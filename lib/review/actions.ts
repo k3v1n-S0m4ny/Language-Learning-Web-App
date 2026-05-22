@@ -21,10 +21,17 @@ export async function submitReview(cardId: string, rating: RatingValue) {
   const learnerId = session?.user?.id;
   if (!learnerId) throw new Error("Unauthorized");
 
+  // Server Actions are reachable by direct POST, so the rating is untrusted at
+  // runtime despite its type — reject anything outside the four FSRS grades.
+  if (![1, 2, 3, 4].includes(rating)) throw new Error("Invalid rating");
+
   const now = new Date();
   const settings = await ensureLearnerSettings(learnerId);
   const scheduler = getScheduler(settings.requestRetention);
 
+  // Re-read the state here (the study screen already read it for the hint preview)
+  // so the rating is applied to the freshest row — this avoids a lost update and
+  // is intentional, not a redundant query to remove.
   const [existing] = await db
     .select()
     .from(reviewStates)
@@ -75,8 +82,18 @@ export async function submitReview(cardId: string, rating: RatingValue) {
   refresh();
 }
 
-// Update a Learner's settings (kept here for completeness; not yet surfaced in UI).
-export async function setNewCardsPerDay(learnerId: string, value: number) {
+// Update the signed-in Learner's new-cards-per-day cap. Like submitReview, this is
+// a directly-POSTable server action: it derives the Learner from the session (never
+// a caller-supplied id) and validates the value before writing.
+export async function setNewCardsPerDay(value: number) {
+  const session = await auth();
+  const learnerId = session?.user?.id;
+  if (!learnerId) throw new Error("Unauthorized");
+
+  if (!Number.isInteger(value) || value < 0 || value > 1000) {
+    throw new Error("Invalid new-cards-per-day value");
+  }
+
   await db
     .update(learnerSettings)
     .set({ newCardsPerDay: value })

@@ -16,12 +16,18 @@ import {
 } from "./scheduler";
 import type { IntervalHints, SessionCounts, StudyCard } from "./types";
 
-// Start of the current UTC day. The new-card daily cap resets at UTC midnight
-// (≈07:00 Thailand) — see active-plan.md A9.
-function startOfUtcDay(now: Date): Date {
-  return new Date(
-    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()),
+// Both learners are in Thailand (UTC+7, no DST), so the new-card daily cap resets
+// at local midnight rather than UTC midnight (see active-plan.md A9). Returns the
+// UTC instant corresponding to 00:00 Asia/Bangkok of the current Thai day.
+const THAILAND_OFFSET_MS = 7 * 60 * 60 * 1000;
+function startOfThailandDay(now: Date): Date {
+  const thai = new Date(now.getTime() + THAILAND_OFFSET_MS);
+  const thaiMidnightAsUtc = Date.UTC(
+    thai.getUTCFullYear(),
+    thai.getUTCMonth(),
+    thai.getUTCDate(),
   );
+  return new Date(thaiMidnightAsUtc - THAILAND_OFFSET_MS);
 }
 
 // Read the Learner's settings, creating the default row only if missing. Common
@@ -47,7 +53,7 @@ async function fetchRawCounts(
   learnerId: string,
   now: Date,
 ): Promise<{ due: number; newToday: number; unseen: number }> {
-  const dayStart = startOfUtcDay(now);
+  const dayStart = startOfThailandDay(now);
   const [dueRow, newRow, unseenRow] = await Promise.all([
     db
       .select({ n: count() })
@@ -95,15 +101,6 @@ function toCounts(
 ): SessionCounts {
   const capRemaining = Math.max(0, newCardsPerDay - raw.newToday);
   return { dueCount: raw.due, newRemaining: Math.min(capRemaining, raw.unseen) };
-}
-
-export async function getSessionCounts(
-  learnerId: string,
-  now: Date = new Date(),
-): Promise<SessionCounts> {
-  const settings = await ensureLearnerSettings(learnerId);
-  const raw = await fetchRawCounts(learnerId, now);
-  return toCounts(raw, settings.newCardsPerDay);
 }
 
 // Load a Card's Words (ordered) and Tag names in parallel.

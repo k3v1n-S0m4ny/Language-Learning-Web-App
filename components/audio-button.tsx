@@ -11,7 +11,11 @@ export function AudioButton({
 }) {
   function play() {
     if (!url) return;
-    void new Audio(url).play();
+    // A missing/!ok Blob URL or decode failure rejects this promise; surface it to
+    // the console rather than failing the tap silently.
+    new Audio(url).play().catch((err) => {
+      console.error("Audio playback failed", url, err);
+    });
   }
 
   return (
