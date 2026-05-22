@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Neon__list_organizations",
+      "PowerShell(npm *)",
+      "PowerShell($procs = Get-Process node -ErrorAction SilentlyContinue; if \\($procs\\) { $procs | Stop-Process -Force -ErrorAction SilentlyContinue; \"Stopped $\\($procs.Count\\) node process\\(es\\)\" } else { \"No node processes running\" })"
+    ]
+  }
+}
