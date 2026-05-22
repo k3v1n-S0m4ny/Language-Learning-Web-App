@@ -1,87 +1,86 @@
 ---
-status: COMPLETE
+status: IN_PROGRESS
 updated: 2026-05-22
 ---
 
-> **Complete.** M4 behavioral walkthrough (A1–A11) confirmed by the user in production: signed in
-> via Google (arisadesiam Workspace), study screen serves the seeded deck, reveal → per-word gloss →
-> pinyin → audio → rate advances to the next Card with counts decrementing. A12 (tsc/lint/build)
-> passed. **M5 (deploy) also done:** live at `https://thepolyglot.vercel.app` (Vercel, project
-> `language-learning-web-app`), Neon us-east-1 + Blob integrations connected, 4 auth env vars set,
-> `trustHost: true` added for production, Google OAuth callback registered for the domain. A per-card
-> query optimization (~18 → ~3 round-trip waves) + optimistic "Next card…" UI shipped in `aa83cf5`.
-> Deferred: true next-card prefetch (see project memory `deferred-card-prefetch-optimization`).
+# Active Plan — Milestone 6: Progress / Stats View (Validation Contract)
 
-# Active Plan — Milestone 4: Review UI (Validation Contract)
-
-Chinese spaced-repetition flashcards ("I Hate My 9-5"). M1–M3 complete (see
-`m1-3-archive--*.md`). This contract covers M4: the FSRS-driven study screen — the core of
-the product. Source plan: `C:\Users\User\.claude\plans\next-step-recommendation-kind-orbit.md`.
+A read-only stats screen for the two learners (a couple studying together), showing each
+learner's progress side by side. M1–M4 (review UI) + M5 (deploy) are COMPLETE — see
+`m4-archive--active-plan.md` and the `*-archive--*` snapshots. M6 adds analytics over the
+data the review loop already produces; it changes no existing review/auth behavior.
 
 **Plan root:** `c:\Users\User\Software Projects\Language-Learning-App\.claude\plans\`
-**Project-context:** `CONTEXT.md` (ubiquitous language), `docs/adr/0001-*` (storage), `m1-3-archive--*`.
+**Project-context:** `CONTEXT.md` (glossary), `inspection-report--ast-code-inspection.md`,
+`docs/vendor-cache/*` (version-correct Next 16 / Drizzle+Neon / Auth.js docs).
+**AGENTS.md rule:** read `node_modules/next/dist/docs/` before writing Next code; this Next
+differs from training data. **Global rules:** no placeholders/fake data; verify third-party
+tools actually work before relying on them; simple > clever.
 
----
+## Assertions (must all hold)
 
-## Validation Contract — assertions
+### Access & auth
+- **A1** — From the study screen a learner can navigate to `/stats`, and back to study.
+- **A2** — `/stats` is auth-protected: an unauthenticated request redirects to sign-in
+  (inherits `proxy.ts`; no special-casing).
 
-Required (must PASS for M4 to be complete):
+### Content — both learners, side by side
+- **A3** — The view renders data for BOTH learners side by side, each labelled by name
+  (or email if name is null). Each metric below appears per learner.
+- **A4** — *Cards learned/seen:* cards seen (has a `review_states` row) vs total cards in the
+  library, plus a "mature" count (FSRS `scheduled_days >= 21`).
+- **A5** — *Reviews over time:* a chart of reviews per day for the last 30 days, bucketed by
+  **Thailand day** (from `review_logs.reviewedAt`).
+- **A6** — *Streak:* current streak = consecutive Thailand-days ending today with ≥1 review.
+- **A7** — *Due forecast:* count of cards due on each of the next 7 days (per learner),
+  bucketed by Thailand day (from `review_states.due`).
+- **A8** — *Per-rating breakdown:* distribution of Again/Hard/Good/Easy from `review_logs`.
 
-- **A1** Signing in as an allowlisted Learner with no review history shows a Card front displaying ONLY the Chinese headword (no gloss/pinyin/English visible).
-- **A2** Activating "Show answer" reveals the whole-Phrase Gloss and a whole-Phrase audio control.
-- **A3** For a Phrase Card (`isPhrase=true`), a word-by-word row renders; each Word's Gloss is hidden until that Word is tapped; each Word has its own audio control. For a single-Word Card (`isPhrase=false`), the word-by-word row is suppressed.
-- **A4** A single "Show pinyin" control reveals whole-Phrase pinyin and per-Word pinyin together; pinyin is hidden until then.
-- **A5** Four rating controls (Again/Hard/Good/Easy) are shown after reveal, each labelled with its next-interval hint computed from `ts-fsrs`.
-- **A6** Submitting a rating persists state: a `review_states` row for `(learnerId, cardId)` is created or updated with new `fsrs_card`, `due`, `last_review`; and a `review_logs` row is inserted with the chosen `rating` (1–4). The two writes happen via `db.batch` (neon-http has no interactive transactions).
-- **A7** After a rating, the screen advances to the next due/new Card (or an all-caught-up empty state), and the session counts reflect the change.
-- **A8** "Due first" ordering: a Card whose `review_states.due <= now()` is served before any new (unseen) Card.
-- **A9** New-card daily cap: at most `learnerSettings.newCardsPerDay` (default 10) unseen Cards are introduced per Learner per UTC day; introduced-today is counted by `review_states.createdAt >= startOfUtcDay`.
-- **A10** `learner_settings` is lazily bootstrapped (newCardsPerDay=10, requestRetention=0.9) on first read so a Card can always be served.
-- **A11** Audio controls are disabled (not hidden) when a Card's/Word's `audio_url` is null; layout stays stable.
-- **A12** `npx tsc --noEmit` is clean and `npm run lint` passes.
+### Quality
+- **A9** — Charts use a real charting library **verified to work with React 19 / Next 16**
+  (Recharts v3+ supports React 19; if it does not install/render cleanly, the implementer
+  picks a known-compatible alternative and records the choice + why). Charts live in client
+  components; the rest of the page is a server component.
+- **A10** — Every number/series comes from real DB queries (`review_states`, `review_logs`,
+  `cards`). No placeholder, sample, or hard-coded data.
+- **A11** — All day bucketing reuses the **Thailand-day boundary** (the same logic as the
+  new-card cap fix in `queries.ts`), never raw UTC days.
+- **A12** — `npx tsc --noEmit`, `npx eslint .`, and `npm run build` all pass (exit 0).
+- **A13** — A learner with zero reviews shows clean zero-states (no crash, no `NaN`, no empty
+  chart errors).
 
-Quality gates:
-- **Q1** The `fsrs_card` jsonb never crosses to the client; scheduling math stays server-side. Only serializable display data (headword, words, glosses, pinyin, audio URLs, hint strings, counts) is passed to client components.
-- **Q2** Double-submit is guarded (rating controls disabled while the action is pending).
-- **Q3** Glossary terms (Learner, Card, Headword, Phrase, Word, Gloss, Pinyin, Audio Clip, Tag, Review State) used consistently in code/UI per `CONTEXT.md`.
+## Feature → assertion mapping (implementation outline)
 
-Out of scope (M4): `/library`, `/stats`, in-app authoring, deployment (M5), bidirectional study, named decks, audio autoplay.
-
----
-
-## Feature → assertion mapping
-
-| Feature | File(s) | Assertions |
-|---|---|---|
-| Shared types | `lib/review/types.ts` | (supports all) |
-| ts-fsrs wrapper | `lib/review/scheduler.ts` | A5, A6 |
-| Queries + bootstrap | `lib/review/queries.ts` | A8, A9, A10 |
-| submitReview action | `lib/review/actions.ts` | A6, A7, Q1, Q2 |
-| Study screen | `app/page.tsx` | A1, A7, A8 |
-| Card front | `components/card-front.tsx` | A1, A2 |
-| Card back + word row | `components/card-back.tsx`, `components/word-chip.tsx` | A2, A3, A4, A11 |
-| Audio control | `components/audio-button.tsx` | A2, A3, A11 |
-| Rating controls | `components/rating-buttons.tsx` | A5, A7, Q2 |
-| Session shell | `components/review-session.tsx`, `session-header.tsx`, `empty-state.tsx`, `sign-out-button.tsx` | A7, Q1, Q3 |
-| Dev helper | `scripts/fast-forward-due.ts` (+ `dev:fast-forward`) | A8 (testability) |
-
----
-
-## Verified technical constraints (checked against installed code)
-
-- **neon-http: no `db.transaction()`** (it throws) → use **`db.batch([...])`** for the atomic A6 write.
-- **`refresh()` from `next/cache`** in Next 16.2.6 (not `router.refresh()`).
-- **ts-fsrs 5.4.0:** `fsrs(generatorParameters({ request_retention }))`; `createEmptyCard(now)`;
-  `.repeat(card, now)` → preview indexable by `Rating` (`{card,log}` each); `.next(card, now, grade)` →
-  `{card,log}`. `Rating` Again=1/Hard=2/Good=3/Easy=4. jsonb rehydrates dates as ISO strings → coerce to `Date`.
+1. **Shared Thailand-day util** (A11) — export `startOfThailandDay` (currently private in
+   `lib/review/queries.ts`) or move it to `lib/review/time.ts`; reuse everywhere.
+2. **`lib/review/stats.ts`** (A4–A8, A10) — `getLearnersStats(now)` returns, per learner:
+   `{ learnerId, name, seen, total, mature, reviewsByDay[30], streak, dueForecast[7],
+   ratingCounts{again,hard,good,easy} }`. Data is small (2 learners, ~100 cards, hundreds of
+   logs): fetch rows and aggregate in JS for the tz-sensitive series (reviews/day, streak,
+   forecast) to avoid error-prone SQL timezone bucketing; plain `count()` for simple totals.
+   `mature` reads `fsrs_card->>'scheduled_days'` (or computes from fetched rows).
+3. **`app/stats/page.tsx`** (A1–A3, A13) — server component; calls `auth()` for guard parity,
+   fetches `getLearnersStats`, renders a two-column (responsive: stacked on mobile) layout,
+   one column per learner, with a back link to `/`.
+4. **Chart client components** (A9) — e.g. `components/stats/*` ("use client"): a bar/line
+   chart for reviews-over-time and due-forecast, a small bar for the rating breakdown.
+5. **Nav link** (A1) — add a "Stats" link in the study-screen header (near `SessionHeader` /
+   `SignOutButton` in `app/page.tsx`).
 
 ## Done criteria
-All required assertions A1–A12 PASS; quality gates Q1–Q3 satisfied; handoff chain written
-(`implementation-summary.md` → `review-summary.md` → `qa-summary.md`); status set to COMPLETE.
+- All assertions A1–A13 hold; handoff chain written (`implementation-summary.md` →
+  `review-summary.md` → `qa-summary.md`); `active-plan.md` flipped to COMPLETE.
+- Behavioral assertions confirmed locally (`npm run dev`/`build` + the user clicking through),
+  since live OAuth + the prod DB are needed for a full check.
 
-## Build order
-1. `lib/review/{types,scheduler,queries,actions}.ts`
-2. `components/*.tsx` (server: session-header, empty-state, sign-out-button; client: review-session, card-front, card-back, word-chip, audio-button, rating-buttons)
-3. `app/page.tsx` rewrite
-4. `scripts/fast-forward-due.ts` + `dev:fast-forward` npm script
-5. Verify (A12) + manual walkthrough (A1–A11)
+## Out of scope
+- **Deployment** — deferred; M6 ships later together with the committed review-loop fixes
+  (`c345041`). Production currently runs pre-fix code.
+- Adding/editing cards; a settings UI for `newCardsPerDay` (the hardened `setNewCardsPerDay`
+  action exists but stays unsurfaced).
+- Per-card history drill-down; data export; date-range pickers.
+
+## Notes / decisions
+- **Privacy:** each signed-in learner sees BOTH learners' stats. Acceptable and intended for
+  this two-person consensual app (a couple). Stated explicitly so it is a conscious choice.
+- **Charting dependency** adds bundle weight (accepted, per user choice over dependency-free).
