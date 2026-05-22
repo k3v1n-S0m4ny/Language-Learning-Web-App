@@ -9,7 +9,12 @@ Date: 2026-05-22 · QA: Claude (dev-cycle Phase 4, main thread).
 **Read both `implementation-summary.md` and `review-summary.md` before validating** — yes, both were
 read; this summary checks their assertions rather than re-deriving them.
 
-## Result: CONDITIONAL PASS — all machine-verifiable assertions PASS; live-session assertions DEFERRED to user
+## Result: PASS — machine-verifiable assertions PASS; live-session assertions CONFIRMED by user in production (2026-05-22)
+
+> **Update (2026-05-22):** the deferred live-session assertions (A1–A11) were confirmed by the user
+> on production `https://thepolyglot.vercel.app`: Google sign-in succeeds for the arisadesiam
+> Workspace, the seeded deck renders, and reveal → gloss → pinyin → audio → rate advances to the next
+> Card with counts updating. Conditional → PASS.
 
 The build, type, lint, and route-protection checks pass. The behavioral assertions that require a
 signed-in Learner could not be exercised in this environment for two independent reasons, both

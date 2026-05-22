@@ -1,13 +1,16 @@
 ---
-status: BLOCKED
+status: COMPLETE
 updated: 2026-05-22
 ---
 
-> **Blocker:** M4 code is complete and build/type/lint-clean. Required behavioral assertions
-> A1–A11 await a runtime walkthrough by the user — they need real Google OAuth (browser +
-> Workspace account) and the Vercel-provisioned Neon DB, neither reachable in this session.
-> Once the user completes the deferred walkthrough in `qa-summary.md`, flip status to COMPLETE.
-> A12 (tsc/lint/build) already PASSES (executed).
+> **Complete.** M4 behavioral walkthrough (A1–A11) confirmed by the user in production: signed in
+> via Google (arisadesiam Workspace), study screen serves the seeded deck, reveal → per-word gloss →
+> pinyin → audio → rate advances to the next Card with counts decrementing. A12 (tsc/lint/build)
+> passed. **M5 (deploy) also done:** live at `https://thepolyglot.vercel.app` (Vercel, project
+> `language-learning-web-app`), Neon us-east-1 + Blob integrations connected, 4 auth env vars set,
+> `trustHost: true` added for production, Google OAuth callback registered for the domain. A per-card
+> query optimization (~18 → ~3 round-trip waves) + optimistic "Next card…" UI shipped in `aa83cf5`.
+> Deferred: true next-card prefetch (see project memory `deferred-card-prefetch-optimization`).
 
 # Active Plan — Milestone 4: Review UI (Validation Contract)
 
