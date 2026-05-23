@@ -14,21 +14,8 @@ import {
   hydrateFsrsCard,
   previewIntervals,
 } from "./scheduler";
+import { startOfThailandDay } from "./time";
 import type { IntervalHints, SessionCounts, StudyCard } from "./types";
-
-// Both learners are in Thailand (UTC+7, no DST), so the new-card daily cap resets
-// at local midnight rather than UTC midnight (see active-plan.md A9). Returns the
-// UTC instant corresponding to 00:00 Asia/Bangkok of the current Thai day.
-const THAILAND_OFFSET_MS = 7 * 60 * 60 * 1000;
-function startOfThailandDay(now: Date): Date {
-  const thai = new Date(now.getTime() + THAILAND_OFFSET_MS);
-  const thaiMidnightAsUtc = Date.UTC(
-    thai.getUTCFullYear(),
-    thai.getUTCMonth(),
-    thai.getUTCDate(),
-  );
-  return new Date(thaiMidnightAsUtc - THAILAND_OFFSET_MS);
-}
 
 // Read the Learner's settings, creating the default row only if missing. Common
 // case (row exists) is a single SELECT — no write on every request.

@@ -1,9 +1,16 @@
 ---
-status: IN_PROGRESS
-updated: 2026-05-22
+status: COMPLETE
+updated: 2026-05-23
 ---
 
 # Active Plan — Milestone 6: Progress / Stats View (Validation Contract)
+
+> **COMPLETE (2026-05-23).** All assertions A1–A13 hold. Handoff chain written:
+> `implementation-summary.md` → `review-summary.md` → `qa-summary.md`. Review: PASS
+> (0 CRITICAL/HIGH/MEDIUM after fix pass; 3 LOW style-only). QA: PASS on all 13. One review
+> cycle fixed a HIGH (A6 streak window) + 2 MEDIUM (A7 overdue forecast, dead loop bound).
+> NOT yet committed/pushed/deployed (deferred per "Out of scope" — ships with the `c345041`
+> review-loop fixes later).
 
 A read-only stats screen for the two learners (a couple studying together), showing each
 learner's progress side by side. M1–M4 (review UI) + M5 (deploy) are COMPLETE — see
