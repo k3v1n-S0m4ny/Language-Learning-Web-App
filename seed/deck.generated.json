@@ -1,798 +1,5 @@
 [
   {
-    "headword": "你",
-    "isPhrase": false,
-    "wholeGloss": "you",
-    "wholePinyin": "nǐ",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "你",
-        "gloss": "you",
-        "pinyin": "nǐ",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a0c7716669b5ded0d8051abfc232b828.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a0c7716669b5ded0d8051abfc232b828.mp3"
-  },
-  {
-    "headword": "会",
-    "isPhrase": false,
-    "wholeGloss": "can / to be able to / will",
-    "wholePinyin": "huì",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "会",
-        "gloss": "can",
-        "pinyin": "huì",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5ba1e3c0eb6361618e95cb63fa67ce0f.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5ba1e3c0eb6361618e95cb63fa67ce0f.mp3"
-  },
-  {
-    "headword": "说",
-    "isPhrase": false,
-    "wholeGloss": "to speak / to say",
-    "wholePinyin": "shuō",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "说",
-        "gloss": "to speak",
-        "pinyin": "shuō",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/ccca74461399d2a0c9e3e944d20b01de.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/ccca74461399d2a0c9e3e944d20b01de.mp3"
-  },
-  {
-    "headword": "英文",
-    "isPhrase": false,
-    "wholeGloss": "English (language)",
-    "wholePinyin": "Yīngwén",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "英文",
-        "gloss": "English",
-        "pinyin": "Yīngwén",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/348ea84c60466c775ef76b536818a214.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/348ea84c60466c775ef76b536818a214.mp3"
-  },
-  {
-    "headword": "吗",
-    "isPhrase": false,
-    "wholeGloss": "(question particle)",
-    "wholePinyin": "ma",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "吗",
-        "gloss": "question particle",
-        "pinyin": "ma",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5ac1612110def2c499accdb0f55b8fb0.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5ac1612110def2c499accdb0f55b8fb0.mp3"
-  },
-  {
-    "headword": "有",
-    "isPhrase": false,
-    "wholeGloss": "to have / there is",
-    "wholePinyin": "yǒu",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "有",
-        "gloss": "to have",
-        "pinyin": "yǒu",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/90ce0f66f09488f205e53736a105dfd3.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/90ce0f66f09488f205e53736a105dfd3.mp3"
-  },
-  {
-    "headword": "谁",
-    "isPhrase": false,
-    "wholeGloss": "who",
-    "wholePinyin": "shéi",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "谁",
-        "gloss": "who",
-        "pinyin": "shéi",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/056b9c626275cd545ba70d32c6dad139.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/056b9c626275cd545ba70d32c6dad139.mp3"
-  },
-  {
-    "headword": "明白",
-    "isPhrase": false,
-    "wholeGloss": "to understand / clear",
-    "wholePinyin": "míngbai",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "明白",
-        "gloss": "to understand",
-        "pinyin": "míngbai",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8e37cd5f7f76c831a2ba528cd4c6de3f.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8e37cd5f7f76c831a2ba528cd4c6de3f.mp3"
-  },
-  {
-    "headword": "不",
-    "isPhrase": false,
-    "wholeGloss": "not / no",
-    "wholePinyin": "bù",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "不",
-        "gloss": "not",
-        "pinyin": "bù",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b02dfe2160c687c22f0762f388d6e2bc.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b02dfe2160c687c22f0762f388d6e2bc.mp3"
-  },
-  {
-    "headword": "我",
-    "isPhrase": false,
-    "wholeGloss": "I / me",
-    "wholePinyin": "wǒ",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "我",
-        "gloss": "I / me",
-        "pinyin": "wǒ",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
-  },
-  {
-    "headword": "一点",
-    "isPhrase": false,
-    "wholeGloss": "a little / a bit",
-    "wholePinyin": "yīdiǎn",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "一点",
-        "gloss": "a little",
-        "pinyin": "yīdiǎn",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/148b16e60318fa66c5ee20bef8e04c94.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/148b16e60318fa66c5ee20bef8e04c94.mp3"
-  },
-  {
-    "headword": "请",
-    "isPhrase": false,
-    "wholeGloss": "please",
-    "wholePinyin": "qǐng",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "请",
-        "gloss": "please",
-        "pinyin": "qǐng",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/88d5840fab773af6bd7f9b6a4660d300.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/88d5840fab773af6bd7f9b6a4660d300.mp3"
-  },
-  {
-    "headword": "用",
-    "isPhrase": false,
-    "wholeGloss": "to use / with",
-    "wholePinyin": "yòng",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "用",
-        "gloss": "to use",
-        "pinyin": "yòng",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/04e45efb3be890e7442f15332bb289be.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/04e45efb3be890e7442f15332bb289be.mp3"
-  },
-  {
-    "headword": "拼音",
-    "isPhrase": false,
-    "wholeGloss": "Pinyin (romanization system)",
-    "wholePinyin": "pīnyīn",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "拼音",
-        "gloss": "Pinyin",
-        "pinyin": "pīnyīn",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/7cfb855571b48dea97706d920dd9ac17.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/7cfb855571b48dea97706d920dd9ac17.mp3"
-  },
-  {
-    "headword": "写",
-    "isPhrase": false,
-    "wholeGloss": "to write",
-    "wholePinyin": "xiě",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "写",
-        "gloss": "to write",
-        "pinyin": "xiě",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/eecaf7bb139f9c37a82faa01abef5d46.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/eecaf7bb139f9c37a82faa01abef5d46.mp3"
-  },
-  {
-    "headword": "中文",
-    "isPhrase": false,
-    "wholeGloss": "Chinese (language)",
-    "wholePinyin": "zhōngwén",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "中文",
-        "gloss": "Chinese (language)",
-        "pinyin": "zhōngwén",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/72726d8818f693066ceb69afa364218b.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/72726d8818f693066ceb69afa364218b.mp3"
-  },
-  {
-    "headword": "下来",
-    "isPhrase": false,
-    "wholeGloss": "(verb complement: down / completion)",
-    "wholePinyin": "xiàlái",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "下来",
-        "gloss": "down",
-        "pinyin": "xiàlái",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/dd30687a430070b38f9e8bf9ebceafaa.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/dd30687a430070b38f9e8bf9ebceafaa.mp3"
-  },
-  {
-    "headword": "指出",
-    "isPhrase": false,
-    "wholeGloss": "to point out",
-    "wholePinyin": "zhǐchū",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "指出",
-        "gloss": "to point out",
-        "pinyin": "zhǐchū",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5721af40be928e680fc392cf62b5a49a.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5721af40be928e680fc392cf62b5a49a.mp3"
-  },
-  {
-    "headword": "书",
-    "isPhrase": false,
-    "wholeGloss": "book",
-    "wholePinyin": "shū",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "书",
-        "gloss": "book",
-        "pinyin": "shū",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1be968f125240969534774b435cfb712.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1be968f125240969534774b435cfb712.mp3"
-  },
-  {
-    "headword": "上",
-    "isPhrase": false,
-    "wholeGloss": "on / above",
-    "wholePinyin": "shàng",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "上",
-        "gloss": "on",
-        "pinyin": "shàng",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/db5ba671d244ee8284613c31e1b84384.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/db5ba671d244ee8284613c31e1b84384.mp3"
-  },
-  {
-    "headword": "的",
-    "isPhrase": false,
-    "wholeGloss": "(possessive/modifier particle)",
-    "wholePinyin": "de",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "的",
-        "gloss": "(possessive/modifier particle)",
-        "pinyin": "de",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8af2350cfd65805bd50b6813ab70f85f.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8af2350cfd65805bd50b6813ab70f85f.mp3"
-  },
-  {
-    "headword": "范句",
-    "isPhrase": true,
-    "wholeGloss": "example sentence",
-    "wholePinyin": "fàn jù",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "范",
-        "gloss": "example",
-        "pinyin": "fàn",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/d64652be29abc208e57f2e094800bf13.mp3"
-      },
-      {
-        "position": 1,
-        "hanzi": "句",
-        "gloss": "sentence",
-        "pinyin": "jù",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/cd583bc65b686ec9a54cf17c92c7786d.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/e532b9b91628815e7717c87b022b5a86.mp3"
-  },
-  {
-    "headword": "这个",
-    "isPhrase": true,
-    "wholeGloss": "this / this one",
-    "wholePinyin": "zhè ge",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "这",
-        "gloss": "this",
-        "pinyin": "zhè",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/d409ab2ab3f8a04e1057b97dddd673c6.mp3"
-      },
-      {
-        "position": 1,
-        "hanzi": "个",
-        "gloss": "one",
-        "pinyin": "ge",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3a116815bc9da10d888ffcca7311803a.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/979e2bc35b14bf4c6dfe8e6b96afa366.mp3"
-  },
-  {
-    "headword": "是",
-    "isPhrase": false,
-    "wholeGloss": "to be / is",
-    "wholePinyin": "shì",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "是",
-        "gloss": "to be",
-        "pinyin": "shì",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b5141d3d19e9a04855acdb2dd5218b09.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b5141d3d19e9a04855acdb2dd5218b09.mp3"
-  },
-  {
-    "headword": "什么",
-    "isPhrase": false,
-    "wholeGloss": "what",
-    "wholePinyin": "shénme",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "什么",
-        "gloss": "what",
-        "pinyin": "shénme",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c1b52e0e64a33deadd3ae5c09421ace2.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c1b52e0e64a33deadd3ae5c09421ace2.mp3"
-  },
-  {
-    "headword": "意思",
-    "isPhrase": false,
-    "wholeGloss": "meaning",
-    "wholePinyin": "yìsi",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "意思",
-        "gloss": "meaning",
-        "pinyin": "yìsi",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/65eb352d08bf12a00b8a5a9e8b832dd4.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/65eb352d08bf12a00b8a5a9e8b832dd4.mp3"
-  },
-  {
-    "headword": "怎么",
-    "isPhrase": false,
-    "wholeGloss": "how / why",
-    "wholePinyin": "zěnme",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "怎么",
-        "gloss": "how",
-        "pinyin": "zěnme",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5ee8091a38eee1885b522997cc259dc7.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5ee8091a38eee1885b522997cc259dc7.mp3"
-  },
-  {
-    "headword": "念",
-    "isPhrase": false,
-    "wholeGloss": "to read aloud / to study",
-    "wholePinyin": "niàn",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "念",
-        "gloss": "to read aloud",
-        "pinyin": "niàn",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/99b5940c6d9474e34f68e96bfe090ffc.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/99b5940c6d9474e34f68e96bfe090ffc.mp3"
-  },
-  {
-    "headword": "熊猫",
-    "isPhrase": false,
-    "wholeGloss": "panda",
-    "wholePinyin": "xióngmāo",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "熊猫",
-        "gloss": "panda",
-        "pinyin": "xióngmāo",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/983c9a436768807d72ceb0f1a40c889b.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/983c9a436768807d72ceb0f1a40c889b.mp3"
-  },
-  {
-    "headword": "再",
-    "isPhrase": false,
-    "wholeGloss": "again / once more",
-    "wholePinyin": "zài",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "再",
-        "gloss": "again",
-        "pinyin": "zài",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8aa07f1595bd98d4841178f6694407eb.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8aa07f1595bd98d4841178f6694407eb.mp3"
-  },
-  {
-    "headword": "一遍",
-    "isPhrase": false,
-    "wholeGloss": "one time (through) / once",
-    "wholePinyin": "yī biàn",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "一遍",
-        "gloss": "once",
-        "pinyin": "yī biàn",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/4d3cc4a0faa25118ea633452f8bf7862.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/4d3cc4a0faa25118ea633452f8bf7862.mp3"
-  },
-  {
-    "headword": "慢",
-    "isPhrase": false,
-    "wholeGloss": "slow",
-    "wholePinyin": "màn",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "慢",
-        "gloss": "slow",
-        "pinyin": "màn",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/42269e2627f4916c9bbe3c79fb3990ee.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/42269e2627f4916c9bbe3c79fb3990ee.mp3"
-  },
-  {
-    "headword": "可以",
-    "isPhrase": false,
-    "wholeGloss": "can / may / possible",
-    "wholePinyin": "kěyǐ",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "可以",
-        "gloss": "can",
-        "pinyin": "kěyǐ",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/0ef5c86fab94f13a7b7d54aa531ceb5d.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/0ef5c86fab94f13a7b7d54aa531ceb5d.mp3"
-  },
-  {
-    "headword": "四十四",
-    "isPhrase": false,
-    "wholeGloss": "forty-four",
-    "wholePinyin": "sìshísì",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "四十四",
-        "gloss": "forty-four",
-        "pinyin": "sìshísì",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6b3f3fb856682badb3ce7f175f01b704.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6b3f3fb856682badb3ce7f175f01b704.mp3"
-  },
-  {
-    "headword": "只",
-    "isPhrase": false,
-    "wholeGloss": "(measure word for animals)",
-    "wholePinyin": "zhī",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "只",
-        "gloss": "measure word for animals",
-        "pinyin": "zhī",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/409e2c3882c96ae674ec3e59b7576c0e.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/409e2c3882c96ae674ec3e59b7576c0e.mp3"
-  },
-  {
-    "headword": "石",
-    "isPhrase": false,
-    "wholeGloss": "stone",
-    "wholePinyin": "shí",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "石",
-        "gloss": "stone",
-        "pinyin": "shí",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/e6df66d46112600ca97b87f8ca76702b.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/e6df66d46112600ca97b87f8ca76702b.mp3"
-  },
-  {
-    "headword": "狮子",
-    "isPhrase": false,
-    "wholeGloss": "lion",
-    "wholePinyin": "shīzi",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "狮子",
-        "gloss": "lion",
-        "pinyin": "shīzi",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/e7c20034f075c68a78d4be84092ccc84.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/e7c20034f075c68a78d4be84092ccc84.mp3"
-  },
-  {
-    "headword": "死",
-    "isPhrase": false,
-    "wholeGloss": "to die / dead",
-    "wholePinyin": "sǐ",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "死",
-        "gloss": "to die",
-        "pinyin": "sǐ",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/586af0c5092c7ad8c8372a9493731f60.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/586af0c5092c7ad8c8372a9493731f60.mp3"
-  },
-  {
-    "headword": "外交官",
-    "isPhrase": false,
-    "wholeGloss": "diplomat",
-    "wholePinyin": "wàijiāoguān",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "外交官",
-        "gloss": "diplomat",
-        "pinyin": "wàijiāoguān",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/2e2c23483b4dcfc1cd2597d995085883.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/2e2c23483b4dcfc1cd2597d995085883.mp3"
-  },
-  {
-    "headword": "歪",
-    "isPhrase": false,
-    "wholeGloss": "crooked / askew",
-    "wholePinyin": "wāi",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "歪",
-        "gloss": "crooked",
-        "pinyin": "wāi",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/958d29d389f89d867f0ae803bec3ac04.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/958d29d389f89d867f0ae803bec3ac04.mp3"
-  },
-  {
-    "headword": "胶管",
-    "isPhrase": false,
-    "wholeGloss": "rubber tube / hose",
-    "wholePinyin": "jiāoguǎn",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "胶管",
-        "gloss": "rubber tube",
-        "pinyin": "jiāoguǎn",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/d650262e753db0ef87e5174098280bb2.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/d650262e753db0ef87e5174098280bb2.mp3"
-  },
-  {
     "headword": "你会说英文吗？",
     "isPhrase": true,
     "wholeGloss": "Do you speak English?",
@@ -1405,53 +612,6 @@
       }
     ],
     "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/39bd68872944445fa2cd075d77b49b02.mp3"
-  },
-  {
-    "headword": "四十四只石狮子是死的。",
-    "isPhrase": true,
-    "wholeGloss": "Forty-four stone lions are dead.",
-    "wholePinyin": "sìshísì zhī shí shīzi shì sǐ de",
-    "tags": [
-      "languages difficulties"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "四十四",
-        "gloss": "forty-four",
-        "pinyin": "sìshísì",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6b3f3fb856682badb3ce7f175f01b704.mp3"
-      },
-      {
-        "position": 1,
-        "hanzi": "只",
-        "gloss": "measure word",
-        "pinyin": "zhī",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/409e2c3882c96ae674ec3e59b7576c0e.mp3"
-      },
-      {
-        "position": 2,
-        "hanzi": "石狮子",
-        "gloss": "stone lions",
-        "pinyin": "shí shīzi",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c866da0859fdda53e1503bbb4922d258.mp3"
-      },
-      {
-        "position": 3,
-        "hanzi": "是",
-        "gloss": "are",
-        "pinyin": "shì",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b5141d3d19e9a04855acdb2dd5218b09.mp3"
-      },
-      {
-        "position": 4,
-        "hanzi": "死的",
-        "gloss": "dead",
-        "pinyin": "sǐ de",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/e270447fd94259f7564306039f791715.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/08a6e8575ae3b45b2817a36b095facd6.mp3"
   },
   {
     "headword": "数字与数量",
@@ -2283,5 +1443,4291 @@
       }
     ],
     "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/92e437aac5e385e85174c797742417b0.mp3"
+  },
+  {
+    "headword": "第一",
+    "isPhrase": false,
+    "wholeGloss": "1st",
+    "wholePinyin": "dì yī",
+    "tags": [
+      "numbers & amounts"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "第一",
+        "gloss": "1st",
+        "pinyin": "dì yī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/437683aa833326848f9a63e9a52f43ca.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/437683aa833326848f9a63e9a52f43ca.mp3"
+  },
+  {
+    "headword": "第二",
+    "isPhrase": true,
+    "wholeGloss": "2nd",
+    "wholePinyin": "dì èr",
+    "tags": [
+      "numbers & amounts"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "第",
+        "gloss": "ordinal",
+        "pinyin": "dì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/af50a0fe2a50a3d15556402bca185197.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "二",
+        "gloss": "two",
+        "pinyin": "èr",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/084b42f6e95e4e6545e236975ade8e20.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/af351f2b09936190427149686675005c.mp3"
+  },
+  {
+    "headword": "第三",
+    "isPhrase": true,
+    "wholeGloss": "3rd",
+    "wholePinyin": "dì sān",
+    "tags": [
+      "numbers & amounts"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "第",
+        "gloss": "ordinal",
+        "pinyin": "dì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/af50a0fe2a50a3d15556402bca185197.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "三",
+        "gloss": "three",
+        "pinyin": "sān",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a4c3313deb180960469d0e79a770b9de.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/0bf0432eac5578597accdb4e9c8aa832.mp3"
+  },
+  {
+    "headword": "第四",
+    "isPhrase": false,
+    "wholeGloss": "4th",
+    "wholePinyin": "dìsì",
+    "tags": [
+      "numbers & amounts"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "第四",
+        "gloss": "4th",
+        "pinyin": "dìsì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8576e217e67c762e76697cd2ecc05f2f.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8576e217e67c762e76697cd2ecc05f2f.mp3"
+  },
+  {
+    "headword": "第五",
+    "isPhrase": true,
+    "wholeGloss": "5th",
+    "wholePinyin": "dì wǔ",
+    "tags": [
+      "numbers & amounts"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "第",
+        "gloss": "ordinal",
+        "pinyin": "dì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/af50a0fe2a50a3d15556402bca185197.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "五",
+        "gloss": "five",
+        "pinyin": "wǔ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c9b87f516a38ea36a0ca35f5137d4676.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/61220d38feb0ef76e8939c10a199e836.mp3"
+  },
+  {
+    "headword": "百分比",
+    "isPhrase": false,
+    "wholeGloss": "fractions",
+    "wholePinyin": "bǎifēnbǐ",
+    "tags": [
+      "numbers & amounts"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "百分比",
+        "gloss": "fractions",
+        "pinyin": "bǎifēnbǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/03af18e367972eb09ef622a8f7347006.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/03af18e367972eb09ef622a8f7347006.mp3"
+  },
+  {
+    "headword": "四分之一",
+    "isPhrase": true,
+    "wholeGloss": "a quarter",
+    "wholePinyin": "sì fēn zhī yī",
+    "tags": [
+      "numbers & amounts"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "四",
+        "gloss": "four",
+        "pinyin": "sì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/754a9d5828d502f19ae91df8f089811d.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "分",
+        "gloss": "part",
+        "pinyin": "fēn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b6a993c256ef577abb04b0c353affde2.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "之",
+        "gloss": "of",
+        "pinyin": "zhī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/0ca502f6699c90aa0269f5149ec4c7dc.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "一",
+        "gloss": "one",
+        "pinyin": "yī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/51a75f4634dfa8598a0a1436da0b7764.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/103e0d694e257231199a5150903f1c83.mp3"
+  },
+  {
+    "headword": "三分之一",
+    "isPhrase": true,
+    "wholeGloss": "a third",
+    "wholePinyin": "sānfēnzhīyī",
+    "tags": [
+      "numbers & amounts"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "三",
+        "gloss": "three",
+        "pinyin": "sān",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a4c3313deb180960469d0e79a770b9de.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "分",
+        "gloss": "part",
+        "pinyin": "fēn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b6a993c256ef577abb04b0c353affde2.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "之",
+        "gloss": "of",
+        "pinyin": "zhī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/0ca502f6699c90aa0269f5149ec4c7dc.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "一",
+        "gloss": "one",
+        "pinyin": "yī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/51a75f4634dfa8598a0a1436da0b7764.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/32be3e281bf8089f22490fd6115ee650.mp3"
+  },
+  {
+    "headword": "一半",
+    "isPhrase": false,
+    "wholeGloss": "a half",
+    "wholePinyin": "yībàn",
+    "tags": [
+      "numbers & amounts"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "一半",
+        "gloss": "a half",
+        "pinyin": "yībàn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/0d16ffcc872471432bd06805252154e4.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/0d16ffcc872471432bd06805252154e4.mp3"
+  },
+  {
+    "headword": "四分之三",
+    "isPhrase": true,
+    "wholeGloss": "three-quarters",
+    "wholePinyin": "sì fēn zhī sān",
+    "tags": [
+      "numbers & amounts"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "四",
+        "gloss": "four",
+        "pinyin": "sì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/754a9d5828d502f19ae91df8f089811d.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "分",
+        "gloss": "part",
+        "pinyin": "fēn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b6a993c256ef577abb04b0c353affde2.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "之",
+        "gloss": "of",
+        "pinyin": "zhī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/0ca502f6699c90aa0269f5149ec4c7dc.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "三",
+        "gloss": "three",
+        "pinyin": "sān",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a4c3313deb180960469d0e79a770b9de.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/30ff20c7821950a86347b996780fd408.mp3"
+  },
+  {
+    "headword": "所有",
+    "isPhrase": false,
+    "wholeGloss": "all",
+    "wholePinyin": "suǒyǒu",
+    "tags": [
+      "numbers & amounts"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "所有",
+        "gloss": "all",
+        "pinyin": "suǒyǒu",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/ae99f297e9f5c759e6eb3b9ea3d4d887.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/ae99f297e9f5c759e6eb3b9ea3d4d887.mp3"
+  },
+  {
+    "headword": "没有",
+    "isPhrase": true,
+    "wholeGloss": "none",
+    "wholePinyin": "méiyǒu",
+    "tags": [
+      "numbers & amounts"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "没",
+        "gloss": "not",
+        "pinyin": "méi",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/279e8b3573607d17a262bf1250f71ebc.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "有",
+        "gloss": "have",
+        "pinyin": "yǒu",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/90ce0f66f09488f205e53736a105dfd3.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f127804b9227e152766662c76e1946d5.mp3"
+  },
+  {
+    "headword": "量词",
+    "isPhrase": true,
+    "wholeGloss": "classifiers",
+    "wholePinyin": "liàngcí",
+    "tags": [
+      "numbers & amounts"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "量",
+        "gloss": "measure",
+        "pinyin": "liàng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/ab121cd5a89868b720b1f30c83d87e5f.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "词",
+        "gloss": "word",
+        "pinyin": "cí",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/52ff1aedae10a89812e29cfa50746c69.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/93e0e959bcc7b1d31fbbeef52a441c28.mp3"
+  },
+  {
+    "headword": "个",
+    "isPhrase": false,
+    "wholeGloss": "generic classifier",
+    "wholePinyin": "gè",
+    "tags": [
+      "numbers & amounts"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "个",
+        "gloss": "generic classifier",
+        "pinyin": "gè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3a116815bc9da10d888ffcca7311803a.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3a116815bc9da10d888ffcca7311803a.mp3"
+  },
+  {
+    "headword": "张",
+    "isPhrase": false,
+    "wholeGloss": "flat things (tickets, paper, tables)",
+    "wholePinyin": "zhāng",
+    "tags": [
+      "numbers & amounts"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "张",
+        "gloss": "flat things",
+        "pinyin": "zhāng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f56a049fcc23f1ebfce1fdd64cb24f40.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f56a049fcc23f1ebfce1fdd64cb24f40.mp3"
+  },
+  {
+    "headword": "条",
+    "isPhrase": false,
+    "wholeGloss": "long things (fish, ribbons, roads)",
+    "wholePinyin": "tiáo",
+    "tags": [
+      "numbers & amounts"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "条",
+        "gloss": "long things",
+        "pinyin": "tiáo",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f004f1d84cf962dcb4cfeb0c1442719e.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f004f1d84cf962dcb4cfeb0c1442719e.mp3"
+  },
+  {
+    "headword": "位",
+    "isPhrase": false,
+    "wholeGloss": "people",
+    "wholePinyin": "wèi",
+    "tags": [
+      "numbers & amounts"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "位",
+        "gloss": "people",
+        "pinyin": "wèi",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1aa9c4170bddb16e01b1727623dbd03c.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1aa9c4170bddb16e01b1727623dbd03c.mp3"
+  },
+  {
+    "headword": "座",
+    "isPhrase": false,
+    "wholeGloss": "big things (mountains, buildings)",
+    "wholePinyin": "zuò",
+    "tags": [
+      "numbers & amounts"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "座",
+        "gloss": "big things (mountains, buildings)",
+        "pinyin": "zuò",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/001d9c64f7f1d3816df61f0d42a31eb8.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/001d9c64f7f1d3816df61f0d42a31eb8.mp3"
+  },
+  {
+    "headword": "常用数量",
+    "isPhrase": true,
+    "wholeGloss": "amounts",
+    "wholePinyin": "cháng yòng shù liàng",
+    "tags": [
+      "numbers & amounts"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "常用",
+        "gloss": "commonly used",
+        "pinyin": "cháng yòng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/4563c57b5143deaa74ff41804744da8c.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "数量",
+        "gloss": "amount",
+        "pinyin": "shù liàng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5e29d121dda011c50d1a2d539dde9596.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f052d1f13309b3797018315c557de4ff.mp3"
+  },
+  {
+    "headword": "多少？",
+    "isPhrase": true,
+    "wholeGloss": "How much?",
+    "wholePinyin": "duōshǎo",
+    "tags": [
+      "numbers & amounts"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "多",
+        "gloss": "many",
+        "pinyin": "duō",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1940119f0571646018c3cc8986182471.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "少",
+        "gloss": "few",
+        "pinyin": "shǎo",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/62f99c9a0c50d790a7ab9b368df96695.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/0a38f9d6f8112ccf12401d325b962eb9.mp3"
+  },
+  {
+    "headword": "几个？",
+    "isPhrase": true,
+    "wholeGloss": "How many?",
+    "wholePinyin": "jǐ gè",
+    "tags": [
+      "numbers & amounts"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "几",
+        "gloss": "how many",
+        "pinyin": "jǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/bb0d9c666fa88969b9eb4e986f3e7c2f.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "个",
+        "gloss": "measure word",
+        "pinyin": "gè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3a116815bc9da10d888ffcca7311803a.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/7b8f9c9aac1ac5fa7ec4f89cbf2bedbe.mp3"
+  },
+  {
+    "headword": "请给我……",
+    "isPhrase": true,
+    "wholeGloss": "Please give me ...",
+    "wholePinyin": "qǐng gěi wǒ",
+    "tags": [
+      "numbers & amounts"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "请",
+        "gloss": "please",
+        "pinyin": "qǐng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/88d5840fab773af6bd7f9b6a4660d300.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "给",
+        "gloss": "give",
+        "pinyin": "gěi",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6e55fb9d8a3dacc1708dbcd943d26e7b.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "我",
+        "gloss": "me",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3dd7e37709fdddd5fae5c433e4457a7e.mp3"
+  },
+  {
+    "headword": "请给我 (50) 克",
+    "isPhrase": true,
+    "wholeGloss": "Please give me (50) grams",
+    "wholePinyin": "qǐng gěi wǒ kè",
+    "tags": [
+      "numbers & amounts"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "请",
+        "gloss": "please",
+        "pinyin": "qǐng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/88d5840fab773af6bd7f9b6a4660d300.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "给",
+        "gloss": "give",
+        "pinyin": "gěi",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6e55fb9d8a3dacc1708dbcd943d26e7b.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "我",
+        "gloss": "me",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "克",
+        "gloss": "grams",
+        "pinyin": "kè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/747bf31c6621e92939510302a0f8c3c2.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/9b556fa48d157bee032aac21bb5fd240.mp3"
+  },
+  {
+    "headword": "请给我 1 两",
+    "isPhrase": true,
+    "wholeGloss": "Please give me 1 Chinese ounce (=50 grams)",
+    "wholePinyin": "qǐng gěi wǒ yī liǎng",
+    "tags": [
+      "numbers & amounts"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "请",
+        "gloss": "please",
+        "pinyin": "qǐng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/88d5840fab773af6bd7f9b6a4660d300.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "给",
+        "gloss": "give",
+        "pinyin": "gěi",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6e55fb9d8a3dacc1708dbcd943d26e7b.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "我",
+        "gloss": "me",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "一",
+        "gloss": "one",
+        "pinyin": "yī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/51a75f4634dfa8598a0a1436da0b7764.mp3"
+      },
+      {
+        "position": 4,
+        "hanzi": "两",
+        "gloss": "liang (50 grams)",
+        "pinyin": "liǎng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/83385d2edafe28d48d25223ecee09110.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/78a47adf022673b005e1ddac614ed058.mp3"
+  },
+  {
+    "headword": "请给我 1 斤",
+    "isPhrase": true,
+    "wholeGloss": "Please give me 1 Chinese pound (=half a kilo)",
+    "wholePinyin": "qǐng gěi wǒ yī jīn",
+    "tags": [
+      "numbers & amounts"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "请",
+        "gloss": "please",
+        "pinyin": "qǐng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/88d5840fab773af6bd7f9b6a4660d300.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "给",
+        "gloss": "give",
+        "pinyin": "gěi",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6e55fb9d8a3dacc1708dbcd943d26e7b.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "我",
+        "gloss": "me",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "1",
+        "gloss": "one",
+        "pinyin": "yī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6b86b273ff34fce19d6b804eff5a3f57.mp3"
+      },
+      {
+        "position": 4,
+        "hanzi": "斤",
+        "gloss": "jin",
+        "pinyin": "jīn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/53eb39ce7a19b73961e46f32ec56ac32.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/e1d86cf63c39c2122a010c93db90ec85.mp3"
+  },
+  {
+    "headword": "请给我一瓶",
+    "isPhrase": true,
+    "wholeGloss": "Please give me a bottle",
+    "wholePinyin": "qǐng gěi wǒ yī píng",
+    "tags": [
+      "numbers & amounts"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "请",
+        "gloss": "please",
+        "pinyin": "qǐng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/88d5840fab773af6bd7f9b6a4660d300.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "给",
+        "gloss": "give",
+        "pinyin": "gěi",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6e55fb9d8a3dacc1708dbcd943d26e7b.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "我",
+        "gloss": "me",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "一",
+        "gloss": "one",
+        "pinyin": "yī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/51a75f4634dfa8598a0a1436da0b7764.mp3"
+      },
+      {
+        "position": 4,
+        "hanzi": "瓶",
+        "gloss": "bottle",
+        "pinyin": "píng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/0327c611964cd050d78835f60e70f022.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/99b6cfab2835910fc3d3e325ddaf364b.mp3"
+  },
+  {
+    "headword": "请给我一打",
+    "isPhrase": true,
+    "wholeGloss": "Please give me a dozen",
+    "wholePinyin": "qǐng gěi wǒ yī dá",
+    "tags": [
+      "numbers & amounts"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "请",
+        "gloss": "please",
+        "pinyin": "qǐng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/88d5840fab773af6bd7f9b6a4660d300.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "给",
+        "gloss": "give",
+        "pinyin": "gěi",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6e55fb9d8a3dacc1708dbcd943d26e7b.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "我",
+        "gloss": "me",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "一",
+        "gloss": "one",
+        "pinyin": "yī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/51a75f4634dfa8598a0a1436da0b7764.mp3"
+      },
+      {
+        "position": 4,
+        "hanzi": "打",
+        "gloss": "dozen",
+        "pinyin": "dá",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c6d764df544b17199c30427734f47d75.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/2838d6076c7663f4491d3e46a4b1f180.mp3"
+  },
+  {
+    "headword": "请给我一些",
+    "isPhrase": true,
+    "wholeGloss": "Please give me a few",
+    "wholePinyin": "qǐng gěi wǒ yīxiē",
+    "tags": [
+      "numbers & amounts"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "请",
+        "gloss": "please",
+        "pinyin": "qǐng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/88d5840fab773af6bd7f9b6a4660d300.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "给",
+        "gloss": "give",
+        "pinyin": "gěi",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6e55fb9d8a3dacc1708dbcd943d26e7b.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "我",
+        "gloss": "me",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "一些",
+        "gloss": "a few",
+        "pinyin": "yīxiē",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1f5163c433ead049afadf15cdc47c92c.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/0807dfae598a7666fe10c09246724d7d.mp3"
+  },
+  {
+    "headword": "请给我一罐",
+    "isPhrase": true,
+    "wholeGloss": "Please give me a jar",
+    "wholePinyin": "qǐng gěi wǒ yī guàn",
+    "tags": [
+      "numbers & amounts"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "请",
+        "gloss": "please",
+        "pinyin": "qǐng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/88d5840fab773af6bd7f9b6a4660d300.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "给",
+        "gloss": "give",
+        "pinyin": "gěi",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6e55fb9d8a3dacc1708dbcd943d26e7b.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "我",
+        "gloss": "me",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "一",
+        "gloss": "one",
+        "pinyin": "yī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/51a75f4634dfa8598a0a1436da0b7764.mp3"
+      },
+      {
+        "position": 4,
+        "hanzi": "罐",
+        "gloss": "jar",
+        "pinyin": "guàn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/044c39ae92c1d517601fd6b21f2c9a04.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b621e00cbe632bf926a584352e9bd25b.mp3"
+  },
+  {
+    "headword": "请给我 1 公斤",
+    "isPhrase": true,
+    "wholeGloss": "Please give me a kilo",
+    "wholePinyin": "qǐng gěi wǒ yī gōngjīn",
+    "tags": [
+      "numbers & amounts"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "请",
+        "gloss": "please",
+        "pinyin": "qǐng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/88d5840fab773af6bd7f9b6a4660d300.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "给",
+        "gloss": "give",
+        "pinyin": "gěi",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6e55fb9d8a3dacc1708dbcd943d26e7b.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "我",
+        "gloss": "me",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "1",
+        "gloss": "one",
+        "pinyin": "yī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6b86b273ff34fce19d6b804eff5a3f57.mp3"
+      },
+      {
+        "position": 4,
+        "hanzi": "公斤",
+        "gloss": "kilogram",
+        "pinyin": "gōngjīn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5c109595de74149294383cd7d0a5b839.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/332d7f1e1cbb55977498220d81cc6617.mp3"
+  },
+  {
+    "headword": "请给我少一点",
+    "isPhrase": true,
+    "wholeGloss": "Please give me less",
+    "wholePinyin": "qǐng gěi wǒ shǎo yīdiǎn",
+    "tags": [
+      "numbers & amounts"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "请",
+        "gloss": "please",
+        "pinyin": "qǐng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/88d5840fab773af6bd7f9b6a4660d300.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "给",
+        "gloss": "give",
+        "pinyin": "gěi",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6e55fb9d8a3dacc1708dbcd943d26e7b.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "我",
+        "gloss": "me",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "少",
+        "gloss": "less",
+        "pinyin": "shǎo",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/62f99c9a0c50d790a7ab9b368df96695.mp3"
+      },
+      {
+        "position": 4,
+        "hanzi": "一点",
+        "gloss": "a little",
+        "pinyin": "yīdiǎn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/148b16e60318fa66c5ee20bef8e04c94.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/933c1a7eee6fccc8435f6a46957bcfb1.mp3"
+  },
+  {
+    "headword": "请给我一小块",
+    "isPhrase": true,
+    "wholeGloss": "Please give me a little",
+    "wholePinyin": "qǐng gěi wǒ yī xiǎo kuài",
+    "tags": [
+      "numbers & amounts"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "请",
+        "gloss": "please",
+        "pinyin": "qǐng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/88d5840fab773af6bd7f9b6a4660d300.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "给",
+        "gloss": "give",
+        "pinyin": "gěi",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6e55fb9d8a3dacc1708dbcd943d26e7b.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "我",
+        "gloss": "me",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "一",
+        "gloss": "a",
+        "pinyin": "yī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/51a75f4634dfa8598a0a1436da0b7764.mp3"
+      },
+      {
+        "position": 4,
+        "hanzi": "小",
+        "gloss": "little",
+        "pinyin": "xiǎo",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6a7339bb759788f3e3d04633b3fa4a96.mp3"
+      },
+      {
+        "position": 5,
+        "hanzi": "块",
+        "gloss": "piece",
+        "pinyin": "kuài",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/36d89c8f512d8cce3b7fd6ec9b5493fb.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/7c16ba6dd0341b982d5deeaa7d8bb5e3.mp3"
+  },
+  {
+    "headword": "请给我好多",
+    "isPhrase": true,
+    "wholeGloss": "Please give me a lot",
+    "wholePinyin": "qǐng gěi wǒ hǎo duō",
+    "tags": [
+      "numbers & amounts"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "请",
+        "gloss": "please",
+        "pinyin": "qǐng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/88d5840fab773af6bd7f9b6a4660d300.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "给",
+        "gloss": "give",
+        "pinyin": "gěi",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6e55fb9d8a3dacc1708dbcd943d26e7b.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "我",
+        "gloss": "me",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "好多",
+        "gloss": "a lot",
+        "pinyin": "hǎo duō",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/bec1625da1983c12512a271a44e8b00f.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/190d4b1804fbf233e7a58c16359c2d38.mp3"
+  },
+  {
+    "headword": "请给我许多",
+    "isPhrase": true,
+    "wholeGloss": "Please give me many",
+    "wholePinyin": "qǐng gěi wǒ xǔ duō",
+    "tags": [
+      "numbers & amounts"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "请",
+        "gloss": "please",
+        "pinyin": "qǐng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/88d5840fab773af6bd7f9b6a4660d300.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "给",
+        "gloss": "give",
+        "pinyin": "gěi",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6e55fb9d8a3dacc1708dbcd943d26e7b.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "我",
+        "gloss": "me",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "许多",
+        "gloss": "many",
+        "pinyin": "xǔ duō",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1df1ae654a196b96cff4eeca3b1be271.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/279fcc1ee29a3ad6afb570fd95532b12.mp3"
+  },
+  {
+    "headword": "请给我多一些",
+    "isPhrase": true,
+    "wholeGloss": "Please give me more",
+    "wholePinyin": "qǐng gěi wǒ duō yīxiē",
+    "tags": [
+      "numbers & amounts"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "请",
+        "gloss": "please",
+        "pinyin": "qǐng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/88d5840fab773af6bd7f9b6a4660d300.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "给",
+        "gloss": "give",
+        "pinyin": "gěi",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6e55fb9d8a3dacc1708dbcd943d26e7b.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "我",
+        "gloss": "me",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "多",
+        "gloss": "more",
+        "pinyin": "duō",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1940119f0571646018c3cc8986182471.mp3"
+      },
+      {
+        "position": 4,
+        "hanzi": "一些",
+        "gloss": "some",
+        "pinyin": "yīxiē",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1f5163c433ead049afadf15cdc47c92c.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/55406df13cdfdbc780936c38dcafdc6a.mp3"
+  },
+  {
+    "headword": "请给我一盒",
+    "isPhrase": true,
+    "wholeGloss": "Please give me a packet",
+    "wholePinyin": "qǐng gěi wǒ yī hé",
+    "tags": [
+      "numbers & amounts"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "请",
+        "gloss": "please",
+        "pinyin": "qǐng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/88d5840fab773af6bd7f9b6a4660d300.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "给",
+        "gloss": "give",
+        "pinyin": "gěi",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6e55fb9d8a3dacc1708dbcd943d26e7b.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "我",
+        "gloss": "me",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "一",
+        "gloss": "one",
+        "pinyin": "yī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/51a75f4634dfa8598a0a1436da0b7764.mp3"
+      },
+      {
+        "position": 4,
+        "hanzi": "盒",
+        "gloss": "packet",
+        "pinyin": "hé",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/fb1eb0e5561e8d2ef2deec75f6e55b87.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/48e85adb40a8b50e80ab4a02ccc00db7.mp3"
+  },
+  {
+    "headword": "请给我一块",
+    "isPhrase": true,
+    "wholeGloss": "Please give me a slice",
+    "wholePinyin": "qǐng gěi wǒ yī kuài",
+    "tags": [
+      "numbers & amounts"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "请",
+        "gloss": "please",
+        "pinyin": "qǐng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/88d5840fab773af6bd7f9b6a4660d300.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "给",
+        "gloss": "give",
+        "pinyin": "gěi",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6e55fb9d8a3dacc1708dbcd943d26e7b.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "我",
+        "gloss": "me",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "一",
+        "gloss": "one",
+        "pinyin": "yī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/51a75f4634dfa8598a0a1436da0b7764.mp3"
+      },
+      {
+        "position": 4,
+        "hanzi": "块",
+        "gloss": "slice",
+        "pinyin": "kuài",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/36d89c8f512d8cce3b7fd6ec9b5493fb.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/cd2e666a5331ea0a86cab7dec6cbc929.mp3"
+  },
+  {
+    "headword": "请给我一听",
+    "isPhrase": true,
+    "wholeGloss": "Please give me a tin",
+    "wholePinyin": "qǐng gěi wǒ yī tīng",
+    "tags": [
+      "numbers & amounts"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "请",
+        "gloss": "please",
+        "pinyin": "qǐng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/88d5840fab773af6bd7f9b6a4660d300.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "给",
+        "gloss": "give",
+        "pinyin": "gěi",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6e55fb9d8a3dacc1708dbcd943d26e7b.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "我",
+        "gloss": "me",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "一",
+        "gloss": "a",
+        "pinyin": "yī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/51a75f4634dfa8598a0a1436da0b7764.mp3"
+      },
+      {
+        "position": 4,
+        "hanzi": "听",
+        "gloss": "tin",
+        "pinyin": "tīng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1f2eb2608d2362471786e38752da85a4.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6ed564b8ec98d7ce02361f9777481437.mp3"
+  },
+  {
+    "headword": "时间与日期",
+    "isPhrase": true,
+    "wholeGloss": "time & dates",
+    "wholePinyin": "shíjiān yǔ rìqī",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "时间",
+        "gloss": "time",
+        "pinyin": "shíjiān",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8b6ff498515bcc2ffdefa4f7b2efbe5e.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "与",
+        "gloss": "and",
+        "pinyin": "yǔ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/de1d5dd076fb7a704745fca1d49d2059.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "日期",
+        "gloss": "dates",
+        "pinyin": "rìqī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/70d0c1b33626ba4be4e1d36dd7caaff6.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b63a7cf7fe92acb0db225ad1a50a6ce6.mp3"
+  },
+  {
+    "headword": "说时间",
+    "isPhrase": true,
+    "wholeGloss": "telling the time",
+    "wholePinyin": "shuō shíjiān",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "说",
+        "gloss": "telling",
+        "pinyin": "shuō",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/ccca74461399d2a0c9e3e944d20b01de.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "时间",
+        "gloss": "time",
+        "pinyin": "shíjiān",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8b6ff498515bcc2ffdefa4f7b2efbe5e.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f57a822481a1f116f57b3d9e6885ad50.mp3"
+  },
+  {
+    "headword": "现在几点钟？",
+    "isPhrase": true,
+    "wholeGloss": "What time is it?",
+    "wholePinyin": "xiànzài jǐ diǎn zhōng",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "现在",
+        "gloss": "now",
+        "pinyin": "xiànzài",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/43584f37c1f4932ff09f95daf231e5d3.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "几点",
+        "gloss": "what time",
+        "pinyin": "jǐ diǎn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c67d6914bd85b00baa9e86352546d315.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "钟",
+        "gloss": "clock",
+        "pinyin": "zhōng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/13d02782bb6a4598133aa257da01f0c4.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/308bb9bb9b29a99c002f17ace5b34394.mp3"
+  },
+  {
+    "headword": "(一)点钟。",
+    "isPhrase": true,
+    "wholeGloss": "It's (one) o'clock.",
+    "wholePinyin": "yī diǎn zhōng",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "一",
+        "gloss": "one",
+        "pinyin": "yī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/51a75f4634dfa8598a0a1436da0b7764.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "点",
+        "gloss": "o'clock",
+        "pinyin": "diǎn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/08dddeac1319d6e86030da25fdd0bdb5.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "钟",
+        "gloss": "clock",
+        "pinyin": "zhōng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/13d02782bb6a4598133aa257da01f0c4.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/fbd3361a568adc3a2adb8768d48bc70e.mp3"
+  },
+  {
+    "headword": "(十)点五分。",
+    "isPhrase": true,
+    "wholeGloss": "Five past (ten).",
+    "wholePinyin": "shí diǎn wǔ fēn",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "十",
+        "gloss": "ten",
+        "pinyin": "shí",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/fc7edd399a5c4b93723eb0c091bf64e5.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "点",
+        "gloss": "o'clock",
+        "pinyin": "diǎn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/08dddeac1319d6e86030da25fdd0bdb5.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "五",
+        "gloss": "five",
+        "pinyin": "wǔ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c9b87f516a38ea36a0ca35f5137d4676.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "分",
+        "gloss": "minutes",
+        "pinyin": "fēn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b6a993c256ef577abb04b0c353affde2.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/16c393143ed3cb0fba9186febcba6138.mp3"
+  },
+  {
+    "headword": "(十)点十五分。",
+    "isPhrase": true,
+    "wholeGloss": "Quarter past (ten).",
+    "wholePinyin": "diǎn shíwǔ fēn",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "点",
+        "gloss": "o'clock",
+        "pinyin": "diǎn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/08dddeac1319d6e86030da25fdd0bdb5.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "十五",
+        "gloss": "fifteen",
+        "pinyin": "shíwǔ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/2f740e1769682233943b30f27a78ac29.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "分",
+        "gloss": "minutes",
+        "pinyin": "fēn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b6a993c256ef577abb04b0c353affde2.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5b6d84ba9dac1215e24ce8b5404d5cc9.mp3"
+  },
+  {
+    "headword": "(十)点三十分。",
+    "isPhrase": true,
+    "wholeGloss": "Half past (ten).",
+    "wholePinyin": "diǎn sān shí fēn",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "点",
+        "gloss": "o'clock",
+        "pinyin": "diǎn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/08dddeac1319d6e86030da25fdd0bdb5.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "三十",
+        "gloss": "thirty",
+        "pinyin": "sān shí",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a70676fba2a260e89793ebcc9d613314.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "分",
+        "gloss": "minutes",
+        "pinyin": "fēn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b6a993c256ef577abb04b0c353affde2.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/11c9be5e7370c391086267ea1079ae1f.mp3"
+  },
+  {
+    "headword": "(十)点四十分。",
+    "isPhrase": true,
+    "wholeGloss": "Twenty to (eleven).",
+    "wholePinyin": "shí diǎn sì shí fēn",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "十",
+        "gloss": "ten",
+        "pinyin": "shí",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/fc7edd399a5c4b93723eb0c091bf64e5.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "点",
+        "gloss": "o'clock",
+        "pinyin": "diǎn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/08dddeac1319d6e86030da25fdd0bdb5.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "四十",
+        "gloss": "forty",
+        "pinyin": "sì shí",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f4d26ac94ae3b1c7fa675c2a024de100.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "分",
+        "gloss": "minutes",
+        "pinyin": "fēn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b6a993c256ef577abb04b0c353affde2.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/e6b222bba2a7009b2dc842494ed12f06.mp3"
+  },
+  {
+    "headword": "(十)点四十五分。",
+    "isPhrase": true,
+    "wholeGloss": "Quarter to (eleven).",
+    "wholePinyin": "shí diǎn sì shí wǔ fēn",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "十",
+        "gloss": "ten",
+        "pinyin": "shí",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/fc7edd399a5c4b93723eb0c091bf64e5.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "点",
+        "gloss": "o'clock",
+        "pinyin": "diǎn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/08dddeac1319d6e86030da25fdd0bdb5.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "四十五",
+        "gloss": "forty-five",
+        "pinyin": "sì shí wǔ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/ec571976f082976d38a23139d5c9db4f.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "分",
+        "gloss": "minutes",
+        "pinyin": "fēn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b6a993c256ef577abb04b0c353affde2.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/2433b03ef375662306cbd46959bfc59b.mp3"
+  },
+  {
+    "headword": "早上",
+    "isPhrase": false,
+    "wholeGloss": "am",
+    "wholePinyin": "zǎoshang",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "早上",
+        "gloss": "morning",
+        "pinyin": "zǎoshang",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c6fe2eb2c986c38352fe8ca32ce453d7.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c6fe2eb2c986c38352fe8ca32ce453d7.mp3"
+  },
+  {
+    "headword": "晚上",
+    "isPhrase": false,
+    "wholeGloss": "pm",
+    "wholePinyin": "wǎnshang",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "晚上",
+        "gloss": "pm",
+        "pinyin": "wǎnshang",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a9b1124b34615118f85ed09bec2cc88b.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a9b1124b34615118f85ed09bec2cc88b.mp3"
+  },
+  {
+    "headword": "什么时候(开始)？",
+    "isPhrase": true,
+    "wholeGloss": "At what time (does it start)?",
+    "wholePinyin": "shénme shíhòu kāishǐ",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "什么",
+        "gloss": "what",
+        "pinyin": "shénme",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c1b52e0e64a33deadd3ae5c09421ace2.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "时候",
+        "gloss": "time",
+        "pinyin": "shíhòu",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5484678be4ef7c24e82b3243c4ec2dd9.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "开始",
+        "gloss": "start",
+        "pinyin": "kāishǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/d2bb025a2e51c410b704733316c84308.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b9c4831366a6b7589e050f8bbafdc481.mp3"
+  },
+  {
+    "headword": "十点钟(开始)。",
+    "isPhrase": true,
+    "wholeGloss": "(It starts) At ten.",
+    "wholePinyin": "shí diǎn zhōng kāi shǐ",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "十",
+        "gloss": "ten",
+        "pinyin": "shí",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/fc7edd399a5c4b93723eb0c091bf64e5.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "点钟",
+        "gloss": "o'clock",
+        "pinyin": "diǎn zhōng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a5ee3f0d180e540be0b0847a2ca244f6.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "开始",
+        "gloss": "start",
+        "pinyin": "kāi shǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/d2bb025a2e51c410b704733316c84308.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/2a239f2b4e24dacfa4f9b6829b06dec4.mp3"
+  },
+  {
+    "headword": "(晚上9点57分)开始。",
+    "isPhrase": true,
+    "wholeGloss": "It starts at (9:57 pm).",
+    "wholePinyin": "wǎnshàng jiǔ diǎn wǔshíqī fēn kāishǐ",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "晚上",
+        "gloss": "evening",
+        "pinyin": "wǎnshàng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a9b1124b34615118f85ed09bec2cc88b.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "9",
+        "gloss": "nine",
+        "pinyin": "jiǔ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/19581e27de7ced00ff1ce50b2047e7a5.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "点",
+        "gloss": "o'clock",
+        "pinyin": "diǎn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/08dddeac1319d6e86030da25fdd0bdb5.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "57",
+        "gloss": "fifty-seven",
+        "pinyin": "wǔshíqī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c837649cce43f2729138e72cc3152070.mp3"
+      },
+      {
+        "position": 4,
+        "hanzi": "分",
+        "gloss": "minute",
+        "pinyin": "fēn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b6a993c256ef577abb04b0c353affde2.mp3"
+      },
+      {
+        "position": 5,
+        "hanzi": "开始",
+        "gloss": "start",
+        "pinyin": "kāishǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/d2bb025a2e51c410b704733316c84308.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/97f684cae3fb7aadf8864a0b302cbf81.mp3"
+  },
+  {
+    "headword": "日历",
+    "isPhrase": false,
+    "wholeGloss": "the calendar",
+    "wholePinyin": "rìlì",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "日历",
+        "gloss": "calendar",
+        "pinyin": "rìlì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a00f295cfbb0b1b3cb12ee87f2a0529d.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a00f295cfbb0b1b3cb12ee87f2a0529d.mp3"
+  },
+  {
+    "headword": "星期一",
+    "isPhrase": true,
+    "wholeGloss": "Monday",
+    "wholePinyin": "xīngqīyī",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "星期",
+        "gloss": "week",
+        "pinyin": "xīngqī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c398134d7d1f58e7c31cc6cb8eba142f.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "一",
+        "gloss": "one",
+        "pinyin": "yī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/51a75f4634dfa8598a0a1436da0b7764.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/56451fdf19c23fb6d70849293cb84781.mp3"
+  },
+  {
+    "headword": "星期二",
+    "isPhrase": true,
+    "wholeGloss": "Tuesday",
+    "wholePinyin": "xīngqī'èr",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "星期",
+        "gloss": "week",
+        "pinyin": "xīngqī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c398134d7d1f58e7c31cc6cb8eba142f.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "二",
+        "gloss": "two",
+        "pinyin": "èr",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/084b42f6e95e4e6545e236975ade8e20.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8621c00d3b2c45f7308129e7ff75dcad.mp3"
+  },
+  {
+    "headword": "星期三",
+    "isPhrase": true,
+    "wholeGloss": "Wednesday",
+    "wholePinyin": "xīngqīsān",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "星期",
+        "gloss": "week",
+        "pinyin": "xīngqī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c398134d7d1f58e7c31cc6cb8eba142f.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "三",
+        "gloss": "three",
+        "pinyin": "sān",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a4c3313deb180960469d0e79a770b9de.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/23ae0a11ac5bab279073da92efacdd4d.mp3"
+  },
+  {
+    "headword": "星期四",
+    "isPhrase": true,
+    "wholeGloss": "Thursday",
+    "wholePinyin": "xīngqīsì",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "星期",
+        "gloss": "week",
+        "pinyin": "xīngqī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c398134d7d1f58e7c31cc6cb8eba142f.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "四",
+        "gloss": "four",
+        "pinyin": "sì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/754a9d5828d502f19ae91df8f089811d.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/478911d29ab88b951d6fb9d3c13a1a5d.mp3"
+  },
+  {
+    "headword": "星期五",
+    "isPhrase": true,
+    "wholeGloss": "Friday",
+    "wholePinyin": "xīngqīwǔ",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "星期",
+        "gloss": "week",
+        "pinyin": "xīngqī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c398134d7d1f58e7c31cc6cb8eba142f.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "五",
+        "gloss": "five",
+        "pinyin": "wǔ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c9b87f516a38ea36a0ca35f5137d4676.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6e5969e50e4df390c1a7d1954cdcf377.mp3"
+  },
+  {
+    "headword": "星期六",
+    "isPhrase": true,
+    "wholeGloss": "Saturday",
+    "wholePinyin": "xīngqīliù",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "星期",
+        "gloss": "week",
+        "pinyin": "xīngqī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c398134d7d1f58e7c31cc6cb8eba142f.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "六",
+        "gloss": "six",
+        "pinyin": "liù",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/de07b5383874b2a32bd141d2655a9e8b.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/7bb2f5ecaa1dc683cced2e8ce263ad09.mp3"
+  },
+  {
+    "headword": "星期天",
+    "isPhrase": true,
+    "wholeGloss": "Sunday",
+    "wholePinyin": "xīngqītiān",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "星期",
+        "gloss": "week",
+        "pinyin": "xīngqī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c398134d7d1f58e7c31cc6cb8eba142f.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "天",
+        "gloss": "day",
+        "pinyin": "tiān",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/49da61ceeea2f2714263cb2baf9985b8.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/ec93da23f2aa45fdaad1df9a79c410ac.mp3"
+  },
+  {
+    "headword": "一月",
+    "isPhrase": false,
+    "wholeGloss": "January",
+    "wholePinyin": "yīyuè",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "一月",
+        "gloss": "January",
+        "pinyin": "yīyuè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/364a4dfc2d4702455765cc3c264ae9c6.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/364a4dfc2d4702455765cc3c264ae9c6.mp3"
+  },
+  {
+    "headword": "二月",
+    "isPhrase": true,
+    "wholeGloss": "February",
+    "wholePinyin": "èr yuè",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "二",
+        "gloss": "two",
+        "pinyin": "èr",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/084b42f6e95e4e6545e236975ade8e20.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "月",
+        "gloss": "month",
+        "pinyin": "yuè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1625179badc027f0d0a26df9da3d4ae1.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/37c607040dffacec7b1508770721309b.mp3"
+  },
+  {
+    "headword": "三月",
+    "isPhrase": true,
+    "wholeGloss": "March",
+    "wholePinyin": "sān yuè",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "三",
+        "gloss": "three",
+        "pinyin": "sān",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a4c3313deb180960469d0e79a770b9de.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "月",
+        "gloss": "month",
+        "pinyin": "yuè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1625179badc027f0d0a26df9da3d4ae1.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3bfb0e935bb6add8645f738d74b9c93d.mp3"
+  },
+  {
+    "headword": "四月",
+    "isPhrase": false,
+    "wholeGloss": "April",
+    "wholePinyin": "sìyuè",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "四月",
+        "gloss": "April",
+        "pinyin": "sìyuè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8f3c638ad7277f7dea54bb214d95d764.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8f3c638ad7277f7dea54bb214d95d764.mp3"
+  },
+  {
+    "headword": "五月",
+    "isPhrase": false,
+    "wholeGloss": "May",
+    "wholePinyin": "wǔyuè",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "五月",
+        "gloss": "May",
+        "pinyin": "wǔyuè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5ae5cbaf179a4c24c6ab23872bd9d8df.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5ae5cbaf179a4c24c6ab23872bd9d8df.mp3"
+  },
+  {
+    "headword": "六月",
+    "isPhrase": false,
+    "wholeGloss": "June",
+    "wholePinyin": "liùyuè",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "六月",
+        "gloss": "June",
+        "pinyin": "liùyuè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/ebecbbe06139ab8405f507b3efda3a4a.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/ebecbbe06139ab8405f507b3efda3a4a.mp3"
+  },
+  {
+    "headword": "七月",
+    "isPhrase": false,
+    "wholeGloss": "July",
+    "wholePinyin": "qīyuè",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "七月",
+        "gloss": "July",
+        "pinyin": "qīyuè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f8cd68e290a5d7422edda9bb1a685f4d.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f8cd68e290a5d7422edda9bb1a685f4d.mp3"
+  },
+  {
+    "headword": "八月",
+    "isPhrase": true,
+    "wholeGloss": "August",
+    "wholePinyin": "bāyuè",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "八",
+        "gloss": "eight",
+        "pinyin": "bā",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/2c467d3673926b209f49dc3b46f97a30.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "月",
+        "gloss": "month",
+        "pinyin": "yuè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1625179badc027f0d0a26df9da3d4ae1.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/affa2599cd5f27894c4df714c5df9473.mp3"
+  },
+  {
+    "headword": "九月",
+    "isPhrase": true,
+    "wholeGloss": "September",
+    "wholePinyin": "jiǔyuè",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "九",
+        "gloss": "nine",
+        "pinyin": "jiǔ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/df897da6e02ecd3093c3c539ad905323.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "月",
+        "gloss": "month",
+        "pinyin": "yuè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1625179badc027f0d0a26df9da3d4ae1.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b45d34fc7542481e36500deadfb71186.mp3"
+  },
+  {
+    "headword": "十月",
+    "isPhrase": true,
+    "wholeGloss": "October",
+    "wholePinyin": "shíyuè",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "十",
+        "gloss": "ten",
+        "pinyin": "shí",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/fc7edd399a5c4b93723eb0c091bf64e5.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "月",
+        "gloss": "month",
+        "pinyin": "yuè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1625179badc027f0d0a26df9da3d4ae1.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/57ef441f94957cd1603a2edd264a61af.mp3"
+  },
+  {
+    "headword": "十一月",
+    "isPhrase": true,
+    "wholeGloss": "November",
+    "wholePinyin": "shíyīyuè",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "十",
+        "gloss": "ten",
+        "pinyin": "shí",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/fc7edd399a5c4b93723eb0c091bf64e5.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "一",
+        "gloss": "one",
+        "pinyin": "yī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/51a75f4634dfa8598a0a1436da0b7764.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "月",
+        "gloss": "month",
+        "pinyin": "yuè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1625179badc027f0d0a26df9da3d4ae1.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/cc60e689ee69a69c8d2d10bdae52b655.mp3"
+  },
+  {
+    "headword": "十二月",
+    "isPhrase": true,
+    "wholeGloss": "December",
+    "wholePinyin": "shí èr yuè",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "十",
+        "gloss": "ten",
+        "pinyin": "shí",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/fc7edd399a5c4b93723eb0c091bf64e5.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "二",
+        "gloss": "two",
+        "pinyin": "èr",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/084b42f6e95e4e6545e236975ade8e20.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "月",
+        "gloss": "month",
+        "pinyin": "yuè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1625179badc027f0d0a26df9da3d4ae1.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/0cab18cabae0fca0ba13c3e4162d579c.mp3"
+  },
+  {
+    "headword": "今天几号？",
+    "isPhrase": true,
+    "wholeGloss": "What date is it today?",
+    "wholePinyin": "jīntiān jǐ hào",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "今天",
+        "gloss": "today",
+        "pinyin": "jīntiān",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/d5f5a7a010731feb6cc67fcbde1bc713.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "几",
+        "gloss": "what",
+        "pinyin": "jǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/bb0d9c666fa88969b9eb4e986f3e7c2f.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "号",
+        "gloss": "date",
+        "pinyin": "hào",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f9376c98b6cb1cb49f4c6a9ef0efaa60.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b0769acc376c408f24a2f18a0a08788c.mp3"
+  },
+  {
+    "headword": "(十月十八号)。",
+    "isPhrase": true,
+    "wholeGloss": "It's (18 October).",
+    "wholePinyin": "shí yuè shí bā hào",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "十月",
+        "gloss": "October",
+        "pinyin": "shí yuè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/57ef441f94957cd1603a2edd264a61af.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "十八",
+        "gloss": "eighteen",
+        "pinyin": "shí bā",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/078c45851449bef08411f664692f1bbc.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "号",
+        "gloss": "day",
+        "pinyin": "hào",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f9376c98b6cb1cb49f4c6a9ef0efaa60.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/951a1e5b49cbd10b3ade264c35ba9513.mp3"
+  },
+  {
+    "headword": "春天",
+    "isPhrase": false,
+    "wholeGloss": "spring",
+    "wholePinyin": "chūntiān",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "春天",
+        "gloss": "spring",
+        "pinyin": "chūntiān",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/9eaa6d08fa0ccc5c9c7ac54449475a56.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/9eaa6d08fa0ccc5c9c7ac54449475a56.mp3"
+  },
+  {
+    "headword": "夏天",
+    "isPhrase": false,
+    "wholeGloss": "summer",
+    "wholePinyin": "xiàtiān",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "夏天",
+        "gloss": "summer",
+        "pinyin": "xiàtiān",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/0c27fe7382e1aac313ff9f5641f482de.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/0c27fe7382e1aac313ff9f5641f482de.mp3"
+  },
+  {
+    "headword": "秋天",
+    "isPhrase": false,
+    "wholeGloss": "autumn",
+    "wholePinyin": "qiūtiān",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "秋天",
+        "gloss": "autumn",
+        "pinyin": "qiūtiān",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/21691f1b8e10ff5b5f417a70f5ea56de.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/21691f1b8e10ff5b5f417a70f5ea56de.mp3"
+  },
+  {
+    "headword": "冬天",
+    "isPhrase": false,
+    "wholeGloss": "winter",
+    "wholePinyin": "dōngtiān",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "冬天",
+        "gloss": "winter",
+        "pinyin": "dōngtiān",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/7a6cc29740a72c4c0c169895e0ed7ab2.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/7a6cc29740a72c4c0c169895e0ed7ab2.mp3"
+  },
+  {
+    "headword": "目前时态",
+    "isPhrase": true,
+    "wholeGloss": "present",
+    "wholePinyin": "mùqián shítài",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "目前",
+        "gloss": "present",
+        "pinyin": "mùqián",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/937f63a4fb51ec9e264cba760abd092d.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "时态",
+        "gloss": "tense",
+        "pinyin": "shítài",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/fd985cd97a0b206ac9cf8e86ad736915.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/65a833c2ba5c9cdb584632e7b5660b68.mp3"
+  },
+  {
+    "headword": "现在",
+    "isPhrase": false,
+    "wholeGloss": "now",
+    "wholePinyin": "xiànzài",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "现在",
+        "gloss": "now",
+        "pinyin": "xiànzài",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/43584f37c1f4932ff09f95daf231e5d3.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/43584f37c1f4932ff09f95daf231e5d3.mp3"
+  },
+  {
+    "headword": "这个……",
+    "isPhrase": true,
+    "wholeGloss": "this ...",
+    "wholePinyin": "zhè ge",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "这",
+        "gloss": "this",
+        "pinyin": "zhè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/d409ab2ab3f8a04e1057b97dddd673c6.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "个",
+        "gloss": "measure word",
+        "pinyin": "ge",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3a116815bc9da10d888ffcca7311803a.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b8aecff28d6a7a1af5b3c3bd09cb5a25.mp3"
+  },
+  {
+    "headword": "这个下午",
+    "isPhrase": true,
+    "wholeGloss": "this afternoon",
+    "wholePinyin": "zhège xiàwǔ",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "这",
+        "gloss": "this",
+        "pinyin": "zhè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/d409ab2ab3f8a04e1057b97dddd673c6.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "个",
+        "gloss": "(measure word)",
+        "pinyin": "gè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3a116815bc9da10d888ffcca7311803a.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "下午",
+        "gloss": "afternoon",
+        "pinyin": "xiàwǔ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/af81dcf37aa86091075e43941c4dfaa7.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/d4f9beda49c0922e2c8c711af4c38cee.mp3"
+  },
+  {
+    "headword": "这个月",
+    "isPhrase": true,
+    "wholeGloss": "this month",
+    "wholePinyin": "zhège yuè",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "这",
+        "gloss": "this",
+        "pinyin": "zhè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/d409ab2ab3f8a04e1057b97dddd673c6.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "个",
+        "gloss": "(measure word)",
+        "pinyin": "ge",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3a116815bc9da10d888ffcca7311803a.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "月",
+        "gloss": "month",
+        "pinyin": "yuè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1625179badc027f0d0a26df9da3d4ae1.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/bd87223cc2641c3986fc59b6f67f366d.mp3"
+  },
+  {
+    "headword": "这个早上",
+    "isPhrase": true,
+    "wholeGloss": "this morning (after breakfast)",
+    "wholePinyin": "zhè ge zǎo shang",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "这",
+        "gloss": "this",
+        "pinyin": "zhè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/d409ab2ab3f8a04e1057b97dddd673c6.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "个",
+        "gloss": "(measure word)",
+        "pinyin": "ge",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3a116815bc9da10d888ffcca7311803a.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "早上",
+        "gloss": "morning",
+        "pinyin": "zǎo shang",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c6fe2eb2c986c38352fe8ca32ce453d7.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/aff469f1f40e36a8117086baa9578870.mp3"
+  },
+  {
+    "headword": "这个上午",
+    "isPhrase": true,
+    "wholeGloss": "this morning (before lunch)",
+    "wholePinyin": "zhège shàngwǔ",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "这",
+        "gloss": "this",
+        "pinyin": "zhè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/d409ab2ab3f8a04e1057b97dddd673c6.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "个",
+        "gloss": "(measure word)",
+        "pinyin": "gè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3a116815bc9da10d888ffcca7311803a.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "上午",
+        "gloss": "morning",
+        "pinyin": "shàngwǔ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/298336ec2c0e2e37cd12f98cbe7b182d.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/bce366677895b0f6f40edfa8069e3665.mp3"
+  },
+  {
+    "headword": "这个星期",
+    "isPhrase": true,
+    "wholeGloss": "this week",
+    "wholePinyin": "zhè ge xīng qī",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "这",
+        "gloss": "this",
+        "pinyin": "zhè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/d409ab2ab3f8a04e1057b97dddd673c6.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "个",
+        "gloss": "(measure word)",
+        "pinyin": "ge",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3a116815bc9da10d888ffcca7311803a.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "星期",
+        "gloss": "week",
+        "pinyin": "xīng qī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c398134d7d1f58e7c31cc6cb8eba142f.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/9df71aba85aca628a624685d5db5c286.mp3"
+  },
+  {
+    "headword": "今年",
+    "isPhrase": false,
+    "wholeGloss": "this year",
+    "wholePinyin": "jīnnián",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "今年",
+        "gloss": "this year",
+        "pinyin": "jīnnián",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3a7ddf6c862aa15c95891470187e7b26.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3a7ddf6c862aa15c95891470187e7b26.mp3"
+  },
+  {
+    "headword": "今天",
+    "isPhrase": false,
+    "wholeGloss": "today",
+    "wholePinyin": "jīntiān",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "今天",
+        "gloss": "today",
+        "pinyin": "jīntiān",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/d5f5a7a010731feb6cc67fcbde1bc713.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/d5f5a7a010731feb6cc67fcbde1bc713.mp3"
+  },
+  {
+    "headword": "今天晚上",
+    "isPhrase": true,
+    "wholeGloss": "tonight",
+    "wholePinyin": "jīntiān wǎnshàng",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "今天",
+        "gloss": "today",
+        "pinyin": "jīntiān",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/d5f5a7a010731feb6cc67fcbde1bc713.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "晚上",
+        "gloss": "evening",
+        "pinyin": "wǎnshàng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a9b1124b34615118f85ed09bec2cc88b.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5f412482e3c165654845f9ee47e5688f.mp3"
+  },
+  {
+    "headword": "过去时间",
+    "isPhrase": true,
+    "wholeGloss": "past",
+    "wholePinyin": "guòqù shíjiān",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "过去",
+        "gloss": "past",
+        "pinyin": "guòqù",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3774af744856e7f5a7056844e66b0e37.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "时间",
+        "gloss": "time",
+        "pinyin": "shíjiān",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8b6ff498515bcc2ffdefa4f7b2efbe5e.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c9c36f74a4cbfee1d4ed3a117b823117.mp3"
+  },
+  {
+    "headword": "(三天)以前",
+    "isPhrase": true,
+    "wholeGloss": "(three days) ago",
+    "wholePinyin": "sān tiān yǐqián",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "三",
+        "gloss": "three",
+        "pinyin": "sān",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a4c3313deb180960469d0e79a770b9de.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "天",
+        "gloss": "days",
+        "pinyin": "tiān",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/49da61ceeea2f2714263cb2baf9985b8.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "以前",
+        "gloss": "ago",
+        "pinyin": "yǐqián",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/aa98317793b49d8dbe4cd993eb38908b.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1195c312fbf4a2e490aef5ca10a07706.mp3"
+  },
+  {
+    "headword": "前天",
+    "isPhrase": false,
+    "wholeGloss": "day before yesterday",
+    "wholePinyin": "qiántiān",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "前天",
+        "gloss": "day before yesterday",
+        "pinyin": "qiántiān",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/807710c9439571b748ab67489e04cf9d.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/807710c9439571b748ab67489e04cf9d.mp3"
+  },
+  {
+    "headword": "昨天晚上",
+    "isPhrase": true,
+    "wholeGloss": "last night",
+    "wholePinyin": "zuótiān wǎnshàng",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "昨天",
+        "gloss": "yesterday",
+        "pinyin": "zuótiān",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/0c184871f658375afc6e0d4f2c2616bc.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "晚上",
+        "gloss": "night",
+        "pinyin": "wǎnshàng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a9b1124b34615118f85ed09bec2cc88b.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/4c3baaa0f285c8cbd2542008cc7c5f7e.mp3"
+  },
+  {
+    "headword": "上星期",
+    "isPhrase": true,
+    "wholeGloss": "last week",
+    "wholePinyin": "shàng xīngqī",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "上",
+        "gloss": "last",
+        "pinyin": "shàng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/db5ba671d244ee8284613c31e1b84384.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "星期",
+        "gloss": "week",
+        "pinyin": "xīngqī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c398134d7d1f58e7c31cc6cb8eba142f.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/e8eecb6a991681372cb54b7c2cba4426.mp3"
+  },
+  {
+    "headword": "上个月",
+    "isPhrase": true,
+    "wholeGloss": "last month",
+    "wholePinyin": "shàng gè yuè",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "上",
+        "gloss": "last",
+        "pinyin": "shàng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/db5ba671d244ee8284613c31e1b84384.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "个",
+        "gloss": "(measure word)",
+        "pinyin": "gè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3a116815bc9da10d888ffcca7311803a.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "月",
+        "gloss": "month",
+        "pinyin": "yuè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1625179badc027f0d0a26df9da3d4ae1.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f9e727223456b71751d1cfc44959547b.mp3"
+  },
+  {
+    "headword": "去年",
+    "isPhrase": false,
+    "wholeGloss": "last year",
+    "wholePinyin": "qùnián",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "去年",
+        "gloss": "last year",
+        "pinyin": "qùnián",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c5c593d385bf56967d978d9753d0a86a.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c5c593d385bf56967d978d9753d0a86a.mp3"
+  },
+  {
+    "headword": "从(五月)以来",
+    "isPhrase": true,
+    "wholeGloss": "since (May)",
+    "wholePinyin": "cóng wǔ yuè yǐ lái",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "从",
+        "gloss": "since",
+        "pinyin": "cóng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/2719a8ea304b8cbfac62209ab10f877d.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "五月",
+        "gloss": "May",
+        "pinyin": "wǔ yuè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5ae5cbaf179a4c24c6ab23872bd9d8df.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "以来",
+        "gloss": "since",
+        "pinyin": "yǐ lái",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a46dac0a68062fb13a1b93277e03a8a2.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c77c7232e01c58ab7ab3c87ca52b4ab9.mp3"
+  },
+  {
+    "headword": "昨天……",
+    "isPhrase": false,
+    "wholeGloss": "yesterday ...",
+    "wholePinyin": "zuótiān",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "昨天",
+        "gloss": "yesterday",
+        "pinyin": "zuótiān",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/0c184871f658375afc6e0d4f2c2616bc.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3b7ef2e1a8315a47b4ff909b2e7a0569.mp3"
+  },
+  {
+    "headword": "将来时",
+    "isPhrase": true,
+    "wholeGloss": "future",
+    "wholePinyin": "jiāngláishí",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "将来",
+        "gloss": "future",
+        "pinyin": "jiānglái",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a4eb2ded2737b9b8bab76b45ef6ce805.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "时",
+        "gloss": "tense",
+        "pinyin": "shí",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/7d58b6422cacedbcdf5e255d0357c07a.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1476bb2ab2aef7ece9a885fce90e6567.mp3"
+  },
+  {
+    "headword": "后天",
+    "isPhrase": false,
+    "wholeGloss": "day after tomorrow",
+    "wholePinyin": "hòutiān",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "后天",
+        "gloss": "day after tomorrow",
+        "pinyin": "hòutiān",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/02bb9a7dd27a97141c1bfeef44f5f948.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/02bb9a7dd27a97141c1bfeef44f5f948.mp3"
+  },
+  {
+    "headword": "(六天)以后",
+    "isPhrase": true,
+    "wholeGloss": "in (six days)",
+    "wholePinyin": "liù tiān yǐ hòu",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "六",
+        "gloss": "six",
+        "pinyin": "liù",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/de07b5383874b2a32bd141d2655a9e8b.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "天",
+        "gloss": "days",
+        "pinyin": "tiān",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/49da61ceeea2f2714263cb2baf9985b8.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "以后",
+        "gloss": "after",
+        "pinyin": "yǐ hòu",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/e6ad7a1dbc1ede22e4c1ec6f04f088e5.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/d0bf72947f86a4067f06b440db9dc4f1.mp3"
+  },
+  {
+    "headword": "下星期",
+    "isPhrase": true,
+    "wholeGloss": "next week",
+    "wholePinyin": "xià xīngqī",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "下",
+        "gloss": "next",
+        "pinyin": "xià",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/13c12b064b635e069c22d29d1decf8e9.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "星期",
+        "gloss": "week",
+        "pinyin": "xīngqī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c398134d7d1f58e7c31cc6cb8eba142f.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/97b102f681afff47858b581f3706b10b.mp3"
+  },
+  {
+    "headword": "下个月",
+    "isPhrase": true,
+    "wholeGloss": "next month",
+    "wholePinyin": "xià gè yuè",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "下",
+        "gloss": "next",
+        "pinyin": "xià",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/13c12b064b635e069c22d29d1decf8e9.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "个",
+        "gloss": "measure word",
+        "pinyin": "gè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3a116815bc9da10d888ffcca7311803a.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "月",
+        "gloss": "month",
+        "pinyin": "yuè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1625179badc027f0d0a26df9da3d4ae1.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3e0b634699d4c9120178a54942e1a534.mp3"
+  },
+  {
+    "headword": "明年",
+    "isPhrase": false,
+    "wholeGloss": "next year",
+    "wholePinyin": "míngnián",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "明年",
+        "gloss": "next year",
+        "pinyin": "míngnián",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/02b511cea0c378edfc1cbab5b07f8ed8.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/02b511cea0c378edfc1cbab5b07f8ed8.mp3"
+  },
+  {
+    "headword": "明天……",
+    "isPhrase": false,
+    "wholeGloss": "tomorrow ...",
+    "wholePinyin": "míngtiān",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "明天",
+        "gloss": "tomorrow",
+        "pinyin": "míngtiān",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b1d841b978fb524c350a0c4e32ab661a.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1bbc141cdabee6c3ddfa14297439d718.mp3"
+  },
+  {
+    "headword": "到(六月)为止",
+    "isPhrase": true,
+    "wholeGloss": "until (June)",
+    "wholePinyin": "dào liù yuè wéi zhǐ",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "到",
+        "gloss": "until",
+        "pinyin": "dào",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b56f36b529dbcd625f9c46a94290cf10.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "六月",
+        "gloss": "June",
+        "pinyin": "liù yuè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/ebecbbe06139ab8405f507b3efda3a4a.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "为止",
+        "gloss": "until",
+        "pinyin": "wéi zhǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5d88b538a492a2610a35c429aeb934bb.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/fcbe8cd144f7a6f5a33bd03f4d04a25f.mp3"
+  },
+  {
+    "headword": "从早到晚",
+    "isPhrase": true,
+    "wholeGloss": "during the day",
+    "wholePinyin": "cóng zǎo dào wǎn",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "从",
+        "gloss": "from",
+        "pinyin": "cóng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/2719a8ea304b8cbfac62209ab10f877d.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "早",
+        "gloss": "early",
+        "pinyin": "zǎo",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/e7c7fb50f3db8408eacd8f1702021a00.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "到",
+        "gloss": "to",
+        "pinyin": "dào",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b56f36b529dbcd625f9c46a94290cf10.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "晚",
+        "gloss": "late",
+        "pinyin": "wǎn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1917a52c057aad5cc3493ce6e807bb3d.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/eb2d381a52b02a8c6fb6df569071d347.mp3"
+  },
+  {
+    "headword": "白天",
+    "isPhrase": false,
+    "wholeGloss": "day",
+    "wholePinyin": "báitiān",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "白天",
+        "gloss": "day",
+        "pinyin": "báitiān",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6fa7e15a01ab0bcf9102ba128db9a1d5.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6fa7e15a01ab0bcf9102ba128db9a1d5.mp3"
+  },
+  {
+    "headword": "黎明",
+    "isPhrase": false,
+    "wholeGloss": "dawn (before breakfast)",
+    "wholePinyin": "límíng",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "黎明",
+        "gloss": "dawn",
+        "pinyin": "límíng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/df56e73f97f3a24d32f46375ec05ca9e.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/df56e73f97f3a24d32f46375ec05ca9e.mp3"
+  },
+  {
+    "headword": "中午",
+    "isPhrase": false,
+    "wholeGloss": "midday (lunch & siesta time)",
+    "wholePinyin": "zhōngwǔ",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "中午",
+        "gloss": "midday",
+        "pinyin": "zhōngwǔ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5422a304a0bf193e48bdd6ab7eeedfb1.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5422a304a0bf193e48bdd6ab7eeedfb1.mp3"
+  },
+  {
+    "headword": "深夜",
+    "isPhrase": false,
+    "wholeGloss": "night (sleep time)",
+    "wholePinyin": "shēnyè",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "深夜",
+        "gloss": "night",
+        "pinyin": "shēnyè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/30003ad423e4c2ece432a3d096e608cb.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/30003ad423e4c2ece432a3d096e608cb.mp3"
+  },
+  {
+    "headword": "日出",
+    "isPhrase": false,
+    "wholeGloss": "sunrise",
+    "wholePinyin": "rìchū",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "日出",
+        "gloss": "sunrise",
+        "pinyin": "rìchū",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3ca0d8d999f25a082771ca7fa5be56f5.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3ca0d8d999f25a082771ca7fa5be56f5.mp3"
+  },
+  {
+    "headword": "日落",
+    "isPhrase": false,
+    "wholeGloss": "sunset",
+    "wholePinyin": "rìluò",
+    "tags": [
+      "time & dates"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "日落",
+        "gloss": "sunset",
+        "pinyin": "rìluò",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/67995f590a93c2112702a0859e32cc1f.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/67995f590a93c2112702a0859e32cc1f.mp3"
+  },
+  {
+    "headword": "金钱",
+    "isPhrase": false,
+    "wholeGloss": "money",
+    "wholePinyin": "jīnqián",
+    "tags": [
+      "money"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "金钱",
+        "gloss": "money",
+        "pinyin": "jīnqián",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5ca4682d5d1faa082c04d2dcfc336e3f.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5ca4682d5d1faa082c04d2dcfc336e3f.mp3"
+  },
+  {
+    "headword": "多少钱？",
+    "isPhrase": true,
+    "wholeGloss": "How much is it?",
+    "wholePinyin": "duōshǎo qián",
+    "tags": [
+      "money"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "多少",
+        "gloss": "how much",
+        "pinyin": "duōshǎo",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/fb8f01cb6d4be28b2e0b326fb16d8006.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "钱",
+        "gloss": "money",
+        "pinyin": "qián",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/0eb863c78da3e38b6b92d1f3999566e5.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/4eb241c847dc1625313b373beeff8102.mp3"
+  },
+  {
+    "headword": "请把价钱写下来。",
+    "isPhrase": true,
+    "wholeGloss": "Please write down the price.",
+    "wholePinyin": "qǐng bǎ jiàqián xiě xiàlái",
+    "tags": [
+      "money"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "请",
+        "gloss": "please",
+        "pinyin": "qǐng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/88d5840fab773af6bd7f9b6a4660d300.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "把",
+        "gloss": "(particle)",
+        "pinyin": "bǎ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/2442748e41108dab1f8691a4064d7bcd.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "价钱",
+        "gloss": "price",
+        "pinyin": "jiàqián",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f28943faa5fcf08f811d9c05c555a705.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "写",
+        "gloss": "write",
+        "pinyin": "xiě",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/eecaf7bb139f9c37a82faa01abef5d46.mp3"
+      },
+      {
+        "position": 4,
+        "hanzi": "下来",
+        "gloss": "down",
+        "pinyin": "xiàlái",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/dd30687a430070b38f9e8bf9ebceafaa.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a1a56f834d2ad1dce78609b18b62a477.mp3"
+  },
+  {
+    "headword": "你们收……吗？",
+    "isPhrase": true,
+    "wholeGloss": "Do you accept ...?",
+    "wholePinyin": "nǐmen shōu ma",
+    "tags": [
+      "money"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "你们",
+        "gloss": "you (plural)",
+        "pinyin": "nǐmen",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8a5d477bdaf612a969bf474a9c20ebce.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "收",
+        "gloss": "accept",
+        "pinyin": "shōu",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/339bacf403051262c073adfa2b976169.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1ad24360ed1ddb6c678e2d6feb2b7c36.mp3"
+  },
+  {
+    "headword": "你们收信用卡吗？",
+    "isPhrase": true,
+    "wholeGloss": "Do you accept credit cards?",
+    "wholePinyin": "nǐmen shōu xìnyòngkǎ ma",
+    "tags": [
+      "money"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "你们",
+        "gloss": "you (plural)",
+        "pinyin": "nǐmen",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8a5d477bdaf612a969bf474a9c20ebce.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "收",
+        "gloss": "accept",
+        "pinyin": "shōu",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/339bacf403051262c073adfa2b976169.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "信用卡",
+        "gloss": "credit card",
+        "pinyin": "xìnyòngkǎ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/bf4fe76a26686e0e18787e5056ca9b8a.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/d47150831c4f82c1b6dde5249c8dbaed.mp3"
+  },
+  {
+    "headword": "你们收借记卡吗？",
+    "isPhrase": true,
+    "wholeGloss": "Do you accept debit cards?",
+    "wholePinyin": "nǐmen shōu jièjìkǎ ma",
+    "tags": [
+      "money"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "你们",
+        "gloss": "you (plural)",
+        "pinyin": "nǐmen",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8a5d477bdaf612a969bf474a9c20ebce.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "收",
+        "gloss": "accept",
+        "pinyin": "shōu",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/339bacf403051262c073adfa2b976169.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "借记卡",
+        "gloss": "debit card",
+        "pinyin": "jièjìkǎ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/31fc5f8a25795e9f70acb6e3ca670d5c.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/9ebee5c4aa686e51cc7fc9ffdc940de2.mp3"
+  },
+  {
+    "headword": "旅行支票你们收吗？",
+    "isPhrase": true,
+    "wholeGloss": "Do you accept travellers cheques?",
+    "wholePinyin": "lǚxíng zhīpiào nǐmen shōu ma",
+    "tags": [
+      "money"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "旅行",
+        "gloss": "travel",
+        "pinyin": "lǚxíng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/e751bca25e1fc515534aecc28478c2d0.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "支票",
+        "gloss": "cheque",
+        "pinyin": "zhīpiào",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5bc99e270d61d457ea032c42f685a36b.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "你们",
+        "gloss": "you (plural)",
+        "pinyin": "nǐmen",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8a5d477bdaf612a969bf474a9c20ebce.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "收",
+        "gloss": "accept",
+        "pinyin": "shōu",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/339bacf403051262c073adfa2b976169.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8f2700db38242aa8e1be2324a24950ad.mp3"
+  },
+  {
+    "headword": "可以……吗？",
+    "isPhrase": true,
+    "wholeGloss": "I'd like ...",
+    "wholePinyin": "kěyǐ ma",
+    "tags": [
+      "money"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "可以",
+        "gloss": "can",
+        "pinyin": "kěyǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/0ef5c86fab94f13a7b7d54aa531ceb5d.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "吗",
+        "gloss": "question particle",
+        "pinyin": "ma",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5ac1612110def2c499accdb0f55b8fb0.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a6fe28c542751c44ec2d1c721c07e20e.mp3"
+  },
+  {
+    "headword": "可以找零吗？",
+    "isPhrase": true,
+    "wholeGloss": "I'd like my change",
+    "wholePinyin": "kěyǐ zhǎo líng ma",
+    "tags": [
+      "money"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "可以",
+        "gloss": "can",
+        "pinyin": "kěyǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/0ef5c86fab94f13a7b7d54aa531ceb5d.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "找",
+        "gloss": "give",
+        "pinyin": "zhǎo",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c277be8a4b92ee421a23d4b6b754c72c.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "零",
+        "gloss": "change",
+        "pinyin": "líng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/9489a4a6f3fbf136816df3dd09583e15.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/e59b4c93dd63c2a09aa90a9329253347.mp3"
+  },
+  {
+    "headword": "可以退款吗？",
+    "isPhrase": true,
+    "wholeGloss": "I'd like a refund",
+    "wholePinyin": "kěyǐ tuìkuǎn ma",
+    "tags": [
+      "money"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "可以",
+        "gloss": "can",
+        "pinyin": "kěyǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/0ef5c86fab94f13a7b7d54aa531ceb5d.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "退款",
+        "gloss": "refund",
+        "pinyin": "tuìkuǎn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f1c91e1d205cdacdf13492c2abfdc37b.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/d92869dc737373f825e2b2af9cacc569.mp3"
+  },
+  {
+    "headword": "可以退换这个吗？",
+    "isPhrase": true,
+    "wholeGloss": "I'd like to return this",
+    "wholePinyin": "kěyǐ tuìhuàn zhège ma",
+    "tags": [
+      "money"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "可以",
+        "gloss": "can",
+        "pinyin": "kěyǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/0ef5c86fab94f13a7b7d54aa531ceb5d.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "退换",
+        "gloss": "return",
+        "pinyin": "tuìhuàn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f64c8e5deb23f4df17a84d670a5bd438.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "这个",
+        "gloss": "this",
+        "pinyin": "zhège",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/979e2bc35b14bf4c6dfe8e6b96afa366.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a111b5cb23f589c814751268b8263cca.mp3"
+  },
+  {
+    "headword": "我要……",
+    "isPhrase": true,
+    "wholeGloss": "I'd like to ...",
+    "wholePinyin": "wǒ yào",
+    "tags": [
+      "money"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "要",
+        "gloss": "want",
+        "pinyin": "yào",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/975f35218ed8782e677da0207b26d7a1.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/16e3afec805e3140012500a3d310752d.mp3"
+  },
+  {
+    "headword": "我要兑现一张支票",
+    "isPhrase": true,
+    "wholeGloss": "I'd like to cash a cheque",
+    "wholePinyin": "wǒ yào duìxiàn yī zhāng zhīpiào",
+    "tags": [
+      "money"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "要",
+        "gloss": "want to",
+        "pinyin": "yào",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/975f35218ed8782e677da0207b26d7a1.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "兑现",
+        "gloss": "cash",
+        "pinyin": "duìxiàn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8be50e2400fc725e890ec0a9992ede34.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "一",
+        "gloss": "a",
+        "pinyin": "yī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/51a75f4634dfa8598a0a1436da0b7764.mp3"
+      },
+      {
+        "position": 4,
+        "hanzi": "张",
+        "gloss": "(measure word for cheque)",
+        "pinyin": "zhāng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f56a049fcc23f1ebfce1fdd64cb24f40.mp3"
+      },
+      {
+        "position": 5,
+        "hanzi": "支票",
+        "gloss": "cheque",
+        "pinyin": "zhīpiào",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5bc99e270d61d457ea032c42f685a36b.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1c6d4c26adac34835d3ef7a4ae848229.mp3"
+  },
+  {
+    "headword": "我要换旅行支票",
+    "isPhrase": true,
+    "wholeGloss": "I'd like to change a travellers cheque",
+    "wholePinyin": "wǒ yào huàn lǚxíng zhīpiào",
+    "tags": [
+      "money"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "要",
+        "gloss": "want to",
+        "pinyin": "yào",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/975f35218ed8782e677da0207b26d7a1.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "换",
+        "gloss": "change",
+        "pinyin": "huàn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1b5fdf01a42e830af2f5b0add5a8d4f2.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "旅行",
+        "gloss": "travel",
+        "pinyin": "lǚxíng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/e751bca25e1fc515534aecc28478c2d0.mp3"
+      },
+      {
+        "position": 4,
+        "hanzi": "支票",
+        "gloss": "cheque",
+        "pinyin": "zhīpiào",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5bc99e270d61d457ea032c42f685a36b.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3b05c80a772a1d8a5381d81f0b489c7f.mp3"
+  },
+  {
+    "headword": "我要换钱",
+    "isPhrase": true,
+    "wholeGloss": "I'd like to change money",
+    "wholePinyin": "wǒ yào huàn qián",
+    "tags": [
+      "money"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "要",
+        "gloss": "want to",
+        "pinyin": "yào",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/975f35218ed8782e677da0207b26d7a1.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "换",
+        "gloss": "change",
+        "pinyin": "huàn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1b5fdf01a42e830af2f5b0add5a8d4f2.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "钱",
+        "gloss": "money",
+        "pinyin": "qián",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/0eb863c78da3e38b6b92d1f3999566e5.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c31ffed2ba63454935e8506edef82484.mp3"
+  },
+  {
+    "headword": "我要现金透支",
+    "isPhrase": true,
+    "wholeGloss": "I'd like to get a cash advance",
+    "wholePinyin": "wǒ yào xiànjīn tòuzhī",
+    "tags": [
+      "money"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "要",
+        "gloss": "want",
+        "pinyin": "yào",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/975f35218ed8782e677da0207b26d7a1.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "现金",
+        "gloss": "cash",
+        "pinyin": "xiànjīn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/118f18e6840546c101b40e08aa8ceac7.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "透支",
+        "gloss": "advance",
+        "pinyin": "tòuzhī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/fbe4b6e2ca3e591bdf7d34db8efedfc2.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/22cb8ffe69efc3615e31c588342854f1.mp3"
+  },
+  {
+    "headword": "我要取现金",
+    "isPhrase": true,
+    "wholeGloss": "I'd like to withdraw money",
+    "wholePinyin": "wǒ yào qǔ xiàn jīn",
+    "tags": [
+      "money"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "要",
+        "gloss": "want to",
+        "pinyin": "yào",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/975f35218ed8782e677da0207b26d7a1.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "取",
+        "gloss": "withdraw",
+        "pinyin": "qǔ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5441f9fb09dc5bb91961639814fab6d3.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "现金",
+        "gloss": "cash",
+        "pinyin": "xiàn jīn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/118f18e6840546c101b40e08aa8ceac7.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/fdd828a7549a96983e1a9108459deb82.mp3"
+  },
+  {
+    "headword": "……在哪儿？",
+    "isPhrase": true,
+    "wholeGloss": "Where's ...?",
+    "wholePinyin": "zài nǎr",
+    "tags": [
+      "money"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "在",
+        "gloss": "at",
+        "pinyin": "zài",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/12404a0b638172406b8776fd1e1a36bf.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "哪儿",
+        "gloss": "where",
+        "pinyin": "nǎr",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1ca22981984a89e6d592ae9fd8583373.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/83e8218d36764aaa57e7cb97cd866386.mp3"
+  },
+  {
+    "headword": "自动取款机在哪儿？",
+    "isPhrase": true,
+    "wholeGloss": "Where's an ATM",
+    "wholePinyin": "zìdòng qǔkuǎnjī zài nǎr",
+    "tags": [
+      "money"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "自动",
+        "gloss": "automatic",
+        "pinyin": "zìdòng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/7eb336e42cb5076b0eac0305418ecd8f.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "取款机",
+        "gloss": "ATM",
+        "pinyin": "qǔkuǎnjī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/2582981a97b041fc2fc64d9a69500b8e.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "在",
+        "gloss": "at",
+        "pinyin": "zài",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/12404a0b638172406b8776fd1e1a36bf.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "哪儿",
+        "gloss": "where",
+        "pinyin": "nǎr",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1ca22981984a89e6d592ae9fd8583373.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/50b19e34ff4ed00ac913d1e3f4904453.mp3"
+  },
+  {
+    "headword": "换外币的地方在哪儿？",
+    "isPhrase": true,
+    "wholeGloss": "Where's a place to change foreign money",
+    "wholePinyin": "huàn wàibì de dìfang zài nǎr",
+    "tags": [
+      "money"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "换",
+        "gloss": "change",
+        "pinyin": "huàn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1b5fdf01a42e830af2f5b0add5a8d4f2.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "外币",
+        "gloss": "foreign money",
+        "pinyin": "wàibì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/708835ecb67f9dccdef8fee68a2148bd.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "的",
+        "gloss": "(possessive particle)",
+        "pinyin": "de",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8af2350cfd65805bd50b6813ab70f85f.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "地方",
+        "gloss": "place",
+        "pinyin": "dìfang",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1462a7d8531ef5d219ed84e59c663b98.mp3"
+      },
+      {
+        "position": 4,
+        "hanzi": "在哪儿",
+        "gloss": "where",
+        "pinyin": "zài nǎr",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/90abd4aeeb7147316d61e4d81dac52d1.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/057310ab9f22e52ce919d0ec07ff4ef0.mp3"
+  },
+  {
+    "headword": "……是多少？",
+    "isPhrase": true,
+    "wholeGloss": "What's the ...?",
+    "wholePinyin": "shì duōshǎo",
+    "tags": [
+      "money"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "是",
+        "gloss": "is",
+        "pinyin": "shì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b5141d3d19e9a04855acdb2dd5218b09.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "多少",
+        "gloss": "how much",
+        "pinyin": "duōshǎo",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/fb8f01cb6d4be28b2e0b326fb16d8006.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f15a48414e2b4143eb643ede1aa85414.mp3"
+  },
+  {
+    "headword": "手续费是多少？",
+    "isPhrase": true,
+    "wholeGloss": "What's the charge for that",
+    "wholePinyin": "shǒuxùfèi shì duōshǎo",
+    "tags": [
+      "money"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "手续费",
+        "gloss": "service charge",
+        "pinyin": "shǒuxùfèi",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a8c470dbab5b73b1052a0d4fb47d0d2e.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "是",
+        "gloss": "is",
+        "pinyin": "shì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b5141d3d19e9a04855acdb2dd5218b09.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "多少",
+        "gloss": "how much",
+        "pinyin": "duōshǎo",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/fb8f01cb6d4be28b2e0b326fb16d8006.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/7dbfce1653eab22a64fa2d8d9a55d64c.mp3"
+  },
+  {
+    "headword": "兑换率是多少？",
+    "isPhrase": true,
+    "wholeGloss": "What's the exchange rate",
+    "wholePinyin": "duìhuànlǜ shì duōshǎo",
+    "tags": [
+      "money"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "兑换率",
+        "gloss": "exchange rate",
+        "pinyin": "duìhuànlǜ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/e7642937cacafd6941365d008ef8e9ec.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "是",
+        "gloss": "is",
+        "pinyin": "shì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b5141d3d19e9a04855acdb2dd5218b09.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "多少",
+        "gloss": "how much",
+        "pinyin": "duōshǎo",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/fb8f01cb6d4be28b2e0b326fb16d8006.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/0a0ee35bb272529460401028494b6f6b.mp3"
+  },
+  {
+    "headword": "是……",
+    "isPhrase": false,
+    "wholeGloss": "It's ...",
+    "wholePinyin": "shì",
+    "tags": [
+      "money"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "是",
+        "gloss": "is",
+        "pinyin": "shì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b5141d3d19e9a04855acdb2dd5218b09.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/2539d3ab31f5a496ae15b832ef856b50.mp3"
+  },
+  {
+    "headword": "是(1200)元",
+    "isPhrase": true,
+    "wholeGloss": "It's 1200 RMB",
+    "wholePinyin": "shì yīqiān èrbǎi yuán",
+    "tags": [
+      "money"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "是",
+        "gloss": "is",
+        "pinyin": "shì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b5141d3d19e9a04855acdb2dd5218b09.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "元",
+        "gloss": "RMB",
+        "pinyin": "yuán",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/7f77f23af7b0dcc87b5ed446cc54be89.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/78fcbba14f78b61f5e7cb9c81d500a58.mp3"
+  },
+  {
+    "headword": "是免费的",
+    "isPhrase": true,
+    "wholeGloss": "It's free",
+    "wholePinyin": "shì miǎn fèi de",
+    "tags": [
+      "money"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "是",
+        "gloss": "is",
+        "pinyin": "shì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b5141d3d19e9a04855acdb2dd5218b09.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "免费",
+        "gloss": "free",
+        "pinyin": "miǎn fèi",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/649a0fc7237ed893d24148112da8491a.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "的",
+        "gloss": "(particle)",
+        "pinyin": "de",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8af2350cfd65805bd50b6813ab70f85f.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/97e223276720cc739da55a36c766ffb1.mp3"
+  },
+  {
+    "headword": "人民币",
+    "isPhrase": false,
+    "wholeGloss": "RMB (Renminbi) - 'People's Money'",
+    "wholePinyin": "rénmínbì",
+    "tags": [
+      "money"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "人民币",
+        "gloss": "RMB",
+        "pinyin": "rénmínbì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/ba9771ca730db58fec6782e8bb84034a.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/ba9771ca730db58fec6782e8bb84034a.mp3"
+  },
+  {
+    "headword": "元",
+    "isPhrase": false,
+    "wholeGloss": "yuan - the official name for the basic unit of RMB",
+    "wholePinyin": "yuán",
+    "tags": [
+      "money"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "元",
+        "gloss": "yuan",
+        "pinyin": "yuán",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/7f77f23af7b0dcc87b5ed446cc54be89.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/7f77f23af7b0dcc87b5ed446cc54be89.mp3"
+  },
+  {
+    "headword": "块",
+    "isPhrase": false,
+    "wholeGloss": "kuai - colloquial term for a yuan",
+    "wholePinyin": "kuài",
+    "tags": [
+      "money"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "块",
+        "gloss": "colloquial term for a yuan",
+        "pinyin": "kuài",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/36d89c8f512d8cce3b7fd6ec9b5493fb.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/36d89c8f512d8cce3b7fd6ec9b5493fb.mp3"
+  },
+  {
+    "headword": "角",
+    "isPhrase": false,
+    "wholeGloss": "jiao - the official term; 10 jiao make up one yuan",
+    "wholePinyin": "jiǎo",
+    "tags": [
+      "money"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "角",
+        "gloss": "jiao",
+        "pinyin": "jiǎo",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/beddda2bcf2473af2920dc0ec2c48819.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/beddda2bcf2473af2920dc0ec2c48819.mp3"
+  },
+  {
+    "headword": "毛",
+    "isPhrase": false,
+    "wholeGloss": "mao - colloquial term for a jiao",
+    "wholePinyin": "máo",
+    "tags": [
+      "money"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "毛",
+        "gloss": "mao",
+        "pinyin": "máo",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/99a8f4358612d50b9c5ed59bb0b72086.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/99a8f4358612d50b9c5ed59bb0b72086.mp3"
+  },
+  {
+    "headword": "分",
+    "isPhrase": false,
+    "wholeGloss": "fen - the official term; 10 fen make up one jiao",
+    "wholePinyin": "fēn",
+    "tags": [
+      "money"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "分",
+        "gloss": "fen",
+        "pinyin": "fēn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b6a993c256ef577abb04b0c353affde2.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b6a993c256ef577abb04b0c353affde2.mp3"
+  },
+  {
+    "headword": "只",
+    "isPhrase": false,
+    "wholeGloss": "nondescript animals (dogs, birds)",
+    "wholePinyin": "zhī",
+    "tags": [
+      "numbers & amounts"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "只",
+        "gloss": "nondescript animals",
+        "pinyin": "zhī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/409e2c3882c96ae674ec3e59b7576c0e.mp3"
+      }
+    ],
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/409e2c3882c96ae674ec3e59b7576c0e.mp3"
   }
 ]

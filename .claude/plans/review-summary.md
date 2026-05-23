@@ -3,26 +3,21 @@ status: COMPLETE
 updated: 2026-05-23
 ---
 
-# Review Summary — Milestone 8: Auto-play phrase audio + FSRS Chinese tuning
+# Review Summary — Seed Data Refresh (Reborn Chinese System deck)
 
 ## Result
 PASS
 
 ## Files Reviewed
-- `components/audio-button.tsx`
-- `components/review-session.tsx`
-- `components/card-back.tsx`
-- `components/card-front.tsx`
-- `components/word-chip.tsx`
-- `lib/review/config.ts`
-- `lib/review/scheduler.ts`
-- `lib/review/actions.ts`
-- `lib/review/queries.ts`
-- `lib/review/types.ts`
-- `lib/review/stats.ts`
-- `lib/db/schema.ts`
-- `app/stats/page.tsx`
-- `scripts/migrate-retention.ts`
+- `scripts/generate-deck.ts`
+- `scripts/refresh-seed-db.ts`
+- `scripts/build-seed-csv.mjs`
+- `scripts/prune-retag-deck.mjs`
+- `seed/reborn-chinese-system.csv`
+- `seed/deck.generated.json`
+- `lib/db/schema.ts` (cascade verification)
+- `scripts/deck-types.ts`
+- `scripts/seed-db.ts` (idempotency context)
 
 ## Findings
 
@@ -33,80 +28,123 @@ None.
 None.
 
 ### MEDIUM
-None.
+
+- **`scripts/refresh-seed-db.ts`:69-73** — Drift detection covers only card-level fields
+  (`wholeGloss`, `wholePinyin`, `isPhrase`, `wholeAudioUrl`). Word-level fields
+  (`words[].gloss`, `words[].pinyin`, `words[].audioUrl`) are not compared. If a retained
+  card's word breakdown changes in the deck but none of its card-level fields change, the
+  re-sync will not fire and the words table stays stale. The script comment says "re-syncs
+  any retained card whose generated content drifted" without qualifying this exclusion.
+  For this specific run the gap had no impact (只's card-level wholeGloss changed, so drift
+  was detected correctly). Risk is latent for a future refresh where only word-level content
+  is regenerated.
+  - Fix direction: either add a words comparison pass, or narrow the JSDoc to "card-level drift only".
 
 ### LOW
 
-- `scripts/migrate-retention.ts:22-23` — The `result` value logged by `console.log("Updated learner_settings rows:", result)` will be an empty array `[]` under the neon-http Drizzle driver. Drizzle `update()` on neon-http returns no row count unless `.returning()` is chained. The script runs correctly and the UPDATE fires, but the operator sees no confirmation of how many rows were actually touched. Suggested fix: chain `.returning({ learnerId: learnerSettings.learnerId })` so the log shows which rows were updated.
+- **`scripts/refresh-seed-db.ts`:38-41** — The SELECT that feeds `doomed` uses
+  `notInArray(schema.cards.headword, keep)` with no guard for an empty `keep` array. Postgres
+  rejects `WHERE col NOT IN ()` as invalid SQL; Drizzle would surface this as a runtime
+  exception. The `if (doomed.length)` guard below protects the DELETE but not this SELECT.
+  The script is documented as "safe to re-run", which is only true when the deck file is
+  non-empty. Practical risk is near-zero against a 204-card deck; a mis-run against a
+  truncated or empty deck file would throw.
+  - Fix direction: add `if (!keep.length) { console.log('[delete] deck is empty — aborting'); return; }` before the SELECT.
 
-- `components/audio-button.tsx:7` — `new Audio(url).play()` creates a detached `HTMLAudioElement` with no stored reference. Modern browsers keep active media elements alive via an internal active-media list while playing, so GC before playback completes is not a real-world risk. This is the standard fire-and-forget audio idiom. Flagged for completeness; not a functional bug in any current browser.
+- **`scripts/build-seed-csv.mjs`:14-16** — Source path is hard-coded to
+  `C:\Users\User\Downloads\Reborn Chinese System - Sheet1 (1).csv`. This is acceptable for a
+  one-shot helper, but anyone re-running this script on a different machine or after the
+  Downloads file is removed will get an opaque ENOENT. Since the script is kept for
+  auditability, a comment noting the dependency on that path would prevent confusion.
 
 ## Assertions Checked
 
-**A1 — Auto-play on reveal exactly once; no front auto-play; no per-word auto-play; null-safe.**
+**A1 — CSV shape (206 rows, no empty-Chinese, no 77 row, section headers present, 4 classifier glosses correct):**
 PASS.
-- `playAudio` is called inside the inline `onReveal` arrow function at `review-session.tsx:54-59`, which is the `onClick` of `CardFront`'s "Show answer" button. It fires once per click, inside the user-gesture context.
-- `revealed` flips to `true` on that same click; `CardFront` is conditionally rendered only when `!revealed`. The "Show answer" button — and therefore the `onReveal` handler — is unreachable after the first reveal. No second call path exists.
-- `CardBack` and `WordChip` render `AudioButton`, which requires an explicit user click. No `useEffect` hooks exist anywhere in the component tree (confirmed: grep for `useEffect` in `components/` returns zero matches). No auto-play on `CardBack` mount.
-- `playAudio(null)`: first line is `if (!url) return`. No throw on null `wholeAudioUrl`. Confirmed.
-- React 18 StrictMode double-invoke concern: StrictMode double-invokes render functions and effects, not event handlers. The play call is in a click handler; no double-play risk.
+- Line count: 207 lines / 206 non-empty (confirmed via `node`).
+- No empty-Chinese rows: grep for `^,` and `^$` returns zero matches.
+- No `77` row: grep for `^77,` and `^"77",` returns zero matches. `build-seed-csv.mjs` also
+  strips non-CJK col-0 values via `/[一-鿿]/` which correctly excludes the ASCII string "77".
+- Section headers at CSV lines 16, 99, 175 (数字与数量, 时间与日期, 金钱).
+- All 4 classifier glosses present with full parenthetical lists:
+  - 张 → "flat things (tickets, paper, tables)"
+  - 条 → "long things (fish, ribbons, roads)"
+  - 只 → "nondescript animals (dogs, birds)"
+  - 座 → "big things (mountains, buildings)"
+- Embedded-quote row: `"怎么写""熊猫""？",How do you write 'panda'?` — correctly
+  RFC-4180 double-quoted. Round-trip parse via csv-parse with `relax_quotes: true` returns
+  `怎么写"熊猫"？` as col-0 (confirmed by inline node execution).
 
-**A2 — `request_retention: 0.85` flows into every scheduler call.**
+**A2 — Tagging: section-header-derived tags, no LANGUAGE_ROW_CUTOFF:**
 PASS.
-- `REQUEST_RETENTION = 0.85` is the single definition at `lib/review/config.ts:11`.
-- `getScheduler()` at `scheduler.ts:22` passes it directly: `fsrs(generatorParameters({ request_retention: REQUEST_RETENTION }))`.
-- Both call sites (`actions.ts:28`, `queries.ts:226`) call `getScheduler()` with zero arguments.
-- No call site passes a retention argument. The per-learner column path is completely removed from scheduling logic.
-- Grep for `0.9` in `lib/`, `components/`, `app/` returns zero matches.
-- Schema default updated to `0.85` and marked vestigial with an inline comment (`schema.ts:174-177`).
-- `ensureLearnerSettings` is still called in `queries.ts:172` (needed for `newCardsPerDay`), but only `settings.newCardsPerDay` is used from its return value; `requestRetention` is never read.
+- No `LANGUAGE_ROW_CUTOFF`, `TAG_LANGUAGE`, or `TAG_NUMBERS` in `generate-deck.ts`
+  (full-text inspection).
+- `SECTION_TAGS` map and `DEFAULT_TAG` constant are present.
+- Critical ordering: `currentTag` is updated at lines 136-138 before the `byHeadword.has()`
+  cache check at line 141. This means `currentTag` advances even when the section-header
+  row itself is cached — subsequent new rows in that section receive the correct tag.
+- Section-header rows are cards in the deck (confirmed in JSON); they are cached on a re-run
+  and skipped, but `currentTag` is correctly updated before the skip.
+- `prune-retag-deck.mjs` mirrors the same `SECTION_TAGS` / `DEFAULT_TAG` / `currentTag`
+  pattern; tag derivation is consistent between the two scripts.
 
-**A3 — `isLeech` returns true iff `lapses >= 7`; badge and stats count use the same predicate.**
+**A3 — Deck JSON: 204 cards, 4 distinct tags, no old-only headwords, 只 correct:**
 PASS.
-- `isLeech` implementation at `config.ts:17`: `return fsrsCard.lapses >= LEECH_THRESHOLD` where `LEECH_THRESHOLD = 7`. Boundary is `>=`, not `>`. Correct per spec.
-- Badge in `card-back.tsx:19`: `const leech = isLeech({ lapses: card.lapses })`, rendered conditionally at line 27. Same predicate via shared import.
-- Stats count in `stats.ts:176-178`: `myStates.filter(s => isLeech({ lapses: extractLapses(s.fsrsCard) })).length`. Same predicate via shared import.
-- All three consumers import `isLeech` from the single source. No predicate drift possible.
-- New cards (no state row): `lapses` seeded `0` in `loadStudyCard` and then overwritten from `createEmptyCard(now).lapses` (also `0`) in `getStudyScreenData`. Badge correctly suppressed for unseen cards.
+- Card count: 204 (confirmed via `node`).
+- Distinct tags: `["languages difficulties", "numbers & amounts", "time & dates", "money"]`.
+- Tag distribution: languages difficulties 15, numbers & amounts 82, time & dates 75,
+  money 32 (total = 204). Matches orchestrator verification.
+- No cards missing required fields (headword, wholeGloss, wholePinyin, tags).
+- 只 entry: `wholeGloss: "nondescript animals (dogs, birds)"`, `tags: ["numbers & amounts"]`,
+  `wholePinyin: "zhī"`, single-word breakdown — all correct.
+- Section-header headwords (数字与数量, 时间与日期, 金钱) are present in the deck as cards.
 
-**A4 — Build / typecheck / lint clean; no M7 same-day requeue regression; no M6 stats regression.**
-PASS.
-- `npm run build`: exit 0, TypeScript clean, all 5 routes generated successfully.
-- `npm run lint`: exit 0, no warnings.
-- `npx tsc --noEmit`: exit 0, no output.
-- M7 same-day requeue logic (`queries.ts:47-100`, `endOfThailandDay` predicate, `fetchRawCounts`, `getStudyScreenData` due-window) is untouched by this milestone. No changes to the due-eligibility predicate.
-- M6 stats fields (`seen`, `mature`, `reviewsByDay`, `streak`, `dueForecast`, `ratingCounts`) are all present and unmodified in `stats.ts`. `leechCount` is purely additive.
-- `app/stats/page.tsx` grid changed from `grid-cols-3` to `grid-cols-2 sm:grid-cols-4` to fit the fourth tile. The three existing `StatTile` instances are unchanged in label and data binding.
+**A4 — DB cascade safety:**
+PASS (verified by schema inspection).
+- `words.cardId` → `cards.id` with `{ onDelete: "cascade" }` (schema.ts:92).
+- `cardTags.cardId` → `cards.id` with `{ onDelete: "cascade" }` (schema.ts:110).
+- `reviewStates.cardId` → `cards.id` with `{ onDelete: "cascade" }` (schema.ts:133).
+- `reviewLogs.cardId` → `cards.id` with `{ onDelete: "cascade" }` (schema.ts:159).
+- All four required cascades declared. `refresh-seed-db.ts` deletes `cards` rows by UUID;
+  the FK cascades will fire on all child tables automatically.
+- The two-step delete (SELECT doomed → DELETE by id) is correct. Selecting by id avoids any
+  race condition from the headword column's lack of a UNIQUE constraint.
 
-**Vestigial column check — `requestRetention` is not read for scheduling.**
-PASS.
-- All usages of `requestRetention` / `request_retention` in source: `schema.ts` (column definition), `config.ts` (comment only), `scheduler.ts` (uses `REQUEST_RETENTION` constant, not the DB column), `migrate-retention.ts` (update script).
-- Confirmed via grep across all `.ts`/`.tsx` files: no call path reads the column value and passes it to `getScheduler` or `generatorParameters`.
+**A5 — TypeScript build clean:**
+PASS — orchestrator reports `npx tsc --noEmit` → exit 0.
 
 ## Commands Run
-- `npm run lint` — exit 0, clean (no output)
-- `npm run build` — exit 0, TypeScript clean, 5 routes generated
-- `npx tsc --noEmit` — exit 0, no output
-- `grep -rn "0\.9" lib/ components/ app/ --include="*.ts" --include="*.tsx"` — zero matches
-- `grep -rn "getScheduler(" lib/ components/ app/ --include="*.ts" --include="*.tsx"` — 2 call sites, both zero-arg
-- `grep -rn "requestRetention|request_retention" --include="*.{ts,tsx}"` — no scheduling use of per-learner column confirmed
-- `grep -rn "useEffect" components/ --include="*.tsx"` — zero matches (no auto-play-on-mount risk)
-- `cat node_modules/next/dist/docs/01-app/03-api-reference/04-functions/refresh.md` — confirmed `refresh()` from `next/cache` is the correct API for this Next.js version
+
+- `node -e` (inline): CSV line count → 207 lines / 206 non-empty
+- `node -e` (inline): deck card count, 只 entry, distinct tags, tag distribution,
+  missing-field check, section-header presence in deck
+- `node -e` (inline): duplicate headwords in deck → none
+- `node -e` (via bash): RFC-4180 embedded-quote row round-trip parse → correct
+- `grep`: 77-row scan, empty-line scan, section-header locations, classifier rows,
+  熊猫 row — all matched expectations
 
 ## Residual Risk
 
-1. **Migration not yet run.** `scripts/migrate-retention.ts` updates the vestigial `request_retention` column for the 2 existing learner_settings rows and has not been executed (no DB credentials in the session). Functional risk is zero since the column is no longer read for scheduling. The cosmetic risk is that reading `learner_settings` directly shows `0.9` until the script runs.
+1. **Word-level drift not detected (MEDIUM above).** For this refresh, zero impact. Latent
+   for future re-runs where only word-level content changes.
 
-2. **Migration result logging opaque.** The `console.log` in `migrate-retention.ts` prints `[]` rather than a row count. The operator should verify post-run with a direct SELECT. See LOW finding above.
+2. **notInArray empty-array guard missing (LOW above).** Zero risk against the current
+   204-card deck. Only dangerous if the script is invoked after the deck file is wiped.
 
-3. **`lapses` field relies on ts-fsrs default.** Code assumes `createEmptyCard(now).lapses === 0`. This is standard ts-fsrs behavior but is not asserted in a test. A future ts-fsrs upgrade that changes the default would cause new cards to erroneously show the leech badge. Risk is low for a pinned dependency.
+3. **昨天晚上 duplicate in CSV (data, not code).** Two rows (lines 153 and 159) with the
+   same headword but different English glosses. The generated card uses the first
+   occurrence's English ("last night"); the second's English ("yesterday evening (after
+   dinner)") is silently lost. This is a source-sheet authoring issue. The behavior is
+   consistent with how `generate-deck.ts` handles any duplicate headword (Map overwrites
+   on re-encounter, but the card was already cached from the first encounter). One card
+   is in the deck; no data corruption occurs.
 
-4. **No automated tests.** No regression tests cover audio auto-play, leech threshold, or retention constant propagation. A future refactor touching these paths would not be caught automatically. Out of scope for this milestone.
+4. **build-seed-csv.mjs hard-coded path (LOW above).** Zero operational risk since the
+   CSV deliverable is already committed. Risk is only to anyone re-running the helper.
 
 ## Procedure Compliance
 - Plan (`active-plan.md`) consulted before review: yes
-- Implementation summary (`implementation-summary.md`) read before review: yes
+- Implementation summary (`implementation-summary.md`) read before review: yes (including orchestrator addendum)
 - All changed and related source files read in full: yes
-- Next.js API usage verified against `node_modules/next/dist/docs/` (`refresh` from `next/cache` confirmed correct): yes
 - No source files modified during review: yes
 - Review summary written: yes

@@ -1,44 +1,3 @@
-你,you
-会,can / to be able to / will
-说,to speak / to say
-英文,English (language)
-吗,(question particle)
-有,to have / there is
-谁,who
-明白,to understand / clear
-不,not / no
-我,I / me
-一点,a little / a bit
-请,please
-用,to use / with
-拼音,Pinyin (romanization system)
-写,to write
-中文,Chinese (language)
-下来,(verb complement: down / completion)
-指出,to point out
-书,book
-上,on / above
-的,(possessive/modifier particle)
-范句,example sentence
-这个,this / this one
-是,to be / is
-什么,what
-意思,meaning
-怎么,how / why
-念,to read aloud / to study
-熊猫,panda
-再,again / once more
-一遍,one time (through) / once
-慢,slow
-可以,can / may / possible
-四十四,forty-four
-只,(measure word for animals)
-石,stone
-狮子,lion
-死,to die / dead
-外交官,diplomat
-歪,crooked / askew
-胶管,rubber tube / hose
 你会说英文吗？,Do you speak English?
 有谁会说英文吗？,Does anyone speak English?
 你明白吗？,Do you understand?
@@ -54,7 +13,6 @@
 请你再说一遍？,Could you please repeat that?
 请你慢一点说？,Could you please speak more slowly?
 可以请你写下来吗？,Could you please write it down?
-四十四只石狮子是死的。,Forty-four stone lions are dead.
 数字与数量,numbers & amounts
 基数,cardinal numbers
 零,0
@@ -98,3 +56,149 @@
 一百万,1000000
 一亿,100000000
 序数,ordinal numbers
+第一,1st
+第二,2nd
+第三,3rd
+第四,4th
+第五,5th
+百分比,fractions
+四分之一,a quarter
+三分之一,a third
+一半,a half
+四分之三,three-quarters
+所有,all
+没有,none
+量词,classifiers
+个,generic classifier
+张,"flat things (tickets, paper, tables)"
+条,"long things (fish, ribbons, roads)"
+位,people
+只,"nondescript animals (dogs, birds)"
+座,"big things (mountains, buildings)"
+常用数量,amounts
+多少？,How much?
+几个？,How many?
+请给我……,Please give me ...
+请给我 (50) 克,Please give me (50) grams
+请给我 1 两,Please give me 1 Chinese ounce (=50 grams)
+请给我 1 斤,Please give me 1 Chinese pound (=half a kilo)
+请给我一瓶,Please give me a bottle
+请给我一打,Please give me a dozen
+请给我一些,Please give me a few
+请给我一罐,Please give me a jar
+请给我 1 公斤,Please give me a kilo
+请给我少一点,Please give me less
+请给我一小块,Please give me a little
+请给我好多,Please give me a lot
+请给我许多,Please give me many
+请给我多一些,Please give me more
+请给我一盒,Please give me a packet
+请给我一块,Please give me a slice
+请给我一听,Please give me a tin
+时间与日期,time & dates
+说时间,telling the time
+现在几点钟？,What time is it?
+(一)点钟。,It's (one) o'clock.
+(十)点五分。,Five past (ten).
+(十)点十五分。,Quarter past (ten).
+(十)点三十分。,Half past (ten).
+(十)点四十分。,Twenty to (eleven).
+(十)点四十五分。,Quarter to (eleven).
+早上,am
+晚上,pm
+什么时候(开始)？,At what time (does it start)?
+十点钟(开始)。,(It starts) At ten.
+(晚上9点57分)开始。,It starts at (9:57 pm).
+日历,the calendar
+星期一,Monday
+星期二,Tuesday
+星期三,Wednesday
+星期四,Thursday
+星期五,Friday
+星期六,Saturday
+星期天,Sunday
+一月,January
+二月,February
+三月,March
+四月,April
+五月,May
+六月,June
+七月,July
+八月,August
+九月,September
+十月,October
+十一月,November
+十二月,December
+今天几号？,What date is it today?
+(十月十八号)。,It's (18 October).
+春天,spring
+夏天,summer
+秋天,autumn
+冬天,winter
+目前时态,present
+现在,now
+这个……,this ...
+这个下午,this afternoon
+这个月,this month
+这个早上,this morning (after breakfast)
+这个上午,this morning (before lunch)
+这个星期,this week
+今年,this year
+今天,today
+今天晚上,tonight
+过去时间,past
+(三天)以前,(three days) ago
+前天,day before yesterday
+昨天晚上,last night
+上星期,last week
+上个月,last month
+去年,last year
+从(五月)以来,since (May)
+昨天……,yesterday ...
+将来时,future
+后天,day after tomorrow
+(六天)以后,in (six days)
+下星期,next week
+下个月,next month
+明年,next year
+明天……,tomorrow ...
+到(六月)为止,until (June)
+从早到晚,during the day
+白天,day
+黎明,dawn (before breakfast)
+中午,midday (lunch & siesta time)
+深夜,night (sleep time)
+日出,sunrise
+日落,sunset
+金钱,money
+多少钱？,How much is it?
+请把价钱写下来。,Please write down the price.
+你们收……吗？,Do you accept ...?
+你们收信用卡吗？,Do you accept credit cards?
+你们收借记卡吗？,Do you accept debit cards?
+旅行支票你们收吗？,Do you accept travellers cheques?
+可以……吗？,I'd like ...
+可以找零吗？,I'd like my change
+可以退款吗？,I'd like a refund
+可以退换这个吗？,I'd like to return this
+我要……,I'd like to ...
+我要兑现一张支票,I'd like to cash a cheque
+我要换旅行支票,I'd like to change a travellers cheque
+我要换钱,I'd like to change money
+我要现金透支,I'd like to get a cash advance
+我要取现金,I'd like to withdraw money
+……在哪儿？,Where's ...?
+自动取款机在哪儿？,Where's an ATM
+换外币的地方在哪儿？,Where's a place to change foreign money
+……是多少？,What's the ...?
+手续费是多少？,What's the charge for that
+兑换率是多少？,What's the exchange rate
+是……,It's ...
+是(1200)元,It's 1200 RMB
+是免费的,It's free
+人民币,RMB (Renminbi) - 'People's Money'
+元,yuan - the official name for the basic unit of RMB
+块,kuai - colloquial term for a yuan
+角,jiao - the official term; 10 jiao make up one yuan
+毛,mao - colloquial term for a jiao
+分,fen - the official term; 10 fen make up one jiao

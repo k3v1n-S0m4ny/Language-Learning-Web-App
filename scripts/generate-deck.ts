@@ -6,9 +6,14 @@
  * word-by-word breakdown (hanzi + gloss + pinyin). The CSV's English is kept as the
  * authoritative whole-phrase gloss. Output: seed/deck.generated.json (review/edit it).
  *
- * Tags (per the deck's two sections):
- *   rows 1-57  -> "languages difficulties"
- *   rows 58+   -> "numbers & amounts"
+ * Tags are derived from section-header rows in the CSV. When a row's headword exactly
+ * matches a key in SECTION_TAGS, currentTag is updated and all subsequent rows carry
+ * that tag until the next section header. Rows before any section header fall back to
+ * DEFAULT_TAG ("languages difficulties").
+ *   数字与数量 -> "numbers & amounts"
+ *   时间与日期 -> "time & dates"
+ *   金钱       -> "money"
+ *   (default)  -> "languages difficulties"
  *
  * Re-runnable: rows already present in the output are skipped (resume after a crash,
  * or delete the file to regenerate). Set LIMIT=3 to process only the first N rows.
@@ -25,9 +30,14 @@ config({ path: ".env.local" });
 const MODEL = process.env.OPENAI_CONTENT_MODEL ?? "gpt-4o";
 const SOURCE = path.join("seed", "reborn-chinese-system.csv");
 const OUT = path.join("seed", "deck.generated.json");
-const TAG_LANGUAGE = "languages difficulties";
-const TAG_NUMBERS = "numbers & amounts";
-const LANGUAGE_ROW_CUTOFF = 57; // rows 1..57 are the language section
+// Top-level section headers in the CSV map to their deck tag. Rows before the
+// first matching header inherit DEFAULT_TAG.
+const SECTION_TAGS: Record<string, string> = {
+  "数字与数量": "numbers & amounts",
+  "时间与日期": "time & dates",
+  "金钱": "money",
+};
+const DEFAULT_TAG = "languages difficulties";
 const LIMIT = process.env.LIMIT ? Number(process.env.LIMIT) : Infinity;
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -115,13 +125,18 @@ async function main() {
   const byHeadword = new Map(existing.map((c) => [c.headword, c]));
 
   let processed = 0;
+  let currentTag = DEFAULT_TAG;
   for (let i = 0; i < rows.length && processed < LIMIT; i++) {
     const [hanziRaw, englishRaw] = rows[i];
     const hanzi = (hanziRaw ?? "").trim();
     const english = (englishRaw ?? "").trim();
     if (!hanzi) continue;
 
-    const tag = i < LANGUAGE_ROW_CUTOFF ? TAG_LANGUAGE : TAG_NUMBERS;
+    // Update the running tag whenever a top-level section header is encountered.
+    if (Object.prototype.hasOwnProperty.call(SECTION_TAGS, hanzi)) {
+      currentTag = SECTION_TAGS[hanzi];
+    }
+    const tag = currentTag;
 
     if (byHeadword.has(hanzi)) {
       console.log(`[skip] ${hanzi} (cached)`);

@@ -3,57 +3,123 @@ status: COMPLETE
 updated: 2026-05-23
 ---
 
-# Handoff: Milestone 8 — Auto-play phrase audio + FSRS Chinese tuning
-
+# Handoff: Seed CSV Rebuild + Deck Re-tag (Steps 1-3)
 Agent: implementer | Date: 2026-05-23 | Status: COMPLETE
 
 ## Completed
 
-### Feature 1 — Default playback to whole-phrase audio
+- **`seed/reborn-chinese-system.csv`** — Overwritten with cleaned output. 206 rows total.
+  All 4 classifier glosses fixed (张, 条, 只, 座). Section headers retained as ordinary rows.
+  Stray `["77",""]` row dropped (no CJK character). 27 trailing empty rows dropped.
+  Fields containing commas are RFC-4180 double-quoted. No header line.
 
-- **`components/audio-button.tsx`** — Added `export function playAudio(url: string | null): void` as a standalone imperative helper. Extracted from the `AudioButton` internal `play()` call, which now delegates to it. Safe to call with `null` (no-op).
-- **`components/review-session.tsx`** — Imported `playAudio`. Changed the `onReveal` prop from `() => setRevealed(true)` to an arrow function that calls `setRevealed(true)` then `playAudio(card.wholeAudioUrl)`. Play fires inside the click handler (user-gesture context), satisfying browser autoplay policy. `null` `wholeAudioUrl` is handled by `playAudio`'s null guard — no throw on reveal.
+- **`scripts/generate-deck.ts`** — Removed `LANGUAGE_ROW_CUTOFF`, `TAG_LANGUAGE`, `TAG_NUMBERS`
+  and the old row-index ternary. Replaced with `SECTION_TAGS` map + `DEFAULT_TAG` constant and a
+  `currentTag` variable that updates on encountering a section-header headword. JSDoc comment block
+  updated to describe the new section-header-driven tagging scheme. All other logic (OpenAI call,
+  resume/skip, incremental write) left unchanged.
 
-React 18 StrictMode note: StrictMode double-invokes *effects*, not event handlers. Since play is called inside the click handler, no ref guard was needed. No double-play risk.
+- **`seed/deck.generated.json`** — Pruned from 100 cards to **59 retained**, **41 dropped**.
+  Each retained card's `tags` array re-set to the section-derived tag.
+  - Distinct tags among retained: `["numbers & amounts", "languages difficulties"]`
+  - `"time & dates"` and `"money"` do not appear in retained because no cards for those
+    sections had been generated yet (they are new rows in the expanded CSV).
+  - Dropped headwords include: individual vocabulary words (你, 会, 说…) and the
+    tongue-twister 四十四只石狮子是死的。 and component words (石, 狮子, 死, 歪, 外交官, 胶管, 四十四).
 
-### Feature 2 — FSRS Chinese tuning as global constants
+- **`scripts/build-seed-csv.mjs`** — One-shot Node ESM build script (Step 1). Not required
+  to be committed; the deliverable is the CSV. Kept in repo for auditability.
 
-- **`lib/review/config.ts`** (new file) — Exports `REQUEST_RETENTION = 0.85`, `LEECH_THRESHOLD = 7`, and `isLeech({ lapses }): boolean`. Single source of truth for all retention and leech logic.
-- **`lib/review/scheduler.ts`** — Imported `REQUEST_RETENTION` from `./config`. `getScheduler()` now takes no arguments and always builds the FSRS instance with the global constant. (Parameter removed entirely to avoid a dead-arg lint warning.)
-- **`lib/db/schema.ts` (line ~174)** — Changed `learnerSettings.requestRetention` column default from `0.9` to `0.85`. Added a comment marking it vestigial (column kept, not dropped).
-- **`lib/review/actions.ts`** — Removed the `ensureLearnerSettings` import and the `settings` variable (no longer needed; `getScheduler()` takes no args). `getScheduler()` called with no args.
-- **`lib/review/queries.ts`** — `getScheduler()` call in `getStudyScreenData` updated to no-arg form. After loading `fsrsCard`, sets `card.lapses = fsrsCard.lapses` so the client gets the lapse count without receiving the full FSRS jsonb blob. `loadStudyCard` seeds `lapses: 0` as the placeholder for unseen cards (correct — no state row exists for them).
-- **`lib/review/types.ts`** — Added `lapses: number` to `StudyCard` interface.
-- **`lib/review/stats.ts`** — Imported `isLeech`. Added `extractLapses(fsrsCard)` internal helper. Added `leechCount: number` to `LearnerStats` interface. Computed `leechCount` per-learner: `myStates.filter(s => isLeech({ lapses: extractLapses(s.fsrsCard) })).length`.
-- **`app/stats/page.tsx`** — Added `<StatTile label="Leeches" value={stats.leechCount} />` tile. Grid changed from `grid-cols-3` to `grid-cols-2 sm:grid-cols-4` to fit four tiles.
-- **`components/card-back.tsx`** — Imported `isLeech`. Computes `leech = isLeech({ lapses: card.lapses })` on render. Renders a small red `leech` badge pill inline with the headword when `leech` is true. Badge has `title` attribute showing the raw lapse count. Absent for non-leeches.
-- **`scripts/migrate-retention.ts`** (new file) — One-time script to UPDATE all `learner_settings` rows to `request_retention = 0.85`. Must be run manually once against production: `tsx scripts/migrate-retention.ts`.
+- **`scripts/prune-retag-deck.mjs`** — One-shot Node ESM prune/re-tag script (Step 3). Same
+  section-tag logic as generate-deck.ts.
 
 ## Left Undone
 
-- **Executing the migration script** — `scripts/migrate-retention.ts` was written but not run (no live DB credentials in this session). Must be run once manually.
-- **Content work** — intentionally out of scope per plan (tags, more phrases, stroke order all cut).
+- Steps 4+ of the seed pipeline (OpenAI generation for new rows, audio generation, DB seeding)
+  are intentionally left to the orchestrator per task instructions.
+- The two helper scripts (`build-seed-csv.mjs`, `prune-retag-deck.mjs`) were not committed —
+  commit decision deferred to orchestrator.
 
 ## Commands Run
 
-- `npm run build` (first pass) — exit 0, compiled successfully, TypeScript clean
-- `npm run lint` (first pass) — exit 1 with 1 warning: `_requestRetention` parameter defined but never used in `scheduler.ts`. Fixed by removing the parameter.
-- `npm run build` (second pass) — exit 0
-- `npm run lint` (second pass) — exit 0, clean
+- `node scripts/build-seed-csv.mjs` — exit 0; output: `Total rows written: 206`, all 4 fixed rows confirmed
+- `node scripts/prune-retag-deck.mjs` — exit 0; output: `Retained: 59`, `Dropped: 41`, distinct tags `["numbers & amounts","languages difficulties"]`
 
 ## Issues Discovered
 
-- **`_requestRetention` lint warning** — First version of `getScheduler` accepted an optional `_requestRetention` parameter for API compatibility. ESLint `@typescript-eslint/no-unused-vars` warned on it even with the underscore prefix. Resolved by removing the parameter entirely; no call site in the project passes a retention value anymore.
-- **`lapses` on `StudyCard`** — FSRS card lives server-side. The simplest path to the client for the leech badge was adding `lapses: number` to `StudyCard` (already a serializable client-bound shape). `loadStudyCard` seeds it 0; `getStudyScreenData` overwrites it from the real state row before returning.
+- `csv-stringify` is listed in the task spec as an available dependency but is **not installed**
+  (`node_modules/csv-stringify` does not exist and it is absent from `package.json`).
+  Resolved by implementing a minimal inline `csvField()` + `csvRow()` helper that applies
+  RFC-4180 quoting — functionally equivalent to `csv-stringify/sync` with default settings.
+
+- The existing `seed/reborn-chinese-system.csv` was the old single-word-only version (57 rows),
+  not the phrase-and-section version. It was replaced by the Step 1 script as intended.
+
+- The 59 retained cards contain only `"numbers & amounts"` and `"languages difficulties"` tags.
+  `"time & dates"` and `"money"` will appear after the next `seed:generate` run processes the
+  new CSV rows for those sections.
 
 ## Spec Deviations
 
-- `getScheduler` signature simplified to zero-args. Spec said "use global REQUEST_RETENTION rather than per-Learner column" but did not say keep the parameter. Removing it is stricter and eliminates a dead-arg smell. Documented here for reviewer awareness.
-- Stats grid changed from 3 to 4 columns to accommodate the Leeches tile. The three existing tiles are unchanged in meaning and layout; 4 columns was a necessary UI adjustment.
+- **csv-stringify not used**: replaced with a 4-line inline quoting helper since the package
+  is not installed. The output is identical RFC-4180 CSV.
+- **Retained count 59 vs expected 59**: exact match.
+- **Dropped count 41 vs expected ~41-42**: 41 exactly, within spec range.
+- **CSV row count 206 vs expected ~206**: exact match.
+- Inline comments in generate-deck.ts follow "explain why, not what" style per project rules.
 
 ## Procedure Compliance
 
 - Plan consulted before coding: yes
-- AGENTS.md read: yes (Next.js docs checked — no new Next.js APIs introduced; only React client-side state and the browser DOM `Audio` API used)
-- Tests run before finishing: yes (`npm run build` exit 0, `npm run lint` exit 0)
+- Tests run before finishing: yes (both node scripts exit 0)
 - Handoff written: yes
+
+---
+
+# Orchestrator addendum: Steps 4-5 (pipeline run + DB reconcile)
+
+Agent: orchestrator (main) | Date: 2026-05-23
+
+## Completed
+
+- **`npm run seed:generate`** (exit 0) — 145 new headwords enriched via OpenAI, 59 cached skipped.
+  Final deck: 204 cards (206 CSV rows − 2 duplicate headwords in the sheet, e.g. 昨天晚上).
+  Tag distribution: numbers & amounts 82, time & dates 75, money 32, languages difficulties 15.
+- **只 gloss/tag reconcile** — 只 was the single retained headword whose meaning changed (old
+  single-word "(measure word for animals)" → new classifier "nondescript animals (dogs, birds)",
+  tag languages difficulties → numbers & amounts). Because generate/seed skip cached headwords, 只
+  was removed from `deck.generated.json` and regenerated, then synced into the DB in place (Step 5).
+- **`npm run seed:audio`** (exit 0) — 327 unique clips (230 generated, 97 reused). Every card has
+  `wholeAudioUrl` and every word has `audioUrl` (verified 0 missing).
+- **`npm run seed:db`** (exit 0) — 145 new cards inserted, 59 already present.
+- **`scripts/refresh-seed-db.ts`** (new, committed — mirrors the existing `migrate-retention.ts`
+  one-off pattern) — deletes cards no longer in the deck (FK cascade removes words/card_tags/
+  review_states/review_logs) and re-syncs any retained card whose generated content drifted.
+  Run output: `41 deleted, 1 re-synced` (the 40 single-words + tongue-twister; 只 re-synced).
+
+## Verification (all PASS)
+
+- DB cards = 204 = deck cards; symmetric set diff empty (no card in DB-not-deck or deck-not-DB).
+- Dropped headwords absent (你, 会, 说, 四十四只石狮子是死的。); new present (金钱, 星期一, 人民币, 第一, 只).
+- Tag counts via card_tags join: languages difficulties 15, money 32, numbers & amounts 82,
+  time & dates 75 (= 204).
+- 只 in DB: gloss "nondescript animals (dogs, birds)", tag numbers & amounts.
+- 0 orphan `words`, 0 orphan `review_states` after the cascade delete.
+- `npx tsc --noEmit` clean.
+
+## Commands Run
+
+- `npm run seed:generate` → exit 0 | `npm run seed:audio` → exit 0 | `npm run seed:db` → exit 0
+- `npx tsx scripts/refresh-seed-db.ts` → exit 0 (`41 deleted, 1 re-synced`)
+- `npx tsc --noEmit` → exit 0
+
+## Notes
+
+- The implementer's two one-shot ESM helpers (`scripts/build-seed-csv.mjs`,
+  `scripts/prune-retag-deck.mjs`) were removed after the artifacts they produce (CSV + deck JSON)
+  were committed; they will not be re-run. `refresh-seed-db.ts` is retained as the migration record
+  (mirrors `migrate-retention.ts`).
+- Post-QA: the seed CSV was deduplicated (dropped the 2 same-headword/different-gloss rows
+  请给我一些 and 昨天晚上, keeping the first occurrence as the deck/DB already do) → 204 rows,
+  exact headword match with the deck.
+- Step 5 irreversibly removed FSRS history for the 41 dropped cards (explicitly approved).

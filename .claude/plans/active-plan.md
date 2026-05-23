@@ -3,97 +3,56 @@ status: COMPLETE
 updated: 2026-05-23
 ---
 
-> **Cycle outcome (2026-05-23):** All 4 Validation Contract assertions PASS. Implementer →
-> code-reviewer (PASS, 2 LOW) → qa-engineer (PASS) handoffs written. Code-only changes shipped.
-> **Pending manual op:** run `tsx scripts/migrate-retention.ts` to set `request_retention = 0.85`
-> on the 2 existing `learner_settings` rows (vestigial column, no scheduling impact). Not run yet.
+> **Cycle outcome (2026-05-23):** All 5 Validation Contract assertions PASS. implementer
+> (Steps 1-3) → orchestrator (Steps 4-5 pipeline + DB reconcile) → code-reviewer (PASS; 1 MEDIUM +
+> 1 LOW, both fixed in `refresh-seed-db.ts`) → qa-engineer (PASS, `npm run build` clean). Final
+> state: 204 cards across 4 tags (languages difficulties 15, numbers & amounts 82, time & dates 75,
+> money 32); 41 old-only cards deleted; 只 re-synced in place. **Not committed** — awaiting user.
 
-# Active Plan — Milestone 8: Research-driven SRS tuning + phrase-content path
+# Active Plan — Seed refresh: replace Reborn Chinese deck with new sheet export
 
-Derived from a competitive/feature analysis of Mandarin learning apps (Skritter, HelloChinese,
-Anki, Du Chinese, Mandarin Blueprint, Dong Chinese, Speechling, Duolingo, et al.) and the
-learner/research literature on what actually helps vs. what is gimmicky. Full reasoning lives in
-the conversation; this plan captures only the agreed scope.
+Full design + decision record: `C:\Users\User\.claude\plans\jolly-riding-beaver.md` (approved).
 
-This milestone ships two **code-only**, low-risk SRS improvements. Everything content-related has
-been intentionally cut (see below) so the dev cycle can run in a fresh session without content
-work blocking it.
+## Goal
+Replace `seed/reborn-chinese-system.csv` with the new Google Sheet export
+(`C:\Users\User\Downloads\Reborn Chinese System - Sheet1 (1).csv`), fix the now-broken pipeline
+tagging, re-seed, and delete the entries the new sheet drops. Instruction: *keep whatever is
+similar, delete the rest.*
 
-**Cut by user decision (2026-05-23):**
-- **Phrase-first content strategy — ABANDONED.** User's deliberate stance: learning the individual
-  Words that recur inside Phrases aids memorization, and the app keeps its Word-level focus. This
-  diverges from the competitor consensus on purpose; do not reintroduce a phrase-ratio target.
-- **Tags / CSV tag column — DEFERRED.** Keep the current tagging as-is for now.
-- **Stroke-order animation — NOT BUILDING.** This app is **reading-focused, not writing**; all
-  handwriting/stroke features are out of scope permanently.
+## Diff (old → new)
+- Old (100 rows): 41 single-word rows + 16 phrases (incl. 四十四只石狮子 tongue-twister) + numbers.
+- New (207 non-empty rows): the 15 phrases, numbers, ordinals, fractions, classifiers, amounts,
+  **time & dates, calendar, money/currency**. Drops the 41 single-words + tongue-twister.
+- Overlap (reused, no OpenAI cost): 59. New headwords to generate: 147. Dropped: ~42.
+- New file junk to strip: 27 empty trailing rows, one stray `["77",""]` cell.
 
-Still deliberately **never** (for a 2-person intrinsic-motivation app): streaks / leaderboards /
-XP, permanent tone color-coding, full handwriting recognition, in-app card authoring, AI chat
-tutor. Still **deferred** (reading-relevant, revisit later): confusable-character compare,
-component/radical decomposition card-back layer.
+## Confirmed decisions
+- Scope: rewrite CSV + fix pipeline tagging + re-seed (generate/audio/db).
+- Section-header rows kept as ordinary rows (old behavior).
+- 4 truncated classifier glosses fixed with full text.
+- deck.generated.json: prune + extend (keep 59, drop ~42, generate 147).
+- Dropped DB cards: delete (cascades words/card_tags/review_states/review_logs).
 
-## Context (verified in code)
+## Validation Contract (assertions QA must verify)
+1. **CSV**: `seed/reborn-chinese-system.csv` parses to ~206 rows; no empty-Chinese rows; no `77`
+   row; header rows present; the 4 classifier glosses (张/条/只/座) contain full parenthetical lists.
+2. **Tagging**: `scripts/generate-deck.ts` derives tags from top-level section headers
+   (数字与数量→`numbers & amounts`, 时间与日期→`time & dates`, 金钱→`money`, default
+   `languages difficulties`); no remaining `LANGUAGE_ROW_CUTOFF` row-index logic.
+3. **Deck JSON**: after `seed:generate`, ~206 cards; distinct tags = the 4 above; no old-only
+   headwords (你, 会, 四十四只石狮子…) remain.
+4. **DB**: card count ≈206; new headwords present (金钱, 星期一, 人民币, 第一); dropped headwords
+   absent (你, 会, 说); tag rows `time & dates` and `money` exist and join via `card_tags`; no orphan
+   `words`/`review_states` for deleted cards.
+5. **Build**: `npx tsc --noEmit` (or `npm run build`) passes with the generate-deck.ts edit.
 
-- FSRS scheduling is `ts-fsrs` via `lib/review/scheduler.ts`. `getScheduler(requestRetention)`
-  builds the scheduler from a per-Learner value. `learnerSettings.requestRetention` currently
-  **defaults to 0.9** (`lib/db/schema.ts:174`). Two Learner rows exist.
-- `ts-fsrs` has **no native "leech"** concept; it tracks `lapses` on the persisted Card
-  (`review_states.fsrs_card` jsonb). A leech is therefore a derived check: `fsrsCard.lapses >= N`.
-  No schema change required to detect it.
-- Card back (`components/card-back.tsx`) already renders **whole-phrase audio** (`AudioButton`,
-  `card.wholeAudioUrl`) and **per-word audio** (`WordChip`). Today nothing auto-plays; both are
-  manual. Reveal state lives in `components/review-session.tsx`.
-- Content pipeline: `seed/reborn-chinese-system.csv` (authored 中文,English) →
-  `scripts/generate-deck.ts` (LLM adds pinyin + word segmentation only — does NOT invent
-  vocabulary) → `seed/deck.generated.json` → `scripts/generate-audio.ts` (TTS) →
-  `scripts/seed-db.ts`. Tags are currently assigned by a `row < 57` hack (only 2 generic tags).
-  Seed is 100 cards / **18 phrases / 82 single words** — inverted from the phrase-first ideal.
+## Steps
+1. Write cleaned CSV (parse → strip junk/77 → fix 4 glosses → keep headers → stringify UTF-8).
+2. Replace tagging in `scripts/generate-deck.ts` with section-derived logic + update comment.
+3. Prune+re-tag `seed/deck.generated.json` (keep new-CSV headwords, re-tag via Step 2 logic).
+4. Run `npm run seed:generate` → `seed:audio` → `seed:db`.
+5. Delete dropped cards: `DELETE FROM cards WHERE headword = ANY(DB headwords − new CSV headwords)`.
 
-## Decisions (from user)
-
-- **Audio:** keep OpenAI TTS; make **whole-phrase the default**, per-word stays opt-in drill-down.
-- **FSRS tuning:** apply as **global constants** (not per-Learner).
-- **Content / tags / stroke order:** all cut (see top of file). This milestone is code-only.
-
-## Scope
-
-### 1. Default playback to whole-phrase audio (code)
-- On card **reveal**, auto-play `card.wholeAudioUrl` once (whole-phrase clip preserves prosody /
-  tone sandhi — the research's main audio point). Per-word `WordChip` audio remains tap-only.
-- Likely touch: `components/review-session.tsx` (fire on reveal), `components/audio-button.tsx`
-  (add an `autoPlay`/imperative play path), possibly `components/card-back.tsx`.
-- Respect browser autoplay constraints: the reveal is a user gesture (button click), so a
-  programmatic `.play()` in that handler is permitted. Must not throw if `wholeAudioUrl` is null.
-- No double-play, no autoplay on the front, no autoplay of per-word clips.
-
-### 2. FSRS Chinese tuning as global constants (code)
-- Introduce `REQUEST_RETENTION = 0.85` and `LEECH_THRESHOLD = 7` constants (single source, e.g.
-  in `lib/review/scheduler.ts` or a small `lib/review/config.ts`).
-- `getScheduler` uses the global `REQUEST_RETENTION` (0.85) rather than the per-Learner column.
-  Set `learnerSettings.requestRetention` default to 0.85 and one-time UPDATE the 2 existing rows
-  for consistency (the column becomes vestigial but is left in place to avoid a destructive drop).
-- **Leech detection:** add a derived helper `isLeech(fsrsCard) => fsrsCard.lapses >= LEECH_THRESHOLD`.
-  Surface minimally: a small "leech" badge on the review card back when true, and a leech **count**
-  in the existing stats view (`lib/review/stats.ts` + `app/stats/page.tsx`). No new table; compute
-  from `lapses`. "Do something about leeches" (re-author / add context) is a manual follow-up, not
-  automated here.
-
-## Validation Contract (assertions QA must check)
-1. Revealing a card auto-plays the whole-phrase audio exactly once; front never auto-plays;
-   per-word clips never auto-play; a card with null `wholeAudioUrl` reveals without error.
-2. A freshly scheduled review uses request_retention 0.85 (not 0.9) — verify via scheduler input
-   and that interval previews shift accordingly vs. the old default.
-3. `isLeech` returns true iff `lapses >= 7`; the leech badge shows only for such cards; the stats
-   leech count matches the number of the Learner's states with `lapses >= 7`.
-4. `npm run build` / typecheck / lint clean. No regression in same-day requeue (M7) or stats (M6).
-
-## Risks / notes
-- Autoplay: keep the play call inside the reveal click handler's React update path; guard against
-  React 18 double-invoke in dev (StrictMode) causing a double play.
-- The per-Learner `requestRetention` column is intentionally left in place (not dropped) — global
-  constant overrides it; document this so it isn't mistaken for live config.
-- Content authoring (more phrases, tag backfill) is decoupled: code can ship before content grows.
-
-## Handoff chain
-active-plan.md (this) → implementation-summary.md → review-summary.md → qa-summary.md.
-Recommended execution: `/dev-cycle`.
+## Notes / risks
+- OpenAI + TTS cost for 147 new headwords. If a key is invalid at run time, pause and report.
+- Step 5 irreversibly drops FSRS history for the ~42 dropped cards (approved).
