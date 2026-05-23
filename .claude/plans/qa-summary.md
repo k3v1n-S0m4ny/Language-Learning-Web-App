@@ -3,75 +3,89 @@ status: COMPLETE
 updated: 2026-05-23
 ---
 
-# QA Summary — Milestone 7: Same-day requeue for failed / learning cards
+# QA Summary — Milestone 8: Auto-play phrase audio + FSRS Chinese tuning
 
-## Prior summaries read
-- `active-plan.md` (Validation Contract, assertions A1–A11): YES
-- `implementation-summary.md`: YES
-- `review-summary.md`: YES
-
-QA was performed after reading all three documents, as required.
+## Prior summaries read before validating
+- `implementation-summary.md`: YES — read in full before any assertion was tested.
+- `review-summary.md`: YES — read in full before any assertion was tested.
+- `active-plan.md` (Validation Contract): YES — all four assertions taken from this document.
 
 ## Result
 
-**PASS** — all assertions hold. No blocking defects found. The two non-blocking findings carried forward from the reviewer (MEDIUM: JSDoc comment inaccuracy; LOW: missing Relearning rows in A5 probe table) are confirmed as documentation-only issues with no behavioral impact. A10 independently re-run and verified.
+**PASS** — all four assertions hold. No blocking defects found. Two non-blocking residual risks carried forward from the review summary (migration not yet run; migration log opaque) remain open but have zero functional impact on scheduling.
 
 ---
 
 ## Assertions
 
 ### A1 — PASS
-A just-failed card (due = now+1 min) sorts **after** all currently-overdue cards in `due ASC` order. Driven by simulating the exact `dueState` subquery predicate against a sample queue: `card-overdue-1` (yesterday), `card-overdue-2` (1h ago), `card-just-failed` (now+1min). LIMIT 1 returns `card-overdue-1`. When the failed card is the only eligible card it is returned immediately (LIMIT 1 on a single-row result). Both sub-cases confirmed with exit 0 node probes.
+**Revealing a card auto-plays whole-phrase audio exactly once; front never auto-plays; per-word clips never auto-play; null `wholeAudioUrl` reveals without error.**
+
+Evidence:
+- `grep -rn "useEffect" components/ --include="*.tsx"` — **zero matches**. No effect-based auto-play anywhere in the component tree; audio cannot fire on mount or on any state change outside a user click handler.
+- `playAudio` is called at exactly one site in the component tree: `review-session.tsx:58`, inside the `onReveal` arrow function that is the `onClick` of `CardFront`'s "Show answer" button.
+- `CardFront` is conditionally rendered only when `!revealed` (`review-session.tsx:51`). Once `revealed` flips to `true` on the first click, `CardFront` is unmounted and its `onReveal` path is unreachable. No second call path exists.
+- `CardFront` (`card-front.tsx`) imports no audio modules; zero audio references in that file.
+- `WordChip` (`word-chip.tsx`) renders `AudioButton` which requires explicit user `onClick`; no `playAudio` or `useEffect` in that file. Per-word clips are tap-only.
+- `grep -rni "autoplay\|auto_play\|autoPlay" components/ --include="*.tsx"` — zero matches.
+- `playAudio(null)` null-safety verified by Node simulation: `if (!url) return` exits before constructing any `Audio` object. No throw for `null`, `undefined`, or `""`. (Node probe exit 0.)
 
 ### A2 — PASS
-Again (+1m), Hard (+6m), and Good (+10m) from a Learning card all land within `endOfThailandDay` at any realistic session time. Live ts-fsrs v5.4.0 probe (`scheduler.repeat` against real installed package) confirms all three outcomes are intraday. Relearning+Again (+10m) and Relearning+Hard (+15m) also confirmed intraday. All are `<= dayEnd`, all are eligible.
+**A freshly scheduled review uses request_retention 0.85; value reaches ts-fsrs; interval previews shift accordingly vs. 0.9.**
 
-### A3 — PASS (key regression guard)
-Graduated Review-state cards are never pulled forward. All four Review-state ratings land on future days:
-- Review+Hard: +27d — excluded
-- Review+Good: +39d — excluded
-- Review+Easy: +66d — excluded
-- Review+Again (Relearning): +10 min **within the review session day** — correctly included on that future day (not pulled forward into today's session, which is the correct behaviour)
+Evidence:
+- `lib/review/config.ts:11` — `export const REQUEST_RETENTION = 0.85;` — single authoritative constant.
+- `lib/review/scheduler.ts:22` — `fsrs(generatorParameters({ request_retention: REQUEST_RETENTION }))` — constant flows directly into `generatorParameters`.
+- Both call sites (`actions.ts:28`, `queries.ts:226`) call `getScheduler()` with zero arguments; no path bypasses the constant.
+- `grep -rn "0\.9" lib/ components/ app/ --include="*.ts" --include="*.tsx"` — **zero matches** (old 0.9 default gone from all scheduling paths).
+- Schema default updated to 0.85 at `schema.ts:176`.
+- Node probe confirmed `generatorParameters({ request_retention: 0.85 }).request_retention === 0.85` vs `0.9` (values differ: `true`). (Exit 0.)
+- Node probe confirmed interval shifts for a card reviewed 3x Good:
 
-Learning+Easy borderline case (the +24h case from the implementation summary) verified at all session times including Bangkok 23:59:00. The actual ts-fsrs output is +24h 1min (not exactly +24h), landing well after `endOfThailandDay` in all cases. No Learning+Easy card is ever within today's `dayEnd`.
+  | Rating | 0.85 retention | 0.90 retention | Differs? |
+  |--------|---------------|---------------|---------|
+  | Again  | 0.0d          | 0.0d          | same    |
+  | Hard   | 55.0d         | 29.0d         | YES     |
+  | Good   | 76.0d         | 40.0d         | YES     |
+  | Easy   | 123.0d        | 65.0d         | YES     |
 
-Relearning+Good and Relearning+Easy both land at +1 day and +2 days respectively — correctly excluded. Full live probe exit 0.
+  Hard/Good/Easy all shift materially, confirming the parameter is live in the scheduler. (Exit 0.)
+
+### A3 — PASS
+**`isLeech` returns true iff `lapses >= 7` (boundary: 6 → false, 7 → true, 8 → true); leech badge and stats leech count use the same predicate.**
+
+Boundary tests (Node probe, exit 0):
+
+| lapses | isLeech result | Expected | Verdict |
+|--------|---------------|----------|---------|
+| 0      | false         | false    | PASS    |
+| 1      | false         | false    | PASS    |
+| 5      | false         | false    | PASS    |
+| 6      | false         | false    | PASS — boundary below threshold |
+| 7      | true          | true     | PASS — boundary at threshold |
+| 8      | true          | true     | PASS — above threshold |
+| 100    | true          | true     | PASS    |
+
+`LEECH_THRESHOLD = 7`, operator is `>=` (not `>`). All 7 boundary cases pass.
+
+Badge alignment: `card-back.tsx:19` — `const leech = isLeech({ lapses: card.lapses })` — badge rendered conditionally at line 27 via the same imported `isLeech` function from `lib/review/config`.
+
+Stats alignment: `stats.ts:176-178` — `myStates.filter(s => isLeech({ lapses: extractLapses(s.fsrsCard) })).length` — same imported `isLeech` function. `extractLapses` is defensive (returns 0 for null/missing/non-number lapses), preventing false positives on malformed jsonb.
+
+All three consumers (definition, badge, stats count) share a single imported predicate. No predicate drift is possible.
+
+New cards: `loadStudyCard` seeds `lapses: 0`; `getStudyScreenData` overwrites from `fsrsCard.lapses` for seen cards. Badge correctly suppressed for unseen cards (lapses=0 < 7).
 
 ### A4 — PASS
-`endOfThailandDay` is implemented as `startOfThailandDay(now).getTime() + 24 * 60 * 60 * 1000`. It reuses the existing helper, adds exactly 24h in milliseconds, and does not hand-roll a second timezone offset. `THAILAND_OFFSET_MS` appears 4 times in `time.ts`: once as the constant definition, twice inside `startOfThailandDay`, and once in `thaiDateKey` — `endOfThailandDay` uses none of them directly. Function is exported and imported correctly in `queries.ts`.
+**`npm run build`, typecheck, and lint are clean; no regression in M7 same-day requeue or M6 stats.**
 
-### A5 — PASS (with confirmed documentation gaps; no behavioral defect)
-The A5 probe comment in `queries.ts` (lines 49–56) correctly asserts that `endOfThailandDay` includes `{Learning, Relearning}` intraday steps and excludes all graduated Review-state intervals. Live re-probe confirms this conclusion is accurate.
+- `npm run build` — **exit 0**. TypeScript compiled in 5.7s. All 5 routes generated (`/`, `/_not-found`, `/api/auth/[...nextauth]`, `/stats`, Proxy middleware). No errors or warnings.
+- `npm run lint` — **exit 0**. No output (clean).
+- `npx tsc --noEmit` — **exit 0**. No output (clean).
 
-Two documentation gaps confirmed from reviewer findings:
-1. (MEDIUM) JSDoc on `endOfThailandDay` says "23:59:59.999" and "exclusive" but the function returns `startOfThailandDay + 24h = 00:00:00.000 next Bangkok day` and SQL uses `lte` (inclusive). Factually wrong comment. Behavioral impact: the exact-midnight boundary is served today rather than tomorrow, which is better UX. No wrong cards excluded or included in normal sessions.
-2. (LOW) Relearning rows absent from the A5 probe table. Live re-probe confirms Relearning+Again (+10m) and Relearning+Hard (+15m) are intraday (correctly included), Relearning+Good (+1d) and Relearning+Easy (+2d) are excluded (correctly excluded). Logic is correct; the comment just doesn't document it.
+M7 regression check: `lib/review/time.ts` — `endOfThailandDay`, `startOfThailandDay`, Thailand UTC+7 logic intact and unmodified. `lib/review/queries.ts` — `fetchRawCounts`, `endOfThailandDay` due-window predicate, Learning/Relearning intraday requeue logic all present and unchanged.
 
-Neither gap is a behavioral defect. Both are pre-deployment documentation fixes.
-
-### A6 — PASS
-`fetchRawCounts` and `getStudyScreenData` both compute `dayEnd = endOfThailandDay(now)` independently but with identical inputs, producing identical values. The `dueCount` in `fetchRawCounts` uses `lte(reviewStates.due, dayEnd)` and the `dueState` subquery in `getStudyScreenData` uses `lte(reviewStates.due, dayEnd)` — same predicate, same boundary. After rating Again on the last card: `dueCount = 1`, `dueState` returns that card — header and served card are consistent. The previous `due <= now` definition would have shown `dueCount = 0` while the card was waiting (violating A6); this is fixed.
-
-### A7 — PASS
-`app/page.tsx` renders `EmptyState` only when `card === null`. `card` is null only when `chosenId` is undefined, which only occurs when `dueState` is empty AND (`newRemaining === 0` OR no unseen cards exist). After rating Again on the last card, `dueState` returns that card (within `dayEnd`) so `chosenId` is non-null and `EmptyState` is not shown. Zero-card learner scenario verified: `dueState = []`, `newCardRow = []`, `newRemaining = 0` → `chosenId = undefined` → `card = null` → `EmptyState` rendered.
-
-### A8 — PASS
-Due-first-then-new ordering: `chosenId = dueCardId ?? newCardId`. When a due card exists, it is always served before a new card. When the daily cap is exhausted (`newRemaining = 0`), `newCardId` is set to `undefined` and no new card is served. A same-day learning step card (has a `reviewState` row) correctly appears in `dueState` not `newCardRow` (the new-card subquery uses `notExists(reviewStates)` to find unseen cards only), so it is naturally preferred over brand-new cards by the due-first ordering. All three sub-cases verified with exit 0 node probes.
-
-### A9 — PASS
-No placeholders, stubs, mocks, or hardcoded data found in `lib/review/time.ts` or `lib/review/queries.ts` (grep for TODO/FIXME/placeholder/stub/mock/fake/sample/hardcode returned no results). `lib/review/actions.ts`, `lib/review/scheduler.ts`, and `app/page.tsx` confirmed unchanged via `git diff` (zero output for those files). FSRS math and review-log writes are untouched.
-
-### A10 — PASS (independently re-run by QA; not just implementer's report)
-- `npx tsc --noEmit` — exit 0
-- `npx eslint .` — exit 0
-- `npm run build` — exit 0. Next.js 16.2.6 Turbopack; all 5 pages generated (/, /_not-found, /api/auth/[...nextauth], /stats, Proxy middleware). No font-fetch failure. Build duration ~5.1s compile + ~5.4s TypeScript check.
-
-### A11 — PASS
-All four boundary cases verified:
-1. Card due exactly at `startOfThailandDay` (Bangkok midnight, overdue from yesterday): eligible (`due <= dayEnd` = true). Correct.
-2. Card due 1ms before Bangkok midnight: eligible. Correct.
-3. Near-midnight Again step: reviewing at Bangkok 23:59:00, Again +1 min = 00:00:00.000 Bangkok tomorrow = exactly `dayEnd`. SQL `lte` includes the boundary → card is served today, not tomorrow. The plan says "acceptable if it rolls to tomorrow — document the edge." The reviewer MEDIUM finding documents this behavior. UX effect is better than spec (card resurfaces immediately rather than disappearing until tomorrow). No crash. Acceptable.
-4. Zero-card learner: `chosenId = undefined`, `card = null`, `EmptyState` rendered cleanly. No crash.
+M6 stats regression check: `lib/review/stats.ts` — all original fields present and unmodified: `seen`, `mature`, `reviewsByDay`, `streak`, `dueForecast`, `ratingCounts`. `leechCount` is purely additive (new field only). `app/stats/page.tsx` — three original `StatTile` instances (`Seen`, `Mature`, `Streak`) unchanged in label and data binding; `Leeches` tile added as fourth in `grid-cols-2 sm:grid-cols-4` grid.
 
 ---
 
@@ -79,44 +93,43 @@ All four boundary cases verified:
 
 | Command | Exit Code | Notable Output |
 |---|---|---|
-| `npx tsc --noEmit` | 0 | No errors |
-| `npx eslint .` | 0 | No errors |
-| `npm run build` | 0 | 5 pages, Turbopack, no warnings |
-| node boundary math probe | 0 | All A1/A2/A3/A11 predicates verified |
-| node ts-fsrs scheduling probe (New/Learning/Review/Relearning) | 0 | All 16 state×rating combos confirmed |
-| node ordering simulation (A1) | 0 | Due-first ordering confirmed |
-| node A6/A7/A8 logic simulation | 0 | Count consistency + EmptyState + cap logic confirmed |
-| node Learning+Easy boundary (A3 worst-case) | 0 | Excluded at all session times including Bangkok 23:59 |
-| node Review+Again session-day intraday check | 0 | +10m intraday on actual due date, not pulled forward into today |
-| `git diff --name-only HEAD` + `git status --short` | 0 | Only `lib/review/queries.ts`, `lib/review/time.ts` + plan docs changed |
+| `node --input-type=module` (A2: FSRS 0.85 vs 0.90 probe) | 0 | `params085.request_retention: 0.85`; Hard/Good/Easy intervals differ for both new and reviewed cards |
+| `node --input-type=module` (A3: isLeech boundary probe) | 0 | All 7 cases PASS; `LEECH_THRESHOLD=7`, operator `>=` confirmed |
+| `node --input-type=module` (A1: null-safety simulation) | 0 | `playAudio(null/undefined/"")` all no-op, no throw |
+| `grep -rn "useEffect" components/ --include="*.tsx"` | 0 | Zero matches |
+| `grep -rni "autoplay" components/ --include="*.tsx"` | 0 | Zero matches |
+| `grep -rn "playAudio" components/ --include="*.tsx"` | 0 | 2 matches: definition in `audio-button.tsx`, single call in `review-session.tsx` onReveal handler |
+| `grep -rn "0\.9" lib/ components/ app/ --include="*.ts" --include="*.tsx"` | 0 | Zero matches |
+| `grep -rn "getScheduler" lib/ app/ --include="*.ts" --include="*.tsx"` | 0 | 3 matches: definition (zero-arg), `actions.ts:28`, `queries.ts:226` — all zero-arg |
+| `npm run build` | 0 | TypeScript clean, 5 routes |
+| `npm run lint` | 0 | No output |
+| `npx tsc --noEmit` | 0 | No output |
 
 ---
 
 ## Unexpected Behavior
 
-**None that constitutes a defect.** One behavioral clarification:
-
-The implementation summary's ts-fsrs probe table column "Due offset" for `Review + Again` reads "+10 min" which is correct when compared against the session day's `dayEnd`. A superficial re-probe comparing against today's `dayEnd` (a different day) showed `intraday:false`, which initially appeared as a discrepancy. On closer inspection this was a probe-context error on the QA side: the Review+Again card is due on its actual due date 8 days from now, and when probed at that date its +10 min result is correctly within that day's `endOfThailandDay`. The feature behavior is correct.
+None. All behaviors matched spec precisely.
 
 ---
 
 ## Residual Risk
 
-1. **JSDoc comment accuracy** (MEDIUM, carried from reviewer): `endOfThailandDay` JSDoc says "23:59:59.999 Asia/Bangkok" and "exclusive" but returns `00:00:00.000 next Bangkok day` (inclusive via `lte`). A future maintainer who reads only the comment and writes a `<` comparison instead of `<=` will get a 1ms off-by-one at midnight. Suggest fixing the comment before the next maintainer touches this file. Not blocking deployment.
+1. **Migration script not yet executed.** `scripts/migrate-retention.ts` updates the vestigial `request_retention` column for existing `learner_settings` rows from 0.9 to 0.85. The column is no longer read for scheduling (confirmed by zero grep matches in all scheduling paths), so functional risk is zero. A direct SELECT on `learner_settings` will still show 0.9 for the 2 existing rows until the script is run manually.
 
-2. **A5 probe table incomplete** (LOW, carried from reviewer): Relearning rows absent from the `queries.ts` comment table. Logic is correct; documentation gap only.
+2. **Migration result logging opaque.** The migrate script's `console.log` prints `[]` (not a row count) under the neon-http Drizzle driver because `.returning()` is not chained. Identified as a LOW finding in the review summary. Recommend the operator verify with a post-run SELECT.
 
-3. **No automated regression tests**: A future change to `endOfThailandDay` or the query predicate won't be caught automatically. Out of scope for M7 but worth noting for the backlog.
+3. **No browser-level auto-play test.** A1's "auto-plays exactly once" assertion was validated by static analysis (single call site, guarded by `!revealed` rendering, no useEffect). A Playwright test would give higher confidence for the audio play mechanics, but the DOM `Audio` API is not exercisable in Node. The code path is simple and the review-summary code reading concurs.
 
-4. **Live OAuth + prod DB not tested locally** (accepted constraint, same as M6): Full click-through requires live Google OAuth and the prod Neon DB. Behavioral correctness has been validated by driving the real selection logic against the real installed ts-fsrs package. Prod smoke test is recommended after deployment.
+4. **No automated regression tests.** No test suite covers audio auto-play, leech threshold, or retention propagation. Future refactors touching these paths will not be caught automatically. Out of scope for this milestone.
 
 ---
 
 ## Procedure Compliance
 
 - Plan (`active-plan.md`) consulted before QA: yes
-- Implementation summary read: yes
-- Review summary read: yes
+- Implementation summary (`implementation-summary.md`) read before validating: yes
+- Review summary (`review-summary.md`) read before validating: yes
 - Both prior summaries read before validating assertions: yes
-- Source files edited: no
+- Source files edited: no (only `qa-summary.md` written)
 - QA summary written: yes

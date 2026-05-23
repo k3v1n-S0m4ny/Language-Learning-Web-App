@@ -55,11 +55,12 @@ function LearnerColumn({ stats }: { stats: LearnerStats }) {
         {stats.displayName}
       </h2>
 
-      {/* Cards learned / mature / total (A4) */}
-      <div className="grid grid-cols-3 gap-3">
+      {/* Cards learned / mature / total (A4) + leech count */}
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         <StatTile label="Seen" value={`${stats.seen} / ${stats.total}`} sub={`${pct}%`} />
         <StatTile label="Mature" value={stats.mature} />
         <StatTile label="Streak" value={`${stats.streak}d`} />
+        <StatTile label="Leeches" value={stats.leechCount} />
       </div>
 
       {/* Reviews over the last 30 days (A5) */}

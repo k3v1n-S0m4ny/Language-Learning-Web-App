@@ -142,6 +142,9 @@ async function loadStudyCard(cardId: string): Promise<StudyCard | null> {
       audioUrl: w.audioUrl,
     })),
     tags: tagRows.map((t) => t.name),
+    // Placeholder — getStudyScreenData overwrites this with the real value once
+    // the fsrs_card row is available. New (unseen) cards have lapses = 0.
+    lapses: 0,
   };
 }
 
@@ -220,11 +223,15 @@ export async function getStudyScreenData(
 
   if (!card) return { counts, card: null, hints: null };
 
-  const scheduler = getScheduler(settings.requestRetention);
+  const scheduler = getScheduler();
   const fsrsCard = stateRow[0]
     ? hydrateFsrsCard(stateRow[0].fsrsCard)
     : createEmptyCard(now);
   const hints = previewIntervals(scheduler, fsrsCard, now);
+
+  // Populate lapses from the persisted FSRS card so the client can show the
+  // leech badge without receiving the full fsrs_card blob.
+  card.lapses = fsrsCard.lapses;
 
   return { counts, card, hints };
 }

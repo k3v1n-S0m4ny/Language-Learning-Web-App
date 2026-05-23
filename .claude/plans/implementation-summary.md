@@ -3,97 +3,57 @@ status: COMPLETE
 updated: 2026-05-23
 ---
 
-# Handoff: M7 — Same-day requeue for failed / learning cards
+# Handoff: Milestone 8 — Auto-play phrase audio + FSRS Chinese tuning
 
 Agent: implementer | Date: 2026-05-23 | Status: COMPLETE
 
 ## Completed
 
-- **`lib/review/time.ts`** — Added `endOfThailandDay(now: Date): Date`. Implemented as `startOfThailandDay(now) + 24h` (exclusive upper bound). This reuses the existing timezone logic without hand-rolling a second offset. Exported alongside the existing helpers.
+### Feature 1 — Default playback to whole-phrase audio
 
-- **`lib/review/queries.ts`** — Two changes:
-  1. `fetchRawCounts`: Changed `lte(reviewStates.due, now)` to `lte(reviewStates.due, dayEnd)` where `dayEnd = endOfThailandDay(now)`. `dueCount` now reflects "due today" (overdue + same-day learning steps) — same predicate as what the selection logic serves (A6). Added the full A5 ts-fsrs probe findings as a code comment.
-  2. `getStudyScreenData` (the `dueState` subquery): Changed `lte(reviewStates.due, now)` to `lte(reviewStates.due, dayEnd)`. Added a comment explaining why (A1, A2, A3, A5 cross-references).
-  3. Updated the `import` line to include `endOfThailandDay`.
+- **`components/audio-button.tsx`** — Added `export function playAudio(url: string | null): void` as a standalone imperative helper. Extracted from the `AudioButton` internal `play()` call, which now delegates to it. Safe to call with `null` (no-op).
+- **`components/review-session.tsx`** — Imported `playAudio`. Changed the `onReveal` prop from `() => setRevealed(true)` to an arrow function that calls `setRevealed(true)` then `playAudio(card.wholeAudioUrl)`. Play fires inside the click handler (user-gesture context), satisfying browser autoplay policy. `null` `wholeAudioUrl` is handled by `playAudio`'s null guard — no throw on reveal.
 
-- **`app/page.tsx`** — No changes needed. It already renders `ReviewSession` vs `EmptyState` based on whether `card` is null, and `submitReview` already calls `refresh()` which re-runs `getStudyScreenData`. Correct selection makes A7 fall out automatically.
+React 18 StrictMode note: StrictMode double-invokes *effects*, not event handlers. Since play is called inside the click handler, no ref guard was needed. No double-play risk.
 
-- **`lib/review/actions.ts`** — No changes needed. FSRS math, review-log writes, and auth/validation are unchanged (A9).
+### Feature 2 — FSRS Chinese tuning as global constants
+
+- **`lib/review/config.ts`** (new file) — Exports `REQUEST_RETENTION = 0.85`, `LEECH_THRESHOLD = 7`, and `isLeech({ lapses }): boolean`. Single source of truth for all retention and leech logic.
+- **`lib/review/scheduler.ts`** — Imported `REQUEST_RETENTION` from `./config`. `getScheduler()` now takes no arguments and always builds the FSRS instance with the global constant. (Parameter removed entirely to avoid a dead-arg lint warning.)
+- **`lib/db/schema.ts` (line ~174)** — Changed `learnerSettings.requestRetention` column default from `0.9` to `0.85`. Added a comment marking it vestigial (column kept, not dropped).
+- **`lib/review/actions.ts`** — Removed the `ensureLearnerSettings` import and the `settings` variable (no longer needed; `getScheduler()` takes no args). `getScheduler()` called with no args.
+- **`lib/review/queries.ts`** — `getScheduler()` call in `getStudyScreenData` updated to no-arg form. After loading `fsrsCard`, sets `card.lapses = fsrsCard.lapses` so the client gets the lapse count without receiving the full FSRS jsonb blob. `loadStudyCard` seeds `lapses: 0` as the placeholder for unseen cards (correct — no state row exists for them).
+- **`lib/review/types.ts`** — Added `lapses: number` to `StudyCard` interface.
+- **`lib/review/stats.ts`** — Imported `isLeech`. Added `extractLapses(fsrsCard)` internal helper. Added `leechCount: number` to `LearnerStats` interface. Computed `leechCount` per-learner: `myStates.filter(s => isLeech({ lapses: extractLapses(s.fsrsCard) })).length`.
+- **`app/stats/page.tsx`** — Added `<StatTile label="Leeches" value={stats.leechCount} />` tile. Grid changed from `grid-cols-3` to `grid-cols-2 sm:grid-cols-4` to fit four tiles.
+- **`components/card-back.tsx`** — Imported `isLeech`. Computes `leech = isLeech({ lapses: card.lapses })` on render. Renders a small red `leech` badge pill inline with the headword when `leech` is true. Badge has `title` attribute showing the raw lapse count. Absent for non-leeches.
+- **`scripts/migrate-retention.ts`** (new file) — One-time script to UPDATE all `learner_settings` rows to `request_retention = 0.85`. Must be run manually once against production: `tsx scripts/migrate-retention.ts`.
 
 ## Left Undone
 
-Nothing. All A1–A11 assertions are covered by the two file changes.
+- **Executing the migration script** — `scripts/migrate-retention.ts` was written but not run (no live DB credentials in this session). Must be run once manually.
+- **Content work** — intentionally out of scope per plan (tags, more phrases, stroke order all cut).
 
 ## Commands Run
 
-- `node --input-type=module` ts-fsrs probe — exit 0; produced the A5 scheduling findings (see below)
-- `npx tsc --noEmit` — exit 0
-- `npx eslint .` — exit 0
-- `npm run build` — exit 0 (Next.js 16.2.6 Turbopack; all 5 pages generated; no font-fetch failure)
+- `npm run build` (first pass) — exit 0, compiled successfully, TypeScript clean
+- `npm run lint` (first pass) — exit 1 with 1 warning: `_requestRetention` parameter defined but never used in `scheduler.ts`. Fixed by removing the parameter.
+- `npm run build` (second pass) — exit 0
+- `npm run lint` (second pass) — exit 0, clean
 
 ## Issues Discovered
 
-None beyond the expected root cause stated in the plan. The `endOfThailandDay` approach is clean and sufficient — no fallback state-filter was needed.
-
-## ts-fsrs v5.4.0 Scheduling Findings (A5)
-
-Probe command: `node --input-type=module` against `./node_modules/ts-fsrs/dist/index.mjs`  
-Config used: `generatorParameters({ request_retention: 0.9 })` (same as production)  
-Defaults confirmed: `enable_short_term: true`, `learning_steps: ["1m","10m"]`, `relearning_steps: ["10m"]`
-
-| Card state | Rating | Resulting state | Due offset | Within same day? |
-|---|---|---|---|---|
-| New | Again | Learning | +1 min | YES |
-| New | Hard | Learning | +6 min | YES |
-| New | Good | Learning | +10 min | YES |
-| New | Easy | Review | +8 days | NO — excluded |
-| Learning | Again | Learning | +1 min | YES |
-| Learning | Hard | Learning | +6 min | YES |
-| Learning | Good | Learning | +10 min | YES |
-| Learning | Easy | Review | +24 hours | borderline* |
-| Review | Again | Relearning | +10 min | YES |
-| Review | Hard | Review | +27 days | NO — excluded |
-| Review | Good | Review | +39 days | NO — excluded |
-| Review | Easy | Review | +66 days | NO — excluded |
-
-*Easy from Learning produces exactly +24h. This is `startOfThailandDay(now+24h)` territory — it lands at the start of the *next* Thailand day, so `endOfThailandDay(now)` (exclusive: `startOfThailandDay(now) + 24h`) correctly excludes it. The card will appear at the start of tomorrow's session as intended.
-
-**Conclusion:** `endOfThailandDay` correctly captures exactly `{Learning, Relearning}` intraday steps and excludes all graduated `Review`-state intervals. No explicit FSRS-state filter fallback needed.
-
-## dueCount Semantics (A6)
-
-`dueCount` is redefined to "cards due today" — i.e. `reviewStates.due <= endOfThailandDay(now)`. This matches precisely what the queue selection serves. Previously it counted only `due <= now` (strictly overdue), which would have shown 0 while a just-failed card (+1 min) was being served, violating A6. The new semantics also make `dueCount` a more useful session progress indicator: it shows the total workload remaining for today, not just what is firing right now.
+- **`_requestRetention` lint warning** — First version of `getScheduler` accepted an optional `_requestRetention` parameter for API compatibility. ESLint `@typescript-eslint/no-unused-vars` warned on it even with the underscore prefix. Resolved by removing the parameter entirely; no call site in the project passes a retention value anymore.
+- **`lapses` on `StudyCard`** — FSRS card lives server-side. The simplest path to the client for the leech badge was adding `lapses: number` to `StudyCard` (already a serializable client-bound shape). `loadStudyCard` seeds it 0; `getStudyScreenData` overwrites it from the real state row before returning.
 
 ## Spec Deviations
 
-None. Implemented exactly as specified in the Validation Contract.
+- `getScheduler` signature simplified to zero-args. Spec said "use global REQUEST_RETENTION rather than per-Learner column" but did not say keep the parameter. Removing it is stricter and eliminates a dead-arg smell. Documented here for reviewer awareness.
+- Stats grid changed from 3 to 4 columns to accommodate the Leeches tile. The three existing tiles are unchanged in meaning and layout; 4 columns was a necessary UI adjustment.
 
 ## Procedure Compliance
 
-- Plan (`active-plan.md`) consulted before coding: yes
-- AGENTS.md read: yes
-- Next.js 16 docs (`node_modules/next/dist/docs/`) checked: yes (index.md + app router structure reviewed; no relevant breaking changes for this server-side query-only change)
-- ts-fsrs behavior verified against installed package before relying on it: yes (live `node -e` probe, not training data assumptions)
-- No placeholders, stubs, mocks, or fake data used: yes — all counts and cards come from real DB queries; FSRS math unchanged
-- Tests run before finishing: yes (`tsc --noEmit`, `eslint .`, `npm run build` — all exit 0)
+- Plan consulted before coding: yes
+- AGENTS.md read: yes (Next.js docs checked — no new Next.js APIs introduced; only React client-side state and the browser DOM `Audio` API used)
+- Tests run before finishing: yes (`npm run build` exit 0, `npm run lint` exit 0)
 - Handoff written: yes
-
----
-
-## Post-review fixes (2026-05-23)
-
-Two comment-only fixes applied from M7 code review findings — no behavior changes.
-
-**Fix 1 (MEDIUM) — `lib/review/time.ts`, `endOfThailandDay` JSDoc**
-Rewrote the JSDoc. Old text incorrectly claimed the function returns "23:59:59.999 Asia/Bangkok" and called the bound "exclusive." New text accurately states: the function returns `startOfThailandDay(now) + 24h`, which is `00:00:00.000` of the next Bangkok day; SQL callers use inclusive `lte`; the exact boundary is effectively unreachable by ts-fsrs scheduling; a card landing there resurfacing today is a documented, accepted edge (plan A11).
-
-**Fix 2 (LOW) — `lib/review/queries.ts`, A5 probe comment**
-Added four Relearning-state rows to the bullet-format probe findings table so all four states (New/Learning/Review/Relearning) × 4 ratings are covered:
-- Relearning + Again → Relearning, +10 min, intraday, included
-- Relearning + Hard → Relearning, +15 min, intraday, included
-- Relearning + Good → Review, +1 day, excluded
-- Relearning + Easy → Review, +2 days, excluded
-
-**Re-verification after fixes:**
-- `npx tsc --noEmit` — exit 0
-- `npx eslint .` — exit 0

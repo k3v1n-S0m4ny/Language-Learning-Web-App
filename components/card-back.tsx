@@ -1,5 +1,6 @@
 "use client";
 
+import { isLeech } from "@/lib/review/config";
 import type { StudyCard } from "@/lib/review/types";
 import { AudioButton } from "./audio-button";
 import { WordChip } from "./word-chip";
@@ -15,11 +16,23 @@ export function CardBack({
   pinyinShown: boolean;
   onTogglePinyin: () => void;
 }) {
+  const leech = isLeech({ lapses: card.lapses });
+
   return (
     <div className="flex w-full flex-col items-center gap-6">
-      <p className="text-4xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
-        {card.headword}
-      </p>
+      <div className="flex items-center gap-2">
+        <p className="text-4xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
+          {card.headword}
+        </p>
+        {leech && (
+          <span
+            title={`Lapsed ${card.lapses} times — needs review`}
+            className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700 dark:bg-red-900/40 dark:text-red-400"
+          >
+            leech
+          </span>
+        )}
+      </div>
 
       <div className="flex flex-col items-center gap-2">
         <div className="flex items-center gap-3">

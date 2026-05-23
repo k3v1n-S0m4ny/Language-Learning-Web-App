@@ -171,5 +171,7 @@ export const learnerSettings = pgTable("learner_settings", {
     .primaryKey()
     .references(() => users.id, { onDelete: "cascade" }),
   newCardsPerDay: integer("new_cards_per_day").notNull().default(10),
-  requestRetention: real("request_retention").notNull().default(0.9),
+  // Vestigial — the scheduler now uses the global REQUEST_RETENTION constant
+  // (lib/review/config.ts). This column is kept to avoid a destructive DROP.
+  requestRetention: real("request_retention").notNull().default(0.85),
 });

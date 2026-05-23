@@ -23,6 +23,8 @@ export interface StudyCard {
   wholeAudioUrl: string | null;
   words: StudyWord[];
   tags: string[];
+  /** FSRS lapse count — 0 for cards never reviewed. Used for leech badge. */
+  lapses: number;
 }
 
 // Header counts for the current study session.

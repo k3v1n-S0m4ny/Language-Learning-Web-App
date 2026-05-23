@@ -7,6 +7,7 @@ import type {
   RatingValue,
   StudyCard,
 } from "@/lib/review/types";
+import { playAudio } from "./audio-button";
 import { CardBack } from "./card-back";
 import { CardFront } from "./card-front";
 import { RatingButtons } from "./rating-buttons";
@@ -48,7 +49,15 @@ export function ReviewSession({
   return (
     <div className="flex w-full max-w-2xl flex-col items-center gap-8">
       {!revealed ? (
-        <CardFront card={card} onReveal={() => setRevealed(true)} />
+        <CardFront
+          card={card}
+          onReveal={() => {
+            setRevealed(true);
+            // Play inside the click-handler so it counts as a user gesture.
+            // playAudio is a no-op when wholeAudioUrl is null.
+            playAudio(card.wholeAudioUrl);
+          }}
+        />
       ) : (
         <>
           <CardBack

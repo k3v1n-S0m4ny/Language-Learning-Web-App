@@ -1,5 +1,14 @@
 "use client";
 
+// Imperatively start playback from a URL. Safe to call with null — a no-op.
+// Intended for programmatic play triggered inside a user-gesture handler.
+export function playAudio(url: string | null): void {
+  if (!url) return;
+  new Audio(url).play().catch((err) => {
+    console.error("Audio playback failed", url, err);
+  });
+}
+
 // Plays an Audio Clip from its Blob URL. Disabled (not hidden) when no clip
 // exists, so the layout stays stable.
 export function AudioButton({
@@ -10,12 +19,7 @@ export function AudioButton({
   label: string;
 }) {
   function play() {
-    if (!url) return;
-    // A missing/!ok Blob URL or decode failure rejects this promise; surface it to
-    // the console rather than failing the tap silently.
-    new Audio(url).play().catch((err) => {
-      console.error("Audio playback failed", url, err);
-    });
+    playAudio(url);
   }
 
   return (

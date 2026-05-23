@@ -11,6 +11,7 @@ import {
   thaiDateKey,
   thaiShortLabel,
 } from "@/lib/review/time";
+import { isLeech } from "@/lib/review/config";
 
 // --- Public types -----------------------------------------------------------
 
@@ -45,6 +46,8 @@ export interface LearnerStats {
   dueForecast: DayCount[];
   /** Per-rating breakdown across all review_logs (A8) */
   ratingCounts: RatingCounts;
+  /** Cards where fsrs_card.lapses >= LEECH_THRESHOLD — need manual attention */
+  leechCount: number;
 }
 
 // --- Internal helpers -------------------------------------------------------
@@ -92,6 +95,19 @@ function scheduledDays(fsrsCard: unknown): number {
     "scheduled_days" in fsrsCard
   ) {
     const v = (fsrsCard as Record<string, unknown>).scheduled_days;
+    return typeof v === "number" ? v : 0;
+  }
+  return 0;
+}
+
+// Extract lapses from the FSRS jsonb blob.
+function extractLapses(fsrsCard: unknown): number {
+  if (
+    fsrsCard !== null &&
+    typeof fsrsCard === "object" &&
+    "lapses" in fsrsCard
+  ) {
+    const v = (fsrsCard as Record<string, unknown>).lapses;
     return typeof v === "number" ? v : 0;
   }
   return 0;
@@ -153,10 +169,13 @@ export async function getLearnersStats(now: Date): Promise<LearnerStats[]> {
   return allUsers.map((u): LearnerStats => {
     const displayName = u.name ?? u.email ?? u.id;
 
-    // --- Seen + mature (A4) ---
+    // --- Seen + mature (A4) + leeches ---
     const myStates = allStates.filter((s) => s.learnerId === u.id);
     const seen = myStates.length;
     const mature = myStates.filter((s) => scheduledDays(s.fsrsCard) >= 21).length;
+    const leechCount = myStates.filter((s) =>
+      isLeech({ lapses: extractLapses(s.fsrsCard) }),
+    ).length;
 
     // All-time logs for this learner — used by both streak (A6) and rating
     // breakdown (A8).  Defined early so both sections can reference it.
@@ -242,6 +261,7 @@ export async function getLearnersStats(now: Date): Promise<LearnerStats[]> {
       streak,
       dueForecast,
       ratingCounts,
+      leechCount,
     };
   });
 }

@@ -11,7 +11,6 @@ import {
   getScheduler,
   hydrateFsrsCard,
 } from "./scheduler";
-import { ensureLearnerSettings } from "./queries";
 import type { RatingValue } from "./types";
 
 // Apply a Learner's rating to a Card: advance its FSRS schedule and record the
@@ -26,8 +25,7 @@ export async function submitReview(cardId: string, rating: RatingValue) {
   if (![1, 2, 3, 4].includes(rating)) throw new Error("Invalid rating");
 
   const now = new Date();
-  const settings = await ensureLearnerSettings(learnerId);
-  const scheduler = getScheduler(settings.requestRetention);
+  const scheduler = getScheduler();
 
   // Re-read the state here (the study screen already read it for the hint preview)
   // so the rating is applied to the freshest row — this avoids a lost update and

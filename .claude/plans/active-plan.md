@@ -3,113 +3,97 @@ status: COMPLETE
 updated: 2026-05-23
 ---
 
-# Active Plan — Milestone 7: Same-day requeue for failed / learning cards (Validation Contract)
+> **Cycle outcome (2026-05-23):** All 4 Validation Contract assertions PASS. Implementer →
+> code-reviewer (PASS, 2 LOW) → qa-engineer (PASS) handoffs written. Code-only changes shipped.
+> **Pending manual op:** run `tsx scripts/migrate-retention.ts` to set `request_retention = 0.85`
+> on the 2 existing `learner_settings` rows (vestigial column, no scheduling impact). Not run yet.
 
-Fix a user complaint: rating **Again** does not bring the card back within the session. Root
-cause confirmed in code: the study queue selects the earliest card where `due <= now`
-(`lib/review/queries.ts` — the `dueState` subquery + `fetchRawCounts`). ts-fsrs schedules an
-**Again** (and short **Hard**) on a new/learning card with a same-day learning step
-(`due ≈ now + ~1 min`), which is *in the future*, so the `due <= now` filter excludes it: the
-just-failed card vanishes for ~1 real minute (or the session shows "done" if it was the last
-card). M1–M6 are COMPLETE and live (prod `a482c58`); this changes only queue **selection** and
-the header **counts**, not the FSRS scheduling math or the review-log writes.
+# Active Plan — Milestone 8: Research-driven SRS tuning + phrase-content path
 
-**Plan root:** `c:\Users\User\Software Projects\Language-Learning-App\.claude\plans\`
-**Project-context:** `CONTEXT.md` (glossary), `m6-archive--*` (prior milestone handoffs),
-`lib/review/{queries,scheduler,actions,time,types}.ts`, `app/page.tsx`, `lib/db/schema.ts`.
-**AGENTS.md rule:** this is Next.js 16 — read `node_modules/next/dist/docs/` before writing
-Next code. **Global rules:** no placeholders/fake data; verify third-party behavior (here, the
-actual ts-fsrs scheduling shape) before relying on it; simple > clever.
+Derived from a competitive/feature analysis of Mandarin learning apps (Skritter, HelloChinese,
+Anki, Du Chinese, Mandarin Blueprint, Dong Chinese, Speechling, Duolingo, et al.) and the
+learner/research literature on what actually helps vs. what is gimmicky. Full reasoning lives in
+the conversation; this plan captures only the agreed scope.
 
-## Desired behavior (from the user)
-- **Again → comes back soon, after a few cards** (Anki-style learning queue), and immediately
-  if it is the only card left. (User chose "Soon, after a few cards.")
-- **Applies to any same-day step**, not just Again — e.g. a short **Hard**/**Good** learning
-  step that schedules the card for later *today* should also be eligible to resurface in the
-  current session. (User chose "Yes, any same-day step.")
+This milestone ships two **code-only**, low-risk SRS improvements. Everything content-related has
+been intentionally cut (see below) so the dev cycle can run in a fresh session without content
+work blocking it.
 
-## Assertions (must all hold)
+**Cut by user decision (2026-05-23):**
+- **Phrase-first content strategy — ABANDONED.** User's deliberate stance: learning the individual
+  Words that recur inside Phrases aids memorization, and the app keeps its Word-level focus. This
+  diverges from the competitor consensus on purpose; do not reintroduce a phrase-ratio target.
+- **Tags / CSV tag column — DEFERRED.** Keep the current tagging as-is for now.
+- **Stroke-order animation — NOT BUILDING.** This app is **reading-focused, not writing**; all
+  handwriting/stroke features are out of scope permanently.
 
-### Core requeue behavior
-- **A1** — After rating **Again** on a card, that card is served again within the same session
-  without waiting for wall-clock time to pass: if it is the only eligible card it reappears
-  immediately; if other genuinely-due cards remain it reappears **after** them (it does not
-  jump to the front). Verified by driving the real queue selection.
-- **A2** — The same holds for any rating whose ts-fsrs result schedules the card to be due
-  **later the same Thailand-day** (learning/relearning steps), not only Again.
-- **A3** — A card scheduled by ts-fsrs to be due on a **future day** (a graduated multi-day
-  interval) is **NOT** pulled forward into today's session — it disappears until its due day,
-  exactly as before. (No regression to normal review intervals.)
+Still deliberately **never** (for a 2-person intrinsic-motivation app): streaks / leaderboards /
+XP, permanent tone color-coding, full handwriting recognition, in-app card authoring, AI chat
+tutor. Still **deferred** (reading-relevant, revisit later): confusable-character compare,
+component/radical decomposition card-back layer.
 
-### Selection mechanism
-- **A4** — Queue eligibility uses a **Thailand-day** upper bound, reusing the existing
-  `startOfThailandDay` boundary (add an `endOfThailandDay`/equivalent to `lib/review/time.ts`;
-  do not hand-roll a second tz offset). Selection stays ordered by `due` ascending so overdue
-  cards precede same-day learning steps (this is what makes A1's "after a few cards" hold).
-- **A5** — The "due" definition change is justified in a code comment: ts-fsrs Review-state
-  intervals are ≥ 1 day, so `due <= endOfThailandDay(now)` pulls in exactly *overdue cards +
-  same-day learning/relearning steps* and never a normal Review card due on a later day. The
-  implementer MUST verify this assumption against the **installed** ts-fsrs (learning_steps /
-  enable short-term scheduling) by reading `node_modules` and/or a small real-data probe; if
-  Review intervals can be intra-day in this config, fall back to an explicit FSRS-state filter
-  (`state ∈ {Learning, Relearning}`) and record the finding.
+## Context (verified in code)
 
-### Counts / UI consistency
-- **A6** — The header counts and the served card stay **consistent**: the study screen never
-  shows a card while the header reads 0 due / 0 new (today's todo). Whatever predicate selects
-  the card also feeds `dueCount` (or `dueCount` is redefined to "due today" to match). State
-  the chosen count semantics in the handoff.
-- **A7** — The **EmptyState** ("done") appears only when there is genuinely nothing eligible
-  today **and** no new card within the daily cap — i.e. failing the last card does NOT show the
-  done screen; the failed card shows again.
-- **A8** — New-card behavior is unchanged: the daily new-card cap (Thailand-day) and the
-  due-first-then-new ordering still hold; a same-day learning step is preferred over
-  introducing a brand-new card (you finish learning what you started before adding more).
+- FSRS scheduling is `ts-fsrs` via `lib/review/scheduler.ts`. `getScheduler(requestRetention)`
+  builds the scheduler from a per-Learner value. `learnerSettings.requestRetention` currently
+  **defaults to 0.9** (`lib/db/schema.ts:174`). Two Learner rows exist.
+- `ts-fsrs` has **no native "leech"** concept; it tracks `lapses` on the persisted Card
+  (`review_states.fsrs_card` jsonb). A leech is therefore a derived check: `fsrsCard.lapses >= N`.
+  No schema change required to detect it.
+- Card back (`components/card-back.tsx`) already renders **whole-phrase audio** (`AudioButton`,
+  `card.wholeAudioUrl`) and **per-word audio** (`WordChip`). Today nothing auto-plays; both are
+  manual. Reveal state lives in `components/review-session.tsx`.
+- Content pipeline: `seed/reborn-chinese-system.csv` (authored 中文,English) →
+  `scripts/generate-deck.ts` (LLM adds pinyin + word segmentation only — does NOT invent
+  vocabulary) → `seed/deck.generated.json` → `scripts/generate-audio.ts` (TTS) →
+  `scripts/seed-db.ts`. Tags are currently assigned by a `row < 57` hack (only 2 generic tags).
+  Seed is 100 cards / **18 phrases / 82 single words** — inverted from the phrase-first ideal.
 
-### Quality
-- **A9** — Every count and selected card comes from real DB queries; no placeholder, sample,
-  or hard-coded card. FSRS math, the review-log writes, and `submitReview` auth/validation are
-  unchanged.
-- **A10** — `npx tsc --noEmit`, `npx eslint .`, and `npm run build` all pass (exit 0). Build
-  fetches Google Fonts; a font-fetch failure is environmental — retry and note it.
-- **A11** — Round-trip / boundary cases hold without crash or wrong results: a card due exactly
-  at `startOfThailandDay`, a card due 1 ms before midnight, a learning step that crosses
-  Thailand-midnight (acceptable if it rolls to tomorrow — document the edge), and a learner
-  with zero cards (clean EmptyState).
+## Decisions (from user)
 
-## Feature → assertion mapping (implementation outline)
-1. **`lib/review/time.ts`** (A4) — add `endOfThailandDay(now)` (or `startOfThailandDay(now) +
-   24h`, exclusive) next to the existing boundary helper; export it.
-2. **`lib/review/queries.ts`** (A1–A8) —
-   - `getStudyScreenData`: change the `dueState` subquery's predicate from `lte(due, now)` to
-     `lte(due, endOfThailandDay(now))`, keep `orderBy(asc(due)).limit(1)`. Due-first-then-new
-     ordering and the new-card cap stay as-is (A8).
-   - `fetchRawCounts` / `toCounts`: align `dueCount` with the same "due today" predicate so the
-     header matches what is served (A6). Keep `newRemaining` logic.
-   - Add the justifying comment + the verified ts-fsrs assumption note (A5).
-3. **No client changes expected** — `app/page.tsx` already renders `ReviewSession` vs
-   `EmptyState` off `card`; correct selection makes A7 fall out. Confirm `refresh()` in
-   `submitReview` still re-runs selection (it does).
-4. **Verify ts-fsrs scheduling shape** (A5) — read the installed ts-fsrs config/defaults; if
-   needed, a throwaway `node -e` probe with a real empty card to confirm Again/Hard produce a
-   same-day due and Good/Easy graduate to ≥ 1 day.
+- **Audio:** keep OpenAI TTS; make **whole-phrase the default**, per-word stays opt-in drill-down.
+- **FSRS tuning:** apply as **global constants** (not per-Learner).
+- **Content / tags / stroke order:** all cut (see top of file). This milestone is code-only.
 
-## Done criteria
-- A1–A11 hold; handoff chain written (`implementation-summary.md` → `review-summary.md` →
-  `qa-summary.md`) with canonical frontmatter; `active-plan.md` flipped to COMPLETE.
-- Behavioral assertions confirmed by driving the real selection logic locally (the full
-  click-through needs live OAuth + prod DB, accepted as in M6).
+## Scope
 
-## Out of scope
-- Changing FSRS parameters, learning_steps, or request_retention; a settings UI for them.
-- A client-side in-memory session queue / "learn-ahead" limit configuration.
-- Interday vs intraday due model for **Review** (graduated) cards — only same-day learning
-  steps are pulled forward; graduated cards keep day-boundary behavior.
-- Deploying — decide separately after QA (M6 deploy is already live).
+### 1. Default playback to whole-phrase audio (code)
+- On card **reveal**, auto-play `card.wholeAudioUrl` once (whole-phrase clip preserves prosody /
+  tone sandhi — the research's main audio point). Per-word `WordChip` audio remains tap-only.
+- Likely touch: `components/review-session.tsx` (fire on reveal), `components/audio-button.tsx`
+  (add an `autoPlay`/imperative play path), possibly `components/card-back.tsx`.
+- Respect browser autoplay constraints: the reveal is a user gesture (button click), so a
+  programmatic `.play()` in that handler is permitted. Must not throw if `wholeAudioUrl` is null.
+- No double-play, no autoplay on the front, no autoplay of per-word clips.
 
-## Notes / decisions
-- "After a few cards" is achieved purely by `due ASC` ordering: a failed card's `now+1m` due
-  sorts behind all currently-overdue cards, so they are served first; when it is the only card
-  left it returns immediately (user accepted this).
-- Single-card repeat-loop: hammering Again on the last remaining card reshows it each time —
-  intended and accepted.
+### 2. FSRS Chinese tuning as global constants (code)
+- Introduce `REQUEST_RETENTION = 0.85` and `LEECH_THRESHOLD = 7` constants (single source, e.g.
+  in `lib/review/scheduler.ts` or a small `lib/review/config.ts`).
+- `getScheduler` uses the global `REQUEST_RETENTION` (0.85) rather than the per-Learner column.
+  Set `learnerSettings.requestRetention` default to 0.85 and one-time UPDATE the 2 existing rows
+  for consistency (the column becomes vestigial but is left in place to avoid a destructive drop).
+- **Leech detection:** add a derived helper `isLeech(fsrsCard) => fsrsCard.lapses >= LEECH_THRESHOLD`.
+  Surface minimally: a small "leech" badge on the review card back when true, and a leech **count**
+  in the existing stats view (`lib/review/stats.ts` + `app/stats/page.tsx`). No new table; compute
+  from `lapses`. "Do something about leeches" (re-author / add context) is a manual follow-up, not
+  automated here.
+
+## Validation Contract (assertions QA must check)
+1. Revealing a card auto-plays the whole-phrase audio exactly once; front never auto-plays;
+   per-word clips never auto-play; a card with null `wholeAudioUrl` reveals without error.
+2. A freshly scheduled review uses request_retention 0.85 (not 0.9) — verify via scheduler input
+   and that interval previews shift accordingly vs. the old default.
+3. `isLeech` returns true iff `lapses >= 7`; the leech badge shows only for such cards; the stats
+   leech count matches the number of the Learner's states with `lapses >= 7`.
+4. `npm run build` / typecheck / lint clean. No regression in same-day requeue (M7) or stats (M6).
+
+## Risks / notes
+- Autoplay: keep the play call inside the reveal click handler's React update path; guard against
+  React 18 double-invoke in dev (StrictMode) causing a double play.
+- The per-Learner `requestRetention` column is intentionally left in place (not dropped) — global
+  constant overrides it; document this so it isn't mistaken for live config.
+- Content authoring (more phrases, tag backfill) is decoupled: code can ship before content grows.
+
+## Handoff chain
+active-plan.md (this) → implementation-summary.md → review-summary.md → qa-summary.md.
+Recommended execution: `/dev-cycle`.

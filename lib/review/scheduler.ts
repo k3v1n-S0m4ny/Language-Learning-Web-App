@@ -12,13 +12,14 @@ import {
   type ReviewLog,
 } from "ts-fsrs";
 import type { IntervalHints, RatingValue } from "./types";
+import { REQUEST_RETENTION } from "./config";
 
 export { createEmptyCard };
 export type { Card };
 
-// Build a scheduler for a Learner from their requested retention.
-export function getScheduler(requestRetention: number): FSRS {
-  return fsrs(generatorParameters({ request_retention: requestRetention }));
+// Build a scheduler using the global REQUEST_RETENTION constant.
+export function getScheduler(): FSRS {
+  return fsrs(generatorParameters({ request_retention: REQUEST_RETENTION }));
 }
 
 // jsonb round-trips Dates as ISO strings. Coerce them back before handing the
