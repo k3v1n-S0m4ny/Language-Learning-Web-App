@@ -18,6 +18,19 @@ export function startOfThailandDay(now: Date): Date {
   return new Date(thaiMidnightAsUtc - THAILAND_OFFSET_MS);
 }
 
+// Returns the UTC instant that is exactly startOfThailandDay(now) + 24 h, which
+// is 00:00:00.000 Asia/Bangkok of the *next* calendar day (not 23:59:59.999 of
+// the current one).  SQL callers use this with inclusive `lte`, so the effective
+// upper bound is "due on or before the very first millisecond of tomorrow Bangkok
+// time."  In practice this boundary is unreachable: ts-fsrs scheduling always adds
+// an interval to the current review time and never snaps a due date to exactly
+// midnight, so a card landing precisely here is a documented ~1-second-wide edge
+// accepted as negligible (plan A11).  This function is the single source of truth
+// for the today/tomorrow cut-off — do not hand-roll a second tz offset in callers.
+export function endOfThailandDay(now: Date): Date {
+  return new Date(startOfThailandDay(now).getTime() + 24 * 60 * 60 * 1000);
+}
+
 // Returns a "YYYY-MM-DD" string for the Thai calendar date of `now`.
 // Used as a stable map key when bucketing rows by Thai day.
 export function thaiDateKey(now: Date): string {

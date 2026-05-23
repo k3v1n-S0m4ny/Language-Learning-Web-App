@@ -3,240 +3,120 @@ status: COMPLETE
 updated: 2026-05-23
 ---
 
-# QA Summary — Milestone 6: Progress / Stats View
+# QA Summary — Milestone 7: Same-day requeue for failed / learning cards
 
-## Prior Handoffs Read
+## Prior summaries read
+- `active-plan.md` (Validation Contract, assertions A1–A11): YES
+- `implementation-summary.md`: YES
+- `review-summary.md`: YES
 
-- `implementation-summary.md`: READ. Covers initial implementer pass + fix pass (HIGH A6
-  streak cap, MEDIUM A7 overdue drop, MEDIUM misleading loop bound).
-- `review-summary.md`: READ. Covers initial review (A6 FAIL, A7 PARTIAL) + re-review after
-  fix pass (A6 PASS, A7 PASS, all others unchanged PASS).
-
-Both were read in full before any validation was attempted.
-
----
+QA was performed after reading all three documents, as required.
 
 ## Result
 
-**PASS**
-
-All 13 assertions verified. A1, A2, A5, A6, A7, A11, A12, A13 verified behaviorally or by
-live execution. A3, A4, A8, A9, A10 verified by code inspection + static analysis (full
-behavioral check requires live OAuth session + prod DB, which is a stated constraint of the
-done criteria).
+**PASS** — all assertions hold. No blocking defects found. The two non-blocking findings carried forward from the reviewer (MEDIUM: JSDoc comment inaccuracy; LOW: missing Relearning rows in A5 probe table) are confirmed as documentation-only issues with no behavioral impact. A10 independently re-run and verified.
 
 ---
 
 ## Assertions
 
-### A1 — Nav to/from `/stats`
-**PASS (code inspection + build confirmed)**
+### A1 — PASS
+A just-failed card (due = now+1 min) sorts **after** all currently-overdue cards in `due ASC` order. Driven by simulating the exact `dueState` subquery predicate against a sample queue: `card-overdue-1` (yesterday), `card-overdue-2` (1h ago), `card-just-failed` (now+1min). LIMIT 1 returns `card-overdue-1`. When the failed card is the only eligible card it is returned immediately (LIMIT 1 on a single-row result). Both sub-cases confirmed with exit 0 node probes.
 
-- `app/page.tsx` line 28–31: `<Link href="/stats">Stats</Link>` in study-screen header,
-  styled to match `SignOutButton`.
-- `app/stats/page.tsx` line 27–31: `<Link href="/">Back to study</Link>` in page header.
-- Both confirmed in source. `/stats` appears as `ƒ (Dynamic)` in `npm run build` route list.
+### A2 — PASS
+Again (+1m), Hard (+6m), and Good (+10m) from a Learning card all land within `endOfThailandDay` at any realistic session time. Live ts-fsrs v5.4.0 probe (`scheduler.repeat` against real installed package) confirms all three outcomes are intraday. Relearning+Again (+10m) and Relearning+Hard (+15m) also confirmed intraday. All are `<= dayEnd`, all are eligible.
 
-### A2 — `/stats` auth-protected, unauthenticated → sign-in redirect
-**PASS (live behavioral test)**
+### A3 — PASS (key regression guard)
+Graduated Review-state cards are never pulled forward. All four Review-state ratings land on future days:
+- Review+Hard: +27d — excluded
+- Review+Good: +39d — excluded
+- Review+Easy: +66d — excluded
+- Review+Again (Relearning): +10 min **within the review session day** — correctly included on that future day (not pulled forward into today's session, which is the correct behaviour)
 
-- Dev server started (`npm run dev`, exit 0, ready in ~1.4s).
-- `curl -v http://localhost:3000/stats` → `HTTP/1.1 307 Temporary Redirect`, `Location:
-  /api/auth/signin?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2Fstats`.
-- `proxy.ts` matcher `/((?!api/auth|_next/static|_next/image|favicon.ico).*)` covers
-  `/stats` (confirmed by logic check — "stats" does not match any exclusion prefix).
-- `app/stats/page.tsx` has defensive `auth()` guard matching `app/page.tsx` pattern.
-- Existing `/` redirect behavior unchanged (also returns 307 — no regression).
+Learning+Easy borderline case (the +24h case from the implementation summary) verified at all session times including Bangkok 23:59:00. The actual ts-fsrs output is +24h 1min (not exactly +24h), landing well after `endOfThailandDay` in all cases. No Learning+Easy card is ever within today's `dayEnd`.
 
-### A3 — Both learners side by side, labelled by name/email
-**PASS (code inspection)**
+Relearning+Good and Relearning+Easy both land at +1 day and +2 days respectively — correctly excluded. Full live probe exit 0.
 
-- `app/stats/page.tsx` line 36: `<div className="... sm:grid-cols-2">` renders two columns
-  on sm+ breakpoints, stacks on mobile.
-- `learners.map((learner) => <LearnerColumn key={learner.learnerId} stats={learner} />)`:
-  one column per user row from DB.
-- `displayName = u.name ?? u.email ?? u.id` in `stats.ts` line 154: name-first, email
-  fallback, ID last-resort.
-- `<h2>{stats.displayName}</h2>` in `LearnerColumn` at line 54.
-- Full behavioral test (two real learner names side by side) requires prod OAuth session.
-  Marked: verified by code inspection, not live run.
+### A4 — PASS
+`endOfThailandDay` is implemented as `startOfThailandDay(now).getTime() + 24 * 60 * 60 * 1000`. It reuses the existing helper, adds exactly 24h in milliseconds, and does not hand-roll a second timezone offset. `THAILAND_OFFSET_MS` appears 4 times in `time.ts`: once as the constant definition, twice inside `startOfThailandDay`, and once in `thaiDateKey` — `endOfThailandDay` uses none of them directly. Function is exported and imported correctly in `queries.ts`.
 
-### A4 — Seen/total/mature counts
-**PASS (code inspection + scheduledDays unit test)**
+### A5 — PASS (with confirmed documentation gaps; no behavioral defect)
+The A5 probe comment in `queries.ts` (lines 49–56) correctly asserts that `endOfThailandDay` includes `{Learning, Relearning}` intraday steps and excludes all graduated Review-state intervals. Live re-probe confirms this conclusion is accurate.
 
-- `seen = myStates.length` (count of `review_states` rows for this learner).
-- `total = totalRow[0]?.n ?? 0` from `count(*)` on `cards` table.
-- `mature = myStates.filter(s => scheduledDays(s.fsrsCard) >= 21).length`.
-- `scheduledDays()` extracts `scheduled_days` from the FSRS jsonb blob — verified against
-  7 input shapes (null, empty, valid, string-typed, exactly 21, above/below threshold): all
-  returned correct values (exit 0).
-- Schema confirms `fsrsCard: jsonb("fsrs_card")` in `review_states`.
-- Marked: verified by code inspection + logic test, not live DB run.
+Two documentation gaps confirmed from reviewer findings:
+1. (MEDIUM) JSDoc on `endOfThailandDay` says "23:59:59.999" and "exclusive" but the function returns `startOfThailandDay + 24h = 00:00:00.000 next Bangkok day` and SQL uses `lte` (inclusive). Factually wrong comment. Behavioral impact: the exact-midnight boundary is served today rather than tomorrow, which is better UX. No wrong cards excluded or included in normal sessions.
+2. (LOW) Relearning rows absent from the A5 probe table. Live re-probe confirms Relearning+Again (+10m) and Relearning+Hard (+15m) are intraday (correctly included), Relearning+Good (+1d) and Relearning+Easy (+2d) are excluded (correctly excluded). Logic is correct; the comment just doesn't document it.
 
-### A5 — 30-day reviews chart, Thai-day bucketed
-**PASS (code inspection + 30-day window logic test)**
+Neither gap is a behavioral defect. Both are pre-deployment documentation fixes.
 
-- `recentLogs` query uses `gte(reviewLogs.reviewedAt, logWindowStart)` (31-day window for
-  timezone headroom).
-- `past30Start = todayStart - 29 days`; `buildDayKeys(past30Start, 30)` produces exactly
-  30 keys.
-- Verified: `past30Keys[29] === todayKey` (last key = today's Thai date — exit 0).
-- All keys in `YYYY-MM-DD` Thai format (exit 0).
-- `ReviewsChart` in `components/stats/reviews-chart.tsx`: "use client", Recharts `BarChart`,
-  empty-state placeholder when no data.
-- Marked: verified by code inspection + logic test, not live DB run.
+### A6 — PASS
+`fetchRawCounts` and `getStudyScreenData` both compute `dayEnd = endOfThailandDay(now)` independently but with identical inputs, producing identical values. The `dueCount` in `fetchRawCounts` uses `lte(reviewStates.due, dayEnd)` and the `dueState` subquery in `getStudyScreenData` uses `lte(reviewStates.due, dayEnd)` — same predicate, same boundary. After rating Again on the last card: `dueCount = 1`, `dueState` returns that card — header and served card are consistent. The previous `due <= now` definition would have shown `dueCount = 0` while the card was waiting (violating A6); this is fixed.
 
-### A6 — Streak (consecutive Thai-days, today-not-reviewed doesn't break it)
-**PASS (code inspection + 6-edge-case logic test)**
+### A7 — PASS
+`app/page.tsx` renders `EmptyState` only when `card === null`. `card` is null only when `chosenId` is undefined, which only occurs when `dueState` is empty AND (`newRemaining === 0` OR no unseen cards exist). After rating Again on the last card, `dueState` returns that card (within `dayEnd`) so `chosenId` is non-null and `EmptyState` is not shown. Zero-card learner scenario verified: `dueState = []`, `newCardRow = []`, `newRemaining = 0` → `chosenId = undefined` → `card = null` → `EmptyState` rendered.
 
-- Streak loop uses `myAllLogsReviewsByKey` built from `allLogs` (no date filter). The old
-  32-day cap from `recentLogs` is gone.
-- Loop semantics: `i=0` zero reviews → `continue` (not break); `i>0` zero reviews → `break`.
-- 365-iteration cap is now honest (allLogs is unbounded).
-- All 6 edge cases verified by JS simulation (exit 0):
-  - Today=0, yesterday+day-before reviewed → streak=2. Correct.
-  - 5 days consecutive including today → streak=5. Correct.
-  - Today=0, yesterday=0 (gap), 2-days-ago reviewed → streak=0. Correct.
-  - 35-day streak, today=0 → streak=35. Correct (previously would cap at 32).
-  - 40-day streak including today → streak=40. Correct.
-  - No reviews ever → streak=0. No crash.
+### A8 — PASS
+Due-first-then-new ordering: `chosenId = dueCardId ?? newCardId`. When a due card exists, it is always served before a new card. When the daily cap is exhausted (`newRemaining = 0`), `newCardId` is set to `undefined` and no new card is served. A same-day learning step card (has a `reviewState` row) correctly appears in `dueState` not `newCardRow` (the new-card subquery uses `notExists(reviewStates)` to find unseen cards only), so it is naturally preferred over brand-new cards by the due-first ordering. All three sub-cases verified with exit 0 node probes.
 
-### A7 — Due forecast, 7 Thai days, overdue → today
-**PASS (code inspection + overdue-bucketing logic test)**
+### A9 — PASS
+No placeholders, stubs, mocks, or hardcoded data found in `lib/review/time.ts` or `lib/review/queries.ts` (grep for TODO/FIXME/placeholder/stub/mock/fake/sample/hardcode returned no results). `lib/review/actions.ts`, `lib/review/scheduler.ts`, and `app/page.tsx` confirmed unchanged via `git diff` (zero output for those files). FSRS math and review-log writes are untouched.
 
-- `forecastKeys = buildDayKeys(todayStart, 7)` — 7 keys from today.
-- `state.due < todayStart ? todayKey : thaiDateKey(state.due)` — overdue cards use
-  `todayKey` directly before the `forecastKeys.includes(dueKey)` check.
-- Boundary conditions verified by JS simulation (exit 0):
-  - due = yesterday → todayKey. No double-count.
-  - due = todayStart exactly → thaiDateKey path, still todayKey. No double-count.
-  - due = todayStart - 1ms → todayKey. Correct.
-  - due = today+3 → in forecastKeys. Correct.
-  - due = today+8 → not in forecastKeys, excluded. Correct.
+### A10 — PASS (independently re-run by QA; not just implementer's report)
+- `npx tsc --noEmit` — exit 0
+- `npx eslint .` — exit 0
+- `npm run build` — exit 0. Next.js 16.2.6 Turbopack; all 5 pages generated (/, /_not-found, /api/auth/[...nextauth], /stats, Proxy middleware). No font-fetch failure. Build duration ~5.1s compile + ~5.4s TypeScript check.
 
-### A8 — Again/Hard/Good/Easy rating breakdown
-**PASS (code inspection + rating-mapping unit test)**
-
-- `allLogs` query (no date filter) used for ratings — confirmed in lines 139–147 of stats.ts.
-- Rating mapping: 1=again, 2=hard, 3=good, 4=easy. Verified with 7-review simulation
-  (again=2, hard=1, good=3, easy=1 — exit 0).
-- `RatingChart` uses per-bar `Cell` with `RATING_COLORS = ["#ef4444","#f97316","#22c55e","#6366f1"]`
-  (red=again, orange=hard, green=good, indigo=easy).
-- Marked: verified by code inspection + logic test, not live DB run.
-
-### A9 — Charts in client components, rest server, recharts renders cleanly
-**PASS (install verified + build exit 0)**
-
-- `recharts@3.8.1` installed (`npm list recharts` exit 0).
-- All 8 required exports confirmed present via `node -e` require test (BarChart, Bar, Cell,
-  XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer — exit 0).
-- All three chart components have `"use client"` as line 1.
-- `app/stats/page.tsx` has no `"use client"` — confirmed server component.
-- `npx tsc --noEmit` exit 0; `npm run build` exit 0. No TS or build errors from Recharts.
-
-### A10 — All real DB data, no placeholders
-**PASS (code inspection)**
-
-- `getLearnersStats` issues 5 DB queries in a single `Promise.all`: `users`, `count(*)` on
-  `cards`, all `review_states`, recent `review_logs` (31-day filter), all `review_logs`
-  (unfiltered).
-- No hard-coded numbers, no sample arrays, no `Math.random()`, no TODO fillers found in
-  `stats.ts`, `app/stats/page.tsx`, or the three chart components.
-- `grep` for hardcoded data patterns returned no results.
-- Marked: verified by code inspection, not live DB run.
-
-### A11 — Thailand-day boundary everywhere
-**PASS (code inspection + round-trip logic test)**
-
-- `lib/review/time.ts` is the single source of truth for `THAILAND_OFFSET_MS = 7 * 60 * 60 * 1000`.
-- `lib/review/queries.ts` imports `startOfThailandDay` from `"./time"` (line 17); its
-  private copy is confirmed gone (grep returned no results).
-- `stats.ts` imports `startOfThailandDay`, `thaiDateKey`, `thaiShortLabel` from `"@/lib/review/time"`.
-- Round-trip verified: `startOfThailandDay(now) → thaiDateKey` = correct Thai date (exit 0).
-  UTC 20:00 May 22 correctly maps to Thai day 2026-05-23.
-- `thaiShortLabel` uses `Intl.DateTimeFormat` with `timeZone: "Asia/Bangkok"` — correct for
-  server-side Node 18+ (full ICU bundled).
-
-### A12 — tsc/eslint/build all exit 0
-**PASS (live execution)**
-
-- `npx tsc --noEmit` — exit 0 (no output)
-- `npx eslint .` — exit 0 (no output)
-- `npm run build` — exit 0. Compiled in 7.3s. `/stats` is `ƒ (Dynamic)`. No warnings.
-
-### A13 — Zero-state safe (no NaN, no crash)
-**PASS (code inspection + zero-state simulation)**
-
-- `pct = total > 0 ? Math.round((seen/total)*100) : 0` — no division-by-zero (exit 0 confirmed).
-- Streak on empty map: `i=0` hits `continue`, `i=1` hits `break`, returns 0 (exit 0).
-- `RatingChart`: `total = data.reduce(...); if (total===0) return placeholder`.
-- `ReviewsChart`: `hasData = data.some(d=>d.count>0); if (!hasData) return placeholder`.
-- `ForecastChart`: `hasData = data.some(d=>d.count>0); if (!hasData) return placeholder`.
-- All zero values for seen, total, mature, streak, reviewsByDay, dueForecast, ratingCounts
-  produce clean zero-state renders — no NaN or crash paths found (exit 0).
+### A11 — PASS
+All four boundary cases verified:
+1. Card due exactly at `startOfThailandDay` (Bangkok midnight, overdue from yesterday): eligible (`due <= dayEnd` = true). Correct.
+2. Card due 1ms before Bangkok midnight: eligible. Correct.
+3. Near-midnight Again step: reviewing at Bangkok 23:59:00, Again +1 min = 00:00:00.000 Bangkok tomorrow = exactly `dayEnd`. SQL `lte` includes the boundary → card is served today, not tomorrow. The plan says "acceptable if it rolls to tomorrow — document the edge." The reviewer MEDIUM finding documents this behavior. UX effect is better than spec (card resurfaces immediately rather than disappearing until tomorrow). No crash. Acceptable.
+4. Zero-card learner: `chosenId = undefined`, `card = null`, `EmptyState` rendered cleanly. No crash.
 
 ---
 
 ## Commands Run
 
 | Command | Exit Code | Notable Output |
-|---------|-----------|----------------|
-| `npx tsc --noEmit` | 0 | No output |
-| `npx eslint .` | 0 | No output |
-| `npm run build` | 0 | `/stats` ƒ (Dynamic), compiled 7.3s |
-| `npm list recharts` | 0 | `recharts@3.8.1` |
-| `npm run dev` (background) | 0 | Ready in ~1.4s |
-| `curl -v localhost:3000/stats` | — | 307 → `/api/auth/signin?callbackUrl=...` |
-| `curl -v localhost:3000/` | — | 307 (no regression) |
-| `node -e` (Thai timezone round-trip) | 0 | todayStart → key → correct Thai date |
-| `node -e` (30-day window) | 0 | 30 keys, last = today's Thai key |
-| `node -e` (streak 6 edge cases) | 0 | All 6 correct |
-| `node -e` (A7 overdue boundary) | 0 | All 5 conditions correct |
-| `node -e` (scheduledDays 7 cases) | 0 | All 7 correct |
-| `node -e` (A8 rating mapping) | 0 | Counts correct |
-| `node -e` (A13 zero-state) | 0 | No NaN, no crash |
-| `node -e` (recharts exports) | 0 | All 8 exports present |
+|---|---|---|
+| `npx tsc --noEmit` | 0 | No errors |
+| `npx eslint .` | 0 | No errors |
+| `npm run build` | 0 | 5 pages, Turbopack, no warnings |
+| node boundary math probe | 0 | All A1/A2/A3/A11 predicates verified |
+| node ts-fsrs scheduling probe (New/Learning/Review/Relearning) | 0 | All 16 state×rating combos confirmed |
+| node ordering simulation (A1) | 0 | Due-first ordering confirmed |
+| node A6/A7/A8 logic simulation | 0 | Count consistency + EmptyState + cap logic confirmed |
+| node Learning+Easy boundary (A3 worst-case) | 0 | Excluded at all session times including Bangkok 23:59 |
+| node Review+Again session-day intraday check | 0 | +10m intraday on actual due date, not pulled forward into today |
+| `git diff --name-only HEAD` + `git status --short` | 0 | Only `lib/review/queries.ts`, `lib/review/time.ts` + plan docs changed |
 
 ---
 
 ## Unexpected Behavior
 
-None. The implementation matched the plan and review exactly. The fixes for the HIGH
-(A6 streak cap) and two MEDIUM (A7 overdue drop, misleading loop bound) findings from the
-initial review were confirmed correct by independent simulation.
+**None that constitutes a defect.** One behavioral clarification:
+
+The implementation summary's ts-fsrs probe table column "Due offset" for `Review + Again` reads "+10 min" which is correct when compared against the session day's `dayEnd`. A superficial re-probe comparing against today's `dayEnd` (a different day) showed `intraday:false`, which initially appeared as a discrepancy. On closer inspection this was a probe-context error on the QA side: the Review+Again card is due on its actual due date 8 days from now, and when probed at that date its +10 min result is correctly within that day's `endOfThailandDay`. The feature behavior is correct.
 
 ---
 
 ## Residual Risk
 
-1. **`allLogs` full-table scan at scale** — No `WHERE` clause on the all-time logs query.
-   At current dataset (hundreds of logs, 2 learners) this is negligible. After 1–2 years
-   of daily use, a rating-only aggregation query would be more efficient. Not a current defect.
+1. **JSDoc comment accuracy** (MEDIUM, carried from reviewer): `endOfThailandDay` JSDoc says "23:59:59.999 Asia/Bangkok" and "exclusive" but returns `00:00:00.000 next Bangkok day` (inclusive via `lte`). A future maintainer who reads only the comment and writes a `<` comparison instead of `<=` will get a 1ms off-by-one at midnight. Suggest fixing the comment before the next maintainer touches this file. Not blocking deployment.
 
-2. **`Intl.DateTimeFormat` server-side** — `thaiShortLabel` is called in a server component.
-   Full ICU is standard in Node 18+ (Vercel runtime). Not verified against the deployed
-   runtime configuration, but risk is very low.
+2. **A5 probe table incomplete** (LOW, carried from reviewer): Relearning rows absent from the `queries.ts` comment table. Logic is correct; documentation gap only.
 
-3. **Three LOW style findings from review** remain unaddressed: optional chain on
-   `totalRow[0]?.n`, full `user` table scan (safe at 2-user scale), `key={index}` on
-   `<Cell>`. No correctness impact.
+3. **No automated regression tests**: A future change to `endOfThailandDay` or the query predicate won't be caught automatically. Out of scope for M7 but worth noting for the backlog.
 
-4. **A3/A4/A8/A10 full behavioral pass** — Seeing two real learner columns with real
-   data requires a prod OAuth session + live Neon DB. These assertions are verified by code
-   inspection and logic simulation only, per the done criteria stated in the plan.
+4. **Live OAuth + prod DB not tested locally** (accepted constraint, same as M6): Full click-through requires live Google OAuth and the prod Neon DB. Behavioral correctness has been validated by driving the real selection logic against the real installed ts-fsrs package. Prod smoke test is recommended after deployment.
 
 ---
 
 ## Procedure Compliance
 
 - Plan (`active-plan.md`) consulted before QA: yes
-- Implementation summary read before validating: yes
-- Review summary read before validating: yes
-- AGENTS.md read: yes
-- Source files read (stats.ts, time.ts, page.tsx, all chart components, proxy.ts, schema.ts,
-  queries.ts, app/page.tsx): yes
-- Static tool checks run (`tsc`, `eslint`, `build`): yes — all exit 0
-- Behavioral auth test run (`curl` against dev server): yes — 307 confirmed
-- Logic verified with independent `node -e` scripts: yes — 8 scripts, all exit 0
-- No source files modified: confirmed
+- Implementation summary read: yes
+- Review summary read: yes
+- Both prior summaries read before validating assertions: yes
+- Source files edited: no
 - QA summary written: yes

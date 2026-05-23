@@ -3,74 +3,73 @@
 > Paste everything below into a FRESH Claude Code session opened in
 > `C:\Users\User\Software Projects\Language-Learning-App`. It assumes ZERO prior context.
 > The point of a fresh session is to run the full `/dev-cycle` with the real agents without
-> this build-up of context.
+> context bloat.
 
 ---
 
-You are picking up a **Chinese spaced-repetition flashcard web app** for a couple (the user
-and his girlfriend) to study together. **M1–M5 are DONE and live in production**
-(`https://thepolyglot.vercel.app`). Your job is **Milestone 6: the Progress / Stats view**,
-and the Validation Contract is already written and approved.
+You are picking up a **Chinese spaced-repetition flashcard web app** for a couple (the user and
+his girlfriend) to study together. **M1–M6 are DONE and live in production**
+(`https://thepolyglot.vercel.app`, deployed 2026-05-23, commit `a482c58`). Your job is
+**Milestone 7: same-day requeue for failed / learning cards**, and the Validation Contract is
+already written and approved.
 
 ## 0. First action — run the dev-cycle
-The M6 contract is in `.claude/plans/active-plan.md` (status `IN_PROGRESS`, **approved**).
+The M7 contract is in `.claude/plans/active-plan.md` (status `DRAFT` → flip to `IN_PROGRESS`
+when you start; it is **already approved by the user**, do not re-litigate scope).
 Implementation has NOT started. Run `/dev-cycle` to execute Phase 2 (implement) → Phase 3
-(review) → Phase 4 (QA) → Phase 5 (wrap up), delegating to the `implementer`,
-`code-reviewer`, and `qa-engineer` agents.
+(review) → Phase 4 (QA) → Phase 5 (wrap up), delegating to the `implementer`, `code-reviewer`,
+and `qa-engineer` agents. Confirm the Agent tool lists those three; if not, ask the user before
+falling back to `general-purpose`.
 
-**Agent availability check:** those three agents live in `~/.claude/agents/`. A UTF-8 BOM that
-was preventing them from loading was stripped on 2026-05-22. Confirm the Agent tool lists
-`implementer` / `code-reviewer` / `qa-engineer`. If it still does not, the agent definitions
-are valid — it is an environment/runtime issue; fall back to `general-purpose` agents for each
-role (ask the user first), keeping the same handoff files.
+## 1. The complaint being fixed
+Rating **Again** does not bring the card back within the session. Root cause (confirmed): the
+study queue selects the earliest card where `due <= now` (`lib/review/queries.ts`). ts-fsrs
+schedules Again (and short Hard) as a same-day learning step `due ≈ now + ~1 min` — a *future*
+time — so `due <= now` excludes it; the card vanishes for ~1 real minute, or the session shows
+"done" if it was the last card.
 
-## 1. Read these first (durable context in the repo)
-- `.claude/plans/active-plan.md` — the M6 Validation Contract (assertions A1–A13). This is the spec.
-- `CONTEXT.md` — the glossary (Learner, Card, Word, Gloss, Pinyin, Review State, …). Use exact terms.
+**The agreed fix** (full detail + assertions A1–A11 in `active-plan.md`): broaden queue
+eligibility to `due <= endOfThailandDay(now)`, keep `due ASC` ordering (so a failed card returns
+*after* genuinely-overdue cards — "soon, after a few cards" — and immediately if it's the only
+one left). Applies to **any same-day step**, not just Again. Graduated multi-day cards must NOT
+be pulled forward. Align the header `dueCount` with the same predicate so the screen never shows
+a card while reading "0 due / 0 new".
+
+## 2. User decisions already made (do not re-ask)
+- Again behavior: **"soon, after a few cards"** (not immediate-next).
+- Scope: **any same-day learning step** (Again + short Hard/Good), not Again only.
+
+## 3. Read these first (durable context in the repo)
+- `.claude/plans/active-plan.md` — the M7 Validation Contract (assertions A1–A11). THIS IS THE SPEC.
+- `CONTEXT.md` — glossary (Learner, Card, Word, Gloss, Pinyin, Review State, …). Use exact terms.
 - `AGENTS.md` — **CRITICAL: this is Next.js 16, not your training data.** Read the relevant
   guides in `node_modules/next/dist/docs/` before writing Next code.
-- `.claude/project-context/inspection-report--ast-code-inspection.md` — a recent bug-inspection
-  of the review loop. Already-applied fixes are listed below; do NOT re-run that inspection.
-- `lib/review/{queries,actions,scheduler,types}.ts`, `lib/db/schema.ts`, `app/page.tsx`,
-  `proxy.ts`, `auth.ts` — existing patterns to match.
+- `lib/review/{queries,scheduler,actions,time,types}.ts`, `lib/db/schema.ts`, `app/page.tsx` —
+  the code you'll touch / match. `startOfThailandDay` lives in `lib/review/time.ts`.
+- `.claude/plans/m6-archive--*` — prior milestone handoffs (context only; do not redo).
 
-## 2. Hard rules (the user cares a lot)
-- **No placeholders, stubs, mocks, or fake/sample data.** Every number comes from real DB queries.
-- **Verify third-party tools before relying on them.** The contract calls for a charting
-  library — actually install it and confirm it builds + renders under **React 19 / Next 16.2.6**
-  (Recharts v3+ supports React 19; if not clean, pick a compatible alternative and record why).
-- Ask clarifying questions before complex work; simple > clever; comment the "why", not the "what".
-- Keep the `.claude/plans/` handoff chain current: `active-plan.md` → `implementation-summary.md`
-  → `review-summary.md` → `qa-summary.md`, with the canonical YAML frontmatter.
+## 4. Hard rules (the user cares a lot)
+- **No placeholders, stubs, mocks, or fake/sample data.** Every count/card from real DB queries.
+- **Verify third-party behavior before relying on it.** Specifically (A5): confirm against the
+  *installed* ts-fsrs that Again/Hard yield a same-day `due` and Good/Easy graduate to ≥ 1 day.
+  If Review intervals can be intra-day in this config, fall back to an explicit FSRS-state filter
+  (`state ∈ {Learning, Relearning}`) and record the finding. Don't assume from training data.
+- Simple > clever; comment the "why", not the "what".
+- Keep the `.claude/plans/` handoff chain current with canonical YAML frontmatter:
+  `active-plan.md` → `implementation-summary.md` → `review-summary.md` → `qa-summary.md`.
 
-## 3. Current git / deploy state (IMPORTANT)
-- Branch `main`. Local commits NOT yet pushed and NOT yet deployed:
-  - `aa83cf5` — M1–M4 review UI (this IS what production currently runs, deployed earlier)
-  - `53c8c55` — M4/M5 milestone doc closeout
-  - `c345041` — review-loop fixes (see §4)
-- **Production runs the pre-fix code (`aa83cf5`).** The §4 fixes + M6 are intended to **deploy
-  together later** via `vercel --prod` (CLI is installed, logged in as `k3v1n-s0m4ny`, repo
-  linked). Do NOT deploy or push without the user asking.
+## 5. Verification (A10)
+`npx tsc --noEmit`, `npx eslint .`, `npm run build` — all exit 0. Build fetches Google Fonts; a
+font-fetch failure is environmental — retry and note it.
 
-## 4. Review-loop fixes already applied in `c345041` (baseline for reviewer/QA)
-- `setNewCardsPerDay` now derives the learner from the session + validates input (was an
-  unauthenticated server action taking a caller-supplied id).
-- `submitReview` rejects ratings outside 1–4.
-- New-card daily cap resets at **Thailand midnight** (UTC+7), not UTC — via `startOfThailandDay`
-  in `lib/review/queries.ts` (M6 should reuse this same boundary for all day bucketing).
-- `AudioButton` catches `play()` rejection; dead `getSessionCounts` removed.
+## 6. Git / deploy state
+- Branch `main`. M6 is committed (`a482c58`) and live in production.
+- Plan scaffolding for M7 (this prompt, the new `active-plan.md`, and the `m6-archive--*`
+  renames) may be uncommitted on disk — that's fine, the files are present. Do NOT push or
+  deploy without the user explicitly asking. Decide deployment separately after QA passes.
 
-## 5. M6 scope (full detail in active-plan.md)
-A `/stats` route (auth-protected, linked from the study screen) showing **both learners side by
-side**, with: cards seen/total/mature · reviews-per-day (30d) + streak · 7-day due forecast ·
-Again/Hard/Good/Easy breakdown. Charts via a verified library. All day bucketing in Thailand tz.
-**Privacy is intentional:** each learner sees both learners' stats (a couple). **Out of scope:**
-deployment, card editing, settings UI, drill-downs.
-
-## 6. Stack quick reference
+## 7. Stack quick reference
 Next.js 16.2.6 (App Router, Turbopack, no `src/`), React 19, Tailwind v4, TypeScript. Neon
-Postgres (us-east-1) via Drizzle (`drizzle-orm/neon-http`, `lib/db/index.ts`, reads
-`DATABASE_URL`). Auth.js v5 Google sign-in, allowlist of two emails, route protection in
-`proxy.ts` (Next 16 uses `proxy.ts`, not `middleware.ts`). Verify: `npx tsc --noEmit`,
-`npx eslint .`, `npm run build` (build fetches Google Fonts — a font-fetch failure is
-environmental; retry).
+Postgres (us-east-1) via Drizzle (`drizzle-orm/neon-http`, `lib/db/index.ts`, `DATABASE_URL`).
+Auth.js v5 Google sign-in, allowlist of two emails, route protection in `proxy.ts` (Next 16 uses
+`proxy.ts`, not `middleware.ts`). ts-fsrs for scheduling (`lib/review/scheduler.ts`).

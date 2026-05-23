@@ -14,7 +14,7 @@ import {
   hydrateFsrsCard,
   previewIntervals,
 } from "./scheduler";
-import { startOfThailandDay } from "./time";
+import { endOfThailandDay, startOfThailandDay } from "./time";
 import type { IntervalHints, SessionCounts, StudyCard } from "./types";
 
 // Read the Learner's settings, creating the default row only if missing. Common
@@ -41,12 +41,30 @@ async function fetchRawCounts(
   now: Date,
 ): Promise<{ due: number; newToday: number; unseen: number }> {
   const dayStart = startOfThailandDay(now);
+  // "Due today" = overdue cards (due <= now) PLUS same-day learning/relearning
+  // steps that fire later today (due <= end-of-Thailand-day).  We use the same
+  // predicate as the queue selection below so the header count always matches
+  // what is actually served (A6).
+  //
+  // Safety (A5): ts-fsrs v5.4.0 (enable_short_term=true, learning_steps=["1m","10m"],
+  // relearning_steps=["10m"]) was probed with node -e.  Findings:
+  //   • New/Learning cards rated Again/Hard/Good → state=Learning, due ≤ now+10m (intraday) ✓
+  //   • New card rated Easy → state=Review, due = +8 days ✗  (excluded — well past today)
+  //   • Review card rated Again → state=Relearning, due = now+10m (intraday) ✓
+  //   • Review card rated Hard/Good/Easy → state=Review, due ≥ now+27d ✗ (excluded)
+  //   • Relearning + Again → state=Relearning, due = now+10m (intraday) ✓
+  //   • Relearning + Hard → state=Relearning, due = now+15m (intraday) ✓
+  //   • Relearning + Good → state=Review, due = +1 day ✗  (excluded)
+  //   • Relearning + Easy → state=Review, due = +2 days ✗  (excluded)
+  // Therefore endOfThailandDay correctly includes {Learning, Relearning} intraday steps
+  // and excludes all graduated Review-state intervals.  No state-filter fallback needed.
+  const dayEnd = endOfThailandDay(now);
   const [dueRow, newRow, unseenRow] = await Promise.all([
     db
       .select({ n: count() })
       .from(reviewStates)
       .where(
-        and(eq(reviewStates.learnerId, learnerId), lte(reviewStates.due, now)),
+        and(eq(reviewStates.learnerId, learnerId), lte(reviewStates.due, dayEnd)),
       ),
     db
       .select({ n: count() })
@@ -139,6 +157,14 @@ export async function getStudyScreenData(
   card: StudyCard | null;
   hints: IntervalHints | null;
 }> {
+  // Broaden eligibility to end-of-Thailand-day so same-day learning/relearning
+  // steps (Again → +1 min, Hard → +6 min, etc.) are served within the session
+  // rather than waiting for wall-clock time to catch up (A1, A2).
+  // Graduated Review-state cards rated Hard/Good/Easy land ≥ 27 days out, so
+  // they are never pulled forward by this bound (A3).  See fetchRawCounts for
+  // the full ts-fsrs v5.4.0 probe findings (A5).
+  const dayEnd = endOfThailandDay(now);
+
   const [settings, raw, dueState, newCardRow] = await Promise.all([
     ensureLearnerSettings(learnerId),
     fetchRawCounts(learnerId, now),
@@ -146,7 +172,7 @@ export async function getStudyScreenData(
       .select({ cardId: reviewStates.cardId })
       .from(reviewStates)
       .where(
-        and(eq(reviewStates.learnerId, learnerId), lte(reviewStates.due, now)),
+        and(eq(reviewStates.learnerId, learnerId), lte(reviewStates.due, dayEnd)),
       )
       .orderBy(asc(reviewStates.due))
       .limit(1),
