@@ -8,6 +8,13 @@
       "when": 1779387434224,
       "tag": "0000_gray_sandman",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1779591459553,
+      "tag": "0001_supreme_joseph",
+      "breakpoints": true
     }
   ]
 }

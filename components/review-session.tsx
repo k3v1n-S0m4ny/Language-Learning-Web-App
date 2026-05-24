@@ -36,18 +36,18 @@ export function ReviewSession({
   // The server action + re-render is in flight: advance immediately in the UI.
   if (pending) {
     return (
-      <div className="flex w-full max-w-2xl flex-col items-center justify-center gap-4 py-16">
+      <div className="flex w-full max-w-2xl flex-col items-center justify-center gap-4 py-16 animate-fade-in">
         <div
-          className="h-6 w-6 animate-spin rounded-full border-2 border-zinc-300 border-t-zinc-700 dark:border-zinc-700 dark:border-t-zinc-300"
+          className="h-6 w-6 animate-spin rounded-full border-2 border-sage border-t-brand"
           aria-hidden
         />
-        <p className="text-sm text-zinc-500 dark:text-zinc-400">Next card…</p>
+        <p className="text-sm text-foreground-muted">Next card…</p>
       </div>
     );
   }
 
   return (
-    <div className="flex w-full max-w-2xl flex-col items-center gap-8">
+    <div className="flex w-full max-w-2xl flex-col items-center gap-8 animate-slide-up-fade">
       {!revealed ? (
         <CardFront
           card={card}

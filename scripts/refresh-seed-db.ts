@@ -143,7 +143,24 @@ async function main() {
     console.log(`[resync] ${dbCard.headword} -> ${card.tags.join(", ")}`);
   }
 
-  console.log(`\nDone. ${doomed.length} deleted, ${resynced} re-synced.`);
+  // 3. Unconditionally backfill deck_order for every card still in the deck.
+  //    This is independent of the drift check above — it always runs so that
+  //    re-running this script is idempotent and the CSV row order is always
+  //    authoritative (M9/A5). Cards deleted in step 1 are already gone.
+  const deckIndexByHeadword = new Map(deck.map((c, i) => [c.headword, i]));
+  let backfilled = 0;
+  for (const dbCard of dbCards) {
+    const idx = deckIndexByHeadword.get(dbCard.headword);
+    if (idx === undefined) continue;
+    await db
+      .update(schema.cards)
+      .set({ deckOrder: idx })
+      .where(eq(schema.cards.id, dbCard.id));
+    backfilled++;
+  }
+  console.log(`[backfill] ${backfilled} card(s) deck_order updated.`);
+
+  console.log(`\nDone. ${doomed.length} deleted, ${resynced} re-synced, ${backfilled} deck_order backfilled.`);
 }
 
 main().catch((err) => {

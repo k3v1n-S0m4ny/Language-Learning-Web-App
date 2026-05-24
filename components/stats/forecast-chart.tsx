@@ -18,12 +18,16 @@ interface ForecastChartProps {
   data: DayCount[];
 }
 
+// Success green (#1A7A40) — darkened from original #1F8A4C to pass WCAG AA
+// (white-on-success 5.4:1 ≥ 4.5:1). Matches --color-success in globals.css.
+const BAR_FILL = "#1a7a40";
+
 export function ForecastChart({ data }: ForecastChartProps) {
   const hasData = data.some((d) => d.count > 0);
 
   if (!hasData) {
     return (
-      <div className="flex h-40 items-center justify-center rounded-lg bg-zinc-100 text-sm text-zinc-400 dark:bg-zinc-900">
+      <div className="flex h-40 items-center justify-center rounded-lg bg-background text-sm text-foreground-muted">
         Nothing due in the next 7 days
       </div>
     );
@@ -39,7 +43,7 @@ export function ForecastChart({ data }: ForecastChartProps) {
           formatter={(value) => [value, "Due"]}
           contentStyle={{ fontSize: 12 }}
         />
-        <Bar dataKey="count" fill="#22c55e" radius={[2, 2, 0, 0]} />
+        <Bar dataKey="count" fill={BAR_FILL} radius={[2, 2, 0, 0]} />
       </BarChart>
     </ResponsiveContainer>
   );

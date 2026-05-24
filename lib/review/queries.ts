@@ -1,4 +1,4 @@
-import { and, asc, count, eq, lte, notExists, sql } from "drizzle-orm";
+import { and, asc, count, eq, gt, lte, notExists, sql } from "drizzle-orm";
 import { db } from "@/lib/db";
 import {
   cards,
@@ -168,17 +168,41 @@ export async function getStudyScreenData(
   // the full ts-fsrs v5.4.0 probe findings (A5).
   const dayEnd = endOfThailandDay(now);
 
-  const [settings, raw, dueState, newCardRow] = await Promise.all([
+  // === A-series queue selection (M9/A4) ======================================
+  // Three tiers run in the same Promise.all wave (no extra round-trip):
+  //
+  //   Tier 1 — READY:        due <= now.  Overdue + intraday learning steps
+  //                          whose wall-clock timer has already elapsed.
+  //   Tier 2 — NEW:          unseen cards ordered by deck_order ASC (CSV row
+  //                          order), created_at as tiebreak. Only served when
+  //                          the daily new-card cap allows (newRemaining > 0).
+  //   Tier 3 — FUTURE-TODAY: due > now AND due <= dayEnd. The failed card's
+  //                          ~1-minute learning step will land here. Serving
+  //                          it prevents a dead-end when only one card remains
+  //                          and no ready or new card is available.
+  //
+  // Priority: readyId > (cap allows ? newId : skip) > futureTodayId.
+  //
+  // WHY this fixes immediate-repeat (commit ac38cce): when a brand-new card is
+  // rated Again, FSRS schedules it ~1 min out (Learning step). On the very next
+  // render Tier 1 finds nothing ready (the failed card's due is ~1 min future),
+  // Tier 2 advances the next new card, and the failed card only resurfaces when
+  // its timer elapses — exactly the natural learning-step delay, not instantly.
+  // Tier 3 guarantees a session with a single card never goes blank.
+  // ============================================================================
+  const [settings, raw, readyRow, newCardRow, futureTodayRow] = await Promise.all([
     ensureLearnerSettings(learnerId),
     fetchRawCounts(learnerId, now),
+    // Tier 1: cards whose due timestamp has already passed.
     db
       .select({ cardId: reviewStates.cardId })
       .from(reviewStates)
       .where(
-        and(eq(reviewStates.learnerId, learnerId), lte(reviewStates.due, dayEnd)),
+        and(eq(reviewStates.learnerId, learnerId), lte(reviewStates.due, now)),
       )
       .orderBy(asc(reviewStates.due))
       .limit(1),
+    // Tier 2: unseen cards ordered by CSV deck position.
     db
       .select({ id: cards.id })
       .from(cards)
@@ -195,16 +219,29 @@ export async function getStudyScreenData(
             ),
         ),
       )
-      .orderBy(asc(cards.createdAt))
+      .orderBy(asc(cards.deckOrder), asc(cards.createdAt))
+      .limit(1),
+    // Tier 3: intraday learning-step cards not yet ready (due > now, <= dayEnd).
+    db
+      .select({ cardId: reviewStates.cardId })
+      .from(reviewStates)
+      .where(
+        and(
+          eq(reviewStates.learnerId, learnerId),
+          gt(reviewStates.due, now),
+          lte(reviewStates.due, dayEnd),
+        ),
+      )
+      .orderBy(asc(reviewStates.due))
       .limit(1),
   ]);
 
   const counts = toCounts(raw, settings.newCardsPerDay);
 
-  // Due Cards first; else a new Card if the daily cap allows.
-  const dueCardId = dueState[0]?.cardId;
+  const readyId = readyRow[0]?.cardId;
   const newCardId = counts.newRemaining > 0 ? newCardRow[0]?.id : undefined;
-  const chosenId = dueCardId ?? newCardId;
+  const futureTodayId = futureTodayRow[0]?.cardId;
+  const chosenId = readyId ?? (counts.newRemaining > 0 ? newCardId : undefined) ?? futureTodayId;
 
   if (!chosenId) return { counts, card: null, hints: null };
 

@@ -49,7 +49,7 @@ async function main() {
   const alreadySeeded = new Set(present.map((r) => r.headword));
 
   let inserted = 0;
-  for (const card of deck) {
+  for (const [index, card] of deck.entries()) {
     if (alreadySeeded.has(card.headword)) continue;
 
     const [row] = await db
@@ -60,6 +60,7 @@ async function main() {
         wholeGloss: card.wholeGloss,
         wholePinyin: card.wholePinyin,
         wholeAudioUrl: card.wholeAudioUrl ?? null,
+        deckOrder: index,
       })
       .returning({ id: schema.cards.id });
 

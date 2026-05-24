@@ -75,6 +75,8 @@ export const cards = pgTable("cards", {
   wholeGloss: text("whole_gloss").notNull(),
   wholePinyin: text("whole_pinyin").notNull(),
   wholeAudioUrl: text("whole_audio_url"),
+  // Preserves CSV row order so new cards surface in deck-file sequence (M9/A5).
+  deckOrder: integer("deck_order").notNull().default(0),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),

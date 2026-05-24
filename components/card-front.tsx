@@ -11,14 +11,14 @@ export function CardFront({
   onReveal: () => void;
 }) {
   return (
-    <div className="flex flex-col items-center gap-8">
-      <p className="text-5xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
+    <div className="flex flex-col items-center gap-8 animate-fade-in">
+      <p className="text-5xl font-semibold tracking-tight text-foreground">
         {card.headword}
       </p>
       <button
         type="button"
         onClick={onReveal}
-        className="rounded-full bg-zinc-900 px-6 py-2.5 text-sm font-medium text-zinc-50 transition-colors hover:bg-zinc-700 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200"
+        className="rounded-full bg-brand px-6 py-2.5 text-sm font-medium text-white transition-colors hover:opacity-90 active:scale-95"
       >
         Show answer
       </button>

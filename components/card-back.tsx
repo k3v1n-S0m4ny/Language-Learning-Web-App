@@ -19,15 +19,15 @@ export function CardBack({
   const leech = isLeech({ lapses: card.lapses });
 
   return (
-    <div className="flex w-full flex-col items-center gap-6">
+    <div className="flex w-full flex-col items-center gap-6 animate-fade-in">
       <div className="flex items-center gap-2">
-        <p className="text-4xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
+        <p className="text-4xl font-semibold tracking-tight text-foreground">
           {card.headword}
         </p>
         {leech && (
           <span
             title={`Lapsed ${card.lapses} times — needs review`}
-            className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700 dark:bg-red-900/40 dark:text-red-400"
+            className="rounded-full bg-clay px-2 py-0.5 text-xs font-medium text-on-earthy"
           >
             leech
           </span>
@@ -36,13 +36,13 @@ export function CardBack({
 
       <div className="flex flex-col items-center gap-2">
         <div className="flex items-center gap-3">
-          <p className="text-lg text-zinc-700 dark:text-zinc-300">
+          <p className="text-lg text-foreground">
             {card.wholeGloss}
           </p>
           <AudioButton url={card.wholeAudioUrl} label="Play whole phrase" />
         </div>
         {pinyinShown && (
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">
+          <p className="text-sm text-foreground-muted">
             {card.wholePinyin}
           </p>
         )}
@@ -59,7 +59,7 @@ export function CardBack({
       <button
         type="button"
         onClick={onTogglePinyin}
-        className="rounded-full border border-zinc-300 px-4 py-1.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-900"
+        className="rounded-full border border-border-base px-4 py-1.5 text-xs font-medium text-foreground-muted transition-colors hover:bg-surface active:scale-95"
       >
         {pinyinShown ? "Hide pinyin" : "Show pinyin"}
       </button>

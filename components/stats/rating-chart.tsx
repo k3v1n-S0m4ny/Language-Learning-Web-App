@@ -18,7 +18,10 @@ interface RatingChartProps {
   ratingCounts: RatingCounts;
 }
 
-const RATING_COLORS = ["#ef4444", "#f97316", "#22c55e", "#6366f1"];
+// Palette-aligned colors: Again=clay, Hard=peach, Good=success, Easy=easy.
+// Replaces the old ad-hoc [#ef4444, #f97316, #22c55e, #6366f1] array.
+// Good (#1A7A40) darkened from original #1F8A4C to pass WCAG AA (5.4:1 white-on-success).
+const RATING_COLORS = ["#db846e", "#e8b5a7", "#1a7a40", "#3baf7a"];
 
 export function RatingChart({ ratingCounts }: RatingChartProps) {
   const data = [
@@ -32,7 +35,7 @@ export function RatingChart({ ratingCounts }: RatingChartProps) {
 
   if (total === 0) {
     return (
-      <div className="flex h-28 items-center justify-center rounded-lg bg-zinc-100 text-sm text-zinc-400 dark:bg-zinc-900">
+      <div className="flex h-28 items-center justify-center rounded-lg bg-background text-sm text-foreground-muted">
         No reviews yet
       </div>
     );

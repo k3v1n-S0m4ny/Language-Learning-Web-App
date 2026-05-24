@@ -9,7 +9,7 @@ export function SessionHeader({
   counts: SessionCounts;
 }) {
   return (
-    <header className="flex items-center gap-4 text-sm text-zinc-600 dark:text-zinc-400">
+    <header className="flex items-center gap-4 text-sm text-foreground-muted">
       <span>你好{learnerName ? `, ${learnerName}` : ""} 👋</span>
       <span>Due: {counts.dueCount}</span>
       <span>New: {counts.newRemaining}</span>

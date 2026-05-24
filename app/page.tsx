@@ -20,13 +20,13 @@ export default async function Home() {
   const { counts, card, hints } = await getStudyScreenData(learnerId);
 
   return (
-    <main className="flex min-h-dvh flex-col items-center gap-10 bg-zinc-50 px-6 py-8 dark:bg-black">
+    <main className="flex min-h-dvh flex-col items-center gap-10 bg-background px-6 py-8">
       <div className="flex w-full max-w-2xl items-center justify-between gap-4">
         <SessionHeader learnerName={learner?.name} counts={counts} />
         <div className="flex items-center gap-2">
           <Link
             href="/stats"
-            className="rounded-full border border-zinc-300 px-4 py-1.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-900"
+            className="rounded-full border border-border-base px-4 py-1.5 text-xs font-medium text-foreground-muted transition-colors hover:bg-surface"
           >
             Stats
           </Link>

@@ -29,7 +29,7 @@ export function AudioButton({
       disabled={!url}
       aria-label={label}
       title={url ? label : "No audio"}
-      className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-zinc-300 text-zinc-700 transition-colors hover:bg-zinc-100 disabled:opacity-30 disabled:hover:bg-transparent dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-900"
+      className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-border-base text-foreground-muted transition-colors hover:bg-surface hover:text-brand disabled:opacity-30 disabled:hover:bg-transparent active:scale-95"
     >
       <span aria-hidden>🔊</span>
     </button>

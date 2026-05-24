@@ -18,12 +18,16 @@ interface ReviewsChartProps {
   data: DayCount[];
 }
 
+// Brand color (#62736F) used instead of the old #6366f1 indigo — matches the
+// earthy palette established in globals.css.
+const BAR_FILL = "#62736f";
+
 export function ReviewsChart({ data }: ReviewsChartProps) {
   const hasData = data.some((d) => d.count > 0);
 
   if (!hasData) {
     return (
-      <div className="flex h-40 items-center justify-center rounded-lg bg-zinc-100 text-sm text-zinc-400 dark:bg-zinc-900">
+      <div className="flex h-40 items-center justify-center rounded-lg bg-background text-sm text-foreground-muted">
         No reviews yet
       </div>
     );
@@ -48,7 +52,7 @@ export function ReviewsChart({ data }: ReviewsChartProps) {
           formatter={(value) => [value, "Reviews"]}
           contentStyle={{ fontSize: 12 }}
         />
-        <Bar dataKey="count" fill="#6366f1" radius={[2, 2, 0, 0]} />
+        <Bar dataKey="count" fill={BAR_FILL} radius={[2, 2, 0, 0]} />
       </BarChart>
     </ResponsiveContainer>
   );

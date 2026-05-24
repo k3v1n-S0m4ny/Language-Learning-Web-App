@@ -1,58 +1,69 @@
 ---
 status: COMPLETE
-updated: 2026-05-23
+updated: 2026-05-24
 ---
 
-> **Cycle outcome (2026-05-23):** All 5 Validation Contract assertions PASS. implementer
-> (Steps 1-3) → orchestrator (Steps 4-5 pipeline + DB reconcile) → code-reviewer (PASS; 1 MEDIUM +
-> 1 LOW, both fixed in `refresh-seed-db.ts`) → qa-engineer (PASS, `npm run build` clean). Final
-> state: 204 cards across 4 tags (languages difficulties 15, numbers & amounts 82, time & dates 75,
-> money 32); 41 old-only cards deleted; 只 re-synced in place. **Not committed** — awaiting user.
+> **Cycle outcome (2026-05-24):** All 6 assertions PASS. implementer → code-reviewer
+> (BLOCKED: 2 CRITICAL WCAG failures — Good-button white-on-success 4.38:1 and leech-badge
+> clay-on-translucent 2.13:1) → implementer fix (success → #1A7A40 = 5.38:1; leech badge →
+> opaque `bg-clay text-on-earthy` = 6.25:1) → code-reviewer re-review PASS → qa-engineer PASS
+> (`npm run build` + `lint` exit 0; deck_order 0..203 matches CSV; 3-tier requeue serves a
+> different card on Again). Stale comment in rating-buttons.tsx corrected post-QA.
+> **Not committed** — awaiting user approval + message.
 
-# Active Plan — Seed refresh: replace Reborn Chinese deck with new sheet export
+# Active Plan — M9: Colorful redesign, light animations, "Again" requeue, CSV learning order
 
-Full design + decision record: `C:\Users\User\.claude\plans\jolly-riding-beaver.md` (approved).
+Full design + decision record (approved): `C:\Users\User\.claude\plans\so-some-things-we-snoopy-goblet.md`
+Plan root for this cycle: `C:\Users\User\Software Projects\Language-Learning-App\.claude\plans\`
+
+## Validation Contract (assertions first)
+
+- **A1 — Palette tokens + WCAG.** A semantic color-token layer (light + dark) exists in `app/globals.css`; components stop hardcoding `zinc-*`/`red-*` for primary UI. Every text/background and UI-component pairing meets WCAG AA in **both** light and dark mode (≥4.5:1 normal text, ≥3:1 large text & UI components). Computed ratios are recorded in `implementation-summary.md`. **No white text on `#DB846E`.**
+- **A2 — Colored rating row.** The four rating buttons render as a Duolingo-style colored row (Again=clay+dark text, Hard=peach+dark text, Good=success+white text, Easy=easy), each label+hint meeting AA against its button.
+- **A3 — CSS-only animations + reduced-motion.** No new runtime dependency added to `package.json`. Card advance, front→back reveal, button press, and empty-state animate. All motion is suppressed under `prefers-reduced-motion: reduce`.
+- **A4 — "Again" requeue.** Failing a brand-new card advances to a *different* card on the next render; the failed card does not appear on the immediately-following render when another ready or new card is available, and resurfaces a few cards later. A session with only one remaining card still serves it (tier-3 fallback) — no empty-screen dead-end.
+- **A5 — CSV learning order.** `cards.deck_order` column exists (migration generated + applied). `seed-db.ts` sets it from CSV/JSON index; `refresh-seed-db.ts` backfills it unconditionally. New-card selection orders by `deck_order ASC` (`created_at` tiebreak). New cards are introduced in CSV row order.
+- **A6 — No regression.** `npm run build` and `npm run lint` pass clean. Existing review and stats flows are unaffected; FSRS scheduling parameters are unchanged.
+
+**Feature→assertion map:** Color→A1,A2; Animations→A3; Again requeue→A4; CSV order→A5; all→A6.
+**Done when:** A1–A6 all PASS.
+**Out of scope:** committing (await explicit approval + message); changing FSRS request_retention/steps; adding runtime deps; features beyond the four. DB operations (migrate, backfill) are in scope and pre-approved as part of the plan.
 
 ## Goal
-Replace `seed/reborn-chinese-system.csv` with the new Google Sheet export
-(`C:\Users\User\Downloads\Reborn Chinese System - Sheet1 (1).csv`), fix the now-broken pipeline
-tagging, re-seed, and delete the entries the new sheet drops. Instruction: *keep whatever is
-similar, delete the rest.*
+Four user-requested improvements:
+1. **Animations (CSS-only)** — light, modern motion (card advance, reveal, button press, empty-state), gated behind `prefers-reduced-motion`.
+2. **Color** — adopt the user's 5-color earthy palette as a semantic token layer + a few bright WCAG-checked accent greens for the rating CTAs; full light + dark variants. Must remain WCAG AA.
+3. **"Again" requeue** — failing a card advances to the next card; the failed card resurfaces a few cards later via its natural FSRS learning step (no immediate repeat, no dead-end).
+4. **CSV learning order** — introduce new cards in CSV row order via an explicit `cards.deck_order` column.
 
-## Diff (old → new)
-- Old (100 rows): 41 single-word rows + 16 phrases (incl. 四十四只石狮子 tongue-twister) + numbers.
-- New (207 non-empty rows): the 15 phrases, numbers, ordinals, fractions, classifiers, amounts,
-  **time & dates, calendar, money/currency**. Drops the 41 single-words + tongue-twister.
-- Overlap (reused, no OpenAI cost): 59. New headwords to generate: 147. Dropped: ~42.
-- New file junk to strip: 27 empty trailing rows, one stray `["77",""]` cell.
+## Palette (verified contrasts)
+| Token | Hex | Role | WCAG |
+|---|---|---|---|
+| `--color-brand` | `#62736F` | primary btn (white text), text-on-light | white-on-brand 5.0:1 ✓ |
+| `--color-sage` | `#9FAD9F` | surfaces, borders, chips (dark text) | 8.95:1 ✓ |
+| `--color-sand` | `#D9D0C7` | light page/section bg (dark text) | ✓ |
+| `--color-peach` | `#E8B5A7` | soft accent / "Hard" btn (dark text) | 11.6:1 ✓ |
+| `--color-clay` | `#DB846E` | terracotta / "Again" btn — **DARK TEXT ONLY** | 7.5:1 ✓ (white 2.8:1 ✗) |
+| `--color-success` | ~`#1F8A4C` (verify) | "Good" CTA (white text ≥4.5:1) | compute & record |
+| `--color-easy` | lighter/teal green (verify) | "Easy" btn | compute & record |
 
-## Confirmed decisions
-- Scope: rewrite CSV + fix pipeline tagging + re-seed (generate/audio/db).
-- Section-header rows kept as ordinary rows (old behavior).
-- 4 truncated classifier glosses fixed with full text.
-- deck.generated.json: prune + extend (keep 59, drop ~42, generate 147).
-- Dropped DB cards: delete (cascades words/card_tags/review_states/review_logs).
+Dark mode: bg ~`#15191B`, surface ~`#232A28`, fg ~`#ECEFEC`; re-verify every accent pairing (≥3:1 UI, ≥4.5:1 text).
 
-## Validation Contract (assertions QA must verify)
-1. **CSV**: `seed/reborn-chinese-system.csv` parses to ~206 rows; no empty-Chinese rows; no `77`
-   row; header rows present; the 4 classifier glosses (张/条/只/座) contain full parenthetical lists.
-2. **Tagging**: `scripts/generate-deck.ts` derives tags from top-level section headers
-   (数字与数量→`numbers & amounts`, 时间与日期→`time & dates`, 金钱→`money`, default
-   `languages difficulties`); no remaining `LANGUAGE_ROW_CUTOFF` row-index logic.
-3. **Deck JSON**: after `seed:generate`, ~206 cards; distinct tags = the 4 above; no old-only
-   headwords (你, 会, 四十四只石狮子…) remain.
-4. **DB**: card count ≈206; new headwords present (金钱, 星期一, 人民币, 第一); dropped headwords
-   absent (你, 会, 说); tag rows `time & dates` and `money` exist and join via `card_tags`; no orphan
-   `words`/`review_states` for deleted cards.
-5. **Build**: `npx tsc --noEmit` (or `npm run build`) passes with the generate-deck.ts edit.
+## Implementation steps
+1. **`app/globals.css`** — add `@theme` color tokens (light + dark), `@keyframes` (`fade-in`, `slide-up-fade`, `pop-in`, `gentle-bounce`) + animation tokens wrapped in `@media (prefers-reduced-motion: no-preference)`; set `body` bg/fg to new tokens; remove the stray `font-family: Arial` so Geist applies.
+2. **`lib/db/schema.ts`** — add `deckOrder: integer("deck_order").notNull().default(0)` to `cards`.
+3. **Migration** — `npm run db:generate` then `npm run db:migrate` (Neon, us-east-1).
+4. **`scripts/seed-db.ts`** — set `deckOrder: index` on insert (`deck.entries()`).
+5. **`scripts/refresh-seed-db.ts`** — unconditionally backfill `deck_order = <index>` for every kept card.
+6. **`lib/review/queries.ts`** — replace single due-sorted selection with 3-tier priority: (1) ready `due<=now` ASC, (2) new card (cap allows) `ORDER BY deck_order ASC`, (3) future-today fallback `due>now AND <=dayEnd` ASC. `chosenId = readyId ?? newId ?? futureTodayId`. Document with an A-series comment block.
+7. **Component sweep** — replace `zinc-*`/`red-*` with semantic tokens + add animation classes: `components/rating-buttons.tsx` (colored Duolingo-style row), `card-back.tsx`, `card-front.tsx`, `review-session.tsx`, `word-chip.tsx`, `session-header.tsx`, `empty-state.tsx`, `audio-button.tsx`, `sign-out-button.tsx`; `app/page.tsx`, `app/layout.tsx`, `app/stats/page.tsx`; `components/stats/*-chart.tsx` hardcoded hex → palette.
 
-## Steps
-1. Write cleaned CSV (parse → strip junk/77 → fix 4 glosses → keep headers → stringify UTF-8).
-2. Replace tagging in `scripts/generate-deck.ts` with section-derived logic + update comment.
-3. Prune+re-tag `seed/deck.generated.json` (keep new-CSV headwords, re-tag via Step 2 logic).
-4. Run `npm run seed:generate` → `seed:audio` → `seed:db`.
-5. Delete dropped cards: `DELETE FROM cards WHERE headword = ANY(DB headwords − new CSV headwords)`.
+> `AGENTS.md`: this Next.js 16.2.6 has breaking changes — consult `node_modules/next/dist/docs/` before any Next-specific change.
 
-## Notes / risks
-- OpenAI + TTS cost for 147 new headwords. If a key is invalid at run time, pause and report.
-- Step 5 irreversibly drops FSRS history for the ~42 dropped cards (approved).
+## Verification
+- WCAG: every text/bg + UI pairing (light+dark) ≥4.5:1 text / ≥3:1 large+UI; record ratios.
+- `npm run db:generate && npm run db:migrate` succeed; `cards.deck_order` exists.
+- `tsx scripts/refresh-seed-db.ts` backfills; new cards introduced in CSV order.
+- Fail a new card → next card is a different (new) card; failed card returns a few cards later; single-card session ends cleanly.
+- Animations fire; with OS reduce-motion on, motion is suppressed.
+- `npm run build` + `npm run lint` clean.

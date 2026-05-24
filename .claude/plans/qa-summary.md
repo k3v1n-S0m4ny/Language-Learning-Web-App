@@ -1,131 +1,159 @@
 ---
 status: COMPLETE
-updated: 2026-05-23
+updated: 2026-05-24
 ---
 
-# QA Summary — Seed Data Refresh (Reborn Chinese deck)
+# QA Summary — M9: Colorful redesign, animations, "Again" requeue, CSV learning order
 
-## Prior Summaries Read Before Validating
-- `active-plan.md` (Validation Contract, 5 assertions): YES — read in full before any assertion tested.
-- `implementation-summary.md` (Steps 1-3 + orchestrator addendum Steps 4-5): YES — read in full.
-- `review-summary.md` (verdict PASS; MEDIUM word-level drift + LOW empty-keep guard — both noted as already fixed post-review): YES — read in full.
+## Prior Handoffs Read Before Validating
+
+- `active-plan.md` (Validation Contract, assertions A1–A6): **YES** — read in full before any assertion tested.
+- `implementation-summary.md` (completed work, WCAG table, review-fix round): **YES** — read in full. Noted the two CRITICAL fixes: `--color-success` darkened to `#1A7A40` and leech badge changed to `bg-clay text-on-earthy`.
+- `review-summary.md` (initial FAIL → re-review PASS after two CRITICAL fixes): **YES** — read in full.
 
 ## Result
-**PASS** — all 5 assertions hold. No blocking defects found. Build is clean. Dev server responds 200.
+
+**PASS** — All assertions A1–A6 pass. No regressions detected. Build and lint are clean.
 
 ---
 
 ## Assertions
 
-### A1 — PASS
-**CSV: ~206 rows, no empty-Chinese rows, no 77 row, section headers present, 4 classifier glosses with full parenthetical lists.**
+### A1 — Palette tokens + WCAG: PASS
 
-Evidence (node -e probe, exit 0):
-- Non-empty line count: **206** (exact match to spec "~206").
-- Empty-Chinese rows (col-0 blank or leading comma): **0**.
-- `77` row: **absent** — neither `77,` nor `"77",` prefix found.
-- Section headers:
-  - `数字与数量` at line 16 — PRESENT
-  - `时间与日期` at line 99 — PRESENT
-  - `金钱` at line 175 — PRESENT
-- Classifier glosses (all full parenthetical lists confirmed):
-  - 张 → `"flat things (tickets, paper, tables)"` — PASS
-  - 条 → `"long things (fish, ribbons, roads)"` — PASS
-  - 只 → `"nondescript animals (dogs, birds)"` — PASS
-  - 座 → `"big things (mountains, buildings)"` — PASS
+**Evidence:**
 
-### A2 — PASS
-**`generate-deck.ts` has no `LANGUAGE_ROW_CUTOFF`; derives tags from section headers.**
+- `app/globals.css` `:root` block sets all 9 palette tokens plus 5 semantic page tokens. Dark mode override present inside `@media (prefers-color-scheme: dark)`. `@theme inline` block wires every token into Tailwind v4 utility classes.
+- All 9 palette hex values confirmed present in compiled CSS (`0o3nn~pvfs9wg.css`): `#62736f`, `#9fad9f`, `#d9d0c7`, `#e8b5a7`, `#db846e`, `#1a7a40`, `#3baf7a`, `#1a1a1a`, `#f5f3f0`, `#15191b`.
+- Old failing success color `#1f8a4c` is absent from compiled CSS (confirmed by grep of compiled chunk).
+- No `zinc-*`, `gray-*`, or `red-*` Tailwind classes remain in any `components/` or `app/` `.tsx` file (grep returned empty).
+- Leech badge: `bg-clay text-on-earthy` (`#1A1A1A` on `#DB846E` = 6.3:1 ✓). Old `bg-clay/20 text-clay` (2.13:1 fail) is gone, confirmed in `components/card-back.tsx` line 30.
+- No CSS rule combines clay background with white text (CSS rule-block scan confirmed: 0 occurrences).
+- Dark mode `#ECEFEC` on `#15191B` = 17.4:1; on `#232A28` = 12.8:1 — both well above AA. Both confirmed present in compiled CSS.
+- `font-family: Arial` stray rule removed; `body` reads from `var(--background)` / `var(--foreground)`.
 
-Evidence (node -e probe on source text, exit 0):
-- `LANGUAGE_ROW_CUTOFF`: **absent**.
-- `TAG_LANGUAGE`: **absent**.
-- `TAG_NUMBERS`: **absent**.
-- `SECTION_TAGS` map: **present** — maps 数字与数量 → `numbers & amounts`, 时间与日期 → `time & dates`, 金钱 → `money`.
-- `DEFAULT_TAG` (`"languages difficulties"`): **present**.
-- `currentTag` variable: **present**; updated at lines 136–138 before the cache-skip check at line 141, so the tag advances correctly even for cached (skipped) section-header rows.
+### A2 — Colored rating row: PASS
 
-### A3 — PASS
-**`deck.generated.json`: 204 cards, distinct tags = {languages difficulties, numbers & amounts, time & dates, money}, no old-only headwords.**
+**Evidence:**
 
-Evidence (node -e probe, exit 0):
-- Card count: **204**.
-- Distinct tags: `["languages difficulties", "numbers & amounts", "time & dates", "money"]` — exactly the 4 specified.
-- Tag distribution: languages difficulties 15, numbers & amounts 82, time & dates 75, money 32 (sum = 204).
-- Old-only headwords: 你 **absent**, 会 **absent**, 四十四只石狮子是死的。 **absent** — all good.
-- New headwords: 金钱 **present**, 星期一 **present**, 人民币 **present**, 第一 **present** — all good.
+- `components/rating-buttons.tsx`: 4-button `grid-cols-4` row — Again=`bg-clay text-on-earthy`, Hard=`bg-peach text-on-earthy`, Good=`bg-success text-white`, Easy=`bg-easy text-on-earthy`.
+- All four button hex values present in compiled CSS.
+- Good button: `text-white` on `bg-success` (`#1A7A40`) = 5.38:1 ≥ 4.5:1 AA. Darkened from original `#1F8A4C` (which was 4.38:1 — a CRITICAL failure caught in review and fixed). Old value absent from compiled CSS.
+- Sub-hint `<span>` uses `opacity-80` inheriting the parent text color.
+- No white-on-clay rule in compiled CSS (confirmed).
 
-### A4 — PASS
-**DB: card count = 204; new headwords present; dropped absent; tags `time & dates` and `money` exist and join via card_tags; no orphan words/review_states.**
+### A3 — CSS-only animations + reduced-motion: PASS
 
-Evidence (npx tsx scripts/qa-db-probe.ts, exit 0 — probe script deleted after run):
-- DB card count: **204** (matches deck JSON exactly).
-- New headwords: 金钱 PRESENT, 星期一 PRESENT, 人民币 PRESENT, 第一 PRESENT — all good.
-- Dropped headwords: 你 absent, 会 absent, 说 absent — all good.
-- Tags in DB: `['languages difficulties', 'numbers & amounts', 'time & dates', 'money']` — all 4 present.
-- `card_tags` join: **204 unique cards** each have exactly 1 tag row (204 total card_tags rows); all 204 cards tagged.
-- Cards with `time & dates` tag: **75** (matches deck distribution).
-- Cards with `money` tag: **32** (matches deck distribution).
-- Orphan `words` rows: **0**.
-- Orphan `review_states` rows: **0**.
+**Evidence:**
 
-### A5 — PASS
-**`npx tsc --noEmit` (and `npm run build`) pass clean.**
+- Compiled CSS character-offset analysis: all 4 custom `@keyframes` (`fade-in` at 17489, `slide-up-fade` at 17535, `pop-in` at 17638, `gentle-bounce` at 17723) are inside the `@media (prefers-reduced-motion: no-preference)` block (17451–17841). All 4 confirmed INSIDE gate.
+- The 5th `@keyframes spin` (pos 19250, outside gate) is the Tailwind built-in for the loading spinner — pre-existing, not an M9 keyframe, and acceptable behavior.
+- Source-level confirmation: `app/globals.css` has all 4 custom keyframes inside the media query block (positions confirmed via brace-depth walk). The two `@keyframes` references appearing outside in the regex scan are comment-only text (confirmed).
+- `@theme inline` animation tokens (`--animate-fade-in` etc.) are defined unconditionally as CSS variables — under `reduce` they reference keyframe names that do not exist, producing a no-op, which is the correct behavior.
+- Animation classes confirmed applied in all target components:
+  - `review-session.tsx`: `animate-slide-up-fade` (card wrapper), `animate-fade-in` (pending spinner)
+  - `card-back.tsx`: `animate-fade-in`
+  - `card-front.tsx`: `animate-fade-in`
+  - `word-chip.tsx`: `animate-pop-in`
+  - `empty-state.tsx`: `animate-fade-in` (container), `animate-gentle-bounce` (emoji)
+  - `rating-buttons.tsx`: `animate-pop-in`
+- No new runtime dependency added to `package.json`.
+- Playwright reduced-motion toggle (`emulateMedia`) was not exercised due to OAuth wall. CSS structure guarantees motion suppression at the keyframe level.
 
-Evidence:
-- `npx tsc --noEmit` → **exit 0**, no errors or warnings.
-- `npm run build` (Next.js 16.2.6 Turbopack) → **exit 0**. TypeScript check passed in 9.0s. All 5 routes generated (/, /_not-found, /api/auth/[...nextauth], /stats, Proxy middleware). Zero compilation errors.
+### A4 — "Again" requeue: PASS
 
----
+**Evidence (logic simulation + DB queries):**
 
-## Smoke Test
+- `lib/review/queries.ts` implements 3-tier queue in `getStudyScreenData`:
+  - Tier 1: `lte(due, now)` — ready cards.
+  - Tier 2: unseen cards `ORDER BY deck_order ASC, created_at ASC` — when `newRemaining > 0`.
+  - Tier 3: `gt(due, now) AND lte(due, dayEnd)` — intraday learning steps not yet elapsed.
+  - Selection: `readyId ?? (capRemaining > 0 ? newCardId : undefined) ?? futureTodayId`.
+- FSRS probe (ts-fsrs `generatorParameters({ enable_short_term: true })`): rating `Again` on a brand-new card produces `state=Learning, due=now+1minute`. Confirmed by Node.js probe.
+- After failing card 0 (你会说英文吗？):
+  - Tier 1: failed card's `due = now+1m > now` → empty.
+  - Tier 2: next unseen = 有谁会说英文吗？ (deck_order=1) → served → **user sees different card**. ✓
+  - Failed card resurfaces ~1 min later via Tier 3 when its timer elapses. ✓
+  - No immediate repeat. ✓
+- Single-card session: failed card (`due = now+1m`) satisfies `due > now AND due <= dayEnd` (dayEnd = Thailand midnight = 17:00 UTC). Tier 3 fires. **No empty-screen dead-end**. ✓
+- DB-level live tier simulation run for the real learner (learner 570dce99..., 1 review_state row for `只`): Tier 1 = `只` (past due), Tier 2 = `你会说英文吗？` (deck_order=0), Tier 3 = none. Selection = `只` (Tier 1 priority). Correct.
+- The redundant `newRemaining` double-guard on line 244 (MEDIUM finding from review) is present but functionally correct — dead code only for the `false` branch.
 
-A dev server was already running on port 3000 (PID 37808).
+### A5 — CSV learning order: PASS
 
-- `GET /` (follow redirects) → **HTTP 200** — app starts and serves.
-- `GET /stats` (follow redirects) → **HTTP 200** — stats route resolves.
-- Content-level verification (rendered tag section names, card lists) was **not possible**: both routes redirect to Google OAuth signin for unauthenticated requests; no session cookie available in the QA environment. This is a known constraint documented in QA environment memory. The production build exit 0 is the strongest available signal confirming the deck and stats pages compile against the refreshed data.
+**Evidence:**
+
+- DB query confirmed `deck_order` column: `type=integer, default=0, nullable=NO`.
+- Migration `0001_supreme_joseph.sql`: `ALTER TABLE "cards" ADD COLUMN "deck_order" integer DEFAULT 0 NOT NULL` — confirmed applied.
+- First 5 cards by `deck_order ASC` match CSV row order exactly:
+  - `[0]` 你会说英文吗？ ✓ (CSV row 1)
+  - `[1]` 有谁会说英文吗？ ✓ (CSV row 2)
+  - `[2]` 你明白吗？ ✓ (CSV row 3)
+  - `[3]` 明白。 ✓ (CSV row 4)
+  - `[4]` 我不明白。 ✓ (CSV row 5)
+- 204 cards total, max deck_order = 203 — contiguous 0..203, no gaps or duplicates.
+- Zero NULL `deck_order` values.
+- `seed-db.ts` uses `deck.entries()` with `deckOrder: index` on insert. ✓
+- `refresh-seed-db.ts` step 3 unconditionally backfills all retained cards. ✓
+- Tier 2 query uses `asc(cards.deckOrder), asc(cards.createdAt)` — CSV order is the authoritative sort key. ✓
+
+### A6 — No regression: PASS
+
+**Evidence:**
+
+- `npm run build` exit 0: `Compiled successfully in 8.2s`, TypeScript clean in 9.4s, 4 routes generated (`/`, `/_not-found`, `/api/auth/[...nextauth]`, `/stats`).
+- `npm run lint` exit 0: no warnings or errors.
+- Stats page (`app/stats/page.tsx`) uses only semantic tokens (`bg-background`, `bg-surface`, `text-foreground`, `border-border-base`). No hardcoded colors.
+- Chart files: `forecast-chart.tsx` `BAR_FILL = "#1a7a40"`; `rating-chart.tsx` `RATING_COLORS = ["#db846e", "#e8b5a7", "#1a7a40", "#3baf7a"]`. Old ad-hoc values (`#ef4444`, `#6366f1`) absent.
+- No `zinc-*`, `gray-*`, or `red-*` Tailwind classes in any component or page file.
+- FSRS scheduling parameters unchanged (verified: `learner_settings.request_retention` default still 0.85; scheduler uses `REQUEST_RETENTION` constant in `lib/review/config.ts` — not touched by M9).
 
 ---
 
 ## Commands Run
 
-| Command | Exit code | Notable output |
+| Command | Exit Code | Notable Output |
 |---|---|---|
-| `node -e` (CSV: line count, 77 row, empty-Chinese, section headers, classifier glosses) | 0 | 206 lines; 0 empty-Chinese; 77 absent; 3 headers at lines 16/99/175; all 4 classifier glosses confirmed |
-| `node -e` (deck.generated.json: card count, distinct tags, tag distribution, old/new headwords) | 0 | 204 cards; 4 tags; old headwords absent; new headwords present |
-| `node -e` (generate-deck.ts symbol check) | 0 | LANGUAGE_ROW_CUTOFF absent; SECTION_TAGS/DEFAULT_TAG/currentTag all present |
-| `npx tsx scripts/qa-db-probe.ts` | 0 | 204 cards; all new headwords present; all dropped headwords absent; 4 tags; 204 card_tags rows; 0 orphan words; 0 orphan review_states; time & dates = 75; money = 32 |
-| `npx tsc --noEmit` | 0 | Clean (no output) |
-| `npm run build` | 0 | Turbopack, TypeScript clean, 5 routes generated |
-| `curl -L http://localhost:3000/` | — | HTTP 200 |
-| `curl -L http://localhost:3000/stats` | — | HTTP 200 |
+| `npm run build` | 0 | TypeScript + Turbopack clean; 4 routes |
+| `npm run lint` | 0 | No warnings or errors |
+| `node --input-type=module` DB query (deck_order order, first 10) | 0 | Matches CSV row order exactly |
+| `node --input-type=module` DB query (NULL/duplicate checks) | 0 | 0 NULLs, 0 duplicates, max=203 |
+| `node --input-type=module` DB query (schema: information_schema) | 0 | `integer DEFAULT 0 NOT NULL` confirmed |
+| `node --input-type=module` FSRS probe (Again on new card) | 0 | `state=Learning, due=now+1min` |
+| `node --input-type=module` 3-tier simulation (live DB) | 0 | Tier 1: 只, Tier 2: 你会说英文吗？, Tier 3: none |
+| `node --input-type=module` CSS inspection (compiled chunk) | 0 | 4 custom keyframes inside reduced-motion gate; 9 palette tokens present; `#1f8a4c` absent |
+| `node --input-type=module` single-card Tier 3 check | 0 | Tier 3 fires for failed card within dayEnd — no dead-end |
+| `curl http://localhost:3000/` | 307 | Redirects to NextAuth sign-in (expected; dev server alive) |
+| `grep` zinc/gray/red classes in components+app | 0 | No matches (empty output — correct) |
 
 ---
 
 ## Unexpected Behavior
 
-None. All counts and values matched the orchestrator's verification exactly (204 cards, tag distributions, headword presence/absence).
+1. **Stale comment in `rating-buttons.tsx` line 7** — comment still reads `#1F8A4C (5.3:1 — WCAG AA)`. The actual `--color-success` in `globals.css` is `#1A7A40` (5.4:1 corrected value). Comment-only; no rendering impact.
+
+2. **`@keyframes spin` outside reduced-motion gate in compiled CSS** — the Tailwind built-in loading spinner animation is not gated. Pre-existing Tailwind behavior, not introduced by M9. Users who prefer reduced motion will still see the spinner rotate during card submission. A minor accessibility consideration outside M9 scope.
+
+3. **Dev server port conflict** — a dev server was already running on port 3000 at QA start. Cosmetic; did not affect any test.
 
 ---
 
-## Residual Risk
+## Residual Risk (carried from review-summary)
 
-1. **Word-level drift not detected** (MEDIUM from review, marked as latent): `refresh-seed-db.ts` drift detection covers only card-level fields (`wholeGloss`, `wholePinyin`, `isPhrase`, `wholeAudioUrl`). If a future refresh changes only word-level content in a retained card, re-sync will not fire and the `words` table stays stale. Zero impact on this refresh (只's card-level `wholeGloss` changed, triggering detection correctly). Fix: add a words comparison pass, or narrow the JSDoc to "card-level drift only".
+1. `@theme inline` self-reference fragility — `--color-brand: var(--color-brand)` inside `@theme` works only because the explicit `:root` block appears later in compiled output. Moving `:root` above `@import "tailwindcss"` could silently break all palette tokens.
+2. N sequential UPDATEs in `refresh-seed-db.ts` — 204 individual UPDATE calls; scales linearly as deck grows.
+3. Redundant `newRemaining` double-guard in `queries.ts:244` — dead code, functionally harmless.
+4. Stale comment in `rating-buttons.tsx` line 7 — noted above.
 
-2. **notInArray empty-array guard** (LOW from review, noted as fixed post-review): `refresh-seed-db.ts` was patched to throw if the deck is empty before deleting. Confirmed by the QA brief; DB state (204 cards, correct counts) is consistent with a correct run. Zero risk against current 204-card deck.
-
-3. **昨天晚上 duplicate in CSV** (noted in review, data issue): Two rows with same headword, different English glosses. Second gloss silently lost. Source-sheet authoring issue; one card present in DB with first-occurrence gloss. No data corruption.
-
-4. **OAuth wall limits smoke-test depth**: Cannot verify rendered deck sections or tag labels in the UI without a live session. `npm run build` exit 0 is the ceiling for headless validation in this environment.
+None are blockers for shipping M9.
 
 ---
 
 ## Procedure Compliance
 
-- Plan (`active-plan.md`) consulted before QA: yes
-- Implementation summary (`implementation-summary.md`) read before validating: yes
-- Review summary (`review-summary.md`) read before validating: yes
-- Both prior summaries explicitly read before validating assertions: yes
-- Source files edited during QA: no (throwaway `scripts/qa-db-probe.ts` created then deleted)
-- QA summary written: yes
+- Plan (`active-plan.md`) consulted before QA: **yes**
+- Implementation summary (`implementation-summary.md`) read before validating: **yes**
+- Review summary (`review-summary.md`) read before validating: **yes**
+- Both prior summaries explicitly read before validating assertions: **yes**
+- Source files edited during QA: **no**
+- QA summary written: **yes**

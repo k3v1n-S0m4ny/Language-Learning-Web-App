@@ -18,15 +18,15 @@ export default async function StatsPage() {
   const learners = await getLearnersStats(new Date());
 
   return (
-    <main className="min-h-dvh bg-zinc-50 px-6 py-8 dark:bg-black">
+    <main className="min-h-dvh bg-background px-6 py-8">
       {/* Header with back link (A1) */}
       <div className="mx-auto mb-8 flex max-w-5xl items-center justify-between gap-4">
-        <h1 className="text-xl font-semibold text-zinc-800 dark:text-zinc-100">
+        <h1 className="text-xl font-semibold text-foreground">
           Progress
         </h1>
         <Link
           href="/"
-          className="rounded-full border border-zinc-300 px-4 py-1.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-900"
+          className="rounded-full border border-border-base px-4 py-1.5 text-xs font-medium text-foreground-muted transition-colors hover:bg-surface"
         >
           Back to study
         </Link>
@@ -49,9 +49,9 @@ function LearnerColumn({ stats }: { stats: LearnerStats }) {
     stats.total > 0 ? Math.round((stats.seen / stats.total) * 100) : 0;
 
   return (
-    <section className="flex flex-col gap-6 rounded-2xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-950">
+    <section className="flex flex-col gap-6 rounded-2xl border border-border-base bg-surface p-6">
       {/* Learner label */}
-      <h2 className="text-base font-semibold text-zinc-800 dark:text-zinc-100">
+      <h2 className="text-base font-semibold text-foreground">
         {stats.displayName}
       </h2>
 
@@ -94,13 +94,13 @@ function StatTile({
   sub?: string;
 }) {
   return (
-    <div className="rounded-xl bg-zinc-50 p-3 dark:bg-zinc-900">
-      <div className="text-xs text-zinc-500 dark:text-zinc-400">{label}</div>
-      <div className="mt-1 text-lg font-semibold text-zinc-800 dark:text-zinc-100">
+    <div className="rounded-xl bg-background p-3">
+      <div className="text-xs text-foreground-muted">{label}</div>
+      <div className="mt-1 text-lg font-semibold text-foreground">
         {value}
       </div>
       {sub && (
-        <div className="text-xs text-zinc-400 dark:text-zinc-500">{sub}</div>
+        <div className="text-xs text-foreground-muted opacity-60">{sub}</div>
       )}
     </div>
   );
@@ -108,7 +108,7 @@ function StatTile({
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <div className="mb-2 text-xs font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
+    <div className="mb-2 text-xs font-medium uppercase tracking-wide text-foreground-muted opacity-70">
       {children}
     </div>
   );
