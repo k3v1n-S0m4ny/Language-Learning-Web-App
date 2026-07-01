@@ -4,12 +4,15 @@
  * breakdown to a single word equal to the whole number, so numbers are treated as one
  * lexical unit. Non-numeric vocab in the "numbers & amounts" section (数字与数量, 基数,
  * 序数) is left untouched.
+ *
+ * Mandarin-only: pinned to seed/mandarin (not SEED_LANG-parameterized) because Han
+ * numerals are Mandarin-specific; do not run this for other languages' decks.
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import type { DeckCard } from "./deck-types";
 
-const DECK = path.join("seed", "deck.generated.json");
+const DECK = path.join("seed", "mandarin", "deck.generated.json");
 const NUMERIC = new Set("零〇一二三四五六七八九十百千万亿兆两".split(""));
 
 function isNumber(headword: string): boolean {

@@ -1,159 +1,151 @@
----
-status: COMPLETE
-updated: 2026-05-24
----
-
-# QA Summary — M9: Colorful redesign, animations, "Again" requeue, CSV learning order
-
-## Prior Handoffs Read Before Validating
-
-- `active-plan.md` (Validation Contract, assertions A1–A6): **YES** — read in full before any assertion tested.
-- `implementation-summary.md` (completed work, WCAG table, review-fix round): **YES** — read in full. Noted the two CRITICAL fixes: `--color-success` darkened to `#1A7A40` and leech badge changed to `bg-clay text-on-earthy`.
-- `review-summary.md` (initial FAIL → re-review PASS after two CRITICAL fixes): **YES** — read in full.
+# QA Summary — M10: Restructure `seed/` for multi-language
 
 ## Result
-
-**PASS** — All assertions A1–A6 pass. No regressions detected. Build and lint are clean.
-
----
+PASS
 
 ## Assertions
 
-### A1 — Palette tokens + WCAG: PASS
+- **A1 — `npx tsc --noEmit` passes**: PASS — exit 0, no diagnostics.
+- **A2 — `npm run build` succeeds (Next build compiles, moved files don't break imports)**: PASS — exit 0. No missing env var failures; build completed in ~8.5s including TypeScript check and static page generation. Routes `/`, `/api/auth/[...nextauth]`, `/stats` all built.
+- **A3 — `npm run lint` passes**: PASS — exit 0, no output (clean).
+- **A4 — `resolveLanguage()` behaves correctly**: PASS, verified via a real scratch `.mts` file (not `tsx -e`, which the review summary flagged as unreliable in this environment) run with `npx tsx`, importing `seed/languages.ts` via a `file://` URL, in the OS temp scratch dir, deleted after use.
+  - (a) default (`SEED_LANG` unset) → `key: "mandarin"`, `sourceCsv` ends with `mandarin\source.csv`, `deckJson` ends with `mandarin\deck.generated.json` — confirmed true/true.
+  - (b) `resolveLanguage("thai")` → throws `Unknown/unconfigured SEED_LANG="thai"; configured: mandarin` (names the configured languages) — confirmed.
+  - (c) explicit `process.env.SEED_LANG = "mandarin"` → resolves identically to default — confirmed.
+- **A5 — Mandarin deck intact and loadable**: PASS. `seed/mandarin/deck.generated.json` parses as valid JSON, is an array of 204 entries. Compared against `git show HEAD:seed/deck.generated.json` (the pre-move file, 204 entries) via `JSON.stringify` deep-equality — **exact match**, confirming a pure rename with zero content drift. `seed/mandarin/source.csv` exists (5764 bytes, 204 lines).
+- **A6 — Path resolution wired end-to-end (static grep, no paid execution)**: PASS.
+  - `scripts/generate-deck.ts`: imports `resolveLanguage` from `../seed/languages`; uses `lang.sourceCsv`, `lang.deckJson`, `lang.systemPrompt`, `lang.defaultTag`, `lang.sectionTags`.
+  - `scripts/generate-audio.ts`: imports `resolveLanguage`; uses `lang.deckJson`, `lang.ttsInstructions`.
+  - `scripts/seed-db.ts`: imports `resolveLanguage`; uses `lang.deckJson`.
+  - No `npm run seed:*` was executed (paid OpenAI/Neon/Blob calls correctly avoided).
+- **A7 — Gitignore behavior**: PASS.
+  - `git check-ignore -v seed/thai/research/NOTES.md` → matched `.gitignore:46:/seed/*/research/` (ignored), exit 0.
+  - `git check-ignore -v seed/mandarin/source.csv seed/mandarin/deck.generated.json` → no match, exit 1 (correctly NOT ignored).
+  - `git status --porcelain` shows both files as `R` (rename) and nothing under `seed/thai/research/` is listed.
+- **A8 — No out-of-scope regressions**: PASS with one flagged discrepancy (see Unexpected Behavior). `git diff --stat -- lib/db/schema.ts lib/review/types.ts components/` — empty (zero changes), confirmed independently. `scripts/deck-types.ts` IS modified (comment-only) — see below.
+- **A9 — Pinned scripts NOT parameterized**: PASS. `scripts/refresh-seed-db.ts` and `scripts/normalize-numbers.ts` both hardcode `path.join("seed", "mandarin", "deck.generated.json")`; grep for `SEED_LANG`/`resolveLanguage` in both files returns only comment references, no actual import or env read.
+- **A10 — App starts and shuts down cleanly (runtime smoke test)**: PASS. `npm run dev` → ready in 892ms, no compile/runtime errors. `curl http://localhost:3000/` → clean `307` redirect to `/api/auth/signin` (expected auth-gated behavior, not an error — this app requires Google OAuth sign-in before rendering the review screen, consistent with prior QA sessions where OAuth + prod DB flows aren't automatable in this environment). Dev log showed no stack traces after the request. Server process was stopped via its PID (Windows `Stop-Process`) and port 3000 confirmed free afterward — clean shutdown.
 
-**Evidence:**
+## Commands
 
-- `app/globals.css` `:root` block sets all 9 palette tokens plus 5 semantic page tokens. Dark mode override present inside `@media (prefers-color-scheme: dark)`. `@theme inline` block wires every token into Tailwind v4 utility classes.
-- All 9 palette hex values confirmed present in compiled CSS (`0o3nn~pvfs9wg.css`): `#62736f`, `#9fad9f`, `#d9d0c7`, `#e8b5a7`, `#db846e`, `#1a7a40`, `#3baf7a`, `#1a1a1a`, `#f5f3f0`, `#15191b`.
-- Old failing success color `#1f8a4c` is absent from compiled CSS (confirmed by grep of compiled chunk).
-- No `zinc-*`, `gray-*`, or `red-*` Tailwind classes remain in any `components/` or `app/` `.tsx` file (grep returned empty).
-- Leech badge: `bg-clay text-on-earthy` (`#1A1A1A` on `#DB846E` = 6.3:1 ✓). Old `bg-clay/20 text-clay` (2.13:1 fail) is gone, confirmed in `components/card-back.tsx` line 30.
-- No CSS rule combines clay background with white text (CSS rule-block scan confirmed: 0 occurrences).
-- Dark mode `#ECEFEC` on `#15191B` = 17.4:1; on `#232A28` = 12.8:1 — both well above AA. Both confirmed present in compiled CSS.
-- `font-family: Arial` stray rule removed; `body` reads from `var(--background)` / `var(--foreground)`.
+- `npx tsc --noEmit` — exit 0
+  ```
+  EXIT_CODE=0
+  ```
+- `npm run lint` — exit 0
+  ```
+  > language-learning-web-app@0.1.0 lint
+  > eslint
 
-### A2 — Colored rating row: PASS
+  EXIT_CODE=0
+  ```
+- `npm run build` — exit 0
+  ```
+  ▲ Next.js 16.2.6 (Turbopack)
+  - Environments: .env.local
 
-**Evidence:**
+    Creating an optimized production build ...
+  ✓ Compiled successfully in 8.5s
+    Running TypeScript ...
+    Finished TypeScript in 6.5s ...
+    Collecting page data using 7 workers ...
+  ✓ Generating static pages using 7 workers (5/5) in 810ms
+    Finalizing page optimization ...
 
-- `components/rating-buttons.tsx`: 4-button `grid-cols-4` row — Again=`bg-clay text-on-earthy`, Hard=`bg-peach text-on-earthy`, Good=`bg-success text-white`, Easy=`bg-easy text-on-earthy`.
-- All four button hex values present in compiled CSS.
-- Good button: `text-white` on `bg-success` (`#1A7A40`) = 5.38:1 ≥ 4.5:1 AA. Darkened from original `#1F8A4C` (which was 4.38:1 — a CRITICAL failure caught in review and fixed). Old value absent from compiled CSS.
-- Sub-hint `<span>` uses `opacity-80` inheriting the parent text color.
-- No white-on-clay rule in compiled CSS (confirmed).
+  Route (app)
+  ┌ ƒ /
+  ├ ○ /_not-found
+  ├ ƒ /api/auth/[...nextauth]
+  └ ƒ /stats
 
-### A3 — CSS-only animations + reduced-motion: PASS
+  EXIT_CODE=0
+  ```
+  (Turbopack workspace-root warning present but pre-existing/unrelated — multiple lockfiles detected outside repo at `C:\Users\User\package-lock.json`, not caused by this change.)
+- `npx tsx <scratch>/probe-resolve-language.mts` (real file, `file://` import, OS temp dir, deleted after) — exit 0
+  ```
+  {
+    "defaultKey": "mandarin",
+    "defaultSourceCsv": "seed\\mandarin\\source.csv",
+    "defaultDeckJson": "seed\\mandarin\\deck.generated.json",
+    "defaultSourceCsvEndsRight": true,
+    "defaultDeckJsonEndsRight": true,
+    "thaiThrew": true,
+    "thaiMessage": "Unknown/unconfigured SEED_LANG=\"thai\"; configured: mandarin",
+    "explicitKey": "mandarin",
+    "explicitSourceCsv": "seed\\mandarin\\source.csv",
+    "explicitDeckJson": "seed\\mandarin\\deck.generated.json"
+  }
+  EXIT_CODE=0
+  ```
+- `node -e "..."` parse of `seed/mandarin/deck.generated.json` — exit 0
+  ```
+  current parse OK, isArray: true length: 204
+  EXIT_CODE=0
+  ```
+- `git show HEAD:seed/deck.generated.json` + node compare script (real scratch file, deleted after) — exit 0
+  ```
+  HEAD length: 204 CURRENT length: 204 EQUAL: true
+  deep JSON.stringify match: true
+  EXIT_CODE=0
+  ```
+- `wc -l seed/mandarin/source.csv` — exit 0
+  ```
+  204 seed/mandarin/source.csv
+  ```
+- Grep of `resolveLanguage|lang\.(sourceCsv|deckJson|systemPrompt|ttsInstructions|sectionTags|defaultTag)` across the 3 core scripts — confirmed all wired (see A6 above).
+- Grep of `SEED_LANG|resolveLanguage|mandarin` across `refresh-seed-db.ts` / `normalize-numbers.ts` — confirmed hardcoded, not parameterized (see A9).
+- `git check-ignore -v seed/thai/research/NOTES.md` — exit 0
+  ```
+  .gitignore:46:/seed/*/research/	seed/thai/research/NOTES.md
+  EXIT_CODE=0
+  ```
+- `git check-ignore -v seed/mandarin/source.csv seed/mandarin/deck.generated.json` — exit 1 (no match, correct)
+- `git status --porcelain` — exit 0
+  ```
+   M .claude/plans/active-plan.md
+   M .claude/plans/implementation-summary.md
+   M .claude/plans/review-summary.md
+   M .gitignore
+   M README.md
+   M scripts/deck-types.ts
+   M scripts/generate-audio.ts
+   M scripts/generate-deck.ts
+   M scripts/normalize-numbers.ts
+   M scripts/refresh-seed-db.ts
+   M scripts/seed-db.ts
+  R  seed/deck.generated.json -> seed/mandarin/deck.generated.json
+  R  seed/reborn-chinese-system.csv -> seed/mandarin/source.csv
+  ?? .claude/agent-memory/
+  ?? seed/languages.ts
+  EXIT_CODE=0
+  ```
+- `git diff --stat -- seed/mandarin/deck.generated.json seed/mandarin/source.csv` — exit 0, empty output (pure rename confirmed independently)
+- `git diff --stat -- lib/db/schema.ts lib/review/types.ts components/` — exit 0, empty output (no out-of-scope changes)
+- `git diff -- scripts/deck-types.ts` — exit 0, shows a 2-line comment-only change (see Unexpected Behavior)
+- `npm run dev` (background) — ready in 892ms, no errors
+- `curl -s -D - -o /dev/null http://localhost:3000/` — exit 0
+  ```
+  HTTP/1.1 307 Temporary Redirect
+  location: /api/auth/signin?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2F
+  ```
+- Dev server shutdown via `Stop-Process -Id <pid> -Force` (PID resolved from `Get-NetTCPConnection -LocalPort 3000`); confirmed port 3000 free and PID gone afterward.
 
-**Evidence:**
-
-- Compiled CSS character-offset analysis: all 4 custom `@keyframes` (`fade-in` at 17489, `slide-up-fade` at 17535, `pop-in` at 17638, `gentle-bounce` at 17723) are inside the `@media (prefers-reduced-motion: no-preference)` block (17451–17841). All 4 confirmed INSIDE gate.
-- The 5th `@keyframes spin` (pos 19250, outside gate) is the Tailwind built-in for the loading spinner — pre-existing, not an M9 keyframe, and acceptable behavior.
-- Source-level confirmation: `app/globals.css` has all 4 custom keyframes inside the media query block (positions confirmed via brace-depth walk). The two `@keyframes` references appearing outside in the regex scan are comment-only text (confirmed).
-- `@theme inline` animation tokens (`--animate-fade-in` etc.) are defined unconditionally as CSS variables — under `reduce` they reference keyframe names that do not exist, producing a no-op, which is the correct behavior.
-- Animation classes confirmed applied in all target components:
-  - `review-session.tsx`: `animate-slide-up-fade` (card wrapper), `animate-fade-in` (pending spinner)
-  - `card-back.tsx`: `animate-fade-in`
-  - `card-front.tsx`: `animate-fade-in`
-  - `word-chip.tsx`: `animate-pop-in`
-  - `empty-state.tsx`: `animate-fade-in` (container), `animate-gentle-bounce` (emoji)
-  - `rating-buttons.tsx`: `animate-pop-in`
-- No new runtime dependency added to `package.json`.
-- Playwright reduced-motion toggle (`emulateMedia`) was not exercised due to OAuth wall. CSS structure guarantees motion suppression at the keyframe level.
-
-### A4 — "Again" requeue: PASS
-
-**Evidence (logic simulation + DB queries):**
-
-- `lib/review/queries.ts` implements 3-tier queue in `getStudyScreenData`:
-  - Tier 1: `lte(due, now)` — ready cards.
-  - Tier 2: unseen cards `ORDER BY deck_order ASC, created_at ASC` — when `newRemaining > 0`.
-  - Tier 3: `gt(due, now) AND lte(due, dayEnd)` — intraday learning steps not yet elapsed.
-  - Selection: `readyId ?? (capRemaining > 0 ? newCardId : undefined) ?? futureTodayId`.
-- FSRS probe (ts-fsrs `generatorParameters({ enable_short_term: true })`): rating `Again` on a brand-new card produces `state=Learning, due=now+1minute`. Confirmed by Node.js probe.
-- After failing card 0 (你会说英文吗？):
-  - Tier 1: failed card's `due = now+1m > now` → empty.
-  - Tier 2: next unseen = 有谁会说英文吗？ (deck_order=1) → served → **user sees different card**. ✓
-  - Failed card resurfaces ~1 min later via Tier 3 when its timer elapses. ✓
-  - No immediate repeat. ✓
-- Single-card session: failed card (`due = now+1m`) satisfies `due > now AND due <= dayEnd` (dayEnd = Thailand midnight = 17:00 UTC). Tier 3 fires. **No empty-screen dead-end**. ✓
-- DB-level live tier simulation run for the real learner (learner 570dce99..., 1 review_state row for `只`): Tier 1 = `只` (past due), Tier 2 = `你会说英文吗？` (deck_order=0), Tier 3 = none. Selection = `只` (Tier 1 priority). Correct.
-- The redundant `newRemaining` double-guard on line 244 (MEDIUM finding from review) is present but functionally correct — dead code only for the `false` branch.
-
-### A5 — CSV learning order: PASS
-
-**Evidence:**
-
-- DB query confirmed `deck_order` column: `type=integer, default=0, nullable=NO`.
-- Migration `0001_supreme_joseph.sql`: `ALTER TABLE "cards" ADD COLUMN "deck_order" integer DEFAULT 0 NOT NULL` — confirmed applied.
-- First 5 cards by `deck_order ASC` match CSV row order exactly:
-  - `[0]` 你会说英文吗？ ✓ (CSV row 1)
-  - `[1]` 有谁会说英文吗？ ✓ (CSV row 2)
-  - `[2]` 你明白吗？ ✓ (CSV row 3)
-  - `[3]` 明白。 ✓ (CSV row 4)
-  - `[4]` 我不明白。 ✓ (CSV row 5)
-- 204 cards total, max deck_order = 203 — contiguous 0..203, no gaps or duplicates.
-- Zero NULL `deck_order` values.
-- `seed-db.ts` uses `deck.entries()` with `deckOrder: index` on insert. ✓
-- `refresh-seed-db.ts` step 3 unconditionally backfills all retained cards. ✓
-- Tier 2 query uses `asc(cards.deckOrder), asc(cards.createdAt)` — CSV order is the authoritative sort key. ✓
-
-### A6 — No regression: PASS
-
-**Evidence:**
-
-- `npm run build` exit 0: `Compiled successfully in 8.2s`, TypeScript clean in 9.4s, 4 routes generated (`/`, `/_not-found`, `/api/auth/[...nextauth]`, `/stats`).
-- `npm run lint` exit 0: no warnings or errors.
-- Stats page (`app/stats/page.tsx`) uses only semantic tokens (`bg-background`, `bg-surface`, `text-foreground`, `border-border-base`). No hardcoded colors.
-- Chart files: `forecast-chart.tsx` `BAR_FILL = "#1a7a40"`; `rating-chart.tsx` `RATING_COLORS = ["#db846e", "#e8b5a7", "#1a7a40", "#3baf7a"]`. Old ad-hoc values (`#ef4444`, `#6366f1`) absent.
-- No `zinc-*`, `gray-*`, or `red-*` Tailwind classes in any component or page file.
-- FSRS scheduling parameters unchanged (verified: `learner_settings.request_retention` default still 0.85; scheduler uses `REQUEST_RETENTION` constant in `lib/review/config.ts` — not touched by M9).
-
----
-
-## Commands Run
-
-| Command | Exit Code | Notable Output |
-|---|---|---|
-| `npm run build` | 0 | TypeScript + Turbopack clean; 4 routes |
-| `npm run lint` | 0 | No warnings or errors |
-| `node --input-type=module` DB query (deck_order order, first 10) | 0 | Matches CSV row order exactly |
-| `node --input-type=module` DB query (NULL/duplicate checks) | 0 | 0 NULLs, 0 duplicates, max=203 |
-| `node --input-type=module` DB query (schema: information_schema) | 0 | `integer DEFAULT 0 NOT NULL` confirmed |
-| `node --input-type=module` FSRS probe (Again on new card) | 0 | `state=Learning, due=now+1min` |
-| `node --input-type=module` 3-tier simulation (live DB) | 0 | Tier 1: 只, Tier 2: 你会说英文吗？, Tier 3: none |
-| `node --input-type=module` CSS inspection (compiled chunk) | 0 | 4 custom keyframes inside reduced-motion gate; 9 palette tokens present; `#1f8a4c` absent |
-| `node --input-type=module` single-card Tier 3 check | 0 | Tier 3 fires for failed card within dayEnd — no dead-end |
-| `curl http://localhost:3000/` | 307 | Redirects to NextAuth sign-in (expected; dev server alive) |
-| `grep` zinc/gray/red classes in components+app | 0 | No matches (empty output — correct) |
-
----
+## Evidence Artifacts
+No UI screenshots captured — this is a build-tooling/seed-script restructure with no UI surface change, and the review screen sits behind Google OAuth which is not automatable in this environment (consistent with prior QA sessions in project memory). The `curl` 307-redirect output above is the closest available evidence that the app boots and serves correctly post-restructure; no visual regression is possible from a scripts/seed-only change surface.
 
 ## Unexpected Behavior
+- `scripts/deck-types.ts` shows as **modified** in `git status`, contradicting the review summary's claim that this file was unchanged (the review's Files Reviewed / A8 both stated `git diff -- scripts/deck-types.ts ...` was empty). Re-diffing independently shows a real 2-line change: the header comment was updated from `seed/deck.generated.json` to `seed/<language>/deck.generated.json (e.g. seed/mandarin/deck.generated.json)`. This is exactly the LOW finding the reviewer flagged as *not yet fixed* ("fix opportunistically next time this file is touched") — but it appears to have actually been fixed since the review ran. The active-plan.md, re-read at QA time, now says "Stale comment in `scripts/deck-types.ts` was just corrected," language that (per its own line count) wasn't present when the reviewer read it either — the active-plan.md file itself was edited between review and QA. This is a harmless, in-scope, comment-only correction (type declarations unchanged; `hanzi`/`pinyin` fields untouched per spec) — does not affect the PASS verdict, but the review-summary.md is now stale on this one point and the handoff chain drifted slightly out of sync between review and QA. Flagging for awareness, not blocking.
+- No functional bugs, no regressions, no unexpected script behavior found.
 
-1. **Stale comment in `rating-buttons.tsx` line 7** — comment still reads `#1F8A4C (5.3:1 — WCAG AA)`. The actual `--color-success` in `globals.css` is `#1A7A40` (5.4:1 corrected value). Comment-only; no rendering impact.
-
-2. **`@keyframes spin` outside reduced-motion gate in compiled CSS** — the Tailwind built-in loading spinner animation is not gated. Pre-existing Tailwind behavior, not introduced by M9. Users who prefer reduced motion will still see the spinner rotate during card submission. A minor accessibility consideration outside M9 scope.
-
-3. **Dev server port conflict** — a dev server was already running on port 3000 at QA start. Cosmetic; did not affect any test.
-
----
-
-## Residual Risk (carried from review-summary)
-
-1. `@theme inline` self-reference fragility — `--color-brand: var(--color-brand)` inside `@theme` works only because the explicit `:root` block appears later in compiled output. Moving `:root` above `@import "tailwindcss"` could silently break all palette tokens.
-2. N sequential UPDATEs in `refresh-seed-db.ts` — 204 individual UPDATE calls; scales linearly as deck grows.
-3. Redundant `newRemaining` double-guard in `queries.ts:244` — dead code, functionally harmless.
-4. Stale comment in `rating-buttons.tsx` line 7 — noted above.
-
-None are blockers for shipping M9.
-
----
+## Residual Risk
+- `npm run seed:*` (live OpenAI/Neon/Blob) was not executed, per explicit instruction — DB-idempotency ("0 inserted, all present") and the authenticated review-screen render remain unverified by any automated agent in this chain (implementer, reviewer, or QA). This requires a manual smoke test with real credentials/session.
+- The review-screen-renders-Mandarin-cards check (plan Verification item 5) could not be completed past the OAuth wall in this environment; only server boot + unauthenticated redirect behavior was confirmed.
+- `scripts/deck-types.ts` comment drift noted above — cosmetic only, no code/type impact, and the handoff chain (active-plan.md edited post-review) should be tightened so review and QA are working from the same frozen spec snapshot.
+- Pre-existing Turbopack "workspace root" warning (multiple lockfiles detected outside the repo, at `C:\Users\User\package-lock.json`) is unrelated to this change and was present in build output; not a regression.
 
 ## Procedure Compliance
-
-- Plan (`active-plan.md`) consulted before QA: **yes**
-- Implementation summary (`implementation-summary.md`) read before validating: **yes**
-- Review summary (`review-summary.md`) read before validating: **yes**
-- Both prior summaries explicitly read before validating assertions: **yes**
-- Source files edited during QA: **no**
-- QA summary written: **yes**
+- Plan consulted before QA: yes (`.claude/plans/active-plan.md` read in full)
+- Implementation summary read: yes (`.claude/plans/implementation-summary.md` read in full)
+- Review summary read: yes (`.claude/plans/review-summary.md` read in full)
+- Validations re-run by QA (not copied): yes — every command in this report was executed independently by QA, including a fresh `resolveLanguage()` probe script (not the implementer's `-e` snippet, which the reviewer had already flagged as unreliable in this environment), a fresh deck byte-comparison against `git show HEAD:...`, fresh greps of all 5 scripts, fresh `git status`/`git check-ignore` calls, a fresh `npm run build`, and a fresh `npm run dev` + curl smoke test
+- QA summary written: yes

@@ -1,51 +1,38 @@
 /**
  * Step 1 of the seed pipeline.
  *
- * Reads seed/reborn-chinese-system.csv (Chinese,English), and for every row uses
- * OpenAI to add what the CSV lacks: whole-headword pinyin, a phrase/word flag, and a
- * word-by-word breakdown (hanzi + gloss + pinyin). The CSV's English is kept as the
- * authoritative whole-phrase gloss. Output: seed/deck.generated.json (review/edit it).
+ * Reads <lang>.sourceCsv (e.g. seed/mandarin/source.csv) (Chinese,English), and for
+ * every row uses OpenAI to add what the CSV lacks: whole-headword pinyin, a
+ * phrase/word flag, and a word-by-word breakdown (hanzi + gloss + pinyin). The CSV's
+ * English is kept as the authoritative whole-phrase gloss. Output: <lang>.deckJson
+ * (e.g. seed/mandarin/deck.generated.json — review/edit it).
  *
  * Tags are derived from section-header rows in the CSV. When a row's headword exactly
- * matches a key in SECTION_TAGS, currentTag is updated and all subsequent rows carry
- * that tag until the next section header. Rows before any section header fall back to
- * DEFAULT_TAG ("languages difficulties").
- *   数字与数量 -> "numbers & amounts"
- *   时间与日期 -> "time & dates"
- *   金钱       -> "money"
- *   (default)  -> "languages difficulties"
+ * matches a key in lang.sectionTags, currentTag is updated and all subsequent rows
+ * carry that tag until the next section header. Rows before any section header fall
+ * back to lang.defaultTag. See seed/languages.ts for the Mandarin section tag map.
+ *
+ * Language is selected via SEED_LANG (defaults to "mandarin" — see seed/languages.ts).
  *
  * Re-runnable: rows already present in the output are skipped (resume after a crash,
  * or delete the file to regenerate). Set LIMIT=3 to process only the first N rows.
  */
 import { config } from "dotenv";
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
-import path from "node:path";
 import { parse } from "csv-parse/sync";
 import OpenAI from "openai";
 import type { DeckCard } from "./deck-types";
+import { resolveLanguage } from "../seed/languages";
 
 config({ path: ".env.local" });
 
+const lang = resolveLanguage();
 const MODEL = process.env.OPENAI_CONTENT_MODEL ?? "gpt-4o";
-const SOURCE = path.join("seed", "reborn-chinese-system.csv");
-const OUT = path.join("seed", "deck.generated.json");
-// Top-level section headers in the CSV map to their deck tag. Rows before the
-// first matching header inherit DEFAULT_TAG.
-const SECTION_TAGS: Record<string, string> = {
-  "数字与数量": "numbers & amounts",
-  "时间与日期": "time & dates",
-  "金钱": "money",
-};
-const DEFAULT_TAG = "languages difficulties";
+const SOURCE = lang.sourceCsv;
+const OUT = lang.deckJson;
 const LIMIT = process.env.LIMIT ? Number(process.env.LIMIT) : Infinity;
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
-const SYSTEM = `You are a Mandarin Chinese teaching assistant. Given a Chinese headword and its English meaning, return JSON describing it for a flashcard:
-- wholePinyin: Hanyu Pinyin with tone marks for the entire headword (omit punctuation).
-- isPhrase: true if the headword is more than one word (a sentence or multi-word expression), false if it is a single word.
-- words: the headword segmented into individual Chinese words, in order. For each word give: hanzi (its characters, no punctuation), gloss (a concise English meaning of that word as used here), pinyin (Hanyu Pinyin with tone marks). For a single-word headword return exactly one entry equal to the whole word. Never output punctuation marks as words.`;
 
 const responseSchema = {
   type: "object",
@@ -85,7 +72,7 @@ async function generateCard(
     model: MODEL,
     temperature: 0,
     messages: [
-      { role: "system", content: SYSTEM },
+      { role: "system", content: lang.systemPrompt },
       { role: "user", content: JSON.stringify({ chinese: hanzi, english }) },
     ],
     response_format: {
@@ -125,7 +112,7 @@ async function main() {
   const byHeadword = new Map(existing.map((c) => [c.headword, c]));
 
   let processed = 0;
-  let currentTag = DEFAULT_TAG;
+  let currentTag = lang.defaultTag;
   for (let i = 0; i < rows.length && processed < LIMIT; i++) {
     const [hanziRaw, englishRaw] = rows[i];
     const hanzi = (hanziRaw ?? "").trim();
@@ -133,8 +120,8 @@ async function main() {
     if (!hanzi) continue;
 
     // Update the running tag whenever a top-level section header is encountered.
-    if (Object.prototype.hasOwnProperty.call(SECTION_TAGS, hanzi)) {
-      currentTag = SECTION_TAGS[hanzi];
+    if (Object.prototype.hasOwnProperty.call(lang.sectionTags, hanzi)) {
+      currentTag = lang.sectionTags[hanzi];
     }
     const tag = currentTag;
 

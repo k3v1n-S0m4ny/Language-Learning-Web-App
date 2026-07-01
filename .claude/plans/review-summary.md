@@ -1,214 +1,180 @@
----
-status: COMPLETE
-updated: 2026-05-24
----
-
-# Review Summary — M9: Colorful redesign, animations, "Again" requeue, CSV learning order
+# Review Summary — M10: Restructure `seed/` for multi-language
 
 ## Result
-
-**PASS** _(re-review 2026-05-24 — both CRITICAL failures from initial review confirmed resolved)_
-
-Both WCAG AA failures identified in the initial review have been correctly fixed. All six assertions now pass. No new issues introduced. QA may proceed.
-
----
+PASS
 
 ## Files Reviewed
-
-- `app/globals.css`
-- `lib/review/queries.ts`
-- `lib/db/schema.ts`
+- `seed/languages.ts` (new)
+- `scripts/generate-deck.ts`
+- `scripts/generate-audio.ts`
 - `scripts/seed-db.ts`
 - `scripts/refresh-seed-db.ts`
-- `lib/db/migrations/0001_supreme_joseph.sql`
-- `components/rating-buttons.tsx`
-- `components/review-session.tsx`
-- `components/card-back.tsx`
-- `components/card-front.tsx`
-- `components/word-chip.tsx`
-- `components/empty-state.tsx`
-- `components/session-header.tsx`
-- `components/audio-button.tsx`
-- `components/sign-out-button.tsx`
-- `components/stats/reviews-chart.tsx`
-- `components/stats/forecast-chart.tsx`
-- `components/stats/rating-chart.tsx`
-- `app/page.tsx`
-- `app/layout.tsx`
-- `app/stats/page.tsx`
-- `.next/static/chunks/0-s1943xn.6h1.css` (compiled output, inspection only)
-
----
+- `scripts/normalize-numbers.ts`
+- `scripts/deck-types.ts` (unchanged — checked for scope creep)
+- `.gitignore`
+- `README.md`
+- `seed/mandarin/source.csv`, `seed/mandarin/deck.generated.json` (renamed files — content-diffed)
+- `seed/thai/research/NOTES.md` (untracked, existence + ignore status verified)
+- `.claude/plans/active-plan.md`, `.claude/plans/implementation-summary.md`
 
 ## Findings
 
 ### CRITICAL
-
-**[components/rating-buttons.tsx:35 + globals.css:47] White text on "Good" button (#1F8A4C) fails WCAG AA**
-
-The "Good" button uses `text-white` on `bg-success` (`--color-success: #1f8a4c`). Independent calculation: L(#1F8A4C) = 0.2126 * lin(31) + 0.7152 * lin(138) + 0.0722 * lin(76) = 0.190. Contrast = (1.05) / (0.190 + 0.05) = **4.38:1**. This is below the 4.5:1 threshold for WCAG 2.1 criterion 1.4.3 (normal text, AA). The button label is `text-sm` (14 px, font-semibold), which does not qualify as WCAG large text (14 pt bold = 18.67 px; 14 px ≈ 10.5 pt — below threshold). The failure applies in both light and dark mode since `--color-success` has no dark-mode override.
-
-The implementation summary claims 5.3:1. That value is arithmetically wrong by 0.92 ratio points. A ratio of 5.3:1 would require L ≈ 0.148, corresponding to a darker green around `#1A7A40` (independently verified: 5.38:1).
-
-This violates assertions A1 ("every text/background pairing meets WCAG AA") and A2 ("Good=success+white text meeting AA").
-
-Fix: darken `--color-success` to approximately `#1A7A40`, or switch the Good button to `text-on-earthy` (near-black, 8.1:1 — consistent with the other three buttons).
-
----
-
-**[components/card-back.tsx:31-35] Leech badge text-clay on bg-clay/20 fails WCAG AA in light mode**
-
-The leech badge uses `text-clay` (`#DB846E`) on `bg-clay/20` (rgba(219, 132, 110, 0.2)). The badge has no opaque background; the alpha composites against the page background. In light mode `--background` is `#F5F3F0`; the effective badge background is approximately rgb(240, 221, 214). Contrast = **2.13:1** — below both the 4.5:1 AA threshold and the 3:1 large-text/UI threshold. The label text is `text-xs` (12 px, font-medium), the smallest size in the application.
-
-In dark mode the composited background against `#15191B` gives 4.64:1 (passes AA). The failure is light-mode-only.
-
-This pairing was not included in the implementation summary's contrast table despite being introduced in this PR.
-
-Fix: replace `bg-clay/20 text-clay` with a higher-contrast combination, e.g., `bg-clay text-on-earthy` (7.5:1), or a border-only style (`border border-clay text-foreground`) to avoid the tinted-background problem.
-
----
+None.
 
 ### HIGH
-
-**[.claude/plans/implementation-summary.md — WCAG table] White-on-success ratio reported as 5.3:1; correct value is 4.38:1**
-
-The handoff table entry "white on success / Good btn | 5.3:1 | 4.5:1 | PASS" is materially incorrect. Any downstream QA that trusted this table rather than recomputing would carry the failure forward. The plan's A1 instruction says to "compute & record" the success value; the recorded value is wrong.
-
----
+None.
 
 ### MEDIUM
-
-**[components/card-back.tsx] WCAG table in implementation summary omits the leech badge pairing entirely**
-
-The leech badge (`text-clay on bg-clay/20`) is new in this PR and is absent from the 21-row contrast table. The plan requires ratios to be "recorded in implementation-summary.md." The omission allowed the light-mode AA failure to go undetected.
-
----
-
-**[lib/review/queries.ts:242,244] Redundant double-guard on `newRemaining`**
-
-`newCardId` (line 242) is already `undefined` when `counts.newRemaining === 0`. The inner ternary on line 244 re-checks the same condition, making the guard dead code for the `false` branch. Behaviour is correct in all cases but the pattern is confusing.
-
-```ts
-// line 242
-const newCardId = counts.newRemaining > 0 ? newCardRow[0]?.id : undefined;
-// line 244 — inner ternary is always equivalent to ?? newCardId
-const chosenId = readyId ?? (counts.newRemaining > 0 ? newCardId : undefined) ?? futureTodayId;
-// Cleaner: const chosenId = readyId ?? newCardId ?? futureTodayId;
-```
-
----
+None.
 
 ### LOW
-
-**[lib/review/queries.ts:154,193] Wave-1 comment is stale after M9 expansion**
-
-The comment at line 154 says "wave 1: settings + (due-id, new-id, raw counts)" — accurate before M9. The `Promise.all` on line 193 now has five items (settings, raw counts, three tier queries). The comment should be updated to reflect the new shape.
-
----
+- `scripts/deck-types.ts:1` — stale doc comment still reads `seed/deck.generated.json`
+  (pre-move top-level path); should say `seed/mandarin/deck.generated.json` (or the
+  generic `<lang>.deckJson`) for accuracy. Functionally harmless (this file is a pure
+  type declaration, and the plan explicitly required it stay unchanged pending the
+  field-rename milestone), but it is now a misleading comment. Low priority — fix
+  opportunistically next time this file is touched, not worth a standalone commit.
+- `seed/languages.ts:20-21` — `LanguageConfig.key` and `.dir` fields are populated but
+  currently unused by any of the three consumer scripts (`generate-deck.ts`,
+  `generate-audio.ts`, `seed-db.ts`). Not a defect — both fields were explicitly
+  requested in the plan's field list (work item 1) and are reasonable forward-looking
+  scaffolding for the Thai/French/Japanese milestone — but flagging as unused surface
+  area in case a future linter flags it or a reviewer wonders why they exist.
 
 ## Assertions Checked
 
-| Assertion | Result | Evidence |
-|---|---|---|
-| A1 — Palette tokens + WCAG AA all pairings, both modes | **FAIL** | White on `#1F8A4C` = 4.38:1 (< 4.5). Leech badge light = 2.13:1 (< 3.0). Independently computed via WCAG 2.1 linearisation. |
-| A2 — Colored rating row, each label+hint meets AA | **FAIL** | Good button: white-on-success 4.38:1 < 4.5:1. Again/Hard/Easy all pass (independently verified). |
-| A3 — CSS-only animations + reduced-motion, no new runtime dep | **PASS** | Compiled CSS confirms `@keyframes` inside `@media (prefers-reduced-motion: no-preference)`. Utility classes unconditional but reference conditional keyframe names — no motion fires under reduce-motion. `package.json` and lockfile unchanged (git diff empty). |
-| A4 — "Again" requeue; tier logic correct; no dead-end | **PASS** | Tier1 `lte(now)` / Tier3 `gt(now) AND lte(dayEnd)` are mutually exclusive with no gap. Single-card scenario: Tier3 fires when Tier1 and Tier2 are empty. `chosenId` selection prevents immediate re-serve. `fetchRawCounts.due` uses same `lte(dayEnd)` predicate — count matches served set. |
-| A5 — `deck_order` migration + seed + refresh | **PASS** | Migration additive: `ADD COLUMN deck_order DEFAULT 0 NOT NULL` + `SET DEFAULT` on `request_retention`. `seed-db.ts` uses `deck.entries()` and sets `deckOrder: index` on insert. `refresh-seed-db.ts` step 3 unconditionally backfills all kept cards. `notInArray` guarded by non-empty deck check (line 38). |
-| A6 — No regression, build + lint clean | **PASS** | Implementer reports build exit 0, lint exit 0. Component sweep replaces hardcoded colour tokens. Compiled CSS present and correct. |
-
----
+- **A1 — No behavior change for Mandarin**: PASS. Programmatically extracted `SYSTEM`
+  from `git show HEAD:scripts/generate-deck.ts` and compared to `systemPrompt` in
+  `seed/languages.ts`: identical, byte-for-byte (both 702 chars). `DEFAULT_TAG` /
+  `defaultTag`: identical (`"languages difficulties"`). `INSTRUCTIONS` /
+  `ttsInstructions` (from `generate-audio.ts`): identical. `SECTION_TAGS` /
+  `sectionTags`: identical key→value pairs (数字与数量→numbers & amounts, 时间与日期→time
+  & dates, 金钱→money); the only difference in a raw string diff was indentation
+  whitespace from being nested one level deeper inside an object literal, which is
+  semantically irrelevant. Confirmed via an independent tsx probe that
+  `resolveLanguage()` with `SEED_LANG` unset returns `sourceCsv: "seed\\mandarin\\source.csv"`,
+  `deckJson: "seed\\mandarin\\deck.generated.json"`.
+- **A2 — Moved deck file byte-identical**: PASS. `git status --porcelain -- seed/`
+  shows both files as pure renames (`R`, no `M`). `git diff -- seed/mandarin/deck.generated.json
+  seed/mandarin/source.csv` produced empty output (no content diff at all).
+- **A3 — `SEED_LANG` everywhere, `LANG` nowhere**: PASS. `process\.env\.LANG\b` grep
+  across `scripts/` and `seed/` returned zero matches. `SEED_LANG` grep across the repo
+  found it only in the 3 parameterized scripts + `seed/languages.ts` (as the actual
+  selector) plus comment-only mentions in the 2 pinned scripts and README/plan docs.
+- **A4 — `refresh-seed-db.ts` / `normalize-numbers.ts` NOT parameterized**: PASS.
+  Grepped both files for `SEED_LANG`/`resolveLanguage`: only comment references exist
+  ("not SEED_LANG-parameterized"); no import of `resolveLanguage`, no read of
+  `process.env.SEED_LANG`. Both scripts hardcode `path.join("seed", "mandarin",
+  "deck.generated.json")`.
+- **A5 — `resolveLanguage()` throws clearly for unconfigured languages**: PASS.
+  Independently re-ran (not the implementer's `-e` output, which is untrustworthy on
+  this Windows/tsx setup — see Commands Run below) via a standalone probe script:
+  `resolveLanguage("thai")` → throws `Unknown/unconfigured SEED_LANG="thai"; configured: mandarin`;
+  `resolveLanguage("bogus")` → throws the equivalent message. Neither returns
+  `undefined`.
+- **A6 — Correct imports, no leftover local constants**: PASS. All three core scripts
+  import `{ resolveLanguage } from "../seed/languages"` (correct relative path from
+  `scripts/`). Grepped for leftover `const SYSTEM =` / `SECTION_TAGS =` / `DEFAULT_TAG =`
+  / top-level `INSTRUCTIONS =` literal assignments — none remain; `generate-audio.ts`
+  keeps `const INSTRUCTIONS = lang.ttsInstructions;` as a documented local alias (not a
+  duplicate hardcoded string), which is fine.
+- **A7 — Gitignore correctness**: PASS. `git check-ignore -v seed/thai/research/NOTES.md
+  seed/mandarin/source.csv seed/mandarin/deck.generated.json` matched only
+  `seed/thai/research/NOTES.md` against `.gitignore:46: /seed/*/research/`; the other
+  two paths produced no match (correctly not ignored).
+- **A8 — No scope creep**: PASS. `git status --porcelain` shows no modifications to
+  `scripts/deck-types.ts`, `lib/db/schema.ts`, `lib/review/types.ts`, or `components/*`.
+  Confirmed with an explicit `git diff -- scripts/deck-types.ts lib/db/schema.ts
+  lib/review/types.ts components/` which produced empty output.
 
 ## Commands Run
+All re-run independently by the reviewer, not copy-pasted from the implementer.
 
-| Command | Exit Code | Notable Output |
-|---|---|---|
-| `git diff --stat HEAD` | 0 | 23 files, 487 insertions, 221 deletions |
-| Node WCAG luminance/contrast computation | 0 | White/#1F8A4C = 4.38:1; leech badge light = 2.13:1; all other claimed pairings confirmed within ±0.2 of handoff values |
-| Node compiled CSS inspection (`0-s1943xn.6h1.css`) | 0 | `@theme inline` self-reference safe (hex `:root` block at offset 16259 overrides it). `@keyframes` inside `prefers-reduced-motion` gate. `bg-clay` utility generated correctly. |
-| Node `@theme inline` cascade analysis | 0 | NOT a bug: explicit `:root` block comes after `@theme`-emitted block in compiled output; later declaration wins; palette tokens resolve to correct hex values. |
+- `npx tsc --noEmit` — exit 0
+  ```
+  (no output — clean pass)
+  ```
+- `npx eslint scripts/generate-deck.ts scripts/generate-audio.ts scripts/seed-db.ts scripts/refresh-seed-db.ts scripts/normalize-numbers.ts seed/languages.ts` — exit 0
+  ```
+  (no output — clean pass)
+  ```
+- `npx eslint .` (full repo, beyond what implementer ran) — exit 0
+  ```
+  (no output — clean pass)
+  ```
+- `git status --porcelain` — exit 0
+  ```
+   M .claude/plans/active-plan.md
+   M .claude/plans/implementation-summary.md
+   M .gitignore
+   M README.md
+   M scripts/generate-audio.ts
+   M scripts/generate-deck.ts
+   M scripts/normalize-numbers.ts
+   M scripts/refresh-seed-db.ts
+   M scripts/seed-db.ts
+  R  seed/deck.generated.json -> seed/mandarin/deck.generated.json
+  R  seed/reborn-chinese-system.csv -> seed/mandarin/source.csv
+  ?? .claude/agent-memory/
+  ?? seed/languages.ts
+  ```
+  Matches the implementer's claimed file list exactly.
+- `git diff -- seed/mandarin/deck.generated.json seed/mandarin/source.csv` — exit 0
+  ```
+  (empty — confirms pure rename, no content drift)
+  ```
+- `git check-ignore -v seed/thai/research/NOTES.md seed/mandarin/source.csv seed/mandarin/deck.generated.json` — exit 0
+  ```
+  .gitignore:46:/seed/*/research/	seed/thai/research/NOTES.md
+  ```
+  (only one line printed — the other two paths correctly produced no match)
+- `git diff -- scripts/deck-types.ts lib/db/schema.ts lib/review/types.ts components/` — exit 0
+  ```
+  (empty — confirms no scope creep)
+  ```
+- tsx probe of `resolveLanguage()` (own script, not the implementer's `-e` snippet — see
+  discrepancy note below) — exit 0
+  ```
+  DEFAULT: {"sourceCsv":"seed\\mandarin\\source.csv","deckJson":"seed\\mandarin\\deck.generated.json"}
+  THAI throws: Unknown/unconfigured SEED_LANG="thai"; configured: mandarin
+  BOGUS throws: Unknown/unconfigured SEED_LANG="bogus"; configured: mandarin
+  ```
+- Programmatic string-diff script (own script) comparing `git show HEAD:scripts/generate-deck.ts`
+  / `generate-audio.ts` against `seed/languages.ts` — exit 0
+  ```
+  SYSTEM match: true | lens: 702 702
+  DEFAULT_TAG match: true "languages difficulties" "languages difficulties"
+  INSTRUCTIONS match: true "Speak slowly and clearly, in standard Mandarin Chinese, with a neutral, friendly teaching tone." "Speak slowly and clearly, in standard Mandarin Chinese, with a neutral, friendly teaching tone."
+  SECTION_TAGS raw match: false   <- whitespace-only (indentation), values identical
+  ```
 
----
+### Discrepancy vs. implementer's pasted output
+The implementer's handoff shows `npx tsx -e "..."` for the `resolveLanguage()` probe
+returning correct JSON output. When the reviewer ran the **exact same** `npx tsx -e`
+invocation independently, it exited 0 but printed **no output at all** (the `.then()`
+callback appears to not flush before process exit under `tsx -e` in this environment).
+This is a tooling quirk in `-e` invocations, not a code defect — switching to a real
+`.mjs` file with a `file://` URL import reproduced the implementer's claimed values
+exactly. Flagging this because the implementer's raw command, if re-run verbatim, does
+not reliably reproduce their pasted output — future implementers should prefer a
+temp script file over `tsx -e` for reproducible verification evidence.
 
 ## Residual Risk
-
-1. **Good button contrast** — live WCAG AA failure on the primary rating CTA. Any third-party accessibility audit will flag this.
-2. **Leech badge light mode** — rare (only cards with ≥ 8 lapses) but ships as a WCAG violation.
-3. **`@theme inline` self-reference fragility** — the pattern `--color-brand: var(--color-brand)` inside `@theme` works only because the explicit `:root` block appears later in the compiled stylesheet. Restructuring globals.css (e.g., moving the explicit `:root` above `@import "tailwindcss"`) could invert the cascade and silently break all palette tokens.
-4. **Backfill loop is N sequential UPDATEs** — `refresh-seed-db.ts` step 3 issues one UPDATE per card (204 for the current deck). Not a correctness concern, but will degrade linearly as the deck grows.
-
----
+- `npm run seed:*` (actual OpenAI/Neon/Blob calls) was not run, per explicit
+  instruction — the "0 inserted / all already present" DB-idempotency claim (plan
+  Verification item 4) and the `npm run dev` render check (item 5) remain unverified
+  by this review. These require live credentials/spend and are appropriately deferred
+  to QA or a manual smoke test.
+- `next build` was not run — out of proportion to a scripts/seed-only change surface,
+  and `tsc --noEmit` + full-repo `eslint` already give whole-repo type/lint coverage.
+- The stale `scripts/deck-types.ts` comment (LOW finding above) is cosmetic and does
+  not block merge, but will compound confusion if left across the upcoming
+  field-rename milestone — worth a one-line fix whenever that file is next touched.
+- No test suite exists for the seed scripts (consistent with pre-existing repo state,
+  not a regression introduced by this change).
 
 ## Procedure Compliance
-
-- Plan (`active-plan.md`) consulted before review: **yes**
-- Implementation summary (`implementation-summary.md`) read before review: **yes**
-- All files listed in the diff reviewed in full: **yes**
-- Source files not modified: **yes**
-- Review summary written: **yes**
-
----
-
-## Re-Review (2026-05-24) — CRITICAL Fixes Verified
-
-### Fix 1 — Good button: `--color-success` darkened to `#1A7A40`
-
-**`app/globals.css` line 50:** `--color-success: #1a7a40` confirmed in source. The old value `#1F8A4C` is absent.
-
-**Independent computation (WCAG 2.1 linearisation):**
-- L(#1A7A40) = 0.2126·lin(26) + 0.7152·lin(122) + 0.0722·lin(64) = **0.1451**
-- Contrast = (1.05) / (0.1451 + 0.05) = **5.38:1**
-- Requirement: 4.5:1 (normal text, AA). Result: **PASS** (margin: +0.88)
-
-The implementer table claims 5.4:1 (rounded). Independently verified as 5.38:1 — the rounding is correct and the ratio genuinely clears the threshold.
-
-**Chart files updated:**
-- `components/stats/forecast-chart.tsx` line 23: `BAR_FILL = "#1a7a40"` — confirmed.
-- `components/stats/rating-chart.tsx` line 24: `RATING_COLORS[2] = "#1a7a40"` — confirmed.
-
-Both match `--color-success`. No stale `#1f8a4c` hex remains in any of the three files.
-
-### Fix 2 — Leech badge: `bg-clay text-on-earthy` (opaque)
-
-**`components/card-back.tsx` line 30:** `className="rounded-full bg-clay px-2 py-0.5 text-xs font-medium text-on-earthy"` — confirmed. The old `bg-clay/20 text-clay` classes are gone.
-
-**Independent computation (WCAG 2.1 linearisation):**
-- L(#DB846E) = 0.2126·lin(219) + 0.7152·lin(132) + 0.0722·lin(110) = **0.3269**
-- L(#1A1A1A) = 0.2126·lin(26) + 0.7152·lin(26) + 0.0722·lin(26) = **0.0109**
-- Contrast = (0.3269 + 0.05) / (0.0109 + 0.05) = **6.25:1**
-- Requirement: 4.5:1 (normal text, AA; applies in both modes — clay has no dark-mode override). Result: **PASS** (margin: +1.75)
-
-No alpha compositing; background is fully opaque clay. Light-mode AA failure (formerly 2.13:1) is eliminated.
-
-### Contrast table in implementation-summary.md
-
-The review-fix section of `implementation-summary.md` records 5.38:1 for white-on-success and 6.25:1 for near-black-on-clay. Both match independent computation. The table corrections summary is accurate.
-
-### No new issues introduced
-
-- `globals.css`: no other token values changed relative to the M9 baseline.
-- `card-back.tsx`: no other class or logic changes; leech span is the only edit.
-- `forecast-chart.tsx` / `rating-chart.tsx`: hex-only changes, no logic change.
-- `git diff` output confirms scope is limited to the documented fix lines.
-
-### Assertions re-checked
-
-| Assertion | Re-review Result | Evidence |
-|---|---|---|
-| A1 — All pairings WCAG AA, both modes | **PASS** | White/#1A7A40 = 5.38:1; #1A1A1A/#DB846E = 6.25:1; both independently computed above. |
-| A2 — Good button label+hint meets AA | **PASS** | `text-white` on `bg-success` (#1A7A40) = 5.38:1 ≥ 4.5:1. |
-
-### Commands run (re-review)
-
-| Command | Exit code | Notable output |
-|---|---|---|
-| `git diff HEAD~1 -- app/globals.css components/card-back.tsx components/stats/forecast-chart.tsx components/stats/rating-chart.tsx` | 0 | Confirms `#1a7a40` in globals/forecast/rating; `bg-clay text-on-earthy` in card-back; no other palette changes |
-| Node WCAG luminance/contrast computation | 0 | White/#1A7A40 = 5.3822:1; #1A1A1A/#DB846E = 6.2471:1; old #1F8A4C verified at 4.3768:1 (confirms original failure was real) |
-
-### Residual risk (unchanged from initial review)
-
-1. `@theme inline` self-reference fragility — still present; not a fix regression, was pre-existing.
-2. N sequential UPDATEs in `refresh-seed-db.ts` — pre-existing, not a fix regression.
-3. Redundant double-guard on `newRemaining` (MEDIUM, queries.ts:242,244) — pre-existing, not introduced by the fix.
-
-All residual items are LOW/MEDIUM and carry over from the initial review unchanged.
+- Plan consulted before review: yes (`.claude/plans/active-plan.md` read in full)
+- Implementation summary read: yes (`.claude/plans/implementation-summary.md` read in full)
+- Review summary written: yes

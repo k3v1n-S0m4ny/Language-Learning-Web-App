@@ -1,25 +1,29 @@
 /**
  * Step 3 of the seed pipeline.
  *
- * Loads seed/deck.generated.json into Neon: tags, cards, words, and card↔tag links.
- * Idempotent by headword — cards already in the DB are skipped, so re-running after
- * adding rows only inserts the new ones (and never touches per-Learner review state).
+ * Loads <lang>.deckJson (e.g. seed/mandarin/deck.generated.json) into Neon: tags,
+ * cards, words, and card↔tag links. Idempotent by headword — cards already in the DB
+ * are skipped, so re-running after adding rows only inserts the new ones (and never
+ * touches per-Learner review state).
  *
  * config() must run before the db client is created so DATABASE_URL is read from
  * .env.local; that's why the client is built here rather than imported from lib/db.
+ *
+ * Language is selected via SEED_LANG (defaults to "mandarin" — see seed/languages.ts).
  */
 import { config } from "dotenv";
 config({ path: ".env.local" });
 
 import { readFileSync } from "node:fs";
-import path from "node:path";
 import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
 import { inArray } from "drizzle-orm";
 import * as schema from "../lib/db/schema";
 import type { DeckCard } from "./deck-types";
+import { resolveLanguage } from "../seed/languages";
 
-const DECK = path.join("seed", "deck.generated.json");
+const lang = resolveLanguage();
+const DECK = lang.deckJson;
 
 const sql = neon(process.env.DATABASE_URL!);
 const db = drizzle(sql, { schema });

@@ -3,8 +3,8 @@
  * sheet export). seed-db is insert-only by headword, so it cannot drop entries that
  * left the sheet, nor update an entry whose meaning changed. This script:
  *
- *   1. Deletes cards whose headword is no longer in seed/deck.generated.json (the
- *      41 single-word rows + the tongue-twister). FK cascades remove their words,
+ *   1. Deletes cards whose headword is no longer in seed/mandarin/deck.generated.json
+ *      (the 41 single-word rows + the tongue-twister). FK cascades remove their words,
  *      card_tags, review_states, and review_logs.
  *   2. Re-syncs cards that are still present but whose generated content drifted from
  *      the DB (here only 只, which moved from a single-word gloss to the classifier
@@ -12,6 +12,11 @@
  *      Updated in place so the card id — and the learner's FSRS history — survives.
  *
  * Safe to re-run: deletion is set-based, and the re-sync overwrites to the deck values.
+ *
+ * Mandarin-only: pinned to seed/mandarin (not SEED_LANG-parameterized). The DB is a
+ * single shared library with no per-language column, and this script is destructive
+ * (deletes any card whose headword isn't in the selected deck) — do not point it at
+ * another language's deck until the DB is split per language.
  */
 import { config } from "dotenv";
 config({ path: ".env.local" });
@@ -24,7 +29,7 @@ import { eq, notInArray, inArray } from "drizzle-orm";
 import * as schema from "../lib/db/schema";
 import type { DeckCard } from "./deck-types";
 
-const DECK = path.join("seed", "deck.generated.json");
+const DECK = path.join("seed", "mandarin", "deck.generated.json");
 
 const sql = neon(process.env.DATABASE_URL!);
 const db = drizzle(sql, { schema });

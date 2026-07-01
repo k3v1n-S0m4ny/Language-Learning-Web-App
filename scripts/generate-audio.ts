@@ -1,30 +1,32 @@
 /**
  * Step 2 of the seed pipeline.
  *
- * Reads seed/deck.generated.json and generates pronunciation audio with OpenAI TTS
- * (gpt-4o-mini-tts, voice Nova) for every UNIQUE spoken text — each whole headword
- * and each word — then uploads the mp3s to the public Vercel Blob store and writes
- * the resulting URLs back into the deck file.
+ * Reads <lang>.deckJson (e.g. seed/mandarin/deck.generated.json) and generates
+ * pronunciation audio with OpenAI TTS (gpt-4o-mini-tts, voice Nova) for every UNIQUE
+ * spoken text — each whole headword and each word — then uploads the mp3s to the
+ * public Vercel Blob store and writes the resulting URLs back into the deck file.
  *
  * Immutable + deduped + resumable: clips are keyed by a hash of their text and stored
  * at a stable path; identical words across cards share one clip; existing blobs are
  * reused (no re-generation, no overwrite). Safe to re-run.
+ *
+ * Language is selected via SEED_LANG (defaults to "mandarin" — see seed/languages.ts).
  */
 import { config } from "dotenv";
 import { readFileSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
-import path from "node:path";
 import OpenAI from "openai";
 import { put, list } from "@vercel/blob";
 import type { DeckCard } from "./deck-types";
+import { resolveLanguage } from "../seed/languages";
 
 config({ path: ".env.local" });
 
-const DECK = path.join("seed", "deck.generated.json");
+const lang = resolveLanguage();
+const DECK = lang.deckJson;
 const VOICE = "nova";
 const MODEL = "gpt-4o-mini-tts";
-const INSTRUCTIONS =
-  "Speak slowly and clearly, in standard Mandarin Chinese, with a neutral, friendly teaching tone.";
+const INSTRUCTIONS = lang.ttsInstructions;
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
