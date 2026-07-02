@@ -1,141 +1,323 @@
-# Handoff: M10 — Restructure `seed/` for multi-language
-Agent: implementer | Date: 2026-07-01 | Status: COMPLETE
+---
+status: COMPLETE
+updated: 2026-07-02
+---
+
+# Handoff: M11 — Read Thai: schema, seed, mode toggle, unit map, lessons + drills 1–8, /thai/stats
+Agent: implementer | Date: 2026-07-02 | Status: COMPLETE
+
+## Review Fixes (round 2)
+
+`.claude/plans/review-summary.md` returned RETURN-TO-IMPLEMENTER with one CRITICAL, one HIGH, two MEDIUM, and one LOW finding. All five are fixed in this working tree; the deferred MEDIUM (no `drillType` dimension on `thai_progress`) is left for M12 design per the coordinator's explicit instruction not to change the schema now.
+
+1. **CRITICAL — unit 6 unlock ceiling (fixed, reviewer's minimal option (a)).**
+   `seed/thai/types.ts`'s `FinalItem.drillable` field type changed from the literal `true` to the literal `false` (with a doc comment explaining why, cross-referencing the CRITICAL finding). `seed/thai/items.ts`'s 8 `FINALS` rows now set `drillable: false` accordingly. This drops unit 6's `getUnitSummaries` denominator from 38 (8 finals + 30 words) to 30 (words only) — every one of which is already a real drill subject in `buildSubjectPool`'s unit-6 branch (`word-final`), so 100% is now reachable and units 7–8 can unlock. Verified directly against the dev DB post-`seed:thai`: `unit6 total rows: 38 drillable: 30` (see Commands Run). The 8 `final:x` rows remain in the DB and still render correctly in the unit-6 lesson page (`FinalsTable`) — only their `drillable` flag changed, no content removed.
+
+2. **HIGH — server-side answer verification (fixed).**
+   `lib/thai/actions.ts::submitThaiAttempt` no longer takes an `expected` parameter. It now: (a) validates `drillType` against a known-values list, (b) looks up the item row from `thai_items` by `itemId`, (c) calls a new exported `expectedAnswerFor(item, drillType)` in `lib/thai/drill.ts` to derive the correct answer server-side, (d) computes `correct` from that derived value vs. the client's `chosen`. `expectedAnswerFor` is also now used inside `buildQuestion` (the round-building code) so there is exactly one implementation of "what's the right answer for this item+drillType," not two that could drift.
+   This required dropping the vowel `form-sound` drill's random forward/reverse direction (previously chosen client-side per question and echoed back as `question.correct`): a server-side re-derivation must be a pure function of `(itemId, drillType)`, and a client-supplied "which direction was shown" flag would just move the trust problem rather than solve it. `form-sound` is now always forward (Thai form shown, IPA sound in the options) — noted as a scope simplification in `expectedAnswerFor`'s and `buildQuestion`'s comments. `components/thai/drill/drill-session.tsx` updated to call `submitThaiAttempt(question.itemId, question.drillType, option.value)`; it still uses the client-side `question.correct` value to render the reveal (green/red highlighting is a pure display concern), but that value no longer participates in scoring, `thai_attempts` logging, or mastery — the server is authoritative for all three.
+
+3. **MEDIUM — TOCTOU race in `submitThaiAttempt` (fixed).**
+   Confirmed independently (matching the reviewer's own finding) that `db.transaction()` throws `"No transactions support in neon-http driver"` (`node_modules/drizzle-orm/neon-http/session.cjs:176-183`), so an interactive transaction isn't available. Replaced the SELECT-then-`db.batch` pattern with a single atomic `INSERT ... ON CONFLICT (learner_id, item_id) DO UPDATE` statement (via `db.execute(sql\`...\`)`) whose `SET` expressions reference `thai_progress.streak` / `thai_progress.mastered_at` directly — Postgres resolves these under the row lock the upsert itself takes, so there's no separate read to race against; a concurrent submission for the same `(learnerId, itemId)` can no longer clobber another's streak/mastery update.
+   `newlyMastered` (needed for the drill summary screen's "newly mastered" count) is derived from the query's own `RETURNING streak, mastered_at, last_seen` by comparing `mastered_at` to `last_seen`: both are set via the same statement-scoped `now()` call when *this* write is the one that crosses the mastery threshold, so they come back byte-identical only in that case; a `mastered_at` written by an earlier attempt won't match this write's `last_seen`. Verified this whole state machine end-to-end against the dev DB with a disposable test row (3x correct → mastered; 1x wrong → streak resets, `mastered_at` preserved; 1x correct after mastery → streak restarts at 1, `mastered_at` stays, `newlyMastered` correctly `false` on all but the exact mastering write) — see Commands Run. The `thai_attempts` insert remains a separate, independent statement (append-only, no update-in-place, so it has no TOCTOU exposure to begin with); it is no longer wrapped with the progress write in `db.batch` since the upsert alone is now self-contained/atomic.
+   `lib/thai/mastery.ts::applyAttempt` (the pure-JS version of this same rule) is no longer called from `submitThaiAttempt` — the SQL CASE expressions are now the executed logic — but it's left in place and exported since it documents the rule in a form that's actually unit-testable (per the review's own suggestion that this is exactly the kind of logic a test would catch mechanically), with a comment noting the SQL in `actions.ts` must be kept in sync with it if the mastery rule ever changes.
+
+4. **MEDIUM — `weightedPick` comment vs. behavior (fixed: comment corrected, not behavior).**
+   Confirmed the reviewer's read: `weightedPick` samples **with** replacement (nothing is removed from `entries`/`scored` between picks; only an exact back-to-back repeat of the immediately-previous subject is skipped). This is the intended behavior — round size is fixed at ~15 regardless of a unit's pool size (e.g. unit 2 has only 9 mid-class consonants), so with-replacement sampling is required for smaller pools to ever fill a round. Rewrote the doc comment to say "with replacement" and describe the actual repeat-avoidance rule, rather than changing the sampling algorithm.
+
+5. **LOW — hardcoded Thailand offset in `lib/thai/stats.ts` (fixed).**
+   `keyToUtcInstant` now imports and uses `THAILAND_OFFSET_MS` from `lib/review/time.ts` instead of the inline literal `7 * 60 * 60 * 1000`, matching that file's own stated convention ("this file is the single source of truth for that offset").
+
+## Review Fixes (round 3)
+
+Round-2 re-review (`.claude/plans/review-summary.md`'s "## Re-review (round 2)" section) confirmed all 5 round-2 fixes but found the CRITICAL unit-6-unlock-ceiling bug recurring in a second, independent location: 9 of the 30 unit-6 word-bank syllables (ปลา, ดี, มือ, คา, ขา, ข่า, นา, มา, ไป) have `metadata.finalSound: null` — they illustrate a vowel form, not a final sound — and were excluded by `buildSubjectPool`'s `word-final` filter (`finalSound !== null`) while still being `drillable:true` and counted in `getUnitSummaries`' unit-6 denominator. Same bug class as round 2's `FinalItem` fix, different rows. Max achievable unit-6 mastery was 70% (21/30 reachable), still below the 90% unlock threshold.
+
+1. **CRITICAL — second unlock-ceiling instance (fixed).**
+   `seed/thai/types.ts`'s `SyllableItem.drillable` field type changed from the literal `true` to `boolean` (matching the `FinalItem` pattern from round 2), with a doc comment. `seed/thai/items.ts`'s `WORD_BANK` array: the 9 rows named above now set `drillable: false` — they remain in the DB and still render in the unit-6 lesson page as vowel-form illustration examples (`FinalsTable`/lesson prose), only their `drillable` flag changed. Re-ran `npm run seed:thai`: `0 inserted, 113 upserted-as-update, 0 deleted` (all 113 rows still present, 9 of them flipped). Verified directly against the dev DB post-seed: unit 6's drillable count (denominator) is now **21** (down from 30), with **zero** unreachable/orphaned items — 100% is genuinely achievable. See Commands Run for the exact query and output.
+
+2. **Prevent recurrence — mechanical reachability invariant (required, added).**
+   This is the second time the identical bug shape shipped (round 1: 8 `FinalItem` rows; round 3: 9 `SyllableItem` rows) because "is this drillable item reachable as a drill subject" was only ever checked by manual code reading, never mechanically. Fixed by:
+   - New file `lib/thai/reachability.ts` — a **pure** module (deliberately has zero import of `@/lib/db` or anything that constructs a DB client) exporting `computeReachableIds(unit, allItems)` and `findUnreachableDrillableIds(unit, allItems)`. This is the *one* implementation of "which items does `buildSubjectPool` actually turn into a drill subject for this unit" — factored out specifically so it can be shared without duplication.
+   - `lib/thai/drill.ts`'s `buildSubjectPool` now calls `computeReachableIds` directly (for all three branches: units 2–5, unit 6, units 7–8) instead of re-deriving the same filter inline. There is now exactly one implementation of this filter in the codebase, not two that can drift apart (which is precisely how round 2's bug went undetected in round 1's fix).
+   - `scripts/seed-thai-db.ts` imports `findUnreachableDrillableIds` (and `DRILLED_UNITS = [2,3,4,5,6,7,8]`) and runs `assertEveryDrillableItemIsReachable()` **before any DB write** (right after the existing duplicate-id guard). For each drilled unit it computes the orphaned-id list; if any unit has orphans, the script throws (naming every unit and every orphan id) and `main().catch(...)` exits non-zero, exactly as the existing duplicate-id guard already does. On success it prints a one-line confirmation with the total drillable count checked.
+   - Why this file couldn't just import `lib/thai/drill.ts` directly: `drill.ts` imports `@/lib/db`, which constructs a `neon()` client from `process.env.DATABASE_URL` at module-load time. Standalone scripts run via `tsx` call `dotenv`'s `config({path:".env.local"})` as their first statement specifically so `DATABASE_URL` is set before anything reads it — but ES module `import` statements are hoisted above all other top-level statements regardless of source order, so importing `drill.ts` (or anything that transitively imports `@/lib/db`) into a script would construct that DB client *before* `config()` runs, crashing with "No database connection string was provided." (Confirmed this by reproducing the crash with a throwaway import before extracting `reachability.ts`.) This is the same reason `scripts/seed-db.ts`/`scripts/seed-thai-db.ts` have always built their own local `neon()`/`drizzle()` instances rather than importing `lib/db`'s shared one — `reachability.ts` follows that existing convention by having no DB dependency at all.
+   - Verified the check actually *detects* a regression, not just that it passes trivially: a disposable script (deleted after use) cloned `ALL_THAI_ITEMS`, flipped `syllable:ปลา` back to `drillable:true` (re-simulating the round-3 bug), and called `findUnreachableDrillableIds(6, mutated)` directly — it correctly returned `["syllable:ปลา"]`. See Commands Run.
 
 ## Completed
-- `seed/languages.ts` (new) — per-language config registry. Exports `LanguageKey`,
-  `LanguageConfig`, `LANGUAGES: Partial<Record<LanguageKey, LanguageConfig>>` (mandarin
-  entry only — no thai/french/japanese stubs), and `resolveLanguage(key?)` defaulting to
-  `process.env.SEED_LANG ?? "mandarin"`, throwing a clear `Error` for unconfigured keys.
-  Mandarin config's `systemPrompt`, `sectionTags`, `defaultTag` lifted verbatim from
-  `scripts/generate-deck.ts`; `ttsInstructions` lifted verbatim from
-  `scripts/generate-audio.ts`. Paths built with `path.join` → `seed/mandarin/source.csv`
-  and `seed/mandarin/deck.generated.json`. Top-of-file comment explains the registry and
-  how to add a language.
-- `seed/reborn-chinese-system.csv` → `seed/mandarin/source.csv` (via `git mv`).
-- `seed/deck.generated.json` → `seed/mandarin/deck.generated.json` (via `git mv`).
-- `scripts/generate-deck.ts` — added `const lang = resolveLanguage();`; `SOURCE`/`OUT`
-  now come from `lang.sourceCsv`/`lang.deckJson`; removed local `SYSTEM`, `SECTION_TAGS`,
-  `DEFAULT_TAG` constants (and the now-unused `path` import) in favor of
-  `lang.systemPrompt`/`lang.sectionTags`/`lang.defaultTag`; updated header comment.
-- `scripts/generate-audio.ts` — added `const lang = resolveLanguage();`; `DECK` = 
-  `lang.deckJson`; removed local `INSTRUCTIONS` string literal in favor of
-  `lang.ttsInstructions` (kept `INSTRUCTIONS` as a local alias so the rest of the file
-  is untouched); removed now-unused `path` import; updated header comment.
-- `scripts/seed-db.ts` — added `const lang = resolveLanguage();`; `DECK` = `lang.deckJson`;
-  removed now-unused `path` import; updated header comment.
-- `scripts/deck-types.ts` — unchanged, per spec (hanzi/pinyin naming deferred).
-- `scripts/refresh-seed-db.ts` — `DECK` path only changed to
-  `path.join("seed", "mandarin", "deck.generated.json")`; NOT parameterized by
-  `SEED_LANG`; added a comment block explaining it's Mandarin-only and destructive
-  across languages; updated header comment path reference.
-- `scripts/normalize-numbers.ts` — same `DECK` path change to the Mandarin path; NOT
-  parameterized; added a one-line comment that it's Mandarin-only (Han numerals).
-- `.gitignore` — appended `/seed/*/research/` with an explanatory comment.
-- `seed/thai/research/NOTES.md` (new, untracked/ignored) — one-line placeholder note so
-  the folder exists on disk; confirmed absent from `git status` and confirmed ignored by
-  `git check-ignore`.
-- `README.md` — appended an "Adding a language to the seed pipeline" section documenting
-  the `mkdir seed/<language>` + `LanguageConfig` + `SEED_LANG` convention (bash and
-  PowerShell invocation forms), the private gitignored research folder, and the
-  Mandarin-only guardrail for `refresh-seed-db.ts`/`normalize-numbers.ts`.
+
+**Schema (A1)**
+- `lib/db/schema.ts`: added `thaiItems`, `thaiProgress` (unique on learnerId+itemId, indexed on learnerId), `thaiAttempts` (indexed on learnerId and learnerId+itemId), and `learnerSettings.activeMode` (text, default `'mandarin'`). Mandarin tables untouched.
+- Migration `lib/db/migrations/0002_flat_liz_osborn.sql` generated via `npm run db:generate` and applied via `npm run db:migrate` against the dev Neon DB.
+
+**Seed content + script (A2)**
+- `seed/thai/types.ts`: typed shapes (`ConsonantItem`, `FinalItem`, `VowelItem`, `SyllableItem`, `LessonMarkerItem`).
+- `seed/thai/items.ts`: all unit 1–8 content, derived verbatim from `seed/thai/research/reading-thai-script.html` — 9 mid-class + 11 high-class (incl. ฃ, `drillable:false`) + 12+12 low-class A/B (incl. ฅ, `drillable:false`) = 44 consonants; 8 finals with letters + example word; 18 vowels-A (9 short/long pairs); 12 vowels-B (8 diphthongs + 2 hidden-vowel + 2 shape-changers); a 30-word curated real-word bank; one lesson-marker sentinel for unit 1. 113 rows total.
+- `scripts/seed-thai-db.ts` + `npm run seed:thai`: idempotent refresh (delete-then-upsert by id), mirrors `scripts/refresh-seed-db.ts`'s pattern, never touches Mandarin tables. Ran successfully (see Commands Run).
+
+**Mode toggle (A3)**
+- `components/mode-toggle.tsx` (client) + `lib/thai/actions.ts::setActiveMode` (server action, session-derived learnerId, validated value, `refresh()` on write).
+- `app/page.tsx` now reads `ensureLearnerSettings(learnerId).activeMode` and branches: `'thai'` → `<ThaiHome>`; anything else (including missing rows, which default to `'mandarin'`) → the original Mandarin flow, now with the toggle added next to the existing header (no other Mandarin markup/logic changed).
+
+**Thai unit-map home (A4)**
+- `lib/thai/queries.ts::getUnitSummaries` — computes all 14 units' state: units 9–14 always `built:false`/locked; unit 1 is lesson-only, unlocks unit 2 via a sentinel `thai_progress` row (`markUnit1LessonRead` action) instead of an item-mastery percentage; units 2–8 compute `masteredItems/totalItems` (drillable items only) and unlock the next unit at ≥90%.
+- `components/thai/thai-home.tsx`, `unit-row.tsx`, `progress-ring.tsx` render the vertical map with Lesson/Drill/Repractice actions per A4.
+
+**Lesson framework + units 1–8 (A5)**
+- `app/thai/[unit]/lesson/page.tsx`: generic per-unit lesson shell; unit 1 renders `Unit1Lesson` (IPA primer + syllable/live-dead explanation + "mark as read" button); units 2–5 render `ConsonantTable`; unit 6 renders `FinalsTable`; units 7–8 render `VowelTable`. All read directly from `seed/thai/items.ts` (no DB round trip for lesson content — single source of truth shared with drills).
+- Noto Sans Thai wired via `next/font/google` in `app/layout.tsx`, scoped through a new `font-thai` Tailwind utility (via `--font-thai` in `app/globals.css`'s `@theme inline`) rather than applied globally, so Mandarin typography is untouched.
+
+**MC drills, mastery, attempts (A6)**
+- `lib/thai/mastery.ts`: 3-correct-in-a-row mastery, wrong-answer streak reset, 90% unlock threshold, 15-question round size — pure functions, unit-testable.
+- `lib/thai/drill.ts::buildDrillRound`: builds the ~15-question pool per unit (units 2–5: letter→sound / letter→class off `thai_items` for that unit; unit 6: letter→final off all drillable consonants with a final sound, plus word→final off the unit-6 word bank; units 7–8: form↔sound, bidirectional, off that unit's vowel items — this pool naturally includes the hidden-vowel/shape-changer "special shapes" items). Sampling is weighted toward unmastered + stale-`lastSeen` items; distractors come from confusable sets (same consonant class, same final-sound group i.e. stops/nasals/glides, same vowel category) with a fallback to the wider pool. ฃ/ฅ are excluded structurally — every pool query filters `drillable = true`, and those two letters are the only `drillable:false` rows.
+- `lib/thai/actions.ts::submitThaiAttempt`: session-derived learnerId, inserts `thai_attempts` + updates `thai_progress` in one `db.batch`, returns `{correct, newlyMastered, streak}`.
+- `components/thai/drill/drill-session.tsx` (client): question-by-question flow, reveals the word-bank gloss after answering, ends in a summary screen (score, newly-mastered count, unit %, unlock celebration banner when the round newly crosses 90%).
+- `app/thai/[unit]/drill/page.tsx`: 404s for out-of-range/unbuilt units, shows a locked message if the unit isn't unlocked yet, otherwise builds the round server-side and hands it to the client component.
+
+**/thai/stats (A7)**
+- `lib/thai/stats.ts::getThaiStats`: items-mastered-over-time (30-day cumulative), accuracy-by-unit, drill-activity history (30-day), per-item failure heatmap (top 24 by failure rate), streak calendar (12-week grid).
+- `components/thai/stats/*`: `MasteredOverTimeChart` (recharts Line), `AccuracyByUnitChart` / `DrillActivityChart` (recharts Bar, matching `components/stats/*`'s color/style conventions), `FailureHeatmap` and `StreakCalendar` (custom grid components — recharts has no calendar-heatmap primitive, so these follow the existing earthy-palette + rounded-card look instead).
+- `app/thai/stats/page.tsx`.
+
+**Quality gates (A8)** — see Commands Run.
 
 ## Left Undone
-- Nothing in scope was left undone. Thai/French/Japanese `LanguageConfig` entries were
-  intentionally NOT added (per spec — would be placeholder/stub data).
-- Did not run `npm run seed:*` or commit, per explicit instruction (costs money / mutates
-  data; orchestrator commits after review/QA).
+- None of A1–A8 — all implemented. Explicitly out of scope per the task prompt and left untouched: any audio, units 9–14 content, tone-confusion matrix.
+- The word bank is smaller than the Appendix's aspirational 80–120 words (see Spec Deviations) — expanding it further with more doc-sourced or freshly-researched vocabulary is flagged as future work in the plan's own "Open items" (word-bank authoring continues through M13).
+- No automated tests were added for `lib/thai/mastery.ts` / `lib/thai/drill.ts` (the repo has no existing test runner configured — Mandarin's review/scheduler code also ships without a test suite, so this follows the existing project convention rather than a gap I introduced).
 
 ## Commands Run
-- `git mv seed/reborn-chinese-system.csv seed/mandarin/source.csv && git mv seed/deck.generated.json seed/mandarin/deck.generated.json && git status` — exit 0
+
+- `npm run db:generate` — exit 0
   ```
-  Changes to be committed:
-    renamed:    seed/deck.generated.json -> seed/mandarin/deck.generated.json
-    renamed:    seed/reborn-chinese-system.csv -> seed/mandarin/source.csv
+  14 tables
+  ...
+  thai_attempts 8 columns 2 indexes 2 fks
+  thai_items 10 columns 0 indexes 0 fks
+  thai_progress 6 columns 2 indexes 2 fks
+  ...
+  [✓] Your SQL migration file ➜ lib\db\migrations\0002_flat_liz_osborn.sql 🚀
   ```
+
+- `npm run db:migrate` — exit 0
+  ```
+  Using '@neondatabase/serverless' driver for database querying
+  [✓] migrations applied successfully!
+  ```
+
+- `npm run seed:thai` (first run, before the unit-1 lesson-marker item existed) — exit 0
+  ```
+  [delete] 0 dropped item(s).
+
+  Done. 112 inserted, 0 upserted-as-update, 0 deleted. Total items: 112.
+  ```
+
+- `npm run seed:thai` (second run, after adding the lesson-marker sentinel item) — exit 0
+  ```
+  [delete] 0 dropped item(s).
+
+  Done. 1 inserted, 112 upserted-as-update, 0 deleted. Total items: 113.
+  ```
+
 - `npx tsc --noEmit` — exit 0
   ```
-  EXIT_CODE=0
+  (no output — clean)
   ```
-  (no diagnostic output — clean pass)
-- `npx tsx -e "import('./seed/languages.ts').then(m=>console.log(JSON.stringify({def:m.resolveLanguage(),th:(()=>{try{return m.resolveLanguage('thai')}catch(e){return 'throws: '+e.message}})()},null,2)))"` — exit 0
+
+- `npm run lint` — exit 0
   ```
-  {
-    "def": {
-      "key": "mandarin",
-      "dir": "seed\\mandarin",
-      "sourceCsv": "seed\\mandarin\\source.csv",
-      "deckJson": "seed\\mandarin\\deck.generated.json",
-      "systemPrompt": "You are a Mandarin Chinese teaching assistant. ... Never output punctuation marks as words.",
-      "ttsInstructions": "Speak slowly and clearly, in standard Mandarin Chinese, with a neutral, friendly teaching tone.",
-      "sectionTags": {
-        "数字与数量": "numbers & amounts",
-        "时间与日期": "time & dates",
-        "金钱": "money"
-      },
-      "defaultTag": "languages difficulties"
-    },
-    "th": "throws: Unknown/unconfigured SEED_LANG=\"thai\"; configured: mandarin"
+  > language-learning-web-app@0.1.0 lint
+  > eslint
+
+  (no errors/warnings)
+  ```
+
+- `npm run build` — exit 0
+  ```
+  ✓ Compiled successfully in 6.4s
+    Running TypeScript ...
+    Finished TypeScript in 6.2s ...
+    Collecting page data using 10 workers ...
+  ✓ Generating static pages using 10 workers (6/6) in 920ms
+    Finalizing page optimization ...
+
+  Route (app)
+  ┌ ƒ /
+  ├ ○ /_not-found
+  ├ ƒ /api/auth/[...nextauth]
+  ├ ƒ /stats
+  ├ ƒ /thai/[unit]/drill
+  ├ ƒ /thai/[unit]/lesson
+  └ ƒ /thai/stats
+
+  ƒ Proxy (Middleware)
+  ```
+  (The "workspace root inferred" warning about multiple lockfiles is pre-existing/unrelated to this change — present before M11.)
+
+- Manual smoke test — started `npm run dev`, curled `/`, `/thai/stats`, `/thai/2/lesson` — exit 0
+  ```
+  home: 307
+  thai-stats: 307
+  thai-lesson-2: 307
+  ✓ Ready in 872ms
+  ```
+  All three routes correctly redirect (307) to sign-in via `proxy.ts` for an unauthenticated request — confirms no route throws a 500 at request time. Full authenticated-session behavioral testing (mode toggle round-trip, drill round → mastery → unlock, /thai/stats charts with real data) is QA's job per the workflow and was not performed here beyond this smoke check.
+
+### Round 2 (post-review fixes)
+
+- `npm run seed:thai` (after setting `drillable:false` on the 8 `FinalItem` rows) — exit 0
+  ```
+  [delete] 0 dropped item(s).
+
+  Done. 0 inserted, 113 upserted-as-update, 0 deleted. Total items: 113.
+  ```
+- Direct DB verification of the drillable-flag fix (disposable script, deleted after use) — exit 0
+  ```
+  finals: [{"id":"final:k","drillable":false},{"id":"final:p","drillable":false},{"id":"final:m","drillable":false},{"id":"final:n","drillable":false},{"id":"final:ŋ","drillable":false},{"id":"final:j","drillable":false},{"id":"final:w","drillable":false},{"id":"final:t","drillable":false}]
+  unit6 total rows: 38 drillable: 30
+  ```
+  Confirms unit 6's `getUnitSummaries` denominator is now 30 (word bank only, all reachable as drill subjects), not 38 — the CRITICAL unlock-ceiling bug is fixed.
+- `npx tsc --noEmit` (re-run after all 5 fixes) — exit 0
+  ```
+  (no output — clean)
+  ```
+- `npm run lint` (re-run after all 5 fixes) — exit 0
+  ```
+  > language-learning-web-app@0.1.0 lint
+  > eslint
+
+  (no errors/warnings)
+  ```
+- `npm run build` (re-run after all 5 fixes) — exit 0
+  ```
+  ✓ Compiled successfully in 6.1s
+    Running TypeScript ...
+    Finished TypeScript in 7.3s ...
+    Collecting page data using 10 workers ...
+  ✓ Generating static pages using 10 workers (6/6) in 829ms
+    Finalizing page optimization ...
+
+  Route (app)
+  ┌ ƒ /
+  ├ ○ /_not-found
+  ├ ƒ /api/auth/[...nextauth]
+  ├ ƒ /stats
+  ├ ƒ /thai/[unit]/drill
+  ├ ƒ /thai/[unit]/lesson
+  └ ƒ /thai/stats
+
+  ƒ Proxy (Middleware)
+  ```
+- Atomic-upsert state-machine verification (disposable test row against a real user id + `vowel:oe-short`, deleted after use) — exit 0
+  ```
+  1st correct: { streak: 1, masteredAt: null, newlyMastered: false }
+  2nd correct: { streak: 2, masteredAt: null, newlyMastered: false }
+  3rd correct (expect newlyMastered=true): {
+    streak: 3,
+    masteredAt: '2026-07-02 14:28:12.211315+00',
+    newlyMastered: true
   }
-  EXIT_CODE=0
+  4th WRONG (expect streak=0, masteredAt kept, newlyMastered=false): {
+    streak: 0,
+    masteredAt: '2026-07-02 14:28:12.211315+00',
+    newlyMastered: false
+  }
+  5th correct (post-mastery, expect streak=1, masteredAt kept, newlyMastered=false): {
+    streak: 1,
+    masteredAt: '2026-07-02 14:28:12.211315+00',
+    newlyMastered: false
+  }
+  cleaned up test progress row
   ```
-- `git status` — exit 0 (implicit; command succeeded)
-  ```
-  Changes to be committed:
-    renamed:    seed/deck.generated.json -> seed/mandarin/deck.generated.json
-    renamed:    seed/reborn-chinese-system.csv -> seed/mandarin/source.csv
+  Exercises the exact SQL used in `submitThaiAttempt`: streak increments on correct, resets to 0 on wrong, `mastered_at` is set exactly once (3rd correct) and preserved thereafter, and `newlyMastered` is `true` only on the write that crosses the threshold — matching `lib/thai/mastery.ts::applyAttempt`'s documented rule.
 
-  Changes not staged for commit:
-    modified:   .claude/plans/active-plan.md
-    modified:   .gitignore
-    modified:   README.md
-    modified:   scripts/generate-audio.ts
-    modified:   scripts/generate-deck.ts
-    modified:   scripts/normalize-numbers.ts
-    modified:   scripts/refresh-seed-db.ts
-    modified:   scripts/seed-db.ts
+### Round 3 (second unlock-ceiling instance + invariant check)
 
-  Untracked files:
-    .claude/agent-memory/
-    seed/languages.ts
+- `npx tsc --noEmit` (after adding `lib/thai/reachability.ts`, wiring it into `buildSubjectPool`, and flagging the 9 word rows `drillable:false`) — exit 0
   ```
-- `git check-ignore seed/thai/research/NOTES.md` — exit 0
+  (no output — clean)
   ```
-  seed/thai/research/NOTES.md
-  EXIT_CODE=0
+- `npm run lint` — exit 0
   ```
-- `npx eslint scripts/generate-deck.ts scripts/generate-audio.ts scripts/seed-db.ts scripts/refresh-seed-db.ts scripts/normalize-numbers.ts seed/languages.ts` — exit 0
+  > language-learning-web-app@0.1.0 lint
+  > eslint
+
+  (no errors/warnings)
   ```
-  EXIT_CODE=0
+  **Note**: a later re-run of this exact command in the same session (after further verification steps) reported 4 `@typescript-eslint/no-explicit-any` errors, but all 4 are in `.claude/worktrees/french-course/.qa-tmp/*.mts` — scratch files for a completely unrelated feature (French course), created by a concurrent process during this session (file timestamps land inside my working window) in a separate git worktree that isn't excluded by `eslint.config.mjs`'s `globalIgnores`. None of these files were created or touched by this M11 task. Confirmed no M11 regression by scoping eslint to only the directories this milestone touches: `npx eslint app lib components seed scripts` — exit 0, no output. `npm run build` (which does its own TypeScript/lint-adjacent checks via Next.js, not full eslint) also stayed clean throughout, confirming this is an eslint-repo-wide-scan artifact from unrelated concurrent activity, not a regression in this codebase area.
+- `npm run seed:thai` — exit 0
   ```
-  (no lint errors/warnings output)
+  [reachability] OK — every drillable item across units 2,3,4,5,6,7,8 (93 total) is reachable as a drill subject.
+  [delete] 0 dropped item(s).
+
+  Done. 0 inserted, 113 upserted-as-update, 0 deleted. Total items: 113.
+  ```
+  The `[reachability]` line is the new invariant check (`scripts/seed-thai-db.ts::assertEveryDrillableItemIsReachable`) — it runs before any DB write and would throw (naming every orphaned id) and exit non-zero if any unit had an unreachable drillable item.
+- Direct DB verification post-seed (disposable script, deleted after use) — exit 0
+  ```
+  unit6 drillable count (denominator): 21
+  unit6 orphans (should be empty): []
+  100% achievable: true
+  unit 2: drillable=9 orphans=0
+  unit 3: drillable=10 orphans=0
+  unit 4: drillable=12 orphans=0
+  unit 5: drillable=11 orphans=0
+  unit 6: drillable=21 orphans=0
+  unit 7: drillable=18 orphans=0
+  unit 8: drillable=12 orphans=0
+  ```
+  Confirms unit 6's denominator dropped from 30 (round 2) to 21 (round 3), with zero orphans in every drilled unit — 100% mastery is now genuinely achievable for unit 6, so units 7–8 can unlock.
+- Invariant-check negative test — does the check actually catch a regression, not just print OK unconditionally? (disposable script, deleted after use) — exit 0
+  ```
+  orphans detected after re-introducing the bug: ["syllable:ปลา"]
+  PASS: invariant check correctly detects a reintroduced orphan
+  ```
+  Cloned `ALL_THAI_ITEMS`, flipped `syllable:ปลา` back to `drillable:true` (re-simulating the exact round-3 bug), and called `findUnreachableDrillableIds(6, mutated)` directly — it correctly flagged the one orphan. This is the same function `scripts/seed-thai-db.ts` calls in `assertEveryDrillableItemIsReachable`, which would `throw` (naming the id) and cause `main().catch(...)` to `process.exit(1)` in this scenario.
+- `npm run build` (final re-run after all round-3 changes) — exit 0
+  ```
+  ✓ Compiled successfully in 7.0s
+    Running TypeScript ...
+    Finished TypeScript in 8.9s ...
+    Collecting page data using 10 workers ...
+  ✓ Generating static pages using 10 workers (6/6) in 1317ms
+    Finalizing page optimization ...
+
+  Route (app)
+  ┌ ƒ /
+  ├ ○ /_not-found
+  ├ ƒ /api/auth/[...nextauth]
+  ├ ƒ /stats
+  ├ ƒ /thai/[unit]/drill
+  ├ ƒ /thai/[unit]/lesson
+  └ ƒ /thai/stats
+
+  ƒ Proxy (Middleware)
+  ```
 
 ## Issues Discovered
-- None. `path` import became unused in `generate-deck.ts`, `generate-audio.ts`, and
-  `seed-db.ts` once the hardcoded `path.join(...)` calls were replaced by `lang.*`
-  fields (which are already pre-joined strings from `languages.ts`) — removed the
-  import in each to keep lint/tsc clean (confirmed via `npx eslint` above, no unused-var
-  warnings).
-- `.gitignore` had two separate `.vercel` lines (one under a `# vercel` header, one
-  orphaned at EOF); appended the new `/seed/*/research/` block after the trailing
-  `.vercel` line rather than deduplicating those pre-existing lines (out of scope).
+
+- **`kind` enum vs. finals**: the Validation Contract's `kind` list (`consonant|vowel|tone-rule|numeral|special-sign|syllable|phrase`) has no bucket for the 8 final-sound entries (unit 6). `thai_items.kind` is a plain `text` column (not a pg enum), so I added a `"final"` kind value to cover this — see Spec Deviations. **Round 2 update**: the actual bug this enabled (these 8 rows counting toward unit 6's unlock denominator with no way to ever answer them) is fixed — see "Review Fixes (round 2)" #1. The `kind:"final"` value itself is unchanged and still fine.
+- **Split of the doc's 24 low-class consonants into "Low A (12)" / "Low B (12)"**: the source document lists all 24 low-class letters as one group; the plan's Appendix names two units of 12 (with ฅ specifically in "Low B") but doesn't specify how to split them. I split by keeping the doc's own letter order and moving only ฅ out of its natural position 2 to the front of group B, so Group A = ค ฆ ง ช ซ ฌ ญ ฑ ฒ ณ ท ธ and Group B = ฅ น พ ฟ ภ ม ย ร ล ว ฬ ฮ. Documented in a code comment at `seed/thai/items.ts`.
+- **`thai_progress` is keyed per item, not per (item, drill type)**: a consonant like ก gets one shared mastery streak across all drill types that touch it (letter→sound and letter→class in units 2–5, and letter→final again in unit 6). This is a direct reading of the schema in A1 (`unique(learnerId, itemId)`, no drill-type column) — flagging it because it means unit 6's "letter→final" drills reinforce/consume the *same* streak as unit 2–5's drills on that letter, rather than tracking final-sound mastery independently. **Round 2 note**: per the coordinator's explicit instruction, this is deferred to M12 design and the schema was not touched in this round.
 
 ## Spec Deviations
-- None. All six work items (languages.ts, file moves, 3 core script parameterizations,
-  2 one-off Mandarin path fixes, .gitignore + Thai research folder, README docs) were
-  implemented exactly as specified, using `SEED_LANG` (not `LANG`).
-- Minor implementation choice not spelled out in the spec: `LANGUAGES` typed as
-  `Partial<Record<LanguageKey, LanguageConfig>>` (one of the two options explicitly
-  offered in the prompt) since it kept `resolveLanguage`'s indexing (`LANGUAGES[key as
-  LanguageKey]`) simple and type-safe while still allowing a clear runtime throw for
-  unconfigured keys.
+
+1. **Word bank size**: the Appendix describes a "hand-curated real Thai words (~80–120)" bank "seeded from the doc's ~40 examples, expanded." I seeded exactly the ~30 real example words that actually appear in `reading-thai-script.html`'s running text (ปลา, ปาก, รถ, บาป, ยาม, กิน, ยาง, สาย, ดาว, พร, รัก, ภาพ, ดี, มือ, คา, ขา, ข่า, คน, เด็ก, นา, กรง, ทราย, สบาย, มา, ไป, แมว, น้ำ, โรง, เรียน, ดอก) and did **not** fabricate additional vocabulary to reach 80–120. This follows the task prompt's explicit instruction ("Do NOT invent linguistic data from memory") and the user's global "no placeholder/fake data" rule, which I judged to override the Appendix's aspirational word count. One consequence: final `t` has only one example word (รถ) instead of "several" — the doc simply doesn't supply more running examples of it. The Appendix itself flags word-bank expansion as ongoing work through M13 ("Open items"), so I'm treating the ~30-word set as the correct, honest M11 baseline rather than blocking on it.
+2. **`kind: "final"`**: added as an 8th value beyond the Contract's enum list, for the reason in Issues Discovered. `thai_items.kind` is unconstrained `text`, so this doesn't require a schema change, just a documented extension.
+3. **Low-class A/B split**: an authoring decision not specified by either the doc or the plan — see Issues Discovered.
+4. **Unit 1 completion tracking**: rather than adding a new column/table for "has the learner read unit 1," I added one sentinel `thai_items` row (`kind: "lesson-marker"`, `drillable: false`) and reuse the existing `thai_progress` table (`masteredAt` = "read"). This keeps the schema exactly as specified in A1 (no extra table) while still giving unit 1 a durable, per-learner completion flag.
+5. **Vowel unit-8 "shape-changer" ◌็ (mai tai khu)**: the doc places this mark in section 8 ("Special signs & irregularities"), not section 5 ("Vowels"). I included it as a unit-8 vowel item anyway because the plan's Appendix explicitly lists "shape-changers" as vowels-B content for unit 8, and this is the only shape-changing mark in the doc besides ◌ั (which the doc does cover under vowels). Both marks' Thai forms and IPA/behavior are quoted verbatim from the doc.
+6. **`FinalItem.drillable` now fixed at `false`** (round 2): all 8 `kind:"final"` rows are lesson-only content going forward — they will never be drill subjects (see Review Fixes #1). If a future milestone wants a genuine "given this final sound, pick the letters that produce it" drill (the reviewer's alternative option (b)), that's new drill-type work, not a flip of this flag.
+7. **Vowel `form-sound` drill is now forward-only** (round 2): dropped the earlier random forward/reverse direction to make server-side answer verification a pure function of `(itemId, drillType)` — see Review Fixes #2. Minor reduction in drill variety for units 7–8, traded for closing the HIGH client-trust finding.
+8. **9 `WORD_BANK` rows now `drillable: false`** (round 3): ปลา, ดี, มือ, คา, ขา, ข่า, นา, มา, ไป remain in the DB and lesson content as vowel-form illustration examples but are permanently excluded from unit 6's word→final drill pool and its mastery denominator, since they have no final consonant to quiz. Same shape as deviation #6, found in a second content set — see Review Fixes (round 3) #1.
 
 ## Procedure Compliance
-- Plan consulted before coding: yes (`.claude/plans/active-plan.md` read first, plus all
-  5 existing scripts read in full before editing)
-- Tests run before finishing: yes — `npx tsc --noEmit` (exit 0, clean) and
-  `npx eslint ...` (exit 0, clean) cited above under Commands Run. No test suite exists
-  for the seed scripts in this repo (they are one-off CLI scripts, not covered by a test
-  runner); verification instead relied on the tsc/eslint static checks plus the
-  `resolveLanguage()` runtime probe and `git status`/`git check-ignore`, all per the
-  plan's own Verification section and this task's Step 7.
-- Handoff written: yes
+- Plan consulted before coding: yes — read `.claude/plans/active-plan.md` in full before touching any file.
+- Next.js 16 docs read before writing Next.js code: yes. Specifically read (all under `node_modules/next/dist/docs/01-app/`):
+  - `01-getting-started/07-mutating-data.md` (Server Functions/Actions, `refresh()` vs `revalidatePath`/`revalidateTag` — confirmed the existing `lib/review/actions.ts` pattern of calling `refresh()` from `next/cache` after a mutation is still the current API, and reused it in `lib/thai/actions.ts`).
+  - `01-getting-started/13-fonts.md` (`next/font/google` usage for `app/layout.tsx`'s Noto Sans Thai addition).
+  - `01-getting-started/09-revalidating.md` (confirmed Cache Components/`use cache` is an opt-in feature via `cacheComponents` in `next.config.ts`; this repo doesn't enable it, so dynamic route params can be awaited directly without a `<Suspense>` boundary, matching the existing `app/page.tsx`/`app/stats/page.tsx` style).
+  - `03-api-reference/03-file-conventions/dynamic-routes.md` (confirmed `params` is a `Promise` in this Next version and must be awaited — used in both `app/thai/[unit]/lesson/page.tsx` and `app/thai/[unit]/drill/page.tsx`).
+- Tests run before finishing: cited above under Commands Run — `npx tsc --noEmit` (clean), `npm run lint` (clean), `npm run build` (succeeded, route table printed). No dedicated unit-test runner exists in this repo (no `test` script in `package.json`, no existing `*.test.ts` files), so "tests" here means the three quality gates named in A8 plus the manual dev-server smoke check.
+- Round 2: `review-summary.md` read in full before making any fix; all 5 required findings addressed (not the deferred 6th, per explicit instruction); `npx tsc --noEmit`, `npm run lint`, `npm run build`, and `npm run seed:thai` all re-run after the fixes and all pass (verbatim output under "Review Fixes (round 2)" → Commands Run, round 2 subsection) — plus two additional disposable-script verifications against the live dev DB (unit-6 drillable-count fix, and the full mastery/streak/newlyMastered state machine for the new atomic upsert), both cleaned up after use.
+- Round 3: `review-summary.md`'s "## Re-review (round 2)" section read in full before making any fix; the CRITICAL finding (recurrence of the unlock-ceiling bug) fixed, plus the required mechanical invariant check added and wired into both `buildSubjectPool` (so there's one filter implementation, not two) and `scripts/seed-thai-db.ts` (so it runs on every seed). `npx tsc --noEmit`, `npm run lint`, `npm run build`, and `npm run seed:thai` all re-run after the fix and all pass, plus three additional disposable-script verifications: (1) direct DB confirmation that unit 6's denominator is 21 with zero orphans across every drilled unit, (2) a negative test proving the invariant check actually detects a reintroduced orphan rather than passing unconditionally, (3) the seed script's own `[reachability] OK` line. All verbatim output is under "Review Fixes (round 3)" → Commands Run, round 3 subsection.
+- Handoff written: yes (this file).

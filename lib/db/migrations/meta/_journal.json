@@ -15,6 +15,13 @@
       "when": 1779591459553,
       "tag": "0001_supreme_joseph",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1782999848636,
+      "tag": "0002_flat_liz_osborn",
+      "breakpoints": true
     }
   ]
 }

@@ -1,0 +1,230 @@
+// Read-Thai course content (M11), units 1-8. Single source of truth for both
+// the lesson pages (app/thai/**) and the DB seed script
+// (scripts/seed-thai-db.ts) — drills and progress reference these items by
+// `id`. Everything here — Thai script, IPA, consonant class, acrophonic
+// names/meanings, final-sound collapse, vowel forms, and example words — is
+// taken verbatim from seed/thai/research/reading-thai-script.html. No values
+// are invented; where the doc leaves a gap (e.g. only ~40 running examples
+// for a curated word bank the product spec envisions at 80-120 words) this
+// file stays smaller rather than fabricate additional Thai vocabulary — see
+// the M11 implementation summary "Spec Deviations" section.
+import type {
+  ConsonantItem,
+  FinalItem,
+  SyllableItem,
+  ThaiItem,
+  VowelItem,
+} from "./types";
+
+// --- Unit 2: Mid-class consonants (9) ---------------------------------------
+export const MID_CONSONANTS: ConsonantItem[] = [
+  { kind: "consonant", id: "consonant:ก", unit: 2, display: "ก", initialIpa: "k", finalIpa: "k", consonantClass: "mid", drillable: true, metadata: { name: "ก ไก่", meaning: "chicken" } },
+  { kind: "consonant", id: "consonant:จ", unit: 2, display: "จ", initialIpa: "tɕ", finalIpa: "t", consonantClass: "mid", drillable: true, metadata: { name: "จ จาน", meaning: "plate" } },
+  { kind: "consonant", id: "consonant:ฎ", unit: 2, display: "ฎ", initialIpa: "d", finalIpa: "t", consonantClass: "mid", drillable: true, metadata: { name: "ฎ ชฎา", meaning: "headdress" } },
+  { kind: "consonant", id: "consonant:ฏ", unit: 2, display: "ฏ", initialIpa: "t", finalIpa: "t", consonantClass: "mid", drillable: true, metadata: { name: "ฏ ปฏัก", meaning: "goad" } },
+  { kind: "consonant", id: "consonant:ด", unit: 2, display: "ด", initialIpa: "d", finalIpa: "t", consonantClass: "mid", drillable: true, metadata: { name: "ด เด็ก", meaning: "child" } },
+  { kind: "consonant", id: "consonant:ต", unit: 2, display: "ต", initialIpa: "t", finalIpa: "t", consonantClass: "mid", drillable: true, metadata: { name: "ต เต่า", meaning: "turtle" } },
+  { kind: "consonant", id: "consonant:บ", unit: 2, display: "บ", initialIpa: "b", finalIpa: "p", consonantClass: "mid", drillable: true, metadata: { name: "บ ใบไม้", meaning: "leaf" } },
+  { kind: "consonant", id: "consonant:ป", unit: 2, display: "ป", initialIpa: "p", finalIpa: "p", consonantClass: "mid", drillable: true, metadata: { name: "ป ปลา", meaning: "fish" } },
+  { kind: "consonant", id: "consonant:อ", unit: 2, display: "อ", initialIpa: "ʔ", finalIpa: null, consonantClass: "mid", drillable: true, metadata: { name: "อ อ่าง", meaning: "basin" } },
+];
+
+// --- Unit 3: High-class consonants (11; ฃ shown, not drilled) --------------
+export const HIGH_CONSONANTS: ConsonantItem[] = [
+  { kind: "consonant", id: "consonant:ข", unit: 3, display: "ข", initialIpa: "kʰ", finalIpa: "k", consonantClass: "high", drillable: true, metadata: { name: "ข ไข่", meaning: "egg" } },
+  { kind: "consonant", id: "consonant:ฃ", unit: 3, display: "ฃ", initialIpa: "kʰ", finalIpa: null, consonantClass: "high", drillable: false, metadata: { name: "ฃ ขวด", meaning: "bottle", obsolete: true } },
+  { kind: "consonant", id: "consonant:ฉ", unit: 3, display: "ฉ", initialIpa: "tɕʰ", finalIpa: null, consonantClass: "high", drillable: true, metadata: { name: "ฉ ฉิ่ง", meaning: "cymbals" } },
+  { kind: "consonant", id: "consonant:ฐ", unit: 3, display: "ฐ", initialIpa: "tʰ", finalIpa: "t", consonantClass: "high", drillable: true, metadata: { name: "ฐ ฐาน", meaning: "pedestal" } },
+  { kind: "consonant", id: "consonant:ถ", unit: 3, display: "ถ", initialIpa: "tʰ", finalIpa: "t", consonantClass: "high", drillable: true, metadata: { name: "ถ ถุง", meaning: "sack" } },
+  { kind: "consonant", id: "consonant:ผ", unit: 3, display: "ผ", initialIpa: "pʰ", finalIpa: null, consonantClass: "high", drillable: true, metadata: { name: "ผ ผึ้ง", meaning: "bee" } },
+  { kind: "consonant", id: "consonant:ฝ", unit: 3, display: "ฝ", initialIpa: "f", finalIpa: null, consonantClass: "high", drillable: true, metadata: { name: "ฝ ฝา", meaning: "lid" } },
+  { kind: "consonant", id: "consonant:ศ", unit: 3, display: "ศ", initialIpa: "s", finalIpa: "t", consonantClass: "high", drillable: true, metadata: { name: "ศ ศาลา", meaning: "pavilion" } },
+  { kind: "consonant", id: "consonant:ษ", unit: 3, display: "ษ", initialIpa: "s", finalIpa: "t", consonantClass: "high", drillable: true, metadata: { name: "ษ ฤๅษี", meaning: "hermit" } },
+  { kind: "consonant", id: "consonant:ส", unit: 3, display: "ส", initialIpa: "s", finalIpa: "t", consonantClass: "high", drillable: true, metadata: { name: "ส เสือ", meaning: "tiger" } },
+  { kind: "consonant", id: "consonant:ห", unit: 3, display: "ห", initialIpa: "h", finalIpa: null, consonantClass: "high", drillable: true, metadata: { name: "ห หีบ", meaning: "chest" } },
+];
+
+// --- Unit 4: Low-class consonants A (12) ------------------------------------
+// Split of the doc's 24 low-class letters into two units of 12 (M11 authoring
+// decision — the doc does not itself divide "low class" into A/B). ฅ is
+// placed in group B per the plan's Appendix ("Low-class consonants B (12; ฅ
+// shown, not drilled)"). Group A = the stops/affricates/nasals ค..ธ; Group B =
+// the remaining continuants/sonorants น..ฮ, with ฅ prepended.
+export const LOW_CONSONANTS_A: ConsonantItem[] = [
+  { kind: "consonant", id: "consonant:ค", unit: 4, display: "ค", initialIpa: "kʰ", finalIpa: "k", consonantClass: "low", drillable: true, metadata: { name: "ค ควาย", meaning: "buffalo" } },
+  { kind: "consonant", id: "consonant:ฆ", unit: 4, display: "ฆ", initialIpa: "kʰ", finalIpa: "k", consonantClass: "low", drillable: true, metadata: { name: "ฆ ระฆัง", meaning: "bell" } },
+  { kind: "consonant", id: "consonant:ง", unit: 4, display: "ง", initialIpa: "ŋ", finalIpa: "ŋ", consonantClass: "low", drillable: true, metadata: { name: "ง งู", meaning: "snake" } },
+  { kind: "consonant", id: "consonant:ช", unit: 4, display: "ช", initialIpa: "tɕʰ", finalIpa: "t", consonantClass: "low", drillable: true, metadata: { name: "ช ช้าง", meaning: "elephant" } },
+  { kind: "consonant", id: "consonant:ซ", unit: 4, display: "ซ", initialIpa: "s", finalIpa: "t", consonantClass: "low", drillable: true, metadata: { name: "ซ โซ่", meaning: "chain" } },
+  { kind: "consonant", id: "consonant:ฌ", unit: 4, display: "ฌ", initialIpa: "tɕʰ", finalIpa: "t", consonantClass: "low", drillable: true, metadata: { name: "ฌ เฌอ", meaning: "tree" } },
+  { kind: "consonant", id: "consonant:ญ", unit: 4, display: "ญ", initialIpa: "j", finalIpa: "n", consonantClass: "low", drillable: true, metadata: { name: "ญ หญิง", meaning: "woman" } },
+  { kind: "consonant", id: "consonant:ฑ", unit: 4, display: "ฑ", initialIpa: "tʰ, d", finalIpa: "t", consonantClass: "low", drillable: true, metadata: { name: "ฑ มณโฑ", meaning: "Montho (name)" } },
+  { kind: "consonant", id: "consonant:ฒ", unit: 4, display: "ฒ", initialIpa: "tʰ", finalIpa: "t", consonantClass: "low", drillable: true, metadata: { name: "ฒ ผู้เฒ่า", meaning: "elder" } },
+  { kind: "consonant", id: "consonant:ณ", unit: 4, display: "ณ", initialIpa: "n", finalIpa: "n", consonantClass: "low", drillable: true, metadata: { name: "ณ เณร", meaning: "novice monk" } },
+  { kind: "consonant", id: "consonant:ท", unit: 4, display: "ท", initialIpa: "tʰ", finalIpa: "t", consonantClass: "low", drillable: true, metadata: { name: "ท ทหาร", meaning: "soldier" } },
+  { kind: "consonant", id: "consonant:ธ", unit: 4, display: "ธ", initialIpa: "tʰ", finalIpa: "t", consonantClass: "low", drillable: true, metadata: { name: "ธ ธง", meaning: "flag" } },
+];
+
+// --- Unit 5: Low-class consonants B (12; ฅ shown, not drilled) -------------
+export const LOW_CONSONANTS_B: ConsonantItem[] = [
+  { kind: "consonant", id: "consonant:ฅ", unit: 5, display: "ฅ", initialIpa: "kʰ", finalIpa: null, consonantClass: "low", drillable: false, metadata: { name: "ฅ คน", meaning: "person", obsolete: true } },
+  { kind: "consonant", id: "consonant:น", unit: 5, display: "น", initialIpa: "n", finalIpa: "n", consonantClass: "low", drillable: true, metadata: { name: "น หนู", meaning: "mouse" } },
+  { kind: "consonant", id: "consonant:พ", unit: 5, display: "พ", initialIpa: "pʰ", finalIpa: "p", consonantClass: "low", drillable: true, metadata: { name: "พ พาน", meaning: "tray" } },
+  { kind: "consonant", id: "consonant:ฟ", unit: 5, display: "ฟ", initialIpa: "f", finalIpa: "p", consonantClass: "low", drillable: true, metadata: { name: "ฟ ฟัน", meaning: "tooth" } },
+  { kind: "consonant", id: "consonant:ภ", unit: 5, display: "ภ", initialIpa: "pʰ", finalIpa: "p", consonantClass: "low", drillable: true, metadata: { name: "ภ สำเภา", meaning: "junk (ship)" } },
+  { kind: "consonant", id: "consonant:ม", unit: 5, display: "ม", initialIpa: "m", finalIpa: "m", consonantClass: "low", drillable: true, metadata: { name: "ม ม้า", meaning: "horse" } },
+  { kind: "consonant", id: "consonant:ย", unit: 5, display: "ย", initialIpa: "j", finalIpa: "j", consonantClass: "low", drillable: true, metadata: { name: "ย ยักษ์", meaning: "giant" } },
+  { kind: "consonant", id: "consonant:ร", unit: 5, display: "ร", initialIpa: "r", finalIpa: "n", consonantClass: "low", drillable: true, metadata: { name: "ร เรือ", meaning: "boat" } },
+  { kind: "consonant", id: "consonant:ล", unit: 5, display: "ล", initialIpa: "l", finalIpa: "n", consonantClass: "low", drillable: true, metadata: { name: "ล ลิง", meaning: "monkey" } },
+  { kind: "consonant", id: "consonant:ว", unit: 5, display: "ว", initialIpa: "w", finalIpa: "w", consonantClass: "low", drillable: true, metadata: { name: "ว แหวน", meaning: "ring" } },
+  { kind: "consonant", id: "consonant:ฬ", unit: 5, display: "ฬ", initialIpa: "l", finalIpa: "n", consonantClass: "low", drillable: true, metadata: { name: "ฬ จุฬา", meaning: "kite" } },
+  { kind: "consonant", id: "consonant:ฮ", unit: 5, display: "ฮ", initialIpa: "h", finalIpa: null, consonantClass: "low", drillable: true, metadata: { name: "ฮ นกฮูก", meaning: "owl" } },
+];
+
+export const ALL_CONSONANTS: ConsonantItem[] = [
+  ...MID_CONSONANTS,
+  ...HIGH_CONSONANTS,
+  ...LOW_CONSONANTS_A,
+  ...LOW_CONSONANTS_B,
+];
+
+// --- Unit 6: Finals — the 8 endings -----------------------------------------
+// drillable:false on every row here — see the FinalItem doc comment in
+// seed/thai/types.ts (M11 review round 2, CRITICAL fix). The actual
+// letter→final / word→final drills quiz consonant/syllable items directly.
+export const FINALS: FinalItem[] = [
+  { kind: "final", id: "final:k", unit: 6, display: "k̚", initialIpa: "k", finalIpa: null, consonantClass: null, drillable: false, metadata: { letters: ["ก", "ข", "ค", "ฆ"], example: { thai: "ปาก", ipa: "pàːk̚", gloss: "mouth" } } },
+  { kind: "final", id: "final:t", unit: 6, display: "t̚", initialIpa: "t", finalIpa: null, consonantClass: null, drillable: false, metadata: { letters: ["จ", "ช", "ซ", "ด", "ต", "ถ", "ท", "ธ", "ศ", "ษ", "ส", "(and more)"], example: { thai: "รถ", ipa: "rót̚", gloss: "car" } } },
+  { kind: "final", id: "final:p", unit: 6, display: "p̚", initialIpa: "p", finalIpa: null, consonantClass: null, drillable: false, metadata: { letters: ["บ", "ป", "พ", "ฟ", "ภ"], example: { thai: "บาป", ipa: "bàːp̚", gloss: "sin" } } },
+  { kind: "final", id: "final:m", unit: 6, display: "m", initialIpa: "m", finalIpa: null, consonantClass: null, drillable: false, metadata: { letters: ["ม"], example: { thai: "ยาม", ipa: "jāːm", gloss: "guard" } } },
+  { kind: "final", id: "final:n", unit: 6, display: "n", initialIpa: "n", finalIpa: null, consonantClass: null, drillable: false, metadata: { letters: ["น", "ณ", "ญ", "ร", "ล", "ฬ"], example: { thai: "กิน", ipa: "kīn", gloss: "to eat" } } },
+  { kind: "final", id: "final:ŋ", unit: 6, display: "ŋ", initialIpa: "ŋ", finalIpa: null, consonantClass: null, drillable: false, metadata: { letters: ["ง"], example: { thai: "ยาง", ipa: "jāːŋ", gloss: "rubber" } } },
+  { kind: "final", id: "final:j", unit: 6, display: "j", initialIpa: "j", finalIpa: null, consonantClass: null, drillable: false, metadata: { letters: ["ย"], example: { thai: "สาย", ipa: "sǎːj", gloss: "line, late" } } },
+  { kind: "final", id: "final:w", unit: 6, display: "w", initialIpa: "w", finalIpa: null, consonantClass: null, drillable: false, metadata: { letters: ["ว"], example: { thai: "ดาว", ipa: "dāːw", gloss: "star" } } },
+];
+
+// --- Unit 7: Vowels A — core short/long pairs -------------------------------
+export const VOWELS_A: VowelItem[] = [
+  { kind: "vowel", id: "vowel:a-short", unit: 7, display: "◌ะ", initialIpa: "aʔ", finalIpa: null, consonantClass: null, drillable: true, metadata: { category: "core", length: "short", pairId: "a" } },
+  { kind: "vowel", id: "vowel:a-long", unit: 7, display: "◌า", initialIpa: "aː", finalIpa: null, consonantClass: null, drillable: true, metadata: { category: "core", length: "long", pairId: "a" } },
+  { kind: "vowel", id: "vowel:i-short", unit: 7, display: "◌ิ", initialIpa: "i", finalIpa: null, consonantClass: null, drillable: true, metadata: { category: "core", length: "short", pairId: "i" } },
+  { kind: "vowel", id: "vowel:i-long", unit: 7, display: "◌ี", initialIpa: "iː", finalIpa: null, consonantClass: null, drillable: true, metadata: { category: "core", length: "long", pairId: "i" } },
+  { kind: "vowel", id: "vowel:ue-short", unit: 7, display: "◌ึ", initialIpa: "ɯ", finalIpa: null, consonantClass: null, drillable: true, metadata: { category: "core", length: "short", pairId: "ue" } },
+  { kind: "vowel", id: "vowel:ue-long", unit: 7, display: "◌ือ", initialIpa: "ɯː", finalIpa: null, consonantClass: null, drillable: true, metadata: { category: "core", length: "long", pairId: "ue" } },
+  { kind: "vowel", id: "vowel:u-short", unit: 7, display: "◌ุ", initialIpa: "u", finalIpa: null, consonantClass: null, drillable: true, metadata: { category: "core", length: "short", pairId: "u" } },
+  { kind: "vowel", id: "vowel:u-long", unit: 7, display: "◌ู", initialIpa: "uː", finalIpa: null, consonantClass: null, drillable: true, metadata: { category: "core", length: "long", pairId: "u" } },
+  { kind: "vowel", id: "vowel:e-short", unit: 7, display: "เ◌ะ", initialIpa: "eʔ", finalIpa: null, consonantClass: null, drillable: true, metadata: { category: "core", length: "short", pairId: "e" } },
+  { kind: "vowel", id: "vowel:e-long", unit: 7, display: "เ◌", initialIpa: "eː", finalIpa: null, consonantClass: null, drillable: true, metadata: { category: "core", length: "long", pairId: "e" } },
+  { kind: "vowel", id: "vowel:ae-short", unit: 7, display: "แ◌ะ", initialIpa: "ɛʔ", finalIpa: null, consonantClass: null, drillable: true, metadata: { category: "core", length: "short", pairId: "ae" } },
+  { kind: "vowel", id: "vowel:ae-long", unit: 7, display: "แ◌", initialIpa: "ɛː", finalIpa: null, consonantClass: null, drillable: true, metadata: { category: "core", length: "long", pairId: "ae" } },
+  { kind: "vowel", id: "vowel:o-short", unit: 7, display: "โ◌ะ", initialIpa: "oʔ", finalIpa: null, consonantClass: null, drillable: true, metadata: { category: "core", length: "short", pairId: "o" } },
+  { kind: "vowel", id: "vowel:o-long", unit: 7, display: "โ◌", initialIpa: "oː", finalIpa: null, consonantClass: null, drillable: true, metadata: { category: "core", length: "long", pairId: "o" } },
+  { kind: "vowel", id: "vowel:aw-short", unit: 7, display: "เ◌าะ", initialIpa: "ɔʔ", finalIpa: null, consonantClass: null, drillable: true, metadata: { category: "core", length: "short", pairId: "aw" } },
+  { kind: "vowel", id: "vowel:aw-long", unit: 7, display: "◌อ", initialIpa: "ɔː", finalIpa: null, consonantClass: null, drillable: true, metadata: { category: "core", length: "long", pairId: "aw" } },
+  { kind: "vowel", id: "vowel:oe-short", unit: 7, display: "เ◌อะ", initialIpa: "ɤʔ", finalIpa: null, consonantClass: null, drillable: true, metadata: { category: "core", length: "short", pairId: "oe" } },
+  { kind: "vowel", id: "vowel:oe-long", unit: 7, display: "เ◌อ", initialIpa: "ɤː", finalIpa: null, consonantClass: null, drillable: true, metadata: { category: "core", length: "long", pairId: "oe" } },
+];
+
+// --- Unit 8: Vowels B — diphthongs, hidden vowel, shape-changers -----------
+export const VOWELS_B: VowelItem[] = [
+  { kind: "vowel", id: "vowel:ia", unit: 8, display: "เ◌ีย", initialIpa: "ia", finalIpa: null, consonantClass: null, drillable: true, metadata: { category: "diphthong", length: null } },
+  { kind: "vowel", id: "vowel:ua", unit: 8, display: "◌ัว", initialIpa: "ua", finalIpa: null, consonantClass: null, drillable: true, metadata: { category: "diphthong", length: null } },
+  { kind: "vowel", id: "vowel:uea", unit: 8, display: "เ◌ือ", initialIpa: "ɯa", finalIpa: null, consonantClass: null, drillable: true, metadata: { category: "diphthong", length: null } },
+  { kind: "vowel", id: "vowel:ai", unit: 8, display: "ไ◌ / ใ◌", initialIpa: "aj", finalIpa: null, consonantClass: null, drillable: true, metadata: { category: "diphthong", length: null } },
+  { kind: "vowel", id: "vowel:ao", unit: 8, display: "เ◌า", initialIpa: "aw", finalIpa: null, consonantClass: null, drillable: true, metadata: { category: "diphthong", length: null } },
+  { kind: "vowel", id: "vowel:am", unit: 8, display: "◌ำ", initialIpa: "am", finalIpa: null, consonantClass: null, drillable: true, metadata: { category: "diphthong", length: null } },
+  { kind: "vowel", id: "vowel:aay", unit: 8, display: "◌าย", initialIpa: "aːj", finalIpa: null, consonantClass: null, drillable: true, metadata: { category: "diphthong", length: "long" } },
+  { kind: "vowel", id: "vowel:aaw", unit: 8, display: "◌าว", initialIpa: "aːw", finalIpa: null, consonantClass: null, drillable: true, metadata: { category: "diphthong", length: "long" } },
+  { kind: "vowel", id: "vowel:hidden-o", unit: 8, display: "(unwritten, closed syllable)", initialIpa: "o", finalIpa: null, consonantClass: null, drillable: true, metadata: { category: "hidden", length: null, note: "When a consonant is followed directly by another with no vowel written between them, a closed syllable's hidden vowel is usually o — e.g. คน kʰōn 'person'." } },
+  { kind: "vowel", id: "vowel:hidden-a", unit: 8, display: "(unwritten, short word)", initialIpa: "a", finalIpa: null, consonantClass: null, drillable: true, metadata: { category: "hidden", length: "short", note: "In some short words the hidden vowel is instead a short a." } },
+  { kind: "vowel", id: "vowel:mai-han-akat", unit: 8, display: "◌ั", initialIpa: "a", finalIpa: null, consonantClass: null, drillable: true, metadata: { category: "shape-changer", length: "short", note: "Short a rewritten as ◌ั when a final consonant follows (◌ะ alone becomes ◌ั + final) — e.g. รัก rák̚ 'to love'." } },
+  { kind: "vowel", id: "vowel:mai-tai-khu", unit: 8, display: "◌็", initialIpa: "(shortens the vowel)", finalIpa: null, consonantClass: null, drillable: true, metadata: { category: "shape-changer", length: "short", note: "ไม้ไต่คู้ — shortens the vowel, common with เ and แ in closed syllables, e.g. เด็ก dèk̚ 'child'." } },
+];
+
+export const ALL_VOWELS: VowelItem[] = [...VOWELS_A, ...VOWELS_B];
+
+// --- Curated real-word bank (unit 6 word→final drills; also referenced as --
+// --- lesson examples in units 7-8). All ~30 words are drawn directly from ---
+// --- the doc's own running examples (see file header note on scope). ------
+// drillable:false on the 9 rows below — their metadata.finalSound is null
+// (they illustrate a vowel form, not a final sound), so the unit-6 word→final
+// drill (the only drill type that uses word-bank items) has no way to ever
+// quiz them. See the SyllableItem.drillable doc comment (M11 review round 3).
+export const WORD_BANK: SyllableItem[] = [
+  { kind: "syllable", id: "syllable:ปลา", unit: 6, display: "ปลา", initialIpa: "plāː", finalIpa: null, consonantClass: null, drillable: false, metadata: { gloss: "fish", finalSound: null, vowelForm: "◌า" } },
+  { kind: "syllable", id: "syllable:ปาก", unit: 6, display: "ปาก", initialIpa: "pàːk̚", finalIpa: null, consonantClass: null, drillable: true, metadata: { gloss: "mouth", finalSound: "k", vowelForm: "◌า" } },
+  { kind: "syllable", id: "syllable:รถ", unit: 6, display: "รถ", initialIpa: "rót̚", finalIpa: null, consonantClass: null, drillable: true, metadata: { gloss: "car", finalSound: "t", vowelForm: "(hidden o)" } },
+  { kind: "syllable", id: "syllable:บาป", unit: 6, display: "บาป", initialIpa: "bàːp̚", finalIpa: null, consonantClass: null, drillable: true, metadata: { gloss: "sin", finalSound: "p", vowelForm: "◌า" } },
+  { kind: "syllable", id: "syllable:ยาม", unit: 6, display: "ยาม", initialIpa: "jāːm", finalIpa: null, consonantClass: null, drillable: true, metadata: { gloss: "guard", finalSound: "m", vowelForm: "◌า" } },
+  { kind: "syllable", id: "syllable:กิน", unit: 6, display: "กิน", initialIpa: "kīn", finalIpa: null, consonantClass: null, drillable: true, metadata: { gloss: "to eat", finalSound: "n", vowelForm: "◌ิ" } },
+  { kind: "syllable", id: "syllable:ยาง", unit: 6, display: "ยาง", initialIpa: "jāːŋ", finalIpa: null, consonantClass: null, drillable: true, metadata: { gloss: "rubber", finalSound: "ŋ", vowelForm: "◌า" } },
+  { kind: "syllable", id: "syllable:สาย", unit: 6, display: "สาย", initialIpa: "sǎːj", finalIpa: null, consonantClass: null, drillable: true, metadata: { gloss: "line, late", finalSound: "j", vowelForm: "◌าย" } },
+  { kind: "syllable", id: "syllable:ดาว", unit: 6, display: "ดาว", initialIpa: "dāːw", finalIpa: null, consonantClass: null, drillable: true, metadata: { gloss: "star", finalSound: "w", vowelForm: "◌าว" } },
+  { kind: "syllable", id: "syllable:พร", unit: 6, display: "พร", initialIpa: "pʰɔ̄ːn", finalIpa: null, consonantClass: null, drillable: true, metadata: { gloss: "blessing", finalSound: "n", vowelForm: "◌อ" } },
+  { kind: "syllable", id: "syllable:รัก", unit: 6, display: "รัก", initialIpa: "rák̚", finalIpa: null, consonantClass: null, drillable: true, metadata: { gloss: "to love", finalSound: "k", vowelForm: "◌ั" } },
+  { kind: "syllable", id: "syllable:ภาพ", unit: 6, display: "ภาพ", initialIpa: "pʰâːp̚", finalIpa: null, consonantClass: null, drillable: true, metadata: { gloss: "picture", finalSound: "p", vowelForm: "◌า" } },
+  { kind: "syllable", id: "syllable:ดี", unit: 6, display: "ดี", initialIpa: "dīː", finalIpa: null, consonantClass: null, drillable: false, metadata: { gloss: "good", finalSound: null, vowelForm: "◌ี" } },
+  { kind: "syllable", id: "syllable:มือ", unit: 6, display: "มือ", initialIpa: "mɯ̄ː", finalIpa: null, consonantClass: null, drillable: false, metadata: { gloss: "hand", finalSound: null, vowelForm: "◌ือ" } },
+  { kind: "syllable", id: "syllable:คา", unit: 6, display: "คา", initialIpa: "kʰāː", finalIpa: null, consonantClass: null, drillable: false, metadata: { gloss: "to be stuck", finalSound: null, vowelForm: "◌า" } },
+  { kind: "syllable", id: "syllable:ขา", unit: 6, display: "ขา", initialIpa: "kʰǎː", finalIpa: null, consonantClass: null, drillable: false, metadata: { gloss: "leg", finalSound: null, vowelForm: "◌า" } },
+  { kind: "syllable", id: "syllable:ข่า", unit: 6, display: "ข่า", initialIpa: "kʰàː", finalIpa: null, consonantClass: null, drillable: false, metadata: { gloss: "galangal", finalSound: null, vowelForm: "◌า" } },
+  { kind: "syllable", id: "syllable:คน", unit: 6, display: "คน", initialIpa: "kʰōn", finalIpa: null, consonantClass: null, drillable: true, metadata: { gloss: "person", finalSound: "n", vowelForm: "(hidden o)" } },
+  { kind: "syllable", id: "syllable:เด็ก", unit: 6, display: "เด็ก", initialIpa: "dèk̚", finalIpa: null, consonantClass: null, drillable: true, metadata: { gloss: "child", finalSound: "k", vowelForm: "เ◌็" } },
+  { kind: "syllable", id: "syllable:นา", unit: 6, display: "นา", initialIpa: "nāː", finalIpa: null, consonantClass: null, drillable: false, metadata: { gloss: "rice field", finalSound: null, vowelForm: "◌า" } },
+  { kind: "syllable", id: "syllable:กรง", unit: 6, display: "กรง", initialIpa: "krōŋ", finalIpa: null, consonantClass: null, drillable: true, metadata: { gloss: "cage", finalSound: "ŋ", vowelForm: "โ◌" } },
+  { kind: "syllable", id: "syllable:ทราย", unit: 6, display: "ทราย", initialIpa: "sāːj", finalIpa: null, consonantClass: null, drillable: true, metadata: { gloss: "sand", finalSound: "j", vowelForm: "◌าย" } },
+  { kind: "syllable", id: "syllable:สบาย", unit: 6, display: "สบาย", initialIpa: "sà.bāːj", finalIpa: null, consonantClass: null, drillable: true, metadata: { gloss: "comfortable, well", finalSound: "j", vowelForm: "◌าย" } },
+  { kind: "syllable", id: "syllable:มา", unit: 6, display: "มา", initialIpa: "māː", finalIpa: null, consonantClass: null, drillable: false, metadata: { gloss: "to come", finalSound: null, vowelForm: "◌า" } },
+  { kind: "syllable", id: "syllable:ไป", unit: 6, display: "ไป", initialIpa: "pāj", finalIpa: null, consonantClass: null, drillable: false, metadata: { gloss: "to go", finalSound: null, vowelForm: "ไ◌" } },
+  { kind: "syllable", id: "syllable:แมว", unit: 6, display: "แมว", initialIpa: "mɛ̄ːw", finalIpa: null, consonantClass: null, drillable: true, metadata: { gloss: "cat", finalSound: "w", vowelForm: "แ◌" } },
+  { kind: "syllable", id: "syllable:น้ำ", unit: 6, display: "น้ำ", initialIpa: "náːm", finalIpa: null, consonantClass: null, drillable: true, metadata: { gloss: "water", finalSound: "m", vowelForm: "◌ำ" } },
+  { kind: "syllable", id: "syllable:โรง", unit: 6, display: "โรง", initialIpa: "rōːŋ", finalIpa: null, consonantClass: null, drillable: true, metadata: { gloss: "building, hall (as in 'school')", finalSound: "ŋ", vowelForm: "โ◌" } },
+  { kind: "syllable", id: "syllable:เรียน", unit: 6, display: "เรียน", initialIpa: "rīan", finalIpa: null, consonantClass: null, drillable: true, metadata: { gloss: "to study", finalSound: "n", vowelForm: "เ◌ีย" } },
+  { kind: "syllable", id: "syllable:ดอก", unit: 6, display: "ดอก", initialIpa: "dɔ̀ːk̚", finalIpa: null, consonantClass: null, drillable: true, metadata: { gloss: "flower", finalSound: "k", vowelForm: "◌อ" } },
+];
+
+// Unit 1 is lesson-only ("complete when read") — see LessonMarkerItem doc comment.
+export const UNIT_1_LESSON_MARKER_ID = "lesson-marker:unit-1";
+
+export const LESSON_MARKERS: import("./types").LessonMarkerItem[] = [
+  {
+    kind: "lesson-marker",
+    id: UNIT_1_LESSON_MARKER_ID,
+    unit: 1,
+    display: "Unit 1 — IPA primer & syllable anatomy (read)",
+    initialIpa: null,
+    finalIpa: null,
+    consonantClass: null,
+    drillable: false,
+    metadata: {},
+  },
+];
+
+export const ALL_THAI_ITEMS: ThaiItem[] = [
+  ...LESSON_MARKERS,
+  ...ALL_CONSONANTS,
+  ...FINALS,
+  ...ALL_VOWELS,
+  ...WORD_BANK,
+];
+
+// Units 1-8 built in M11; 9-14 render as locked "coming soon" (no items yet).
+export const BUILT_UNITS = [1, 2, 3, 4, 5, 6, 7, 8] as const;
+export const TOTAL_UNITS = 14;
+
+export const UNIT_TITLES: Record<number, string> = {
+  1: "IPA primer & syllable anatomy",
+  2: "Mid-class consonants",
+  3: "High-class consonants",
+  4: "Low-class consonants A",
+  5: "Low-class consonants B",
+  6: "Finals — the 8 endings",
+  7: "Vowels A — core short/long pairs",
+  8: "Vowels B — diphthongs & shape-changers",
+  9: "Tone ear",
+  10: "Tone rules",
+  11: "Syllable assembly",
+  12: "Special signs & silent leaders",
+  13: "Numerals",
+  14: "Spaceless reading",
+};

@@ -94,6 +94,7 @@
   /* Font stacks from layout */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-thai: var(--font-noto-sans-thai);
 
   /* Animation tokens — only active when the OS has no reduce-motion preference.
      The @keyframes blocks are also gated so components can use these class names

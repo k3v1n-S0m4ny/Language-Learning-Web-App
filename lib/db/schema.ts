@@ -176,4 +176,76 @@ export const learnerSettings = pgTable("learner_settings", {
   // Vestigial — the scheduler now uses the global REQUEST_RETENTION constant
   // (lib/review/config.ts). This column is kept to avoid a destructive DROP.
   requestRetention: real("request_retention").notNull().default(0.85),
+  // Which course a Learner currently sees on the home screen (M11/A3).
+  // 'mandarin' is the existing FSRS flashcard flow; 'thai' is the Read-Thai
+  // unit map. Default 'mandarin' so existing/new learners see no change.
+  activeMode: text("active_mode").notNull().default("mandarin"),
 });
+
+// --- Domain: Read Thai course (M11) -----------------------------------------
+// Thai content lives in its own tables so the Mandarin cards/words/review_states
+// pipeline is completely untouched. Content itself is seeded from the typed
+// module in seed/thai/ (single source of truth, shared by lessons and drills);
+// these tables mirror it plus per-Learner progress/attempts.
+
+// One row per teachable unit-1..8 item: a consonant letter, a final sound
+// bucket, a vowel form, or a curated real-word drill example. `kind` is
+// intentionally a plain text column (no pg enum) so it can grow with future
+// milestones — see note in the M11 handoff about the extra 'final' kind not
+// in the original Validation Contract's enum list.
+export const thaiItems = pgTable("thai_items", {
+  id: text("id").primaryKey(), // stable slug, e.g. "consonant:ก", "final:k"
+  kind: text("kind").notNull(), // consonant|vowel|final|tone-rule|numeral|special-sign|syllable|phrase
+  unit: integer("unit").notNull(),
+  display: text("display").notNull(),
+  initialIpa: text("initial_ipa"),
+  finalIpa: text("final_ipa"),
+  consonantClass: text("consonant_class"), // mid|high|low, consonants only
+  metadata: jsonb("metadata").notNull().default({}),
+  audioUrl: text("audio_url"),
+  drillable: boolean("drillable").notNull().default(true),
+});
+
+export const thaiProgress = pgTable(
+  "thai_progress",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    learnerId: text("learner_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    itemId: text("item_id")
+      .notNull()
+      .references(() => thaiItems.id, { onDelete: "cascade" }),
+    streak: integer("streak").notNull().default(0),
+    lastSeen: timestamp("last_seen", { withTimezone: true }),
+    masteredAt: timestamp("mastered_at", { withTimezone: true }),
+  },
+  (t) => [
+    uniqueIndex("thai_progress_learner_item_uq").on(t.learnerId, t.itemId),
+    index("thai_progress_learner_idx").on(t.learnerId),
+  ],
+);
+
+export const thaiAttempts = pgTable(
+  "thai_attempts",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    learnerId: text("learner_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    itemId: text("item_id")
+      .notNull()
+      .references(() => thaiItems.id, { onDelete: "cascade" }),
+    drillType: text("drill_type").notNull(),
+    expected: text("expected").notNull(),
+    chosen: text("chosen").notNull(),
+    correct: boolean("correct").notNull(),
+    timestamp: timestamp("timestamp", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (t) => [
+    index("thai_attempts_learner_idx").on(t.learnerId),
+    index("thai_attempts_learner_item_idx").on(t.learnerId, t.itemId),
+  ],
+);

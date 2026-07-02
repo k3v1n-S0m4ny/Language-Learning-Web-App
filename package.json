@@ -14,6 +14,7 @@
     "seed:generate": "tsx scripts/generate-deck.ts",
     "seed:audio": "tsx scripts/generate-audio.ts",
     "seed:db": "tsx scripts/seed-db.ts",
+    "seed:thai": "tsx scripts/seed-thai-db.ts",
     "dev:fast-forward": "tsx scripts/fast-forward-due.ts"
   },
   "dependencies": {
