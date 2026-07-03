@@ -16,7 +16,8 @@
     "seed:db": "tsx scripts/seed-db.ts",
     "seed:thai": "tsx scripts/seed-thai-db.ts",
     "audio:thai": "tsx scripts/generate-thai-audio.ts",
-    "dev:fast-forward": "tsx scripts/fast-forward-due.ts"
+    "dev:fast-forward": "tsx scripts/fast-forward-due.ts",
+    "test": "tsx --test lib/**/*.test.ts"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.2",

@@ -1,13 +1,10 @@
-import Link from "next/link";
 import { auth } from "@/auth";
 import { ensureLearnerSettings, getStudyScreenData } from "@/lib/review/queries";
 import { EmptyState } from "@/components/empty-state";
 import { LangSync } from "@/components/lang-sync";
-import { ModeToggle } from "@/components/mode-toggle";
 import { ReviewSession } from "@/components/review-session";
 import { SessionHeader } from "@/components/session-header";
-import { SignOutButton } from "@/components/sign-out-button";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { TopBar } from "@/components/top-bar";
 import { ThaiHome } from "@/components/thai/thai-home";
 
 // The study screen: the whole product. proxy.ts guarantees a signed-in Learner here.
@@ -35,26 +32,18 @@ export default async function Home() {
   }
 
   const { counts, card, hints } = await getStudyScreenData(learnerId);
+  const inSession = Boolean(card && hints);
 
   return (
-    <main className="flex min-h-dvh flex-col items-center gap-10 bg-background px-6 py-8">
+    <main className="flex min-h-dvh flex-col items-center gap-6 px-6 py-8">
       <LangSync activeMode="mandarin" />
-      <div className="flex w-full max-w-2xl items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <SessionHeader learnerName={learner?.name} counts={counts} />
-          <ModeToggle activeMode="mandarin" />
-        </div>
-        <div className="flex items-center gap-2">
-          <ThemeToggle />
-          <Link
-            href="/stats"
-            className="rounded-full border border-border-base px-4 py-1.5 text-xs font-medium text-foreground-muted transition-colors hover:bg-surface"
-          >
-            Stats
-          </Link>
-          <SignOutButton />
-        </div>
-      </div>
+      <TopBar
+        activeMode="mandarin"
+        learnerName={learner?.name}
+        statsHref="/stats"
+        receded={inSession}
+      />
+      <SessionHeader counts={counts} />
 
       <div className="flex w-full flex-1 flex-col items-center justify-center">
         {card && hints ? (

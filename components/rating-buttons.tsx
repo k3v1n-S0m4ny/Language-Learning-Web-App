@@ -1,45 +1,24 @@
 "use client";
 
+import { motion, useReducedMotion } from "motion/react";
 import type { IntervalHints, RatingValue } from "@/lib/review/types";
 
-// Duolingo-style colored rating row. Each button's background is drawn from the
-// earthy palette; text is always near-black (#1A1A1A / on-earthy) except Good
-// which uses white on #1A7A40 (5.38:1 — WCAG AA). See globals.css ratio table.
+// Solid vivid FSRS rating ramp + glass press (specular sheen via the
+// `.rate-press` utility + spring squash via motion, reduced-motion gated).
+// Colour signal is preserved from the earthy original; text is always the
+// explicit near-black --color-on-earthy — every fill clears 4.5:1 against
+// it (verified in globals.css's Phase 1 AA table; "again" was nudged
+// slightly from the north-star mock's #E5484D, which measured 4.45:1).
 const RATINGS: {
   value: RatingValue;
   label: string;
   hintKey: keyof IntervalHints;
   bg: string;
-  text: string;
 }[] = [
-  {
-    value: 1,
-    label: "Again",
-    hintKey: "again",
-    bg: "bg-clay",
-    text: "text-on-earthy",
-  },
-  {
-    value: 2,
-    label: "Hard",
-    hintKey: "hard",
-    bg: "bg-peach",
-    text: "text-on-earthy",
-  },
-  {
-    value: 3,
-    label: "Good",
-    hintKey: "good",
-    bg: "bg-success",
-    text: "text-white",
-  },
-  {
-    value: 4,
-    label: "Easy",
-    hintKey: "easy",
-    bg: "bg-easy",
-    text: "text-on-earthy",
-  },
+  { value: 1, label: "Again", hintKey: "again", bg: "bg-[var(--rate-again)]" },
+  { value: 2, label: "Hard", hintKey: "hard", bg: "bg-[var(--rate-hard)]" },
+  { value: 3, label: "Good", hintKey: "good", bg: "bg-[var(--rate-good)]" },
+  { value: 4, label: "Easy", hintKey: "easy", bg: "bg-[var(--rate-easy)]" },
 ];
 
 // The four FSRS rating controls, each labelled with its next-interval hint.
@@ -53,21 +32,27 @@ export function RatingButtons({
   pending: boolean;
   onRate: (rating: RatingValue) => void;
 }) {
+  const reduceMotion = useReducedMotion();
+
   return (
-    <div className="grid w-full max-w-md grid-cols-4 gap-2">
-      {RATINGS.map(({ value, label, hintKey, bg, text }) => (
-        <button
+    <div
+      className="grid w-full max-w-md grid-cols-4 gap-2 animate-slide-up-fade"
+      role="group"
+      aria-label="Rate recall"
+    >
+      {RATINGS.map(({ value, label, hintKey, bg }) => (
+        <motion.button
           key={value}
           type="button"
           disabled={pending}
           onClick={() => onRate(value)}
-          className={`flex flex-col items-center gap-0.5 rounded-lg px-2 py-2.5 text-sm font-semibold ${bg} ${text} animate-pop-in active:scale-95 transition-transform disabled:opacity-40`}
+          whileTap={reduceMotion ? undefined : { scale: 0.92 }}
+          transition={{ type: "spring", stiffness: 500, damping: 30 }}
+          className={`rate-press flex flex-col items-center gap-0.5 rounded-[var(--r-sm)] px-2 py-2.5 text-sm font-semibold text-on-earthy shadow-[inset_0_1px_0_0_rgba(255,255,255,0.28)] disabled:opacity-40 ${bg}`}
         >
           <span>{label}</span>
-          <span className={`text-xs font-normal opacity-80`}>
-            {hints[hintKey]}
-          </span>
-        </button>
+          <span className="text-xs font-normal tabular-nums opacity-80">{hints[hintKey]}</span>
+        </motion.button>
       ))}
     </div>
   );

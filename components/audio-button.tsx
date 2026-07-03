@@ -10,17 +10,22 @@ export function playAudio(url: string | null): void {
 }
 
 // Plays an Audio Clip from its Blob URL. Disabled (not hidden) when no clip
-// exists, so the layout stays stable.
+// exists, so the layout stays stable. `size="sm"` is the compact per-word
+// chip variant; the default is the larger whole-phrase control.
 export function AudioButton({
   url,
   label,
+  size = "md",
 }: {
   url: string | null;
   label: string;
+  size?: "sm" | "md";
 }) {
   function play() {
     playAudio(url);
   }
+
+  const dimensions = size === "sm" ? "h-6 w-6 text-[11px]" : "h-11 w-11 text-lg";
 
   return (
     <button
@@ -29,7 +34,7 @@ export function AudioButton({
       disabled={!url}
       aria-label={label}
       title={url ? label : "No audio"}
-      className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-border-base text-foreground-muted transition-colors hover:bg-surface hover:text-brand disabled:opacity-30 disabled:hover:bg-transparent active:scale-95"
+      className={`glass inline-flex items-center justify-center rounded-full text-[var(--accent)] transition-transform hover:scale-105 active:scale-95 disabled:opacity-30 disabled:hover:scale-100 ${dimensions}`}
     >
       <span aria-hidden>🔊</span>
     </button>
