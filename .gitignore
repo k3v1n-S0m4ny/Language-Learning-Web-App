@@ -44,3 +44,9 @@ next-env.d.ts
 
 # per-language seed research scratch (private, not committed) — e.g. seed/thai/research/
 /seed/*/research/
+
+# real paid renders from spikes/experiments
+/.artifacts/
+
+# local git worktrees for agent isolation
+/.claude/worktrees/

@@ -1,95 +1,236 @@
 ---
 status: COMPLETE
-updated: 2026-07-02
+updated: 2026-07-03
 ---
 
-# Review Summary — M11 Read Thai
+# Review Summary — M12 Read Thai (audio batch, drillType migration, unit 9, listening drills, confusion matrix)
 
 ## Result
-**FINAL VERDICT: APPROVE-WITH-FINDINGS** — see "## Re-review (round 3)" at the bottom of this file for the current, authoritative verdict. (Superseded below: round 1 was RETURN-TO-IMPLEMENTER for the original CRITICAL unlock-ceiling bug; round 2 was RETURN-TO-IMPLEMENTER for a second, previously-missed instance of the same bug class. Both are now confirmed fixed and independently re-verified — see round 3.)
+**APPROVE-WITH-FINDINGS** (round 2 — see "## Round 2 re-review" below for the
+current, authoritative verdict; superseded round-1 verdict retained below for
+history.)
 
-One CRITICAL structural bug permanently blocks progression past unit 6 (units 7–8 can never unlock through legitimate play), which directly violates the A4/A6 unlock contract and the milestone's Done Criteria ("QA validates A3–A7 behaviorally"). Everything else — schema, seed content integrity, mode toggle, Next.js 16 API usage, and the three quality gates — is solid. Recommend a fast, narrow fix-and-re-review rather than a full redo.
+## Result (round 1, superseded)
+**REQUEST-CHANGES** (BLOCKED)
+
+Two independent CRITICAL bugs make the entire course beyond unit 2 permanently
+unreachable through legitimate play, even now that the paid audio batch has
+run. This is not the "units may legitimately re-lock" outcome the owner
+approved — it is "units can never unlock in the first place." I verified both
+computationally against the actual shipped code (not the implementer's own
+tooling), reproduced below.
 
 ## Files Reviewed
-- `lib/db/schema.ts`, `lib/db/migrations/0002_flat_liz_osborn.sql`
-- `seed/thai/types.ts`, `seed/thai/items.ts`, `scripts/seed-thai-db.ts`
-- `lib/thai/types.ts`, `lib/thai/mastery.ts`, `lib/thai/queries.ts`, `lib/thai/drill.ts`, `lib/thai/actions.ts`, `lib/thai/stats.ts`
-- `components/mode-toggle.tsx`, `components/thai/thai-home.tsx`, `components/thai/unit-row.tsx`, `components/thai/progress-ring.tsx`, `components/thai/lessons/finals-table.tsx`, `components/thai/lessons/vowel-table.tsx`, `components/thai/drill/drill-session.tsx`
-- `app/page.tsx`, `app/layout.tsx`, `app/globals.css`, `app/thai/[unit]/lesson/page.tsx`, `app/thai/[unit]/drill/page.tsx`, `app/thai/stats/page.tsx`
-- `seed/thai/research/reading-thai-script.html` (spot-check source, grepped section-by-section: consonant table ~346–420, finals table ~433–447, true/false clusters ~767, tone-mark/vowel tables ~484–572, worked examples ~707–727, special-signs table ~748–754)
-- `lib/review/time.ts`, `lib/review/queries.ts` (context only, for `ensureLearnerSettings`/timezone helper reuse)
+- `lib/db/schema.ts`, `lib/db/migrations/0003_thai_progress_drill_type.sql`, `lib/db/migrations/meta/0003_snapshot.json`, `lib/db/migrations/meta/_journal.json`
+- `lib/thai/reachability.ts`, `lib/thai/mastery.ts`, `lib/thai/queries.ts`, `lib/thai/actions.ts`, `lib/thai/drill.ts`, `lib/thai/types.ts`, `lib/thai/tone.ts`, `lib/thai/stats.ts`
+- `seed/thai/items.ts`, `seed/thai/types.ts`, `seed/thai/research/reading-thai-script.html` (tone table + worked examples, cross-checked against `TONE_WORDS`/`TONE_CONTOUR_POINTS`)
+- `scripts/generate-thai-audio.ts`
+- `components/thai/audio-play-button.tsx`, `components/thai/drill/drill-session.tsx`, `components/thai/lessons/tone-ear-lesson.tsx`, `components/thai/lessons/tone-sparkline.tsx`, `components/thai/stats/tone-confusion-matrix.tsx`
+- `app/thai/[unit]/lesson/page.tsx`, `app/thai/[unit]/drill/page.tsx`, `app/thai/stats/page.tsx`
+- `package.json`, `eslint.config.mjs`
+- `.claude/plans/active-plan.md`, `.claude/plans/implementation-summary.md`, `.claude/plans/m11-archive--active-plan.md`, `.claude/plans/m11-archive--review-summary.md`
+- Live dev DB (Neon), queried directly (see Commands Run)
 
 ## Findings by Severity
 
 ### CRITICAL
 
-- **`lib/thai/drill.ts` (`buildSubjectPool`, unit===6 branch, ~lines 90–103) × `seed/thai/items.ts` `FINALS` (~lines 92–101) × `lib/thai/queries.ts` (`fetchDrillableItemsByUnit` / `getUnitSummaries`, ~lines 15–27, 87–104)**
-  Unit 6 in `thai_items` contains 8 `kind:"final"` rows (all `drillable:true` — the `FinalItem` type in `seed/thai/types.ts` even hardcodes the field's TS type to the literal `true`) plus 30 `kind:"syllable"` word-bank rows (also `unit:6`, `drillable:true`) — 38 total. `getUnitSummaries` computes unit 6's `totalItems`/`masteredItems`/`percentMastered` from **every** drillable `thai_items` row tagged `unit:6`, i.e. all 38.
-  But `buildSubjectPool(unit===6)` in `drill.ts` only ever builds drill subjects from `consonantsWithFinal` (kind="consonant", spanning units 2–5, filtered by `finalIpa !== null`) and `words` (the 30 syllables filtered by `metadata.finalSound !== null`). It never includes the 8 `kind:"final"` rows as subjects — confirmed by grep: `kind === "final"` / `FinalItem` is referenced nowhere in `lib/thai/*` except a type-union member in `promptKind`; the only consumer of `FinalItem` anywhere in the codebase is the read-only `components/thai/lessons/finals-table.tsx` (lesson display).
-  Consequence: the 8 final-sound items can **never** be answered, so their `thai_progress.masteredAt` can never be set. Max achievable mastery for unit 6 is 30/38 = 78.9% → `Math.round` = 79%, permanently below `UNLOCK_THRESHOLD_PERCENT = 90` in `lib/thai/mastery.ts`. Since `getUnitSummaries`'s `previousUnitUnlocksNext` chain (line 104) requires unit 6 ≥90% before unit 7 unlocks, **units 7 and 8 — the entire back half of M11's built curriculum — can never be unlocked through legitimate play.** This breaks A4 ("A unit's drills unlock when the previous unit is ≥90% mastered") and A6, and would fail QA's own behavioral validation the moment a tester tries to reach unit 7.
-  Fix direction: either (a) set `drillable: false` on the 8 `FinalItem` rows (they're lesson-only content, same pattern already used for the unit-1 `LessonMarkerItem`) so they're excluded from `fetchDrillableItemsByUnit`'s totals, or (b) add a genuine "given this final sound, pick the letters that produce it" drill type that uses them as subjects. (a) is the minimal, spec-consistent fix — the Appendix only calls for "letter→final sound, word→final sound" drill types for unit 6, neither of which needs the `final:x` rows as subjects.
+**1. `lib/thai/reachability.ts:141-151` + `lib/thai/queries.ts:61-67` — STRICT cross-unit mastery creates a permanent unlock deadlock for units 2-5, blocking the entire course past unit 2, independent of audio.**
+
+`allReachableDrillTypesForItem` unions a drill type across **every** unit in
+`DRILLED_UNITS` (`[2,3,4,5,6,7,8,9]`) unconditionally, and `isItemFullyMastered`
+(used by `getUnitSummaries` to compute a unit's own `percentMastered`, which
+directly gates the next unit's unlock) requires that full cross-unit set.
+Every consonant taught in units 2-5 that can end a syllable (`finalIpa !==
+null`) is therefore required to have its `letter-final` streak mastered
+before it counts toward its **home** unit's percentage — but `letter-final`
+is only ever offered as a question inside a **unit-6** drill round
+(`buildSubjectPool`'s `unit === 6` branch), and unit 6 is itself locked until
+unit 5 reaches 90%. Since unit 3/4/5/6 all chain off unit 2's percentage
+(`getUnitSummaries`'s `previousUnitUnlocksNext`), and unit 2 cannot reach
+anywhere near 90% without unit-6-only drilling, **no unit past unit 2 can
+ever unlock through the shipped UI, permanently** (not "until the batch
+runs" — this has nothing to do with audio).
+
+I verified this independently by importing the actual shipped
+`lib/thai/reachability.ts` and `seed/thai/items.ts` and computing, for each
+drilled unit, how many of its own items require a drill type NOT offered in
+that unit's own session:
+
+```
+unit 2:  9 items, 8 need an out-of-unit drill type -> max achievable pct = 11%
+unit 3: 10 items, 6 need an out-of-unit drill type -> max achievable pct = 40%
+unit 4: 12 items, 12 need an out-of-unit drill type -> max achievable pct = 0%
+unit 5: 11 items, 10 need an out-of-unit drill type -> max achievable pct = 9%
+unit 6: 21 items, 0 need an out-of-unit drill type -> max achievable pct = 100%
+unit 7-9: 0 need an out-of-unit drill type -> 100%
+```
+
+All of units 2, 4, 5 (and effectively 3) are far below the 90% unlock
+threshold **even in the best case where every locally-drillable skill is
+perfectly mastered**. Since unit 3's unlock requires unit 2 ≥90% (max 11%
+achievable), the entire chain 3→4→5→6→7→8→9 is permanently locked. This
+means unit 9 (tone-ear, the headline feature of this milestone) can never be
+reached by a real learner — QA's own protocol will hit this wall the moment
+it tries to progress past unit 2.
+
+This is the exact "denominator counts an item whose drill type has no
+reachable path" bug class that M11 review caught twice (round 1: `FinalItem`
+rows; round 2: null-`finalSound` word-bank rows) — recurring here in a new,
+worse form: the drill type IS reachable (reachability.ts correctly reports
+it), but only from a **later, currently-locked unit**, which the mechanical
+seed-time invariant (`findUnreachableDrillableIds`) cannot detect because it
+only checks "is this item reachable via *some* drill type," not "is the
+percentage this unit needs to unlock the next one actually achievable given
+the unlock ORDER."
+
+Fix direction: decouple "is this item's absolute/lifetime mastery complete"
+(fine to be the full cross-unit union, used for badges/stats) from "what
+does THIS unit's own percentMastered require to satisfy the unlock
+threshold" (should only require drill types reachable within that unit's
+own session, or explicitly whichever unit the plan assigns the skill to —
+per the Appendix, "letter→final sound" belongs to unit 6, not units 2-5).
+
+**2. `lib/thai/drill.ts:192-204` + `scripts/generate-thai-audio.ts:58-62` — the two "hidden vowel" items in unit 8 can never get audio, so unit 8 can never exceed 83% (< 90% unlock threshold), blocking unit 9 independently of Finding 1.**
+
+`vowel:hidden-o` and `vowel:hidden-a` (unit 8, `drillable: true`) have no
+written form (`display: "(unwritten, closed syllable)"` / `"(unwritten,
+short word)"`), so `deriveVowelAudioText` in the audio script correctly
+returns `null` for them and skips them — **by design, permanently, not a
+batch-timing gap**. Confirmed against the live DB: both rows still have
+`audio_url IS NULL` after the batch ran. But `reachableDrillTypesForUnit`
+marks `audio-form` as structurally reachable for **every** drillable vowel
+in units 7/8, with no exception for the two hidden-vowel rows, so
+`isItemFullyMastered` requires them to have an `audio-form` 3-streak that
+can never exist (their `audioUrl` is permanently `null`; `buildSubjectPool`
+only adds `"audio-form"` to a subject's `drillTypes` when `item.audioUrl` is
+truthy, so the drill session never even offers the question). Max achievable
+`percentMastered` for unit 8 = 10/12 = 83% — permanently below 90%, so unit
+9 cannot unlock even if Finding 1 is fixed.
+
+This is the identical bug class again (M11 round 1/round 2), now
+re-introduced via the new `audio-form` drill type for content that can
+never have audio.
+
+Fix direction: either exclude the two hidden-vowel rows from `audio-form`
+reachability (mirroring how `FinalItem`/no-final-sound `SyllableItem` rows
+were excluded from their respective drill types in M11), or give them a
+genuine written carrier form to synthesize audio for. Whichever is chosen,
+extend the seed-time invariant to assert "every structurally-required drill
+type for a drillable item has a code path that can eventually produce a
+scoreable question," not just "is reachable at all."
 
 ### HIGH
 
-- **`lib/thai/actions.ts:64-118` (`submitThaiAttempt`) + `components/thai/drill/drill-session.tsx:47-52`** — the server action's "expected" (correct) answer is supplied entirely by the client (`question.correct`, itself already shipped to the browser inside the drill-round payload before the question is answered), and `correct = expected === chosen` is computed by comparing two client-controlled values with no server-side re-derivation from `itemId`/`drillType` against `thai_items`. The task brief explicitly asked me to verify server actions never trust client input for anything security/integrity-relevant; `learnerId` is correctly session-derived here, but the *correctness signal that drives mastery and the `thai_attempts` log* is not. Because the correct answer is already visible in the network response before the user answers, a technically-inclined user (or a buggy client build) can force `correct: true` on every attempt via a raw fetch to the action, instantly maxing every streak/mastery flag and corrupting the accuracy/failure-heatmap stats on `/thai/stats`. Given this is a personal-use app the exploit motive is low, but the integrity gap is real and cheap to close: have `submitThaiAttempt` look up the item server-side (and ideally recompute the expected value for the given `itemId`+`drillType`) rather than accepting `expected` as a parameter at all.
+- **`lib/thai/actions.ts:111-125` — `submitThaiAttempt` never checks that
+  the target unit is unlocked.** The drill *page* (`app/thai/[unit]/drill/page.tsx:31`)
+  gates rendering on `current?.unlocked`, but the server action itself
+  accepts any `(itemId, drillType, chosen)` triple from any authenticated
+  learner regardless of that learner's actual unlock state — it is a
+  directly-invocable Server Action (per its own comment on
+  `setActiveMode`). The "expected" answer is correctly re-derived
+  server-side (not spoofable — this is the M11 HIGH fix, still solid), so
+  this isn't an integrity exploit in the traditional sense, but it means the
+  **only** way a learner could route around Findings 1-2's deadlock is by
+  bypassing the UI entirely and calling the action directly for
+  `drillType: "letter-final"`/`"audio-form"` on items never offered by any
+  round the UI would render for a locked unit — which is not a fix, just
+  evidence the intended flow is broken. Pre-existing gap (not introduced by
+  M12; M11's review didn't flag it either), but its consequence is much more
+  severe now that the intended path is a dead end. Recommend adding an
+  explicit unlock check to `submitThaiAttempt` regardless of the above
+  fixes.
 
 ### MEDIUM
 
-- **`lib/thai/actions.ts:81-115` (`submitThaiAttempt`)** — read-then-write race: the current `(streak, masteredAt)` is fetched via a plain `SELECT` *before* the `db.batch([...])` that inserts the attempt and upserts progress; the SELECT is not part of the same transaction. I confirmed `db.batch` on the neon-http driver *is* transactional (`this.client.transaction(builtQueries, queryConfig)` in `node_modules/drizzle-orm/neon-http/index.cjs:117-132`), but the preceding read is not covered by it. Two concurrent submissions for the same `(learnerId, itemId)` — e.g. the same learner open in two tabs, or a retried request — can both read the same stale streak and one write clobbers the other's progress (a lost update). Low likelihood given the client's `pending`-gated single-flight UI in `drill-session.tsx`, but worth wrapping the read+write in one `db.transaction` for correctness.
-- **`lib/thai/drill.ts:47-63` (`weightedPick`) doc comment vs. behavior** — the function's comment says "Weighted pick **without replacement**", but nothing removes a selected subject from `scored` between iterations; only an immediate repeat of the *previous* question is avoided. Over a 15-question round drawn from a 9-item pool (e.g. unit 2's mid-class consonants), the same item can and will appear 2–3 times non-consecutively — plausibly intended (round size is fixed at ~15 regardless of pool size, per A6), but the comment claims the opposite of what the code does, which will mislead future maintainers. Fix the comment, or implement genuine without-replacement-until-exhausted-then-reshuffle if that was the actual intent.
-- **`thai_progress` keyed by `(learnerId, itemId)` only, no `drillType` column (documented as Issue #3 in the implementation summary)** — I traced the actual consequence rather than taking the implementer's framing at face value: because `applyAttempt` on an incorrect answer only zeroes `streak` and never clears `masteredAt` (`mastery.ts:14-15`), an already-mastered item cannot be "un-mastered" by a later wrong answer in a different drill type — so this does **not** cause previously-unlocked units to silently re-lock (my initial hypothesis, which I retracted after reading `mastery.ts` closely). It does still mean a consonant's letter-sound / letter-class / letter-final competencies are not tracked independently: 1 correct answer in each of three different question types can jointly satisfy the same 3-streak and mark the item "mastered" without ever demonstrating 3 consecutive correct answers on any single skill. Worth reconsidering before M12 reuses this table for tone-ear perception drills (where the confusion-matrix use case makes per-drill-type granularity more valuable), but not blocking for M11.
+- **`lib/db/migrations/0003_thai_progress_drill_type.sql` backfill logic
+  untested on real data** — 0 pre-existing `thai_progress` rows in the dev
+  DB (confirmed: `thai_progress rows: 0`), so the dominant-drillType
+  `DISTINCT ON` tie-break (most attempts, ties → most recent) has never run
+  against actual data. The SQL is logically sound on inspection, but this is
+  worth a synthetic-data dry run before this migration is ever applied to a
+  DB with real progress history (e.g. a future environment promotion).
 
 ### LOW
 
-- **`lib/thai/stats.ts:48-51` (`keyToUtcInstant`)** hardcodes `7 * 60 * 60 * 1000` instead of importing `THAILAND_OFFSET_MS` from `lib/review/time.ts`, which already centralizes this exact constant with a comment stating "this file is the single source of truth for that offset so callers don't each hard-code it." Duplication risk if the offset ever needs to change (unlikely — Thailand has no DST — but a one-line fix and consistent with the project's own stated convention).
-- Low-class A/B consonant split and the `kind:"final"` enum-list addition (Spec Deviations #2, #3 in the implementation summary) are reasonable, transparently-documented authoring/schema judgment calls — no objection beyond the CRITICAL finding above (which is about the `drillable` flag, not the `kind` value itself).
-- Word bank size (~30 vs. the Appendix's aspirational 80–120, Spec Deviation #1) — sound judgment; correctly follows the "no fabricated linguistic data" rule over the aspirational count, and the Appendix itself defers full expansion to M13. Not escalating.
-- Vowel unit-8 "shape-changer" ◌็ placement (Spec Deviation #5) — reasonable; content is quoted verbatim and the doc doesn't force a strict Section-boundary mapping onto the unit map.
+- **`lib/thai/tone.ts:19-25` `TONE_CONTOUR_POINTS` is not an exact affine
+  transform of the doc's own SVG polylines**, despite the comment claiming
+  "transcribed from the research doc's own SVG polylines." Recomputing the
+  doc's `viewBox 0 0 34 22` points onto the claimed shared 0-20 range via
+  `(y-4)*1.25` gives `low: "0,15 34,20"` (shipped: `"0,14 34,18"`),
+  `falling: "0,5 34,20"` (shipped: `"0,4 34,18"`), `rising: "…20…4"`
+  (shipped: `"…18…3"`). The qualitative shape/direction of every contour is
+  preserved (mid flat, low slightly down, falling starts-high-ends-low,
+  high pushes up, rising dips-then-rises) so this is cosmetic only, not a
+  data-correctness bug — but the comment overstates precision.
+- `components/thai/lessons/tone-ear-lesson.tsx:19` family ordering depends
+  on DB row order with no `ORDER BY` (already flagged by the implementer as
+  a known, accepted cosmetic risk) — confirmed, not re-litigating.
+- Word-bank (unit 6) audio is generated but no tracked drill type consumes
+  it beyond the generic "▶ Hear it" reveal button — documented spec
+  deviation, acceptable reading of an ambiguous bullet.
 
-## Spec Deviations — assessment
-1. Word bank size (~30, not 80–120) — sound, no escalation needed.
-2. `kind:"final"` as an 8th value beyond the Contract's enum list — sound in isolation (the column is untyped `text`); **the real bug is not the enum value but that these rows are marked `drillable:true` with no corresponding drill subject — see CRITICAL above.**
-3. Low-class A/B split — sound authoring call, transparently documented in a code comment.
-4. Unit 1 completion via sentinel `thai_items` row — sound, mirrors the schema's actual shape (A1) without adding a table.
-5. ◌็ classified as unit-8 vowel content despite living in the doc's "special signs" section — sound.
+## Tone data correctness (spot-checked against `reading-thai-script.html`)
+Verified every `TONE_WORDS` entry against the doc's own tone grid (§6, "The
+tone grid for Standard Thai") and worked examples (§"tones" practice
+block, §"tone-diacritics" carrier-อ demonstration, §"special" silent-ห
+example): คา(mid)/ขา(rising)/ข่า(low) match the doc's own stated answers
+exactly; ค่า(falling)/ค้า(high) match the grid's Low-class ◌่/◌้ rows;
+อา/อ่า/อ้า/อ๊า/อ๋า (mid/low/falling/high/rising) match the doc's Mid-class
+grid row and its own stated ordering ("mid, low, falling, high, rising");
+นา(mid)/หนา(rising) match the doc's explicit silent-ห worked example. No
+tone errors found.
 
 ## Assertions Checked
-- **A1 (Schema): PASS** — `thaiItems`/`thaiProgress`/`thaiAttempts`/`learnerSettings.activeMode` match the contract; Mandarin tables (`cards`, `words`, `reviewStates`, `reviewLogs`) untouched (verified by reading the full `schema.ts`); migration SQL matches Drizzle's generated FKs/indexes.
-- **A2 (Seed): PASS** — `scripts/seed-thai-db.ts` is idempotent (delete-then-upsert, duplicate-id guard, never touches Mandarin tables); spot-checked ~15 items (all 44 consonants' class/IPA/finals, all 8 finals + examples, and the syllables ทราย/สบาย/กรง/รัก/ดอก/ฑ) against `reading-thai-script.html` line-by-line — all exact matches, no fabricated data found.
-- **A3 (Mode toggle): PASS** — `setActiveMode` derives `learnerId` from session, validates the mode value against `"mandarin"|"thai"`, upserts via `onConflictDoUpdate`; `app/page.tsx` defaults missing/other rows to the Mandarin flow; Mandarin's `ReviewSession`/`EmptyState`/stats link/sign-out are otherwise unchanged — only the toggle is added to the header (consistent with A3's own requirement to show the toggle there).
-- **A4 (Unit map): FAIL** — see CRITICAL finding; units 7–8 cannot unlock because unit 6 cannot reach 90% mastery. Unit 1 lesson-only/lock logic and units 2–5's lock chain verified correct otherwise.
-- **A5 (Lessons): PASS** — lesson pages read directly from `seed/thai/items.ts` (single source of truth shared with drills), Noto Sans Thai scoped via the `.font-thai` utility/`--font-thai` CSS var, Mandarin typography untouched.
-- **A6 (Drills/mastery/attempts): PARTIAL** — MC round construction, weighted sampling, and confusable-set distractors are correctly implemented, and ฃ/ฅ are structurally excluded (verified: every drill query filters `drillable=true`, and only ฃ/ฅ + the lesson-marker are `drillable:false`). Mastery streak logic in `mastery.ts` is correct in isolation. However the HIGH finding (client-trusted `expected`) and the CRITICAL finding (unit-6 unlock ceiling) both fall under this assertion.
-- **A7 (Stats): PASS** — all five charts/aggregations present and queries look correct; reuses `lib/review/time.ts` day-key helpers (bar the LOW duplication note above).
-- **A8 (Quality gates): PASS** — independently re-run below; results match the implementation summary's claims exactly.
+- **A1 (drillType migration + STRICT mastery + reachability):** FAIL —
+  schema/migration/reachability-function mechanics are correct in isolation,
+  but the STRICT aggregation as wired into `getUnitSummaries` creates the
+  permanent deadlock in Finding 1, and the reachability guard's own
+  invariant cannot detect it (see Finding 1 detail).
+- **A2 (audio batch pipeline):** PASS — independently queried the dev DB:
+  103/103 manifested items have a non-null `audioUrl` under `audio/thai/`
+  (0 rows with a non-`audio/thai/` prefix), idempotent/resumable behavior
+  confirmed via the single ledger entry (`made: 51, reused: 52` — consistent
+  with a resumed run after the reported ECONNRESET), Mandarin `audio/`
+  paths untouched.
+- **A3 (tone-ear unit 9):** FAIL (blocked) — the unit's own code (lesson
+  tiles, sparkline, audio-tone question builder, all 12 tone-word rows'
+  audio present) is correct in isolation, but unit 9 is permanently
+  unreachable per Findings 1 and 2, so it cannot be behaviorally validated
+  end-to-end as written.
+- **A4 (listening drill types):** PARTIAL — `audio-letter`/`audio-form`
+  gating on `audioUrl`, ฃ/ฅ exclusion, and the reachability guard extension
+  are all implemented correctly; but `audio-form`'s reachability rule is
+  the direct cause of Finding 2, and the whole feature is unreachable in
+  practice per Finding 1.
+- **A5 (tone-confusion matrix):** PASS (structurally) — correct 5×5 grid
+  construction, empty-state handling, consistent styling; not yet exercisable
+  end-to-end because unit 9 can never be reached (downstream of A1).
+- **A6 (quality gates + regression):** PARTIAL — the three quality gates
+  pass (independently re-run, see below, matches implementer's claims
+  exactly). The regression clause ("existing Thai units 1-8 behavior
+  unchanged... thai learner's M11 drills still work") FAILS on its unlock-
+  progression sub-clause: a fresh Thai learner can no longer progress past
+  unit 2 at all, which is a core part of what "M11 drills still work" means
+  (M11's A4 unlock contract).
 
 ## Commands Run
-All re-run independently in the same working tree, not copied from the implementer's summary.
+All re-run independently in this review session, not copy-pasted from the
+implementation handoff.
 
-- `npx tsc --noEmit` — exit 0
-  ```
-  (no output — clean)
-  ```
+- `npx tsc --noEmit` — exit 0, no output. Matches implementer's claim.
 - `npm run lint` — exit 0
   ```
   > language-learning-web-app@0.1.0 lint
   > eslint
-
-  (no errors/warnings printed)
   ```
+  Matches implementer's claim (no errors).
 - `npm run build` — exit 0
   ```
-  ▲ Next.js 16.2.6 (Turbopack)
-  - Environments: .env.local
-
-    Creating an optimized production build ...
-  ✓ Compiled successfully in 7.2s
-    Running TypeScript ...
-    Finished TypeScript in 9.2s ...
-    Collecting page data using 10 workers ...
-  ✓ Generating static pages using 10 workers (6/6) in 1417ms
-    Finalizing page optimization ...
-
+  ✓ Compiled successfully in 4.6s
+  Running TypeScript ...
+  Finished TypeScript in 6.3s ...
+  ✓ Generating static pages using 10 workers (6/6) in 896ms
   Route (app)
   ┌ ƒ /
   ├ ○ /_not-found
@@ -98,228 +239,315 @@ All re-run independently in the same working tree, not copied from the implement
   ├ ƒ /thai/[unit]/drill
   ├ ƒ /thai/[unit]/lesson
   └ ƒ /thai/stats
-
-  ƒ Proxy (Middleware)
   ```
-  (Same pre-existing multi-lockfile warning noted in the implementation summary, referring to `C:\Users\User\package-lock.json` — unrelated to this change.)
-- Verified `db.batch`'s transactionality directly by inspecting `node_modules/drizzle-orm/neon-http/index.cjs:117-132` (`this.client.transaction(builtQueries, queryConfig)`), rather than assuming it, before rating the read-then-write race as MEDIUM instead of a higher severity.
-- Did **not** re-run `npm run seed:thai` or `npm run db:generate`/`db:migrate` against the dev Neon DB in this pass — no code changes were made during review, and static analysis of `seed-thai-db.ts` + `items.ts` (duplicate-id guard, delete-then-upsert pattern) was sufficient to independently confirm idempotency without touching the live dev DB. Flagging this as a re-run candidate for QA once the CRITICAL fix lands.
-
-All three quality-gate results match the implementation summary's claims exactly — no discrepancy found.
+  Matches implementer's claim.
+- `npm run seed:thai` — exit 0
+  ```
+  [reachability] OK — every drillable item across units 2,3,4,5,6,7,8,9 (105 total) is reachable as a drill subject.
+  [delete] 0 dropped item(s).
+  Done. 0 inserted, 125 upserted-as-update, 0 deleted. Total items: 125.
+  ```
+  Idempotent re-run confirmed (0 inserted/deleted, all upserted). Matches
+  implementer's item counts.
+- `npm run audio:thai -- --dry` — exit 0
+  ```
+  [manifest] 103 clips, 408 total chars, est cost $0.0122 (Google Chirp3-HD $30/1M chars).
+  [manifest] written to .artifacts/thai-audio/manifest.json
+  [dry-run] no API calls made, no Blob uploads, no DB writes.
+  ```
+  Matches implementer's claim exactly; confirmed zero network calls (no
+  hang, instant return, no ledger.json timestamp change).
+- Independent DB verification (one-off Node/tsx script against the live dev
+  DB, not a repo script):
+  ```
+  total thai_items: 125
+  with audio_url: 103
+  null audio_url breakdown: lesson-marker/unit1(1), consonant/unit3(1, =ฃ),
+    consonant/unit5(1, =ฅ), final/unit6(8, expected — finals never get audio),
+    syllable/unit6(9, expected — non-drillable word-bank rows), vowel/unit8(2,
+    =hidden-o/hidden-a — Finding 2)
+  bad-prefix urls (should be empty): []
+  thai_progress rows: 0
+  thai_attempts rows: 0
+  tone words: all 12 rows have audio_url; tones verified against research doc (see above)
+  ```
+- Independent reachability/deadlock computation (one-off Node/tsx script
+  importing the actual shipped `lib/thai/reachability.ts` +
+  `seed/thai/items.ts`, no DB): produced the per-unit max-achievable-percent
+  table quoted in Finding 1.
 
 ## Residual Risk
-- The CRITICAL finding must be fixed and this milestone re-reviewed before QA proceeds to behavioral validation of A4/A6 — QA's own protocol will hit the same permanently-locked-unit-7 wall the moment it tries to validate progression past unit 6.
-- The HIGH client-trust finding is a design gap that should be closed before this app is ever used by a second/less-trusted learner, even though current exploit risk is low (single trusted user, personal app).
-- The MEDIUM shared-streak-across-drill-types design should be revisited before M12 reuses `thai_progress` for tone-ear perception drills, where the confusion-matrix use case makes per-drill-type granularity more valuable.
-- No automated tests exist for `lib/thai/mastery.ts` / `lib/thai/drill.ts` (implementer-acknowledged, consistent with the rest of the repo's convention) — the CRITICAL bug found here is exactly the kind of thing a handful of unit tests on `buildSubjectPool`/`getUnitSummaries` would catch mechanically (e.g. "assert every drillable item returned for a unit is reachable as a subject of at least one drill type for that unit"). Worth considering going forward even without a full test framework.
-- Content spot-check was a sample (~15 of 113 items), not exhaustive; no discrepancies found in the sample, but the remaining ~98 items were not individually re-verified against the source doc.
+- Even after Findings 1-2 are fixed, `submitThaiAttempt`'s missing
+  unlock check (HIGH) remains — a learner could still self-advance streaks
+  for units ahead of their actual unlock state via direct action calls. Not
+  blocking this review's verdict on its own, but should be fixed alongside.
+- Migration backfill logic (MEDIUM) has never run against non-empty
+  `thai_progress`; low risk given the current 0-row dev DB, but untested
+  logic on a future non-empty environment.
+- `thai_progress`/`thai_attempts` are both empty in the dev DB, so none of
+  this review's findings have yet produced bad persisted data — but they
+  will the moment any learner starts using Thai mode post-deploy.
+- Tone-contour sparkline coordinates (LOW) are approximate, not exact —
+  cosmetic only.
 
 ## Procedure Compliance
-- Plan consulted before review: yes — read `.claude/plans/active-plan.md` in full, including the Appendix.
-- Implementation summary read: yes — read `.claude/plans/implementation-summary.md` in full, including all 5 documented spec deviations and 3 documented issues.
-- Every changed/new file in the stated review scope was read in full.
-- Commands re-run independently (not trusting pasted output): yes — `tsc`, `lint`, `build`; plus direct inspection of `drizzle-orm`'s `neon-http` batch implementation to confirm a transactionality claim rather than assuming it.
-- Review summary written: yes.
+- Plan consulted before review: yes (`active-plan.md` + `m11-archive--active-plan.md`)
+- Implementation summary read: yes (in full, including Issues Discovered / Spec Deviations)
+- Commands independently re-run (not trusted from handoff): yes — tsc, lint,
+  build, seed:thai, audio:thai --dry, plus two independent one-off
+  verification scripts (DB state, reachability/deadlock computation)
+- Review summary written: yes
 
 ---
 
-## Re-review (round 2)
+## Round 2 re-review
 
-### Revised Result
-**RETURN-TO-IMPLEMENTER** — 4 of the 5 fixes are solid and verified. But independent re-verification found that **the CRITICAL unit-6-unlock-ceiling bug is not actually fully fixed** — it was fixed for the exact rows the round-1 finding named (`FinalItem`), but the identical bug pattern exists a second time, undetected, in the unit-6 word bank, and I missed this instance during round 1. Unit 6's maximum achievable mastery is still below the 90% unlock threshold, so units 7–8 still cannot unlock through legitimate play. This is a mechanical, narrow fix (same shape as round 1's fix), not a design problem — should be a fast round 3.
+**Verdict: APPROVE-WITH-FINDINGS**
+
+Both CRITICAL findings are fixed and independently re-verified using a method
+I wrote from scratch (not the implementer's `maxAchievablePercentForUnit`
+export, and not their claimed numbers). The HIGH finding is substantially
+fixed, with one narrow, low-severity residual gap. The MEDIUM finding's
+synthetic test covers the CTE tie-break logic fully but only 1 of the SQL's 6
+kind-fallback branches. No new CRITICAL/HIGH issues found. Safe to proceed to
+QA.
 
 ### Files re-reviewed
-- `seed/thai/types.ts`, `seed/thai/items.ts`, `lib/thai/drill.ts`, `lib/thai/actions.ts`, `lib/thai/stats.ts`, `components/thai/drill/drill-session.tsx` (all 6 files named in the round-2 fix list, read in full)
-- `lib/thai/types.ts` (to confirm `DrillType` union matches `KNOWN_DRILL_TYPES`)
-- `lib/review/time.ts` (to confirm `THAILAND_OFFSET_MS` export)
-- `node_modules/drizzle-orm/neon-http/session.cjs` (implementer's claim that `db.transaction()` throws on this driver — not independently re-checked this round beyond trusting the round-1-verified `batch` transactionality; the "no interactive transactions" claim is consistent with the batch-via-`client.transaction()` implementation already inspected in round 1)
+- `lib/thai/reachability.ts` (new `canEverHaveAudio`, `canDrillTypeScore`,
+  `unitOfferingDrillType`, `maxAchievablePercentForUnit`)
+- `lib/thai/queries.ts` (new `unitMasteryStats`, per-unit-scoped)
+- `lib/thai/actions.ts` (server-side unlock check in `submitThaiAttempt`)
+- `lib/thai/tone.ts` (comment fix)
+- `scripts/seed-thai-db.ts` (new `assertEveryUnitCanReach100Percent`)
+- `.claude/plans/implementation-summary.md` "## Round 2" section (read in full)
 
-### Per-finding verdicts
+### CRITICAL 1 (cross-unit mastery deadlock) — CONFIRMED FIXED
+`unitMasteryStats` (`lib/thai/queries.ts:50-61`) now derives both a unit's
+item set AND its per-item required drill types from
+`reachableDrillTypesForUnit(unit, ALL_THAI_ITEMS)` — the unit's own session —
+never from the cross-unit union. I independently recomputed max-achievable
+percentMastered with my own from-scratch predicate (`canScoreIndependent`,
+written without looking at the implementer's private `canDrillTypeScore`,
+using only the exported `reachableDrillTypesForUnit`):
 
-**CRITICAL — unit 6 unlock ceiling: PARTIALLY FIXED, bug persists in a second location (blocking).**
-The fix correctly sets `drillable:false` on all 8 `FinalItem` rows (`seed/thai/types.ts` hardcodes the field's TS type to the literal `false`; `seed/thai/items.ts`'s `FINALS` array confirmed accordingly). I independently re-queried the live dev DB (read-only) rather than trusting the implementer's pasted numbers:
 ```
-unit6 total: 38 drillable: 30
-finals drillable flags: final:j:false, final:k:false, final:m:false, final:n:false, final:p:false, final:t:false, final:w:false, final:ŋ:false
+unit 2:  9 items -> 100%
+unit 3: 10 items -> 100%
+unit 4: 12 items -> 100%
+unit 5: 11 items -> 100%
+unit 6: 57 items -> 100%
+unit 7: 18 items -> 100%
+unit 8: 12 items -> 100%
+unit 9: 12 items -> 100%
+PASS: every drilled unit independently recomputed at 100%
 ```
-This confirms the denominator dropped from 38 to 30 as claimed. **However**, I then checked whether all 30 remaining drillable rows are actually reachable as drill subjects — the exact question the round-1 CRITICAL finding was about — and they are not. `buildSubjectPool`'s unit-6 branch (`lib/thai/drill.ts`) only turns a `kind:"syllable"` row into a `word-final` subject when `metadata.finalSound !== null`. Of the 30 drillable unit-6 syllables in `seed/thai/items.ts`'s `WORD_BANK`, **9 have `finalSound: null`** (words that don't end in a consonant final — used as vowel-form illustration examples, not final-sound examples): ปลา, ดี, มือ, คา, ขา, ข่า, นา, มา, ไป. These 9 are `drillable:true`, tagged `unit:6`, counted in `getUnitSummaries`'s denominator — and, like the `FinalItem` rows before the fix, can never be answered by any drill type unit 6 builds, so they can never be mastered. I verified this against the live DB (read-only query, mirroring `getUnitSummaries`'s and `buildSubjectPool`'s exact filter logic):
+
+Every unit now reaches 100% for a hypothetically perfect learner — the
+deadlock is gone. I also independently re-derived unit 6's item-set
+composition by hand from `seed/thai/items.ts` (counting every drillable
+consonant with `finalIpa !== null` across units 2-5, and every drillable
+unit-6 word-bank row with a non-null `metadata.finalSound`) and got
+**36 + 21 = 57**, matching both the implementer's claim and my script's
+independent count (`unit 6 composition: 36 letter-final subjects + 21
+word-final subjects = 57 total`). I cross-checked this against
+`lib/thai/drill.ts`'s (unmodified) `buildSubjectPool` unit-6 branch
+(`fetchConsonantsWithFinal()` + unit-6 word-bank rows filtered by
+`computeReachableIds`) and confirmed it offers exactly this same 57-item set
+— the mastery denominator and the actual drill session are in sync.
+
+### CRITICAL 2 (hidden vowels can never have audio) — CONFIRMED FIXED
+`canEverHaveAudio()` gates `audio-form`/`audio-letter` additions in
+`reachableDrillTypesForUnit`'s branches on a structural check (vowel `display`
+contains `◌`), which correctly excludes `vowel:hidden-o`/`vowel:hidden-a` (no
+written form). Verified via a black-box perturbation test (no source files
+touched): I fed a synthetic vowel row with **no carrier circle at all** into
+the real, unmodified `reachableDrillTypesForUnit`/`maxAchievablePercentForUnit`
+exports for unit 8 — its reachable-map entry came back as `['form-sound']`
+only (no `audio-form`), and unit 8 stayed at 100%, confirming the fix
+generalizes structurally rather than being hardcoded to the two known IDs.
+Also re-ran the live-DB cross-check myself (see Commands Run) — units 2-9 all
+still show 100% achievable, and the two hidden-vowel rows remain (correctly,
+permanently) audio-less without capping unit 8.
+
+### HIGH (submitThaiAttempt missing unlock check) — SUBSTANTIALLY FIXED, one LOW residual
+`unitOfferingDrillType` correctly re-derives the gating unit server-side
+(never trusting the client), and a forged/impossible pair (e.g.
+`vowel:hidden-o` + `audio-form`, which no longer appears in any unit's
+reachable map) is rejected with `gatingUnit === null` before the DB is ever
+touched. I tested this against the real, unmodified exported functions
+(`unitOfferingDrillType` + `getUnitSummaries`) using a disposable synthetic
+learner (inserted into `user`, fully deleted afterward — confirmed 0
+leftover rows):
+
 ```
-unit6 drillable total (denominator): 30
-reachable as word-final subjects: 21
-unreachable (syllable, drillable, but finalSound null): 9
-unreachable ids: syllable:ปลา, syllable:ดี, syllable:มือ, syllable:คา, syllable:ขา, syllable:ข่า, syllable:นา, syllable:มา, syllable:ไป
-max achievable unit-6 percentMastered: 70 %  (unlock threshold is 90%)
+--- fresh learner (0 progress rows) summaries ---
+unit 1: unlocked=true, unit 2: unlocked=false, unit 3: unlocked=false
+unit-2 native pair, fresh learner: gatingUnit=2 -> ALLOWED (unit <=2, unconditionally allowed)
+letter-final (gating unit 6), fresh learner, unit 6 NOT unlocked: gatingUnit=6 -> REJECTED (unit 6 not unlocked)
+forged pair (hidden vowel + audio-form): gatingUnit=null -> REJECTED (no pairing)
+unit-9 pair, fresh learner, unit 9 NOT unlocked: gatingUnit=9 -> REJECTED (unit 9 not unlocked)
 ```
-Max achievable mastery for unit 6 is **70%**, still below the 90% unlock threshold — units 7–8 remain permanently unreachable through legitimate play, exactly the same user-facing failure mode as the original CRITICAL finding, just with a smaller denominator than before (30 instead of 38) and a different set of orphaned rows (9 null-`finalSound` words instead of 8 `final:x` rows).
-*I own this miss*: my round-1 review verified the `FinalItem` instance of this pattern but did not check whether any other `kind:"syllable"` rows in the same unit had the same "counted-but-unreachable" property — I should have generalized the check to "does every drillable row in this unit's denominator have a reachable path through `buildSubjectPool`" rather than stopping at the one instance the code had obviously missed. Flagging this in my personal review-pattern memory going forward.
-Fix direction (same shape as round 1, item is analogous): mark those 9 specific `WORD_BANK` rows `drillable:false` (they're currently lesson-illustration-only — no drill type in M11's scope uses a word's vowel form as an answerable subject) — the minimal, spec-consistent fix. Alternative: give them a genuine subject role (e.g. a "word→vowel form" drill folded into units 7/8, since they carry `metadata.vowelForm`), but that's new drill-type work beyond M11's stated scope (unit 6 is only "letter→final sound, word→final sound" per the Appendix) and should not block this milestone. Recommend option (a).
 
-**HIGH — server-side answer verification: FIXED, verified.**
-`submitThaiAttempt`'s signature is now `(itemId, drillType, chosen)` — no `expected` parameter. Confirmed: (1) `drillType` is validated against `KNOWN_DRILL_TYPES`, a literal array I diffed against `DrillType`'s type union in `lib/thai/types.ts` — identical 5 values, no drift. (2) The item is looked up fresh from `thai_items` by `itemId` inside the action. (3) `expectedAnswerFor(item, drillType)` (exported from `lib/thai/drill.ts`) is the single implementation used both here and inside `buildQuestion` (the round-builder) — I traced every one of the 5 `DrillType` branches in `expectedAnswerFor`'s switch against `buildQuestion`'s corresponding branch and confirmed each returns the identical field (`initialIpa`, `consonantClass`, `finalIpa`, `metadata.finalSound`, `initialIpa` again for `form-sound`) — so there is no drill type the round builder can emit that `expectedAnswerFor` can't independently re-derive. (4) `components/thai/drill/drill-session.tsx` now calls `submitThaiAttempt(question.itemId, question.drillType, option.value)` — confirmed `question.correct` is no longer sent to the server at all; it's used client-side only for the reveal highlighting, which is a pure display concern with no security relevance. No client-supplied correctness signal remains in the scoring path.
-*Residual LOW note (new, not blocking)*: `expectedAnswerFor`'s switch derives an answer from whatever field the `drillType` maps to, regardless of whether that `drillType` is one `buildSubjectPool` would ever actually pair with that item's `kind` — e.g. a raw call with `itemId` = a vowel row and `drillType:"letter-sound"` would return that vowel's own `initialIpa` (vowels have that field too) rather than throwing, even though vowels are never presented with `letter-sound` in a real round. This can't be used to fabricate an arbitrary correct value (it's still constrained to real DB field values, and `thai_progress`'s shared-streak-across-drill-types issue is an already-accepted MEDIUM from round 1), so it doesn't reopen the HIGH finding, but a stricter version would also check `item.kind` is one that `drillType` legitimately applies to before deriving an answer. Not blocking; worth a follow-up.
+Units 3-9 are now correctly enforced server-side. **LOW residual, not
+blocking**: `submitThaiAttempt`'s `if (gatingUnit > 2)` hard-codes unit 2 as
+*unconditionally* allowed rather than checking unit 2's own `unlocked` flag —
+but per `getUnitSummaries`, unit 2's `unlocked` is actually
+`unit1LessonComplete`, which is `false` for a genuinely fresh learner who
+hasn't yet clicked "mark unit 1 read" (confirmed above: `unit 2:
+unlocked=false` for a 0-row learner). So a learner who has never touched unit
+1 at all could still submit valid unit-2 attempts via a direct action call,
+bypassing that one specific (trivial, click-only) gate. This satisfies the
+coordinator's explicit ask ("unit-2 attempts still work for a fresh
+learner") and has essentially no real-world consequence (unit 1 has no
+content beyond a read-marker), but is a minor inconsistency with the app's
+own unlock model worth a follow-up (check `gatingUnit === 2` against its own
+`unlocked` flag like every other unit, rather than skipping the check
+entirely).
 
-**NEW DEVIATION — vowel `form-sound` narrowed to forward-only: ACCEPTABLE for M11, recommend revisiting for M12/M13, not blocking.**
-The Appendix literally says "form↔sound" for units 7–8 (bidirectional arrow notation), and the round-1 implementation did randomize direction per question. Dropping to forward-only (Thai form shown → learner picks the IPA sound) to make `expectedAnswerFor` a pure function of `(itemId, drillType)` is a real, if minor, narrowing of drill variety. I judge this acceptable rather than a violation to escalate, for three reasons: (1) it was the direct, transparent, necessary consequence of closing a genuine HIGH security/integrity finding — the alternative (keeping a client-supplied "which direction was shown" flag) would just relocate the exact same trust problem rather than solve it; (2) forward reading-recognition (form → sound) is arguably the more foundational skill for a course literally named "Read Thai," while sound → form is closer to a spelling/production skill; (3) it's explicitly documented as Spec Deviation #7 in the implementation summary, not silently dropped. Recommended (not required) follow-up: reintroduce the reverse direction as its own explicit `DrillType` value (e.g. `"sound-form"`) rather than a randomized runtime flag — that would restore bidirectional coverage while keeping `expectedAnswerFor` pure, and is a small, well-scoped addition for M12/M13 rather than something that needs to hold up M11.
+### MEDIUM (migration backfill synthetic test) — partially addresses the ask
+The round-2 synthetic test (3 cases, all passed, confirmed cleaned up — see
+Commands Run) fully exercises the `DISTINCT ON` dominant-by-count and
+tie-by-recency logic (the two hardest-to-get-right parts of the migration).
+However, of the SQL's step-3 kind-fallback `CASE` with 6 branches
+(`consonant→letter-sound`, `vowel→form-sound`, `syllable→word-final`,
+`lesson-marker→lesson-read`, `tone-word→audio-tone`, `ELSE→letter-sound`),
+only the `vowel` branch (Case C) was exercised. The other 5 are a single flat
+mapping each (very low complexity, low risk of a typo-class bug going
+undetected), so this is **LOW**, not MEDIUM, residual risk now — downgraded
+from round 1's MEDIUM given the CTE logic (the actually complex part) is now
+proven correct.
 
-**MEDIUM — TOCTOU race in `submitThaiAttempt`: FIXED, verified by code inspection.**
-Read the new SQL closely against Postgres's actual `ON CONFLICT DO UPDATE` semantics rather than taking the implementer's prose at face value:
-- In the `DO UPDATE SET` clause, unqualified `thai_progress.column` references resolve to the **pre-update** row (the existing row being conflicted into), not the row being computed by this same `SET` clause — so `streak = CASE WHEN correct THEN thai_progress.streak + 1 ELSE 0 END` and the `mastered_at` CASE's own `thai_progress.streak + 1` both read the *same* pre-update streak value consistently; there's no risk of one expression seeing a partially-updated value from the other.
-- `mastered_at`'s CASE is sticky-once-set (`WHEN thai_progress.mastered_at IS NOT NULL THEN thai_progress.mastered_at`) before it ever considers setting a new value, so a wrong answer (which sends `correct=false` into the second branch, which fails) always falls through to the `ELSE thai_progress.mastered_at` — i.e., **never clears** an existing mastery, and never sets one on an incorrect answer. Matches `applyAttempt`'s documented rule exactly.
-- The INSERT branch (first-ever attempt) computes `mastered_at` from a literal `1 >= MASTERY_STREAK` (always false while `MASTERY_STREAK=3`), so a first attempt can never instantly "master" an item — correct.
-- `now()` within Postgres returns the current *transaction's* start timestamp — invariant across every call within one statement/transaction — so `last_seen = now()` and a `mastered_at = now()` set within the *same* statement will always be textually identical, while a `mastered_at` carried over from an *earlier* transaction will (for all practical purposes) never coincide with the current statement's `last_seen = now()`. The `newlyMastered = mastered_at === last_seen` string-equality trick is therefore sound, not a coincidental hack.
-- The atomicity concern itself — a prior separate SELECT read being raced by a concurrent write — is fully closed: there is no longer any read before the mutating statement; the single `INSERT ... ON CONFLICT DO UPDATE ... RETURNING` is the only statement touching `thai_progress`, and Postgres's own row lock on the conflicting unique index (`learner_id, item_id`) serializes concurrent submissions for the same pair.
-I did not re-run a live mutating probe against the dev DB myself for this one (unlike the CRITICAL/unit-6 check, which was read-only): doing so would require writing to a real learner's `thai_progress` row, and while the implementer's disposable-test-row approach is fine for them, I chose not to risk touching live progress data for a re-verification that the SQL's static logic already makes clear-cut. I'm confident in this verdict from code inspection alone.
-*New LOW note*: splitting the previous atomic `db.batch([insertAttempt, upsertProgress])` into two independent statements (the upsert, then a separate `db.insert(thaiAttempts)`) trades away the atomicity *between the attempt log and the progress update* that round 1 had (both were in one transaction via `batch`). If the process crashes or the connection drops between the two statements, mastery could advance with no corresponding `thai_attempts` row logged for that attempt — a minor completeness gap in `/thai/stats`'s accuracy/failure-heatmap data, not a mastery-correctness bug. Low probability, low impact; worth a follow-up (e.g. a single `WITH ... INSERT ... RETURNING ... INSERT INTO thai_attempts ...` CTE) but not blocking.
+### New invariant (`assertEveryUnitCanReach100Percent`) — reasoned + partially perturbation-tested
+- **Content-shape regressions (the actual CRITICAL 2 pattern, and any future
+  unit that reintroduces an unscoreable structural requirement)**: confirmed
+  it fires correctly via my black-box synthetic-vowel perturbation test above
+  — the moment `reachableDrillTypesForUnit` (or the future maintainer adding
+  a new drill type) requires something `canDrillTypeScore` disagrees with,
+  the percentage drops below 100 and the seed script throws. I did not
+  literally edit `reachability.ts` to strip the `canEverHaveAudio` guard and
+  re-run the seed script (that would require editing a source file, outside
+  this reviewer's boundaries), but by reading the code I confirmed
+  `canDrillTypeScore`'s `audio-form`/`audio-letter`/`audio-tone` cases each
+  call `canEverHaveAudio` independently of the branch-building code's own
+  `if (canEverHaveAudio(i))` guards — two separate call sites sharing the
+  same underlying primitive, so a regression that deletes ONE guard (the
+  most likely single-line mistake) would still be caught by the other. A
+  regression to `canEverHaveAudio` itself (the shared primitive) would evade
+  both sides equally — a narrow, low-likelihood blind spot, noted as
+  residual risk.
+- **Architecture-shape regression (CRITICAL 1's actual pattern — `queries.ts`
+  reverting to `allReachableDrillTypesForItem` for unlock math)**: I confirm
+  the implementer's own honest disclosure in "Issues Discovered" is
+  accurate — `assertEveryUnitCanReach100Percent` runs in a DB-free seed
+  script that never imports `lib/thai/queries.ts`, so it structurally cannot
+  observe what function `getUnitSummaries` calls. **This means a future
+  hand-edit reverting `queries.ts` alone (without touching
+  `reachability.ts`) would reintroduce the exact CRITICAL 1 deadlock with no
+  automated check catching it** — confirmed by code reading, not by an
+  actual reverted-and-reran test (there is no test suite in this repo to run
+  against `queries.ts`, and hand-editing it to verify would violate this
+  reviewer's "do not edit source files" boundary). This is the same
+  limitation the implementer already flagged; I'm independently confirming
+  it's real and not overstated. Recommend, as a follow-up (not blocking this
+  milestone): either a lightweight runtime assertion inside
+  `getUnitSummaries` itself, or documenting this single-call-site contract
+  prominently enough that future reviewers check it by hand every time
+  `queries.ts` changes.
 
-**MEDIUM — `weightedPick` comment: FIXED, verified.**
-Comment now accurately reads "Weighted pick **with replacement**..." and correctly describes the actual repeat-avoidance rule (skip an exact back-to-back repeat of the immediately-previous subject). Matches the unchanged sampling behavior. No further issue.
-
-**LOW — hardcoded Thailand offset: FIXED, verified.**
-`lib/thai/stats.ts` now imports `THAILAND_OFFSET_MS` from `lib/review/time.ts` and uses it in `keyToUtcInstant` instead of the inline `7 * 60 * 60 * 1000` literal. Confirmed via grep that `THAILAND_OFFSET_MS` is in fact exported from `lib/review/time.ts`.
-
-**Deferred MEDIUM — `thai_progress` lacks a `drillType` dimension.** Left as-is per the coordinator's explicit instruction not to touch the schema this round. No new information changes my round-1 assessment (streak-sharing across drill types is a real but non-blocking design smell to revisit before M12).
-
-### Commands Run (round 2, independently re-run)
-
-- `npx tsc --noEmit` — exit 0
-  ```
-  (no output — clean)
-  ```
+### Commands Run (round 2, all independently re-run)
+- `npx tsc --noEmit` — exit 0, no output.
 - `npm run lint` — exit 0
   ```
   > language-learning-web-app@0.1.0 lint
   > eslint
-
-  (no errors/warnings)
   ```
-- `npm run build` — exit 0
+- `npm run build` — exit 0 (same route table as round 1, `✓ Compiled
+  successfully in 5.4s`, `Finished TypeScript in 6.7s`).
+- `npm run seed:thai` — exit 0
   ```
-  ▲ Next.js 16.2.6 (Turbopack)
-  - Environments: .env.local
-
-    Creating an optimized production build ...
-  ✓ Compiled successfully in 7.4s
-    Running TypeScript ...
-    Finished TypeScript in 8.8s ...
-    Collecting page data using 10 workers ...
-  ✓ Generating static pages using 10 workers (6/6) in 1399ms
-    Finalizing page optimization ...
-
-  Route (app)
-  ┌ ƒ /
-  ├ ○ /_not-found
-  ├ ƒ /api/auth/[...nextauth]
-  ├ ƒ /stats
-  ├ ƒ /thai/[unit]/drill
-  ├ ƒ /thai/[unit]/lesson
-  └ ƒ /thai/stats
-
-  ƒ Proxy (Middleware)
+  [reachability] OK — every drillable item across units 2,3,4,5,6,7,8,9 (105 total) is reachable as a drill subject.
+  [reachability] OK — every drilled unit (2,3,4,5,6,7,8,9) can reach 100% percentMastered given its own drill session.
+  [delete] 0 dropped item(s).
+  Done. 0 inserted, 125 upserted-as-update, 0 deleted. Total items: 125.
   ```
-  All three gates match the round-2 implementation summary's claims exactly — no discrepancy.
-- Independent read-only DB query (own disposable `.mjs` script, deleted after use — no writes, no risk to real data) verifying the CRITICAL fix's actual denominator/reachability, reproduced above under the CRITICAL finding — this is what surfaced the still-open second instance of the bug. Exit 0.
-- Did not re-run the implementer's live mutating state-machine probe for the MEDIUM TOCTOU fix (chose static SQL-semantics verification instead, to avoid writing to real learner progress rows for a re-check — see reasoning under that finding).
+  Matches the implementer's round-2 claim exactly, including the new second
+  invariant line.
+- `npm run audio:thai -- --dry` — exit 0, unchanged from round 1 (103 clips,
+  $0.0122 est cost, zero network calls) — confirms the audio pipeline itself
+  was untouched this round, as instructed.
+- DB re-verification (one-off Node/tsx script) — exit 0
+  ```
+  thai_progress rows: 0
+  drill_type column: [{"column_name":"drill_type","is_nullable":"NO"}]
+  leftover suspicious test users: 0
+  ```
+  Confirms no synthetic data survives from either my own tests or the
+  implementer's round-2 migration/backfill test.
+- Independent per-unit max-achievable-percent recompute (own predicate,
+  `.mjs` scratch script, deleted after use, imports only the real exported
+  `reachableDrillTypesForUnit`) — exit 0, full output quoted in "CRITICAL 1"
+  above; all 8 units at 100%.
+- Black-box `canEverHaveAudio` perturbation test (synthetic vowel with no
+  carrier circle fed into the real, unmodified exported functions, no source
+  files edited) — exit 0, full output quoted in "CRITICAL 2" above.
+- `submitThaiAttempt` gating logic test (disposable synthetic learner,
+  inserted then fully deleted; exercises the real `unitOfferingDrillType` +
+  `getUnitSummaries` exports with the exact conditional structure copied from
+  `lib/thai/actions.ts`) — exit 0, full output quoted in "HIGH" above;
+  cleanup verified (0 leftover rows).
 
-### Residual Risk (round 2, supersedes round 1's list where overlapping)
-- **Blocking**: the unit-6 unlock ceiling is still not fixed (9 orphaned word-bank rows). QA must not proceed to behaviorally validate A4/A6 (reaching unit 7/8) until this lands — it will fail identically to round 1's finding.
-- The HIGH client-trust fix is solid; the new LOW residual (kind/drillType cross-checking) is worth a follow-up but does not reopen the finding.
-- The new LOW atomicity-between-attempt-and-progress-write note (round 2) should be tracked alongside the deferred MEDIUM (`drillType` dimension on `thai_progress`) as pre-M12 cleanup items.
-- The forward-only vowel drill narrowing (accepted) means units 7–8's drill variety is reduced from the original bidirectional design; flag to the user/product owner if drill repetitiveness becomes noticeable in practice, since a fix (a second explicit `DrillType`) is cheap.
-- All content-integrity and Mandarin-non-regression conclusions from round 1 stand unchanged (no files affecting those areas were touched this round).
+### Residual Risk (round 2)
+- LOW: `submitThaiAttempt` hard-codes unit ≤2 as unconditionally allowed
+  instead of checking unit 2's own `unlocked` flag — a learner who never
+  read unit 1 could still bank unit-2 mastery via a direct action call.
+  Trivial real-world impact.
+- LOW: the seed-time invariant cannot detect a `queries.ts`-only regression
+  back to the cross-unit union for unlock math (architecture-shape half of
+  CRITICAL 1) — mitigated only by code comments/documentation, not a
+  runtime check.
+- LOW: migration backfill's kind-fallback `CASE` is synthetic-tested for only
+  1 of 6 branches (the other 5 are trivial one-line mappings).
+- LOW: a regression to the shared `canEverHaveAudio` primitive itself (rather
+  than to one of its two call sites) would evade both the map-building code
+  and the audit predicate equally.
+- Unit 6's displayed `totalItems` visibly changes from 21 to 57 on the Thai
+  home screen as a correct, intended consequence of the fix — QA should
+  expect this new number, not treat it as a regression.
+- `thai_progress`/`thai_attempts` remain at 0 real rows in the dev DB — none
+  of this has been observed end-to-end with a real learner clicking through
+  the UI yet; recommend QA's behavioral pass exercise the full unit 2→9
+  unlock chain with a real session, not just the pure-function-level proof
+  here.
+
+### Assertions re-checked (A1-A6)
+- **A1**: PASS — STRICT per-unit mastery now correctly scoped; migration
+  mechanics unchanged and further validated (partial coverage, see MEDIUM
+  above, downgraded to LOW).
+- **A2**: PASS (unchanged from round 1 — audio pipeline untouched this round).
+- **A3**: PASS — unit 9 is now actually reachable through the full unlock
+  chain (2→3→4→5→6→7→8→9 all achieve 100% max, confirmed independently).
+- **A4**: PASS — `audio-letter`/`audio-form` correctly gated both structurally
+  (`canEverHaveAudio`, seed-content-level) and operationally (`item.audioUrl`
+  truthy, request-time, in `buildSubjectPool`, unchanged).
+- **A5**: PASS (unchanged) — now actually exercisable end-to-end since unit 9
+  is reachable.
+- **A6**: PASS — all three gates re-run clean; the regression clause now
+  holds (a fresh Thai learner CAN progress through the full course
+  structurally; the LOW residual above is the only remaining gap, and it's a
+  narrow widening of access, not a narrowing/regression).
 
 ### Procedure Compliance (round 2)
-- Round-2 fix list read in full (`## Review Fixes (round 2)` section of `implementation-summary.md`) before re-reviewing: yes.
-- Every file named in the round-2 touched-file list was read in full: yes.
-- Commands re-run independently, not copied from the implementer: yes (`tsc`, `lint`, `build`, plus an original read-only DB verification script that the implementer did not run in this exact form — it's what caught the still-open bug).
-- Revised Result stated: yes — RETURN-TO-IMPLEMENTER, with a narrow, clearly-scoped remaining fix.
-- Review summary updated in place (this file): yes.
-
----
-
-## Re-review (round 3)
-
-### FINAL Result
-**APPROVE-WITH-FINDINGS**
-
-Both CRITICAL instances of the unlock-ceiling bug (round 1's 8 `FinalItem` rows, round 2's 9 null-`finalSound` word-bank rows) are now confirmed fixed, and — more importantly — a mechanical, tested invariant (`lib/thai/reachability.ts` + `scripts/seed-thai-db.ts`'s pre-write assertion) now exists specifically to prevent a third recurrence of this exact bug class. I independently re-verified the whole-unit denominators for every drilled unit (2–8) against the live DB with my own from-scratch reimplementation of the reachability logic — not by re-running or trusting the implementer's script — and got an exact match: 93 total drillable items, unit 6 = 21, zero orphans anywhere. All three quality gates (`tsc`, `build`, scoped `lint`) pass, independently re-run. Nothing found this round rises to CRITICAL/HIGH/blocking; the remaining items are non-blocking residuals already surfaced in round 2 (unchanged) plus one newly-confirmed design choice (the mechanical invariant's scope). Recommend proceeding to QA.
-
-### 1. The 9 finalSound-null syllables — VERIFIED FIXED
-Read `seed/thai/items.ts`'s `WORD_BANK` array directly: `syllable:ปลา`, `syllable:ดี`, `syllable:มือ`, `syllable:คา`, `syllable:ขา`, `syllable:ข่า`, `syllable:นา`, `syllable:มา`, `syllable:ไป` — exactly the 9 rows named in the round-2 finding — now all read `drillable: false`. All other 21 `WORD_BANK` rows are unchanged at `drillable: true`. `seed/thai/types.ts`'s `SyllableItem.drillable` field type changed from the literal `true` to `boolean` (confirmed by reading the interface directly), consistent with the `FinalItem` pattern from round 2, with a doc comment explaining why. No other `WORD_BANK` field (display/IPA/gloss/vowelForm) was touched — only the `drillable` flag, so round-1's content-integrity spot-checks still stand.
-
-### 2. `lib/thai/reachability.ts` — VERIFIED as genuine single source of truth
-- **Pure, no DB import**: read the full file — it imports nothing beyond its own types; no `@/lib/db`, no `neon`/`drizzle` import anywhere. Confirmed.
-- **`buildSubjectPool` in `lib/thai/drill.ts` consumes it, not a parallel reimplementation**: read `drill.ts` directly — `import { computeReachableIds } from "./reachability"` at the top, and all three branches (units 2–5, unit 6, units 7–8) call `computeReachableIds(...)` and filter their fetched DB rows against the returned `Set` before turning them into `Subject`s. There is no second hand-written "is this reachable" predicate left in `drill.ts` — the unit-6 branch in particular now calls `computeReachableIds(6, [...unit6Items, ...consonantsWithFinal])` and filters both the words and cross-unit consonants against that single result, exactly matching `reachability.ts`'s own unit-6 branch logic (which happens to be the one with real complexity — units 2–5/7–8's "reachable" and "denominator" filters are structurally identical by construction, so those three units can't develop this bug class regardless).
-- **`scripts/seed-thai-db.ts` calls `assertEveryDrillableItemIsReachable()` before any write and exits non-zero on violation**: read the script directly — the call happens immediately after the pre-existing duplicate-id guard (`ids.filter(...)` dupe check) and *before* the first `db.select()` for `doomed` (i.e., before any read or write touches the DB). On violation it `throw`s a message naming every offending unit and item id; `main().catch((err) => { console.error(err); process.exit(1); })` at the bottom means any thrown error (this one included) prints and exits 1, identical to how the existing duplicate-id guard already fails. Confirmed by direct code reading, not by trusting the implementer's description.
-- **Detection genuinely works, verified independently**: wrote and ran my own disposable script (`verify-detect-tmp.mts`, deleted after use — imported the *real*, unmodified `lib/thai/reachability.ts` and `seed/thai/items.ts` modules, cloned `ALL_THAI_ITEMS` in memory, flipped `syllable:ปลา` back to `drillable:true` to simulate the round-3 regression, and called `findUnreachableDrillableIds(6, mutated)` directly):
-  ```
-  orphans after simulated regression: [ 'syllable:ปลา' ]
-  DETECTION WORKS
-  real-data check done (no output above this line = zero orphans)
-  ```
-  This is a genuinely independent check (own script, own mutation, not a rerun of the implementer's disposable probe) confirming the invariant both fires on a real regression and passes clean on the actual shipped data.
-
-### 3. Whole-unit denominators for ALL units 2–8 — INDEPENDENTLY RE-VERIFIED, matches implementer's claim exactly
-Wrote my own read-only script against the live dev DB (not importing the implementer's `reachability.ts`/query code at all — a from-scratch reimplementation of the same filter logic, purely from reading the source, to cross-check rather than just re-run their code):
-```
-unit 2: denominator=9 orphans=0
-unit 3: denominator=10 orphans=0
-unit 4: denominator=12 orphans=0
-unit 5: denominator=11 orphans=0
-unit 6: denominator=21 orphans=0
-unit 7: denominator=18 orphans=0
-unit 8: denominator=12 orphans=0
-TOTAL drillable across units 2-8: 93
-RESULT: PASS - zero orphans, 100% achievable in every unit
-```
-This matches the implementer's claimed "93 drillable items total, unit 6 now 21, zero orphans" exactly, via an independent code path (my own inline filter logic against a fresh DB read), not a re-run of their tooling. Every unit's mastery percentage can now genuinely reach 100%, so every unlock threshold (90%) is satisfiable, so units 7–8 (and the full unit-2-through-8 chain) can unlock through legitimate play. **A4/A6's unlock contract is now actually satisfiable end-to-end.**
-
-### 4. Quality gates — INDEPENDENTLY RE-RUN, all pass
-Re-ran each command myself with output redirected to a file first (catching my own mistake mid-session: piping directly through `tail` loses the real exit code and reports `tail`'s exit status instead — re-ran all three correctly after catching this):
-- `npx tsc --noEmit` — exit 0, no output.
-- `npm run build` — exit 0:
-  ```
-  ✓ Compiled successfully in 5.9s
-    Running TypeScript ...
-    Finished TypeScript in 7.1s ...
-  ✓ Generating static pages using 10 workers (6/6) in 930ms
-  Route (app)
-  ┌ ƒ /
-  ├ ○ /_not-found
-  ├ ƒ /api/auth/[...nextauth]
-  ├ ƒ /stats
-  ├ ƒ /thai/[unit]/drill
-  ├ ƒ /thai/[unit]/lesson
-  └ ƒ /thai/stats
-  ```
-  (Same pre-existing multi-lockfile warning as every prior run — unrelated to this change.)
-- `npx eslint app lib components seed scripts` (scoped, as requested) — exit 0, no output.
-- Confirmed the reason for scoping: `npm run lint` (repo-wide) reports many errors, but every single one is under `.claude/worktrees/french-course/.qa-tmp/*.mts` — confirmed via `git status --porcelain -- .claude/worktrees` that this entire directory is untracked (`??`) and via its path/content (a separate French-course QA workstream's scratch type-check scripts, full of `no-explicit-any`/`@ts-ignore` violations) that it is unrelated to M11's change set. Scoping lint to M11's actual directories (`app lib components seed scripts`) is the correct check, and it's clean.
-
-### 5. `npm run seed:thai` — run live, reachability output observed directly
-```
-[reachability] OK — every drillable item across units 2,3,4,5,6,7,8 (93 total) is reachable as a drill subject.
-[delete] 0 dropped item(s).
-
-Done. 0 inserted, 113 upserted-as-update, 0 deleted. Total items: 113.
-```
-Confirms: the check runs and passes on real data (matching my independent 93/21/zero-orphans verification above), and the seed remains idempotent (0 inserted, 113 upserted-as-update, 0 deleted — no drift, safe to re-run any time).
-
-### Outstanding non-blocking items (unchanged from round 2, not re-litigated — still valid, still not blocking)
-- LOW: `expectedAnswerFor` derives an answer from whatever field a `drillType` maps to without checking that `drillType` is one `buildSubjectPool` would ever actually pair with that item's `kind` (e.g. a raw call could pair a vowel item with `drillType:"letter-sound"`). Doesn't allow fabricating an arbitrary value, doesn't reopen the HIGH finding. Worth a follow-up.
-- LOW: the attempts-log insert and the progress upsert are two independent statements (not one transaction) since the MEDIUM TOCTOU fix in round 2 — a process crash between them could leave mastery advanced with no corresponding `thai_attempts` row. Minor completeness gap in `/thai/stats`, not a mastery-correctness bug.
-- Deferred MEDIUM (explicit coordinator instruction, unchanged): `thai_progress` has no `drillType` dimension, so a consonant's letter-sound/letter-class/letter-final competencies share one streak. Revisit before M12 reuses this table for tone-ear perception drills.
-- Accepted deviation (unchanged): vowel `form-sound` drill is forward-only (form → sound), not the Appendix's literal bidirectional "form↔sound," traded for closing the HIGH client-trust finding cleanly. Recommend a follow-up second `DrillType` (e.g. `"sound-form"`) in M12/M13 to restore bidirectional coverage without reopening the purity requirement.
-- Content spot-check (round 1) remains a ~15-of-113-item sample, not exhaustive — no new display/IPA/gloss content was touched in rounds 2–3 (only `drillable` flags changed), so this residual is unchanged and still applies only to the ~98 items never individually re-verified against the source doc.
-
-### Residual Risk (round 3, final)
-- None of the residual items above are blocking for M11 sign-off; all are either explicitly deferred by the coordinator, accepted trade-offs with a documented follow-up path, or minor (LOW) completeness/precision gaps that don't affect correctness of the shipped mastery/unlock model.
-- QA can now behaviorally validate the full A3–A7 chain, including reaching and unlocking units 7–8, without hitting the structural wall that blocked rounds 1 and 2.
-- Recommend the mechanical reachability check (`lib/thai/reachability.ts` + the seed script's pre-write assertion) be kept in mind as a template: any future unit/content addition should be run through `npm run seed:thai` before merging, since that's now the only thing that would have caught this bug class the first time.
-
-### Procedure Compliance (round 3)
-- Round-3 fix section read in full (`## Review Fixes (round 3)` of `implementation-summary.md`) before re-reviewing: yes.
-- Every file named in the round-3 verification list was read in full: yes (`seed/thai/types.ts`, `seed/thai/items.ts`, `lib/thai/reachability.ts`, `lib/thai/drill.ts`, `scripts/seed-thai-db.ts`).
-- Commands re-run independently, not copied from the implementer: yes — `tsc`, scoped `eslint`, `build`, `seed:thai`, plus two original scripts (a live-DB whole-unit reachability re-derivation, and a detection-regression probe against the real modules) that the implementer did not paste in this exact form.
-- Caught and corrected my own tooling mistake mid-review (piping through `tail` silently discards the real exit code) before relying on any exit-code claim in this round's evidence.
-- FINAL Result stated: yes — APPROVE-WITH-FINDINGS.
-- Review summary updated in place (this file): yes.
+- Plan consulted before review: yes — `.claude/plans/active-plan.md`,
+  `.claude/plans/implementation-summary.md`'s "## Round 2" section (read in
+  full), and this file's own round-1 findings (to verify each was actually
+  addressed, not just claimed addressed).
+- Implementation summary read: yes.
+- Commands independently re-run (not trusted from handoff): yes — tsc, lint,
+  build, seed:thai, audio:thai --dry, plus four independent scratch scripts
+  (DB state, independent max-achievable-percent recompute using my own
+  predicate, a black-box structural perturbation test, and a
+  synthetic-learner unlock-gating test) — all temp files/synthetic DB rows
+  created during this review were deleted/rolled back and independently
+  re-verified as gone.
+- Review summary updated: yes (this section appended; top-level Result field
+  updated to point here).

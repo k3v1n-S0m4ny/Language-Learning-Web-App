@@ -13,6 +13,7 @@ import type {
   FinalItem,
   SyllableItem,
   ThaiItem,
+  ToneWordItem,
   VowelItem,
 } from "./types";
 
@@ -183,6 +184,44 @@ export const WORD_BANK: SyllableItem[] = [
   { kind: "syllable", id: "syllable:ดอก", unit: 6, display: "ดอก", initialIpa: "dɔ̀ːk̚", finalIpa: null, consonantClass: null, drillable: true, metadata: { gloss: "flower", finalSound: "k", vowelForm: "◌อ" } },
 ];
 
+// --- Unit 9: Tone ear — minimal-pair families ------------------------------
+// Every word/syllable below is real Thai, sourced from the research doc
+// (verbatim tone-diacritic table + its own worked "minimal set" examples) or
+// from the owner-approved M12 TTS test-clip family (real dictionary words,
+// signed off 2026-07-03 — .artifacts/tts-test-clips/ledger.json). No tone is
+// invented: each is checked against the doc's tone-grid table (§6, "6 ·
+// Tones") or its worked answers.
+//
+// Family "carrier-อ" — doc §"tone-diacritics" ("See it in one minimal set"):
+//   the mid-class carrier อ takes all five tone marks, same letters, five
+//   tones. The doc gives no individual gloss for these — they are a bare
+//   phonetic demonstration, not vocabulary — so `gloss` is omitted and the
+//   lesson tiles render them as playback-only, ungloss forms.
+// Family "khaa" — doc §"tones" worked example (คา/ขา/ข่า, with the answers
+//   giving mid/rising/low) extended to all five tones with ค่า/ค้า, the same
+//   real dictionary words the owner approved during the M12 TTS bake-off/test
+//   clip sign-off for this exact /kʰaː/ family.
+// Family "naa-silent-leader" — doc §"special", the silent-ห leader example:
+//   นา (Low class, live → mid) vs หนา (silent ห reclassifies it as High class
+//   → rising). Only two tones are attested for this pair in the doc; it is
+//   included anyway (a partial-tone family) since it teaches the silent-
+//   leader mechanic the other two families don't, not because a fabricated
+//   third/fourth/fifth tone was manufactured for symmetry.
+export const TONE_WORDS: ToneWordItem[] = [
+  { kind: "tone-word", id: "tone-word:อา", unit: 9, display: "อา", initialIpa: "ʔāː", finalIpa: null, consonantClass: "mid", drillable: true, metadata: { tone: "mid", family: "carrier-อ" } },
+  { kind: "tone-word", id: "tone-word:อ่า", unit: 9, display: "อ่า", initialIpa: "ʔàː", finalIpa: null, consonantClass: "mid", drillable: true, metadata: { tone: "low", family: "carrier-อ" } },
+  { kind: "tone-word", id: "tone-word:อ้า", unit: 9, display: "อ้า", initialIpa: "ʔâː", finalIpa: null, consonantClass: "mid", drillable: true, metadata: { tone: "falling", family: "carrier-อ" } },
+  { kind: "tone-word", id: "tone-word:อ๊า", unit: 9, display: "อ๊า", initialIpa: "ʔáː", finalIpa: null, consonantClass: "mid", drillable: true, metadata: { tone: "high", family: "carrier-อ" } },
+  { kind: "tone-word", id: "tone-word:อ๋า", unit: 9, display: "อ๋า", initialIpa: "ʔǎː", finalIpa: null, consonantClass: "mid", drillable: true, metadata: { tone: "rising", family: "carrier-อ" } },
+  { kind: "tone-word", id: "tone-word:คา", unit: 9, display: "คา", initialIpa: "kʰāː", finalIpa: null, consonantClass: "low", drillable: true, metadata: { tone: "mid", family: "khaa", gloss: "to be stuck" } },
+  { kind: "tone-word", id: "tone-word:ขา", unit: 9, display: "ขา", initialIpa: "kʰǎː", finalIpa: null, consonantClass: "high", drillable: true, metadata: { tone: "rising", family: "khaa", gloss: "leg" } },
+  { kind: "tone-word", id: "tone-word:ข่า", unit: 9, display: "ข่า", initialIpa: "kʰàː", finalIpa: null, consonantClass: "high", drillable: true, metadata: { tone: "low", family: "khaa", gloss: "galangal" } },
+  { kind: "tone-word", id: "tone-word:ค่า", unit: 9, display: "ค่า", initialIpa: "kʰâː", finalIpa: null, consonantClass: "low", drillable: true, metadata: { tone: "falling", family: "khaa", gloss: "value, cost" } },
+  { kind: "tone-word", id: "tone-word:ค้า", unit: 9, display: "ค้า", initialIpa: "kʰáː", finalIpa: null, consonantClass: "low", drillable: true, metadata: { tone: "high", family: "khaa", gloss: "to trade" } },
+  { kind: "tone-word", id: "tone-word:นา", unit: 9, display: "นา", initialIpa: "nāː", finalIpa: null, consonantClass: "low", drillable: true, metadata: { tone: "mid", family: "naa-silent-leader", gloss: "rice field" } },
+  { kind: "tone-word", id: "tone-word:หนา", unit: 9, display: "หนา", initialIpa: "nǎː", finalIpa: null, consonantClass: "high", drillable: true, metadata: { tone: "rising", family: "naa-silent-leader", gloss: "thick (silent ห leader)" } },
+];
+
 // Unit 1 is lesson-only ("complete when read") — see LessonMarkerItem doc comment.
 export const UNIT_1_LESSON_MARKER_ID = "lesson-marker:unit-1";
 
@@ -206,10 +245,12 @@ export const ALL_THAI_ITEMS: ThaiItem[] = [
   ...FINALS,
   ...ALL_VOWELS,
   ...WORD_BANK,
+  ...TONE_WORDS,
 ];
 
-// Units 1-8 built in M11; 9-14 render as locked "coming soon" (no items yet).
-export const BUILT_UNITS = [1, 2, 3, 4, 5, 6, 7, 8] as const;
+// Units 1-9 built (9 added in M12); 10-14 render as locked "coming soon" (no
+// items yet).
+export const BUILT_UNITS = [1, 2, 3, 4, 5, 6, 7, 8, 9] as const;
 export const TOTAL_UNITS = 14;
 
 export const UNIT_TITLES: Record<number, string> = {

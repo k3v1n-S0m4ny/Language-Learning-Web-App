@@ -110,9 +110,38 @@ export interface LessonMarkerItem {
   metadata: Record<string, never>;
 }
 
+// The five tones of Standard (Central) Thai (research doc §"tone-diacritics").
+// Order matches the doc's own table (mid, low, falling, high, rising) and is
+// reused everywhere a tone list needs a stable, doc-consistent order (MC
+// options, the confusion matrix axes — see lib/thai/tone.ts TONE_ORDER).
+export type Tone = "mid" | "low" | "falling" | "high" | "rising";
+
+// Unit 9 (M12): tone-ear minimal-pair words. Every row is a real, doc-sourced
+// or doc-methodology-consistent Thai word/syllable carrying one unambiguous
+// tone (verified against the research doc's tone-diacritic table + its own
+// worked "minimal set" examples) — see seed/thai/items.ts TONE_WORDS header
+// comment for provenance of each family. `family` groups items for the
+// lesson's listen-and-repeat tiles (same base syllable, different tone).
+export interface ToneWordItem {
+  kind: "tone-word";
+  id: string; // e.g. "tone-word:คา"
+  unit: number; // 9
+  display: string; // the Thai word/syllable
+  initialIpa: string; // full IPA reading with tone diacritic, e.g. "kʰāː"
+  finalIpa: null;
+  consonantClass: ConsonantClass | null; // the leading consonant's class, where relevant
+  drillable: true;
+  metadata: {
+    tone: Tone;
+    family: string;
+    gloss?: string; // omitted for the doc's bare อ-carrier demonstration forms
+  };
+}
+
 export type ThaiItem =
   | ConsonantItem
   | FinalItem
   | VowelItem
   | SyllableItem
-  | LessonMarkerItem;
+  | LessonMarkerItem
+  | ToneWordItem;

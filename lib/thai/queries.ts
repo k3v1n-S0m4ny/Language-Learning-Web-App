@@ -2,49 +2,71 @@ import { and, eq, inArray } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { thaiItems, thaiProgress } from "@/lib/db/schema";
 import {
+  ALL_THAI_ITEMS,
   BUILT_UNITS,
   TOTAL_UNITS,
   UNIT_1_LESSON_MARKER_ID,
   UNIT_TITLES,
 } from "@/seed/thai/items";
-import { isUnitUnlocked, percentMastered } from "./mastery";
+import { LESSON_READ_DRILL_TYPE, isUnitUnlocked, percentMastered } from "./mastery";
+import { reachableDrillTypesForUnit } from "./reachability";
 import type { UnitSummary } from "./types";
 
-// Every drillable item, grouped by unit (built units only — units 9-14 have
-// no thai_items rows yet). One query, aggregated in JS (data is tiny: ~110 rows).
-async function fetchDrillableItemsByUnit(): Promise<Map<number, string[]>> {
+// itemId -> the set of drillTypes mastered (masteredAt not null) for that item.
+// M12: thai_progress is now keyed per (learner, item, drillType), so this
+// replaces the old "itemId -> masteredAt" map.
+async function fetchMasteredDrillTypesByItem(learnerId: string): Promise<Map<string, Set<string>>> {
   const rows = await db
-    .select({ id: thaiItems.id, unit: thaiItems.unit })
-    .from(thaiItems)
-    .where(eq(thaiItems.drillable, true));
-  const byUnit = new Map<number, string[]>();
+    .select({
+      itemId: thaiProgress.itemId,
+      drillType: thaiProgress.drillType,
+      masteredAt: thaiProgress.masteredAt,
+    })
+    .from(thaiProgress)
+    .where(eq(thaiProgress.learnerId, learnerId));
+  const map = new Map<string, Set<string>>();
   for (const row of rows) {
-    const list = byUnit.get(row.unit) ?? [];
-    list.push(row.id);
-    byUnit.set(row.unit, list);
+    if (!row.masteredAt) continue;
+    const set = map.get(row.itemId) ?? new Set<string>();
+    set.add(row.drillType);
+    map.set(row.itemId, set);
   }
-  return byUnit;
+  return map;
 }
 
-// The 14-unit map for the Thai-mode home screen (A4). Units 1-8 reflect real
-// progress; 9-14 render as locked "coming soon" placeholders (no content yet).
+// STRICT per-UNIT mastery (A1, owner-approved 2026-07-03; SCOPING fixed in
+// round 2 — see lib/thai/reachability.ts header comment for the full CRITICAL
+// 1 writeup). A unit's own percentMastered — which gates the NEXT unit's
+// unlock — requires EVERY drill type that unit's OWN drill session offers for
+// an item, per `reachableDrillTypesForUnit(unit, ...)`. Deliberately NOT the
+// cross-unit union (`allReachableDrillTypesForItem`): a unit 2-5 consonant's
+// `letter-final` streak (only ever drilled inside unit 6's session) must
+// never gate that consonant's HOME unit's own percentage, or the home unit
+// can never reach 90% and the whole course deadlocks past unit 2. Structural
+// (not gated on whether audioUrl currently exists — an item with no clip yet
+// stays genuinely unmasterable, per A1's original STRICT intent), computed
+// from the static seed content so it needs no DB round-trip beyond the
+// learner's own progress rows.
+function unitMasteryStats(
+  unit: number,
+  masteredByItem: Map<string, Set<string>>,
+): { total: number; mastered: number } {
+  const reachable = reachableDrillTypesForUnit(unit, ALL_THAI_ITEMS);
+  let mastered = 0;
+  for (const [itemId, requiredTypes] of reachable) {
+    const masteredSet = masteredByItem.get(itemId);
+    if (masteredSet && requiredTypes.every((dt) => masteredSet.has(dt))) mastered++;
+  }
+  return { total: reachable.size, mastered };
+}
+
+// The 14-unit map for the Thai-mode home screen (A4). Units 1-9 reflect real
+// progress; 10-14 render as locked "coming soon" placeholders (no content yet).
 export async function getUnitSummaries(learnerId: string): Promise<UnitSummary[]> {
-  const [itemsByUnit, allProgress] = await Promise.all([
-    fetchDrillableItemsByUnit(),
-    db
-      .select({
-        itemId: thaiProgress.itemId,
-        masteredAt: thaiProgress.masteredAt,
-      })
-      .from(thaiProgress)
-      .where(eq(thaiProgress.learnerId, learnerId)),
-  ]);
+  const masteredByItem = await fetchMasteredDrillTypesByItem(learnerId);
 
-  const masteredIds = new Set(
-    allProgress.filter((p) => p.masteredAt !== null).map((p) => p.itemId),
-  );
-
-  const unit1LessonComplete = masteredIds.has(UNIT_1_LESSON_MARKER_ID);
+  const unit1LessonComplete =
+    masteredByItem.get(UNIT_1_LESSON_MARKER_ID)?.has(LESSON_READ_DRILL_TYPE) ?? false;
 
   const summaries: UnitSummary[] = [];
   let previousUnitUnlocksNext: boolean = true; // unit 1 is always reachable
@@ -84,16 +106,15 @@ export async function getUnitSummaries(learnerId: string): Promise<UnitSummary[]
       continue;
     }
 
-    const itemIds = itemsByUnit.get(unit) ?? [];
-    const masteredCount = itemIds.filter((id) => masteredIds.has(id)).length;
-    const pct = percentMastered(masteredCount, itemIds.length);
+    const { total, mastered: masteredCount } = unitMasteryStats(unit, masteredByItem);
+    const pct = percentMastered(masteredCount, total);
     const unlocked: boolean = previousUnitUnlocksNext;
 
     summaries.push({
       unit,
       title: UNIT_TITLES[unit],
       built: true,
-      totalItems: itemIds.length,
+      totalItems: total,
       masteredItems: masteredCount,
       percentMastered: pct,
       unlocked,
@@ -115,12 +136,51 @@ export async function getUnitSummary(
   return all.find((u) => u.unit === unit) ?? null;
 }
 
-// Per-learner progress rows for a set of item ids, keyed by itemId. Used by the
-// drill round builder (lib/thai/drill.ts) to weight sampling.
+export interface ToneWordWithAudio {
+  id: string;
+  display: string;
+  initialIpa: string | null;
+  metadata: Record<string, unknown>;
+  audioUrl: string | null;
+}
+
+// Unit 9's tone-word rows with their (possibly still-null) audioUrl, for the
+// lesson's listen-and-repeat tiles (A3). Read from the DB rather than the
+// typed seed module — seed/thai/types.ts content has no audioUrl field; that
+// only exists once the M12 paid audio batch writes it into thai_items.
+export async function getToneWords(): Promise<ToneWordWithAudio[]> {
+  const rows = await db
+    .select({
+      id: thaiItems.id,
+      display: thaiItems.display,
+      initialIpa: thaiItems.initialIpa,
+      metadata: thaiItems.metadata,
+      audioUrl: thaiItems.audioUrl,
+    })
+    .from(thaiItems)
+    .where(and(eq(thaiItems.kind, "tone-word"), eq(thaiItems.unit, 9)))
+    // Deterministic order (round 2 LOW fix) — without this, Postgres makes no
+    // ordering guarantee at all, so ToneEarLesson's family grouping order
+    // ([...new Set(words.map(w => w.metadata.family))], which relies on first-
+    // appearance order) could vary between requests.
+    .orderBy(thaiItems.id);
+  return rows.map((r) => ({ ...r, metadata: (r.metadata ?? {}) as Record<string, unknown> }));
+}
+
+export interface ItemDrillProgress {
+  drillType: string;
+  streak: number;
+  lastSeen: Date | null;
+  masteredAt: Date | null;
+}
+
+// Per-learner progress rows for a set of item ids, keyed by itemId — now one
+// entry per (item, drillType) row rather than one per item (M12/A1). Used by
+// the drill round builder (lib/thai/drill.ts) to weight sampling.
 export async function getProgressByItemIds(
   learnerId: string,
   itemIds: string[],
-): Promise<Map<string, { streak: number; lastSeen: Date | null; masteredAt: Date | null }>> {
+): Promise<Map<string, ItemDrillProgress[]>> {
   if (!itemIds.length) return new Map();
   const rows = await db
     .select()
@@ -128,10 +188,11 @@ export async function getProgressByItemIds(
     .where(
       and(eq(thaiProgress.learnerId, learnerId), inArray(thaiProgress.itemId, itemIds)),
     );
-  return new Map(
-    rows.map((r) => [
-      r.itemId,
-      { streak: r.streak, lastSeen: r.lastSeen, masteredAt: r.masteredAt },
-    ]),
-  );
+  const map = new Map<string, ItemDrillProgress[]>();
+  for (const r of rows) {
+    const list = map.get(r.itemId) ?? [];
+    list.push({ drillType: r.drillType, streak: r.streak, lastSeen: r.lastSeen, masteredAt: r.masteredAt });
+    map.set(r.itemId, list);
+  }
+  return map;
 }

@@ -21,7 +21,10 @@ export type DrillType =
   | "letter-class"
   | "letter-final"
   | "word-final"
-  | "form-sound";
+  | "form-sound"
+  | "audio-letter"
+  | "audio-form"
+  | "audio-tone";
 
 export interface DrillOption {
   value: string;
@@ -31,9 +34,16 @@ export interface DrillOption {
 export interface DrillQuestion {
   itemId: string;
   drillType: DrillType;
-  prompt: string; // the Thai script / form shown to the learner
-  promptKind: "consonant" | "final" | "vowel" | "syllable";
+  // For audio-* drill types the prompt is empty and the learner hears
+  // `audioUrl` instead; for every other drill type it's the Thai script/form.
+  prompt: string;
+  promptKind: "consonant" | "final" | "vowel" | "syllable" | "audio";
   gloss?: string; // word-bank items only, revealed after answering
+  // Set for audio-* drillTypes (the clip IS the question) and, when present,
+  // for any other drillType too (an optional "hear it" button on reveal) —
+  // undefined until the M12 paid audio batch runs (A2/A4: audio drills must
+  // degrade gracefully while audioUrl is still null).
+  audioUrl?: string;
   correct: string; // value matching one DrillOption.value
   options: DrillOption[];
 }

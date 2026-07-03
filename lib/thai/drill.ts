@@ -4,12 +4,20 @@
 // same vowel category) rather than uniform-random (A6). ฃ and ฅ are excluded
 // by construction — every pool query filters drillable = true, and those two
 // letters are the only drillable:false rows (seed/thai/items.ts).
+//
+// M12: adds audio-letter (units 2-5), audio-form (units 7-8) and audio-tone
+// (unit 9) — all three only enter a subject's drillTypes when the item's
+// audioUrl is actually populated (A4: audio drills must degrade gracefully,
+// sampling nothing, while the M12 paid batch hasn't run yet).
 import { and, eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { thaiItems } from "@/lib/db/schema";
+import { ALL_THAI_ITEMS } from "@/seed/thai/items";
+import type { Tone } from "@/seed/thai/types";
 import { DRILL_ROUND_SIZE } from "./mastery";
 import { getProgressByItemIds } from "./queries";
-import { computeReachableIds } from "./reachability";
+import { allReachableDrillTypesForItem, computeReachableIds } from "./reachability";
+import { TONE_LABELS, TONE_ORDER } from "./tone";
 import type { DrillOption, DrillQuestion, DrillRound, DrillType } from "./types";
 
 type ItemRow = typeof thaiItems.$inferSelect;
@@ -24,6 +32,22 @@ const FINAL_GROUPS: Record<string, string[]> = {
   ŋ: ["ŋ", "m", "n"],
   j: ["j", "w"],
   w: ["w", "j"],
+};
+
+// Which item kinds a drill type is even allowed to apply to — cross-checked
+// in expectedAnswerFor so a drillType/item mismatch (e.g. someone submitting
+// "word-final" against a consonant) returns null rather than a bogus answer
+// (M11 residual, folded into M12: "expectedAnswerFor doesn't cross-check
+// drillType vs item kind").
+const VALID_KINDS_FOR_DRILL_TYPE: Record<DrillType, string[]> = {
+  "letter-sound": ["consonant"],
+  "letter-class": ["consonant"],
+  "letter-final": ["consonant"],
+  "word-final": ["syllable"],
+  "form-sound": ["vowel"],
+  "audio-letter": ["consonant"],
+  "audio-form": ["vowel"],
+  "audio-tone": ["tone-word"],
 };
 
 function shuffled<T>(arr: T[]): T[] {
@@ -49,6 +73,7 @@ export function metadataOf(item: ItemRow): Record<string, unknown> {
 // submitThaiAttempt, which never trusts a client-supplied "expected" value
 // (M11 review round 2, HIGH fix).
 export function expectedAnswerFor(item: ItemRow, drillType: DrillType): string | null {
+  if (!VALID_KINDS_FOR_DRILL_TYPE[drillType].includes(item.kind)) return null;
   const meta = metadataOf(item);
   switch (drillType) {
     case "letter-sound":
@@ -66,6 +91,16 @@ export function expectedAnswerFor(item: ItemRow, drillType: DrillType): string |
       // requires a direction that's a pure function of (item, drillType),
       // not a client-supplied "reversed" flag.
       return item.initialIpa;
+    case "audio-letter":
+      // Hear the letter's name clip, pick the letter (reverse of letter-sound).
+      return item.display;
+    case "audio-form":
+      // Hear the vowel's sound clip, pick the written form (reverse of
+      // form-sound — this is also the M11-residual "sound→form reverse vowel
+      // drill", which ships as audio rather than a second text direction).
+      return item.display;
+    case "audio-tone":
+      return (meta.tone as string | undefined) ?? null;
     default:
       return null;
   }
@@ -121,13 +156,25 @@ interface Subject {
 // filter here to drift out of sync with it (M11 review round 3: this is
 // exactly the class of bug that shipped twice — a thai_items row counted in
 // a unit's denominator with no actual path to becoming a drill subject).
+//
+// Audio drill types are appended per-item, gated on that item's audioUrl
+// actually being populated — a subject with zero available drillTypes (e.g. a
+// unit-9 tone word before the paid audio batch has run) is dropped entirely
+// so it can never be picked into a round with nothing to ask about (A4).
 async function buildSubjectPool(unit: number): Promise<Subject[]> {
   if (unit >= 2 && unit <= 5) {
     const items = await fetchUnitItems(unit);
     const reachable = computeReachableIds(unit, items);
     return items
       .filter((item) => reachable.has(item.id))
-      .map((item) => ({ item, drillTypes: ["letter-sound", "letter-class"] as DrillType[] }));
+      .map((item) => ({
+        item,
+        drillTypes: [
+          "letter-sound",
+          "letter-class",
+          ...(item.audioUrl ? (["audio-letter"] as const) : []),
+        ] as DrillType[],
+      }));
   }
   if (unit === 6) {
     const [unit6Items, consonantsWithFinal] = await Promise.all([
@@ -147,12 +194,29 @@ async function buildSubjectPool(unit: number): Promise<Subject[]> {
     const reachable = computeReachableIds(unit, items);
     return items
       .filter((item) => reachable.has(item.id))
-      .map((item) => ({ item, drillTypes: ["form-sound"] as DrillType[] }));
+      .map((item) => ({
+        item,
+        drillTypes: [
+          "form-sound",
+          ...(item.audioUrl ? (["audio-form"] as const) : []),
+        ] as DrillType[],
+      }));
+  }
+  if (unit === 9) {
+    const items = await fetchUnitItems(9);
+    const reachable = computeReachableIds(9, items);
+    return items
+      .filter((item) => reachable.has(item.id) && item.audioUrl)
+      .map((item) => ({ item, drillTypes: ["audio-tone"] as DrillType[] }));
   }
   return [];
 }
 
-function consonantDistractors(pool: ItemRow[], correct: ItemRow, field: "initialIpa"): DrillOption[] {
+function consonantDistractors(
+  pool: ItemRow[],
+  correct: ItemRow,
+  field: "initialIpa" | "display",
+): DrillOption[] {
   const sameClass = pool.filter(
     (p) => p.id !== correct.id && p.consonantClass === correct.consonantClass && p[field],
   );
@@ -202,11 +266,16 @@ function vowelDistractors(pool: ItemRow[], correct: ItemRow, byForm: boolean): D
   return options;
 }
 
+function toneDistractors(correct: string): DrillOption[] {
+  return TONE_ORDER.filter((t) => t !== correct).map((t) => ({ value: t, label: TONE_LABELS[t] }));
+}
+
 function buildQuestion(subject: Subject, drillType: DrillType, pool: ItemRow[]): DrillQuestion | null {
   const item = subject.item;
   const meta = metadataOf(item);
   const correct = expectedAnswerFor(item, drillType);
   if (correct === null) return null;
+  const audioUrl = item.audioUrl ?? undefined;
 
   if (drillType === "letter-sound") {
     const distractors = consonantDistractors(pool, item, "initialIpa");
@@ -216,6 +285,7 @@ function buildQuestion(subject: Subject, drillType: DrillType, pool: ItemRow[]):
       drillType,
       prompt: item.display,
       promptKind: "consonant",
+      audioUrl,
       correct,
       options: shuffled([{ value: correct, label: correct }, ...distractors]),
     };
@@ -231,6 +301,7 @@ function buildQuestion(subject: Subject, drillType: DrillType, pool: ItemRow[]):
       drillType,
       prompt: item.display,
       promptKind: "consonant",
+      audioUrl,
       correct,
       options: shuffled([{ value: correct, label: correct }, ...distractors]),
     };
@@ -243,6 +314,7 @@ function buildQuestion(subject: Subject, drillType: DrillType, pool: ItemRow[]):
       drillType,
       prompt: item.display,
       promptKind: "consonant",
+      audioUrl,
       correct,
       options: shuffled([{ value: correct, label: correct }, ...distractors]),
     };
@@ -256,6 +328,7 @@ function buildQuestion(subject: Subject, drillType: DrillType, pool: ItemRow[]):
       prompt: item.display,
       promptKind: "syllable",
       gloss: meta.gloss as string,
+      audioUrl,
       correct,
       options: shuffled([{ value: correct, label: correct }, ...distractors]),
     };
@@ -272,8 +345,57 @@ function buildQuestion(subject: Subject, drillType: DrillType, pool: ItemRow[]):
       drillType,
       prompt: item.display,
       promptKind: "vowel",
+      audioUrl,
       correct,
       options: shuffled([{ value: correct, label: correct }, ...distractors]),
+    };
+  }
+
+  if (drillType === "audio-letter") {
+    if (!audioUrl) return null;
+    const distractors = consonantDistractors(pool, item, "display");
+    if (distractors.length < 3) return null;
+    return {
+      itemId: item.id,
+      drillType,
+      prompt: "",
+      promptKind: "audio",
+      audioUrl,
+      correct,
+      options: shuffled([{ value: correct, label: correct }, ...distractors]),
+    };
+  }
+
+  if (drillType === "audio-form") {
+    if (!audioUrl) return null;
+    const distractors = vowelDistractors(pool, item, true);
+    if (distractors.length < 3) return null;
+    return {
+      itemId: item.id,
+      drillType,
+      prompt: "",
+      promptKind: "audio",
+      audioUrl,
+      correct,
+      options: shuffled([{ value: correct, label: correct }, ...distractors]),
+    };
+  }
+
+  if (drillType === "audio-tone") {
+    if (!audioUrl) return null;
+    const distractors = toneDistractors(correct);
+    if (distractors.length < 4) return null;
+    return {
+      itemId: item.id,
+      drillType,
+      prompt: "",
+      promptKind: "audio",
+      audioUrl,
+      correct,
+      options: shuffled([
+        { value: correct, label: TONE_LABELS[correct as Tone] },
+        ...distractors,
+      ]),
     };
   }
 
@@ -288,13 +410,27 @@ export async function buildDrillRound(learnerId: string, unit: number): Promise<
   const progress = await getProgressByItemIds(learnerId, itemIds);
   const now = Date.now();
 
+  // STRICT per-item mastery (A1, owner-approved 2026-07-03): an item is only
+  // "mastered" for sampling-weight purposes when EVERY drill type it is
+  // structurally reachable through (allReachableDrillTypesForItem — the full
+  // cross-unit set, e.g. a consonant's letter-sound + letter-class +
+  // audio-letter + letter-final) has its own 3-streak. This is deliberately
+  // computed from the static seed content, not gated on whether audioUrl
+  // currently exists, so an item can never look "done" purely because an
+  // audio drill type hasn't shipped audio yet.
   const scored: { value: Subject; weight: number }[] = subjects.map((s) => {
-    const p = progress.get(s.item.id);
-    const mastered = p?.masteredAt != null;
-    const lastSeenMs = p?.lastSeen ? p.lastSeen.getTime() : 0;
+    const rows = progress.get(s.item.id) ?? [];
+    const required = allReachableDrillTypesForItem(s.item.id, ALL_THAI_ITEMS);
+    const fullyMastered =
+      required.length > 0 &&
+      required.every((dt) => rows.some((r) => r.drillType === dt && r.masteredAt != null));
+    const lastSeenMs = rows.reduce(
+      (max, r) => Math.max(max, r.lastSeen ? r.lastSeen.getTime() : 0),
+      0,
+    );
     const ageMs = now - lastSeenMs;
     const ageBonus = Math.min(ageMs / (24 * 60 * 60 * 1000), 14); // cap at 14 "days"
-    const weight = (mastered ? 0.3 : 1.5) + ageBonus * 0.15 + 0.05;
+    const weight = (fullyMastered ? 0.3 : 1.5) + ageBonus * 0.15 + 0.05;
     return { value: s, weight };
   });
 

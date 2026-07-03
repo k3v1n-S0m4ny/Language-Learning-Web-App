@@ -20,7 +20,11 @@ import { drizzle } from "drizzle-orm/neon-http";
 import { inArray, notInArray } from "drizzle-orm";
 import * as schema from "../lib/db/schema";
 import { ALL_THAI_ITEMS } from "../seed/thai/items";
-import { DRILLED_UNITS, findUnreachableDrillableIds } from "../lib/thai/reachability";
+import {
+  DRILLED_UNITS,
+  findUnreachableDrillableIds,
+  maxAchievablePercentForUnit,
+} from "../lib/thai/reachability";
 
 const sql = neon(process.env.DATABASE_URL!);
 const db = drizzle(sql, { schema });
@@ -67,6 +71,57 @@ function assertEveryDrillableItemIsReachable(): void {
   );
 }
 
+// Second, independent invariant (M12 review round 2, point 3): "is this item
+// reachable at all" (above) is necessary but not sufficient — round 2 found
+// TWO new bug classes that check still misses entirely:
+//   1. a drill type IS reachable, but only from a unit that is currently
+//      LOCKED relative to the unit whose percentage needs it (letter-final
+//      required units 2-5's own percentage but is only ever drilled in
+//      unit-6's session) — a permanent unlock deadlock, not a reachability
+//      gap.
+//   2. a drill type is structurally required for an item that can never
+//      satisfy it AT ALL (audio-form required for the two hidden vowels,
+//      which have no written form to ever synthesize audio for) — the item
+//      IS "reachable" (buildSubjectPool includes it), but one of its
+//      required drill types is a permanent dead end.
+// Both bug classes manifest the same way: a drilled unit's maximum
+// achievable percentMastered, computed from ITS OWN drill session
+// (reachableDrillTypesForUnit — never the cross-unit union), is less than
+// 100% even for a hypothetically perfect learner. This assertion is that
+// exact check — the same computation the M12 round-2 code review used to
+// prove the deadlock, now a permanent seed-time gate.
+function assertEveryUnitCanReach100Percent(): void {
+  const problems: string[] = [];
+  for (const unit of DRILLED_UNITS) {
+    const pct = maxAchievablePercentForUnit(unit, ALL_THAI_ITEMS);
+    if (pct < 100) {
+      problems.push(
+        `unit ${unit}: max achievable percentMastered = ${pct}% (< 100%) — some drill ` +
+          "type required for an item in this unit's own session can never produce a " +
+          "scoreable question (or is only ever offered by a different unit's session).",
+      );
+    }
+  }
+  if (problems.length) {
+    throw new Error(
+      [
+        "Unlock-deadlock invariant violated — the following units can never reach",
+        "100% percentMastered even for a perfect learner, which permanently blocks",
+        "the 90% unlock threshold for the NEXT unit (M12 review round 2, CRITICAL 1/2):",
+        ...problems.map((p) => `  - ${p}`),
+        "Fix: make sure lib/thai/queries.ts::getUnitSummaries derives percentMastered",
+        "from reachableDrillTypesForUnit(unit, ...) (per-unit-scoped), not from",
+        "allReachableDrillTypesForItem's cross-unit union; and make sure every",
+        "audio-gated drill type in reachableDrillTypesForUnit is only added when",
+        "canEverHaveAudio(item) is true.",
+      ].join("\n"),
+    );
+  }
+  console.log(
+    `[reachability] OK — every drilled unit (${DRILLED_UNITS.join(",")}) can reach 100% percentMastered given its own drill session.`,
+  );
+}
+
 async function main() {
   if (!ALL_THAI_ITEMS.length) {
     throw new Error("seed/thai/items.ts has no items — aborting.");
@@ -79,6 +134,7 @@ async function main() {
   }
 
   assertEveryDrillableItemIsReachable();
+  assertEveryUnitCanReach100Percent();
 
   // 1. Delete items no longer in the content module.
   const doomed = await db

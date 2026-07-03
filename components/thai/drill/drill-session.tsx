@@ -4,6 +4,7 @@ import { useMemo, useState, useTransition } from "react";
 import Link from "next/link";
 import { getUnitProgressSnapshot, submitThaiAttempt } from "@/lib/thai/actions";
 import type { DrillOption, DrillQuestion } from "@/lib/thai/types";
+import { AudioPlayButton } from "@/components/thai/audio-play-button";
 
 interface Props {
   unit: number;
@@ -106,15 +107,22 @@ export function DrillSession({ unit, questions, nextUnitWasUnlocked }: Props) {
       </div>
 
       <div className="flex flex-col items-center gap-4 rounded-xl border border-border-base bg-surface p-8">
-        <div
-          className={`text-center ${
-            question.promptKind === "consonant" || question.promptKind === "syllable"
-              ? "font-thai text-5xl"
-              : "font-mono text-3xl"
-          } text-foreground`}
-        >
-          {question.prompt}
-        </div>
+        {question.promptKind === "audio" ? (
+          question.audioUrl && <AudioPlayButton url={question.audioUrl} label="▶ Play clip" />
+        ) : (
+          <div
+            className={`text-center ${
+              question.promptKind === "consonant" || question.promptKind === "syllable"
+                ? "font-thai text-5xl"
+                : "font-mono text-3xl"
+            } text-foreground`}
+          >
+            {question.prompt}
+          </div>
+        )}
+        {question.promptKind !== "audio" && question.audioUrl && (
+          <AudioPlayButton url={question.audioUrl} label="▶ Hear it" size="sm" />
+        )}
         {phase === "revealed" && question.gloss && (
           <div className="text-sm italic text-foreground-muted animate-fade-in">
             &lsquo;{question.gloss}&rsquo;

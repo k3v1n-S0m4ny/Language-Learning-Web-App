@@ -1,0 +1,13 @@
+- [Streak cap verification](feedback_streak-cap-verification.md) — always verify a documented data-window cap against actual loop bounds; off-by-one between "N-day window" and cap value is common
+- [Overdue forecast gap](feedback_overdue-forecast-gap.md) — check whether past-due items are silently dropped vs bucketed into today in any forecast/due-date feature
+- [Exclusive boundary comment](feedback_exclusive-boundary-comment.md) — verify "exclusive" bound helpers return what their comment says AND that the SQL operator (lt vs lte) matches intent
+- [Probe table completeness](feedback_probe-table-completeness.md) — when spec says "MUST verify" third-party states, check all states are covered (e.g. ts-fsrs has 4 states: New/Learning/Review/Relearning)
+- [Drizzle update no row count](feedback_drizzle-update-no-rowcount.md) — Drizzle update() on neon-http returns [] without .returning(); migration scripts logging the result give no confirmation of rows touched
+- [Partial drift detection](feedback_partial-drift-detection.md) — re-sync scripts often check only parent-row fields; child-row (e.g. words[]) drift is silently missed unless explicitly compared
+- [notInArray empty-array SQL](feedback_notinarray-empty-array.md) — Drizzle notInArray/inArray with [] generates invalid Postgres SQL; guard with early-return before the query when array may be empty
+- [WCAG contrast verify](feedback_wcag-contrast-verify.md) — always recompute contrast ratios independently; implementer tables frequently contain arithmetic errors (M9: 4.38 claimed as 5.3)
+- [Alpha-composited contrast](feedback_alpha-composited-contrast.md) — bg-*/N classes are transparent; composite against actual parent bg before checking contrast; badge/chip elements are high-risk
+- [tsx -e unreliable](feedback_tsx-e-unreliable.md) — `npx tsx -e "...promise chain..."` can silently swallow stdout on Windows/Git-Bash; use a scratch .mjs with file:// import instead for reproducible probes
+- [Unlock denominator orphans](feedback_unlock-denominator-orphans.md) — mastery-% denominators can include items no drill path ever makes answerable, permanently capping % below the unlock threshold (M11 unit 6/7 bug)
+- [Client-supplied correct answer](feedback_client-supplied-correct-answer.md) — quiz/drill server actions must re-derive the correct answer from itemId server-side, not accept it as a client param, even when learnerId is properly session-derived
+- [Cross-unit mastery deadlock](feedback_cross-unit-mastery-deadlock.md) — cross-unit/session drill-type requirements feeding a unit's own unlock % can create circular deadlocks; compute per-unit achievability independently, don't trust a "reachability OK" log line (M12)

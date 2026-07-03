@@ -6,6 +6,8 @@ import { db } from "@/lib/db";
 import { thaiAttempts, thaiItems, thaiProgress } from "@/lib/db/schema";
 import { THAILAND_OFFSET_MS, thaiDateKey, thaiShortLabel } from "@/lib/review/time";
 import type { DayCount } from "@/lib/review/stats";
+import { TONE_ORDER } from "./tone";
+import type { Tone } from "@/seed/thai/types";
 
 export interface UnitAccuracy {
   unit: number;
@@ -29,12 +31,21 @@ export interface StreakDay {
   hasActivity: boolean;
 }
 
+// 5x5 grid, expected tone (row) vs chosen tone (column), from audio-tone
+// attempts (A5). Always TONE_ORDER.length^2 cells, count 0 where unattempted.
+export interface ToneConfusionCell {
+  expected: Tone;
+  chosen: Tone;
+  count: number;
+}
+
 export interface ThaiStats {
   masteredOverTime: DayCount[]; // cumulative, last 30 days
   accuracyByUnit: UnitAccuracy[];
   drillActivity: DayCount[]; // attempts/day, last 30 days
   failureHeatmap: FailureHeatmapRow[];
   streakCalendar: StreakDay[]; // last 84 days
+  toneConfusion: ToneConfusionCell[]; // empty until any audio-tone attempts exist
 }
 
 function buildDayKeys(from: Date, n: number): string[] {
@@ -59,6 +70,9 @@ export async function getThaiStats(learnerId: string, now: Date): Promise<ThaiSt
     db
       .select({
         itemId: thaiAttempts.itemId,
+        drillType: thaiAttempts.drillType,
+        expected: thaiAttempts.expected,
+        chosen: thaiAttempts.chosen,
         correct: thaiAttempts.correct,
         timestamp: thaiAttempts.timestamp,
       })
@@ -156,5 +170,27 @@ export async function getThaiStats(learnerId: string, now: Date): Promise<ThaiSt
     hasActivity: (activityByKey.get(key) ?? 0) > 0,
   }));
 
-  return { masteredOverTime, accuracyByUnit, drillActivity, failureHeatmap, streakCalendar };
+  // --- tone confusion matrix (A5): audio-tone attempts only ---
+  const confusionCounts = new Map<string, number>();
+  for (const attempt of attemptRows) {
+    if (attempt.drillType !== "audio-tone") continue;
+    const key = `${attempt.expected}::${attempt.chosen}`;
+    confusionCounts.set(key, (confusionCounts.get(key) ?? 0) + 1);
+  }
+  const toneConfusion: ToneConfusionCell[] = TONE_ORDER.flatMap((expected) =>
+    TONE_ORDER.map((chosen) => ({
+      expected,
+      chosen,
+      count: confusionCounts.get(`${expected}::${chosen}`) ?? 0,
+    })),
+  );
+
+  return {
+    masteredOverTime,
+    accuracyByUnit,
+    drillActivity,
+    failureHeatmap,
+    streakCalendar,
+    toneConfusion,
+  };
 }

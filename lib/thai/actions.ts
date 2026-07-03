@@ -1,14 +1,19 @@
 "use server";
 
 import { refresh } from "next/cache";
-import { eq, sql } from "drizzle-orm";
+import { and, eq, inArray, sql } from "drizzle-orm";
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { learnerSettings, thaiAttempts, thaiItems, thaiProgress } from "@/lib/db/schema";
-import { UNIT_1_LESSON_MARKER_ID } from "@/seed/thai/items";
+import { ALL_THAI_ITEMS, UNIT_1_LESSON_MARKER_ID } from "@/seed/thai/items";
 import { expectedAnswerFor } from "./drill";
-import { MASTERY_STREAK } from "./mastery";
+import { LESSON_READ_DRILL_TYPE, MASTERY_STREAK } from "./mastery";
 import { getUnitSummaries } from "./queries";
+import {
+  allReachableDrillTypesForItem,
+  unitOfferingDrillType,
+  type DrillTypeId,
+} from "./reachability";
 import type { ActiveMode, DrillAnswerResult, DrillType } from "./types";
 
 const KNOWN_DRILL_TYPES: DrillType[] = [
@@ -17,6 +22,9 @@ const KNOWN_DRILL_TYPES: DrillType[] = [
   "letter-final",
   "word-final",
   "form-sound",
+  "audio-letter",
+  "audio-form",
+  "audio-tone",
 ];
 
 // Persist the Learner's Mandarin/Thai mode choice (A3). Server Actions are
@@ -43,6 +51,8 @@ export async function setActiveMode(mode: ActiveMode) {
 
 // Unit 1 has no drills — "complete when read" (A4). Marks the sentinel item's
 // progress row as mastered so the unit map + unlock check treat it as done.
+// Uses the LESSON_READ_DRILL_TYPE sentinel since thai_progress.drill_type is
+// NOT NULL as of M12/A1 and this row has no real drill type.
 export async function markUnit1LessonRead() {
   const session = await auth();
   const learnerId = session?.user?.id;
@@ -54,12 +64,13 @@ export async function markUnit1LessonRead() {
     .values({
       learnerId,
       itemId: UNIT_1_LESSON_MARKER_ID,
+      drillType: LESSON_READ_DRILL_TYPE,
       streak: 1,
       lastSeen: now,
       masteredAt: now,
     })
     .onConflictDoUpdate({
-      target: [thaiProgress.learnerId, thaiProgress.itemId],
+      target: [thaiProgress.learnerId, thaiProgress.itemId, thaiProgress.drillType],
       set: { lastSeen: now },
     });
 
@@ -67,8 +78,11 @@ export async function markUnit1LessonRead() {
 }
 
 // Score one drill answer: log the attempt (thai_attempts) and update mastery
-// (thai_progress) per the 3-correct-in-a-row rule (A6). No `refresh()` here —
-// the drill session is a client-driven multi-question round; the page only
+// (thai_progress) per the 3-correct-in-a-row rule (A6), now scoped per
+// (item, drillType) rather than per item (M12/A1: thai_progress gained a
+// drillType dimension so streaks for e.g. letter-sound and letter-class on
+// the same consonant no longer blend together). No `refresh()` here — the
+// drill session is a client-driven multi-question round; the page only
 // re-renders once, at the summary screen (handled by the caller navigating).
 //
 // Security (M11 review round 2, HIGH fix): the caller supplies only itemId +
@@ -79,18 +93,25 @@ export async function markUnit1LessonRead() {
 // Concurrency (M11 review round 2, MEDIUM fix): the previous implementation
 // SELECTed the current (streak, masteredAt), computed the next state in JS,
 // then wrote it — a classic read-then-write race under concurrent submissions
-// for the same (learnerId, itemId) (e.g. two tabs). neon-http's driver has no
-// interactive transaction support (`db.transaction()` throws
+// for the same (learnerId, itemId, drillType) (e.g. two tabs). neon-http's
+// driver has no interactive transaction support (`db.transaction()` throws
 // "No transactions support in neon-http driver" — verified directly in
 // node_modules/drizzle-orm/neon-http/session.cjs), so the fix is a single
 // atomic INSERT ... ON CONFLICT DO UPDATE whose SET expressions reference the
 // table's own live pre-update values (thai_progress.streak / .mastered_at) —
 // Postgres resolves these under the row lock taken by the upsert itself, so
-// there is no separate read to race against. `newlyMastered` is derived from
-// the RETURNING row by comparing mastered_at to last_seen: both are set to
-// the statement's single `now()` call when a mastery transition happens in
-// *this* write, so they're identical only when this write is the one that
-// just mastered the item (a mastered_at from an earlier write will differ).
+// there is no separate read to race against.
+//
+// STRICT per-item mastery (A1, owner-approved 2026-07-03): the `newlyMastered`
+// flag returned here reflects the ITEM as a whole (every drill type it is
+// structurally reachable through — allReachableDrillTypesForItem — now has a
+// 3-streak), not just this one drillType, so the drill summary screen's
+// "newly mastered" count and the unit-% progress ring stay consistent with
+// getUnitSummaries' own strict aggregation. Since an already-mastered
+// drillType's mastered_at is frozen by the CASE below, the item's aggregate
+// mastery state can only change on the turn a specific drillType crosses the
+// threshold for the first time — so the aggregate check only needs to run
+// when THIS write is that turn.
 export async function submitThaiAttempt(
   itemId: string,
   drillType: DrillType,
@@ -110,6 +131,25 @@ export async function submitThaiAttempt(
   const expected = expectedAnswerFor(item, drillType);
   if (expected === null) throw new Error("Drill type does not apply to this item");
 
+  // Server-side unlock check (round 2 HIGH fix). The drill *page*
+  // (app/thai/[unit]/drill/page.tsx) already gates rendering on
+  // `current?.unlocked`, but this Server Action is directly invocable
+  // regardless of what the UI rendered — never trust the client on which
+  // unit's session a (itemId, drillType) pair belongs to. Re-derive it:
+  // some drill types (letter-final, word-final) are only ever offered by a
+  // LATER unit's session than the item's own home unit (e.g. a unit
+  // 2-5 consonant's letter-final is drilled inside unit 6), so the gating
+  // unit is "whichever unit's session offers this exact pair", not
+  // `item.unit`. Unit 2 (and unit 1's lesson marker, which never reaches
+  // this action) are always available.
+  const gatingUnit = unitOfferingDrillType(itemId, drillType as DrillTypeId, ALL_THAI_ITEMS);
+  if (gatingUnit === null) throw new Error("Drill type does not apply to this item");
+  if (gatingUnit > 2) {
+    const summaries = await getUnitSummaries(learnerId);
+    const gatingUnitSummary = summaries.find((s) => s.unit === gatingUnit);
+    if (!gatingUnitSummary?.unlocked) throw new Error("Unit not unlocked");
+  }
+
   const correct = expected === chosen;
 
   // Raw db.execute() results are not schema-mapped (unlike .select()), so
@@ -122,15 +162,16 @@ export async function submitThaiAttempt(
     mastered_at: string | null;
     last_seen: string | null;
   }>(sql`
-    INSERT INTO thai_progress (learner_id, item_id, streak, last_seen, mastered_at)
+    INSERT INTO thai_progress (learner_id, item_id, drill_type, streak, last_seen, mastered_at)
     VALUES (
       ${learnerId},
       ${itemId},
+      ${drillType},
       CASE WHEN ${correct} THEN 1 ELSE 0 END,
       now(),
       CASE WHEN ${correct} AND 1 >= ${MASTERY_STREAK} THEN now() ELSE NULL END
     )
-    ON CONFLICT (learner_id, item_id) DO UPDATE SET
+    ON CONFLICT (learner_id, item_id, drill_type) DO UPDATE SET
       streak = CASE WHEN ${correct} THEN thai_progress.streak + 1 ELSE 0 END,
       last_seen = now(),
       mastered_at = CASE
@@ -153,12 +194,35 @@ export async function submitThaiAttempt(
     timestamp: new Date(),
   });
 
-  const newlyMastered =
+  const localNewlyMastered =
     progressRow.mastered_at !== null &&
     progressRow.last_seen !== null &&
     progressRow.mastered_at === progressRow.last_seen;
 
-  return { correct, newlyMastered, streak: progressRow.streak };
+  let itemFullyMastered = false;
+  if (localNewlyMastered) {
+    const required = allReachableDrillTypesForItem(itemId, ALL_THAI_ITEMS);
+    const otherRequired = required.filter((dt) => dt !== drillType);
+    if (otherRequired.length === 0) {
+      itemFullyMastered = true;
+    } else {
+      const otherRows = await db
+        .select({ drillType: thaiProgress.drillType, masteredAt: thaiProgress.masteredAt })
+        .from(thaiProgress)
+        .where(
+          and(
+            eq(thaiProgress.learnerId, learnerId),
+            eq(thaiProgress.itemId, itemId),
+            inArray(thaiProgress.drillType, otherRequired),
+          ),
+        );
+      itemFullyMastered = otherRequired.every((dt) =>
+        otherRows.some((r) => r.drillType === dt && r.masteredAt !== null),
+      );
+    }
+  }
+
+  return { correct, newlyMastered: itemFullyMastered, streak: progressRow.streak };
 }
 
 // Read-only snapshot used by the drill summary screen (A6: "unit %, unlock

@@ -5,6 +5,12 @@ export const MASTERY_STREAK = 3;
 export const UNLOCK_THRESHOLD_PERCENT = 90;
 export const DRILL_ROUND_SIZE = 15;
 
+// Sentinel drillType for the unit-1 lesson-marker row (unit 1 has no drills —
+// "complete when read"). thai_progress.drill_type is NOT NULL as of M12/A1,
+// so markUnit1LessonRead needs a value; this is never a real DrillType and is
+// never checked against KNOWN_DRILL_TYPES in lib/thai/actions.ts.
+export const LESSON_READ_DRILL_TYPE = "lesson-read";
+
 // Applying one attempt to an existing (streak, masteredAt) pair.
 export function applyAttempt(
   current: { streak: number; masteredAt: Date | null },

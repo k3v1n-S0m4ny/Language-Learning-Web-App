@@ -216,12 +216,18 @@ export const thaiProgress = pgTable(
     itemId: text("item_id")
       .notNull()
       .references(() => thaiItems.id, { onDelete: "cascade" }),
+    // Per-drill-type streak dimension (M12/A1) — a consonant's letter-sound,
+    // letter-class, letter-final, and audio-letter streaks no longer blend
+    // into one row. See lib/db/migrations/*_thai_progress_drill_type.sql for
+    // the data migration (existing rows assigned their dominant drillType
+    // from thai_attempts history).
+    drillType: text("drill_type").notNull(),
     streak: integer("streak").notNull().default(0),
     lastSeen: timestamp("last_seen", { withTimezone: true }),
     masteredAt: timestamp("mastered_at", { withTimezone: true }),
   },
   (t) => [
-    uniqueIndex("thai_progress_learner_item_uq").on(t.learnerId, t.itemId),
+    uniqueIndex("thai_progress_learner_item_drill_uq").on(t.learnerId, t.itemId, t.drillType),
     index("thai_progress_learner_idx").on(t.learnerId),
   ],
 );

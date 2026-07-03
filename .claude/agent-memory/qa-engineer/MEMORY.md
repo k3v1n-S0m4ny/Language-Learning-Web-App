@@ -1,0 +1,2 @@
+- [Project start commands](project-start-commands.md) — dev: `npm run dev` (port 3000, ready ~1.4s); build: `npm run build`
+- [QA environment constraints](qa-env-constraints.md) — OAuth + prod Neon DB not automatable; drive ts-fsrs probes via `node --input-type=module` against installed package; compare intraday results against session day's dayEnd not today's

@@ -6,6 +6,7 @@ import { AccuracyByUnitChart } from "@/components/thai/stats/accuracy-by-unit-ch
 import { DrillActivityChart } from "@/components/thai/stats/drill-activity-chart";
 import { FailureHeatmap } from "@/components/thai/stats/failure-heatmap";
 import { StreakCalendar } from "@/components/thai/stats/streak-calendar";
+import { ToneConfusionMatrix } from "@/components/thai/stats/tone-confusion-matrix";
 
 // /thai/stats (A7): items-mastered-over-time, accuracy-by-unit, drill-activity
 // history, per-item failure heatmap, streak calendar.
@@ -47,6 +48,10 @@ export default async function ThaiStatsPage() {
 
         <Section title="Streak calendar — last 12 weeks">
           <StreakCalendar days={stats.streakCalendar} />
+        </Section>
+
+        <Section title="Tone confusion matrix (audio-tone drills)">
+          <ToneConfusionMatrix cells={stats.toneConfusion} />
         </Section>
       </div>
     </main>
