@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getUnitSummaries } from "@/lib/thai/queries";
 import { ModeToggle } from "@/components/mode-toggle";
 import { SignOutButton } from "@/components/sign-out-button";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { UnitRow } from "./unit-row";
 
 // Thai-mode home screen (A4): the 14-unit vertical map replaces the Mandarin
@@ -25,6 +26,7 @@ export async function ThaiHome({
           <ModeToggle activeMode="thai" />
         </div>
         <div className="flex items-center gap-2">
+          <ThemeToggle />
           <Link
             href="/thai/stats"
             className="rounded-full border border-border-base px-4 py-1.5 text-xs font-medium text-foreground-muted transition-colors hover:bg-surface"

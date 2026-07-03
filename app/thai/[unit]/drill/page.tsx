@@ -4,6 +4,7 @@ import { auth } from "@/auth";
 import { buildDrillRound } from "@/lib/thai/drill";
 import { getUnitSummaries } from "@/lib/thai/queries";
 import { UNIT_TITLES } from "@/seed/thai/items";
+import { LangSync } from "@/components/lang-sync";
 import { DrillSession } from "@/components/thai/drill/drill-session";
 
 const DRILLABLE_UNITS = new Set([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]);
@@ -31,6 +32,7 @@ export default async function ThaiDrillPage({
   if (!current?.unlocked) {
     return (
       <main className="mx-auto flex min-h-dvh max-w-2xl flex-col items-center justify-center gap-4 bg-background px-6 py-8 text-center">
+        <LangSync activeMode="thai" />
         <p className="text-sm text-foreground-muted">
           Unit {unit} is still locked — reach 90% on the previous unit first.
         </p>
@@ -48,6 +50,7 @@ export default async function ThaiDrillPage({
 
   return (
     <main className="mx-auto flex min-h-dvh max-w-2xl flex-col gap-6 bg-background px-6 py-8">
+      <LangSync activeMode="thai" />
       <div className="flex items-center justify-between gap-4">
         <Link
           href="/"

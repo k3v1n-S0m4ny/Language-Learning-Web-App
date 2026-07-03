@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { auth } from "@/auth";
+import { LangSync } from "@/components/lang-sync";
 import { getLearnersStats } from "@/lib/review/stats";
 import { ReviewsChart } from "@/components/stats/reviews-chart";
 import { ForecastChart } from "@/components/stats/forecast-chart";
@@ -19,6 +20,7 @@ export default async function StatsPage() {
 
   return (
     <main className="min-h-dvh bg-background px-6 py-8">
+      <LangSync activeMode="mandarin" />
       {/* Header with back link (A1) */}
       <div className="mx-auto mb-8 flex max-w-5xl items-center justify-between gap-4">
         <h1 className="text-xl font-semibold text-foreground">

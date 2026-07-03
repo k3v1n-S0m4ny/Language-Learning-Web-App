@@ -18,6 +18,7 @@ import {
   VOWELS_B,
   WORD_BANK,
 } from "@/seed/thai/items";
+import { LangSync } from "@/components/lang-sync";
 import { ConsonantTable } from "@/components/thai/lessons/consonant-table";
 import { FinalsTable } from "@/components/thai/lessons/finals-table";
 import { NumeralsLesson } from "@/components/thai/lessons/numerals-lesson";
@@ -64,6 +65,7 @@ export default async function ThaiLessonPage({
 
   return (
     <main className="mx-auto flex min-h-dvh max-w-3xl flex-col gap-6 bg-background px-6 py-8">
+      <LangSync activeMode="thai" />
       <div className="flex items-center justify-between gap-4">
         <Link
           href="/"

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { auth } from "@/auth";
+import { LangSync } from "@/components/lang-sync";
 import { getThaiStats } from "@/lib/thai/stats";
 import { MasteredOverTimeChart } from "@/components/thai/stats/mastered-over-time-chart";
 import { AccuracyByUnitChart } from "@/components/thai/stats/accuracy-by-unit-chart";
@@ -19,6 +20,7 @@ export default async function ThaiStatsPage() {
 
   return (
     <main className="min-h-dvh bg-background px-6 py-8">
+      <LangSync activeMode="thai" />
       <div className="mx-auto mb-8 flex max-w-3xl items-center justify-between gap-4">
         <h1 className="text-xl font-semibold text-foreground">Read Thai — Progress</h1>
         <Link

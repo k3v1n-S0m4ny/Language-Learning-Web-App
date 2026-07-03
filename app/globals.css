@@ -62,14 +62,115 @@
   --border: #d0cbc4;
 }
 
+/* Dark theme is driven by [data-theme="dark"] on <html>, set BEFORE first paint
+   by the no-flash script in layout.tsx (reads localStorage, else the OS pref).
+   The prefers-color-scheme block below is kept ONLY as a no-JS fallback and is
+   scoped to :root:not([data-theme]) so an explicit user choice always wins. */
+:root[data-theme="dark"] {
+  --background: #15191b;
+  --surface: #232a28;
+  --foreground: #ecefec;
+  --foreground-muted: #8a9490;
+  --border: #2e3835;
+}
+
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme]) {
     --background: #15191b;
     --surface: #232a28;
     --foreground: #ecefec;
     --foreground-muted: #8a9490;
     --border: #2e3835;
   }
+}
+
+/* ==========================================================================
+   Glass-redesign tokens (Phase 0). Layered ON TOP of the earthy semantic tokens
+   above — nothing here overrides an existing token, so every current
+   bg-background / bg-surface / bg-brand consumer keeps working during migration.
+   ========================================================================== */
+:root {
+  /* Radius scale — one ramp, concentric nesting */
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 22px;
+  --r-xl: 30px;
+  --r-pill: 999px;
+
+  /* Motion easings / springs (used by `motion` and CSS alike) */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Display type scale */
+  --text-display: clamp(2.5rem, 6vw, 4rem);
+  --tracking-display: -0.03em;
+
+  /* Liquid-glass surface tokens — LIGHT. Floating chrome only; reading/content
+     surfaces stay solid (var(--surface)). */
+  --glass-bg: rgba(255, 255, 255, 0.55);
+  --glass-bg-strong: rgba(255, 255, 255, 0.72);
+  --glass-brd: rgba(255, 255, 255, 0.6);
+  --glass-spec: rgba(255, 255, 255, 0.9);
+  --glass-shadow: 0 8px 32px rgba(23, 23, 23, 0.12);
+  --glass-blur: 20px;
+  --glass-saturate: 180%;
+
+  /* Mandarin spoken-tone hues (pinyin only; hanzi stays ink). Consumed in P1. */
+  --tone-1: #e5484d;
+  --tone-2: #e8890c;
+  --tone-3: #2e9e63;
+  --tone-4: #3b7dd8;
+  --tone-neutral: var(--foreground-muted);
+
+  /* Read-Thai restyled systems (glass-native). Light-mode values here; the
+     [data-theme="dark"] block brightens them. Consumed in P2. */
+  --thai-class-mid: #0d9488;
+  --thai-class-high: #d97706;
+  --thai-class-low: #7c3aed;
+  --thai-tone-mid: #64748b;
+  --thai-tone-low: #0284c7;
+  --thai-tone-falling: #dc2626;
+  --thai-tone-high: #16a34a;
+  --thai-tone-rising: #c026d3;
+
+  /* Per-language accents default to Mandarin until [data-lang] is set. */
+  --accent: #12b886;
+  --accent-2: #f0453a;
+  --accent-3: #f6b01e;
+}
+
+/* Dark overrides for the glass + palette tokens (semantic core handled above). */
+:root[data-theme="dark"] {
+  --glass-bg: rgba(32, 40, 42, 0.55);
+  --glass-bg-strong: rgba(32, 40, 42, 0.72);
+  --glass-brd: rgba(255, 255, 255, 0.12);
+  --glass-spec: rgba(255, 255, 255, 0.16);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.44);
+
+  /* Brighter Thai systems for legibility on dark (bake-off north-star values). */
+  --thai-class-mid: #2dd4bf;
+  --thai-class-high: #fbbf24;
+  --thai-class-low: #a78bfa;
+  --thai-tone-mid: #94a3b8;
+  --thai-tone-low: #38bdf8;
+  --thai-tone-falling: #f87171;
+  --thai-tone-high: #4ade80;
+  --thai-tone-rising: #e879f9;
+}
+
+/* Per-language accent + ambient-mesh tints. [data-lang] is set on <html> by
+   <LangSync> from the server-persisted active mode. */
+:root[data-lang="mandarin"] {
+  --accent: #12b886; /* jade */
+  --accent-2: #f0453a; /* vermilion */
+  --accent-3: #f6b01e; /* gold */
+}
+
+:root[data-lang="thai"] {
+  --accent: #f59e0b; /* saffron */
+  --accent-2: #0ea5a4; /* teal */
+  --accent-3: #e11d74; /* ruby */
 }
 
 @theme inline {
@@ -95,6 +196,17 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-thai: var(--font-noto-sans-thai);
+  /* Calligraphic Kai for hanzi — subset woff2 via layout, system-CJK fallback */
+  --font-hanzi: var(--font-lxgw), "Kaiti SC", "KaiTi", "STKaiti",
+    "Noto Serif CJK SC", serif;
+
+  /* Per-language accents as utilities: bg-accent / text-accent / border-accent … */
+  --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
+  --color-accent-3: var(--accent-3);
+
+  /* Pill radius utility (rounded-pill) */
+  --radius-pill: var(--r-pill);
 
   /* Animation tokens — only active when the OS has no reduce-motion preference.
      The @keyframes blocks are also gated so components can use these class names
@@ -158,4 +270,47 @@ body {
   color: var(--foreground);
   /* font-family intentionally omitted — Geist is applied via the layout's
      className (--font-geist-sans) so it loads through next/font correctly. */
+}
+
+/* ==========================================================================
+   Glass-redesign utilities (Phase 0)
+   ========================================================================== */
+
+/* Large tightly-tracked display heading */
+.text-display {
+  font-size: var(--text-display);
+  letter-spacing: var(--tracking-display);
+  line-height: 1.02;
+  font-weight: 600;
+}
+
+/* Liquid-glass recipe for FLOATING CHROME. The inset top highlight is the
+   specular edge that keeps a "flat" glass surface legible on dark (a11y note).
+   Reading/content surfaces must NOT use this — they stay solid var(--surface). */
+.glass {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-brd);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  box-shadow: var(--glass-shadow), inset 0 1px 0 0 var(--glass-spec);
+}
+
+.glass-strong {
+  background: var(--glass-bg-strong);
+}
+
+/* Ambient mesh drift — only animates when motion is welcome; otherwise the
+   blobs render statically (component still mounts, just no movement). */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes mesh-drift {
+    0% {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    50% {
+      transform: translate3d(3%, -4%, 0) scale(1.08);
+    }
+    100% {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+  }
 }
