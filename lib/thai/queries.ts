@@ -9,7 +9,7 @@ import {
   UNIT_TITLES,
 } from "@/seed/thai/items";
 import { LESSON_READ_DRILL_TYPE, isUnitUnlocked, percentMastered } from "./mastery";
-import { reachableDrillTypesForUnit } from "./reachability";
+import { unitMasteryStats } from "./reachability";
 import type { UnitSummary } from "./types";
 
 // itemId -> the set of drillTypes mastered (masteredAt not null) for that item.
@@ -46,19 +46,10 @@ async function fetchMasteredDrillTypesByItem(learnerId: string): Promise<Map<str
 // (not gated on whether audioUrl currently exists — an item with no clip yet
 // stays genuinely unmasterable, per A1's original STRICT intent), computed
 // from the static seed content so it needs no DB round-trip beyond the
-// learner's own progress rows.
-function unitMasteryStats(
-  unit: number,
-  masteredByItem: Map<string, Set<string>>,
-): { total: number; mastered: number } {
-  const reachable = reachableDrillTypesForUnit(unit, ALL_THAI_ITEMS);
-  let mastered = 0;
-  for (const [itemId, requiredTypes] of reachable) {
-    const masteredSet = masteredByItem.get(itemId);
-    if (masteredSet && requiredTypes.every((dt) => masteredSet.has(dt))) mastered++;
-  }
-  return { total: reachable.size, mastered };
-}
+// learner's own progress rows. `unitMasteryStats` itself now lives in
+// lib/thai/reachability.ts (M13/A6 residual #2) so scripts/seed-thai-db.ts
+// can run a regression guard against it without importing this DB-backed
+// module.
 
 // The 14-unit map for the Thai-mode home screen (A4). Units 1-9 reflect real
 // progress; 10-14 render as locked "coming soon" placeholders (no content yet).
@@ -106,7 +97,7 @@ export async function getUnitSummaries(learnerId: string): Promise<UnitSummary[]
       continue;
     }
 
-    const { total, mastered: masteredCount } = unitMasteryStats(unit, masteredByItem);
+    const { total, mastered: masteredCount } = unitMasteryStats(unit, masteredByItem, ALL_THAI_ITEMS);
     const pct = percentMastered(masteredCount, total);
     const unlocked: boolean = previousUnitUnlocksNext;
 

@@ -1,0 +1,212 @@
+[
+  {
+    "word": "คน",
+    "n_options": 4,
+    "options": [
+      "kʰòn",
+      "kʰōn",
+      "kʰón",
+      "kʰǒn"
+    ],
+    "hear_it_before": 0,
+    "hear_it_after": 1,
+    "gloss_text_after": "‘person’",
+    "action_calls": 1
+  },
+  {
+    "word": "ไก่",
+    "n_options": 4,
+    "options": [
+      "káj",
+      "kàj",
+      "kǎj",
+      "kàw"
+    ],
+    "hear_it_before": 0,
+    "hear_it_after": 1,
+    "gloss_text_after": "‘chicken’",
+    "action_calls": 1
+  },
+  {
+    "word": "น้อง",
+    "n_options": 4,
+    "options": [
+      "nɔ́ːm",
+      "nɔ́ːn",
+      "nɔ́ːŋ",
+      "nɔ̄ːŋ"
+    ],
+    "hear_it_before": 0,
+    "hear_it_after": 1,
+    "gloss_text_after": "‘younger sibling’",
+    "action_calls": 1
+  },
+  {
+    "word": "สุข",
+    "n_options": 4,
+    "options": [
+      "sùk̚",
+      "sûk̚",
+      "sǔk̚",
+      "sùt̚"
+    ],
+    "hear_it_before": 0,
+    "hear_it_after": 1,
+    "gloss_text_after": "‘happiness’",
+    "action_calls": 1
+  },
+  {
+    "word": "บาป",
+    "n_options": 4,
+    "options": [
+      "bàːp̚",
+      "báːp̚",
+      "bâːp̚",
+      "bàːt̚"
+    ],
+    "hear_it_before": 0,
+    "hear_it_after": 1,
+    "gloss_text_after": "‘sin’",
+    "action_calls": 1
+  },
+  {
+    "word": "ใจ",
+    "n_options": 4,
+    "options": [
+      "tɕâj",
+      "tɕāw",
+      "tɕāj",
+      "tɕǎj"
+    ],
+    "hear_it_before": 0,
+    "hear_it_after": 1,
+    "gloss_text_after": "‘heart’",
+    "action_calls": 1
+  },
+  {
+    "word": "ทราย",
+    "n_options": 4,
+    "options": [
+      "sāːj",
+      "sâːj",
+      "sǎːj",
+      "sāj"
+    ],
+    "hear_it_before": 0,
+    "hear_it_after": 1,
+    "gloss_text_after": "‘sand’",
+    "action_calls": 1
+  },
+  {
+    "word": "ลูก",
+    "n_options": 4,
+    "options": [
+      "lûːk̚",
+      "lǔːk̚",
+      "lûːp̚",
+      "lûk̚"
+    ],
+    "hear_it_before": 0,
+    "hear_it_after": 1,
+    "gloss_text_after": "‘child, offspring’",
+    "action_calls": 1
+  },
+  {
+    "word": "ต้ม",
+    "n_options": 4,
+    "options": [
+      "tóm",
+      "tòm",
+      "tôn",
+      "tôm"
+    ],
+    "hear_it_before": 0,
+    "hear_it_after": 1,
+    "gloss_text_after": "‘to boil’",
+    "action_calls": 1
+  },
+  {
+    "word": "ทราย",
+    "n_options": 4,
+    "options": [
+      "sāːj",
+      "sáːj",
+      "sâːj",
+      "sāj"
+    ],
+    "hear_it_before": 0,
+    "hear_it_after": 1,
+    "gloss_text_after": "‘sand’",
+    "action_calls": 1
+  },
+  {
+    "word": "ต่อ",
+    "n_options": 4,
+    "options": [
+      "tɔ̂ː",
+      "tɔ́ː",
+      "tɔ̌ː",
+      "tɔ̀ː"
+    ],
+    "hear_it_before": 0,
+    "hear_it_after": 1,
+    "gloss_text_after": "‘to connect’",
+    "action_calls": 1
+  },
+  {
+    "word": "หก",
+    "n_options": 4,
+    "options": [
+      "hôk̚",
+      "hòt̚",
+      "hòk̚",
+      "hōk̚"
+    ],
+    "hear_it_before": 0,
+    "hear_it_after": 1,
+    "gloss_text_after": "‘six’",
+    "action_calls": 1
+  },
+  {
+    "word": "ใจ",
+    "n_options": 4,
+    "options": [
+      "tɕāw",
+      "tɕáj",
+      "tɕàj",
+      "tɕāj"
+    ],
+    "hear_it_before": 0,
+    "hear_it_after": 1,
+    "gloss_text_after": "‘heart’",
+    "action_calls": 1
+  },
+  {
+    "word": "โต๊ะ",
+    "n_options": 4,
+    "options": [
+      "tóʔ",
+      "tòʔ",
+      "tǒʔ",
+      "tōʔ"
+    ],
+    "hear_it_before": 0,
+    "hear_it_after": 1,
+    "gloss_text_after": "‘table’",
+    "action_calls": 1
+  },
+  {
+    "word": "ได้",
+    "n_options": 4,
+    "options": [
+      "dǎːj",
+      "dâːj",
+      "dâːw",
+      "dáːj"
+    ],
+    "hear_it_before": 0,
+    "hear_it_after": 1,
+    "gloss_text_after": "‘can; to get’",
+    "action_calls": 1
+  }
+]

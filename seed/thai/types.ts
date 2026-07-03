@@ -70,6 +70,11 @@ export interface VowelItem {
   };
 }
 
+// The four written tone marks (research doc §6 "The four tone marks"),
+// identified by their Thai names' romanization rather than their glyphs so
+// they're usable as object keys / discriminants. `null` = unmarked.
+export type ToneMark = "mai-ek" | "mai-tho" | "mai-tri" | "mai-chattawa";
+
 export interface SyllableItem {
   kind: "syllable";
   id: string; // e.g. "syllable:ปลา"
@@ -78,19 +83,38 @@ export interface SyllableItem {
   initialIpa: string; // full IPA reading, e.g. "plāː"
   finalIpa: null;
   consonantClass: null;
-  // false for words whose metadata.finalSound is null (no final consonant to
-  // quiz — they illustrate a vowel form instead). The unit-6 word→final drill
-  // is the ONLY drill type that uses word-bank items as subjects, so a word
-  // with no final sound has no reachable path to being drilled; leaving it
-  // drillable:true would count it in getUnitSummaries' unit-6 denominator
-  // with no way to ever master it — the same bug class fixed for the 8
-  // FinalItem rows in round 2, found again here in round 3 (M11 review).
+  // M13/A1: every word-bank row is now drillable — the M11-era rule ("false
+  // when metadata.finalSound is null, since word-final was the only drill
+  // type reachable through word-bank items") no longer holds now that
+  // word-ipa (unit 11) and audio-word (unit 6) are reachable for every
+  // syllable item regardless of finalSound, and tone-assembly/mark-tone
+  // (unit 10) are reachable for every item with asmEligible/toneMark set.
+  // See lib/thai/reachability.ts for the current reachability rules.
   drillable: boolean;
   metadata: {
     gloss: string;
     finalSound: FinalSound | null;
     vowelForm?: string; // the vowel display form this word illustrates, e.g. "◌าย"
     sourceNote?: string; // where in the doc this word came from
+    // --- M13/A1: tone-derivation fields for units 10 (tone-assembly,
+    // mark-tone) and 11 (word-ipa). Every value below is taken verbatim from
+    // `.claude/plans/m13-word-bank.md`'s per-word derivation columns (class,
+    // mark, live, len, tone, asm — each independently Wiktionary-verified for
+    // the 70 new words, and computed from the research doc's own tone grid
+    // for the 30 M11 words). `null` fields are the artifact's own "—" cells,
+    // used only for the one multi-syllable word (สบาย, no single governing
+    // class/mark/live/length/tone) and for open-syllable words with no
+    // vowel-length-relevant branch reached (see asmEligible below). ---
+    initialClass: ConsonantClass | null; // the tone-determining initial consonant's class
+    toneMark: ToneMark | null; // the written tone mark, or null if unmarked
+    live: "live" | "dead" | null; // live/dead (doc §2/§6); null for marked syllables (mark wins — length/live-dead steps are skipped) and for สบาย
+    vowelLength: "short" | "long" | null; // phonetic vowel length; null where the branching drill never needs it (marked syllables with no clear single length, or สบาย)
+    tone: Tone | null; // the resulting tone from the doc's own grid; null only for สบาย (multi-syllable — no single governing tone)
+    // Eligible as a `tone-assembly` drill subject (artifact "asm" column).
+    // `false` for multi-syllable/irregular-spelling words (สบาย, พร, ทราย)
+    // where the branching flowchart's steps would mislead — they remain
+    // eligible for word-ipa (and mark-tone, if marked) instead.
+    asmEligible: boolean;
   };
 }
 

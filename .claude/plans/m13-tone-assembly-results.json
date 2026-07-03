@@ -1,0 +1,292 @@
+{
+  "marked": [
+    {
+      "word": "อ่าน",
+      "total_steps": 3,
+      "prompts": [
+        "What class is the initial consonant?",
+        "Is there a tone mark written?",
+        "Given the mark and class, what tone results?"
+      ],
+      "action_calls": 1
+    },
+    {
+      "word": "น้ำ",
+      "total_steps": 3,
+      "prompts": [
+        "What class is the initial consonant?",
+        "Is there a tone mark written?",
+        "Given the mark and class, what tone results?"
+      ],
+      "action_calls": 1
+    },
+    {
+      "word": "ข้าว",
+      "total_steps": 3,
+      "prompts": [
+        "What class is the initial consonant?",
+        "Is there a tone mark written?",
+        "Given the mark and class, what tone results?"
+      ],
+      "action_calls": 1
+    },
+    {
+      "word": "ข่า",
+      "total_steps": 3,
+      "prompts": [
+        "What class is the initial consonant?",
+        "Is there a tone mark written?",
+        "Given the mark and class, what tone results?"
+      ],
+      "action_calls": 1
+    },
+    {
+      "word": "ว่า",
+      "total_steps": 3,
+      "prompts": [
+        "What class is the initial consonant?",
+        "Is there a tone mark written?",
+        "Given the mark and class, what tone results?"
+      ],
+      "action_calls": 1
+    },
+    {
+      "word": "เดี๋ยว",
+      "total_steps": 3,
+      "prompts": [
+        "What class is the initial consonant?",
+        "Is there a tone mark written?",
+        "Given the mark and class, what tone results?"
+      ],
+      "action_calls": 1
+    },
+    {
+      "word": "ใส่",
+      "total_steps": 3,
+      "prompts": [
+        "What class is the initial consonant?",
+        "Is there a tone mark written?",
+        "Given the mark and class, what tone results?"
+      ],
+      "action_calls": 1
+    }
+  ],
+  "unmarkedDeadLow5": [
+    {
+      "word": "มาก",
+      "total_steps": 5,
+      "prompts": [
+        "What class is the initial consonant?",
+        "Is there a tone mark written?",
+        "Live or dead syllable?",
+        "Short or long vowel?",
+        "What tone results?"
+      ],
+      "action_calls": 1
+    },
+    {
+      "word": "รับ",
+      "total_steps": 5,
+      "prompts": [
+        "What class is the initial consonant?",
+        "Is there a tone mark written?",
+        "Live or dead syllable?",
+        "Short or long vowel?",
+        "What tone results?"
+      ],
+      "action_calls": 1
+    }
+  ],
+  "unmarkedDeadMidHigh4": [
+    {
+      "word": "ปาก",
+      "total_steps": 4,
+      "prompts": [
+        "What class is the initial consonant?",
+        "Is there a tone mark written?",
+        "Live or dead syllable?",
+        "What tone results?"
+      ],
+      "action_calls": 1
+    },
+    {
+      "word": "บาท",
+      "total_steps": 4,
+      "prompts": [
+        "What class is the initial consonant?",
+        "Is there a tone mark written?",
+        "Live or dead syllable?",
+        "What tone results?"
+      ],
+      "action_calls": 1
+    },
+    {
+      "word": "ออก",
+      "total_steps": 4,
+      "prompts": [
+        "What class is the initial consonant?",
+        "Is there a tone mark written?",
+        "Live or dead syllable?",
+        "What tone results?"
+      ],
+      "action_calls": 1
+    },
+    {
+      "word": "บาท",
+      "total_steps": 4,
+      "prompts": [
+        "What class is the initial consonant?",
+        "Is there a tone mark written?",
+        "Live or dead syllable?",
+        "What tone results?"
+      ],
+      "action_calls": 1
+    }
+  ],
+  "unmarkedLive": [
+    {
+      "word": "ไป",
+      "total_steps": 4,
+      "prompts": [
+        "What class is the initial consonant?",
+        "Is there a tone mark written?",
+        "Live or dead syllable?",
+        "What tone results?"
+      ],
+      "action_calls": 1
+    },
+    {
+      "word": "ยาง",
+      "total_steps": 4,
+      "prompts": [
+        "What class is the initial consonant?",
+        "Is there a tone mark written?",
+        "Live or dead syllable?",
+        "What tone results?"
+      ],
+      "action_calls": 1
+    },
+    {
+      "word": "กรง",
+      "total_steps": 4,
+      "prompts": [
+        "What class is the initial consonant?",
+        "Is there a tone mark written?",
+        "Live or dead syllable?",
+        "What tone results?"
+      ],
+      "action_calls": 1
+    },
+    {
+      "word": "ดี",
+      "total_steps": 4,
+      "prompts": [
+        "What class is the initial consonant?",
+        "Is there a tone mark written?",
+        "Live or dead syllable?",
+        "What tone results?"
+      ],
+      "action_calls": 1
+    },
+    {
+      "word": "แมว",
+      "total_steps": 4,
+      "prompts": [
+        "What class is the initial consonant?",
+        "Is there a tone mark written?",
+        "Live or dead syllable?",
+        "What tone results?"
+      ],
+      "action_calls": 1
+    },
+    {
+      "word": "สอง",
+      "total_steps": 4,
+      "prompts": [
+        "What class is the initial consonant?",
+        "Is there a tone mark written?",
+        "Live or dead syllable?",
+        "What tone results?"
+      ],
+      "action_calls": 1
+    },
+    {
+      "word": "ขา",
+      "total_steps": 4,
+      "prompts": [
+        "What class is the initial consonant?",
+        "Is there a tone mark written?",
+        "Live or dead syllable?",
+        "What tone results?"
+      ],
+      "action_calls": 1
+    },
+    {
+      "word": "ปลา",
+      "total_steps": 4,
+      "prompts": [
+        "What class is the initial consonant?",
+        "Is there a tone mark written?",
+        "Live or dead syllable?",
+        "What tone results?"
+      ],
+      "action_calls": 1
+    },
+    {
+      "word": "ปลา",
+      "total_steps": 4,
+      "prompts": [
+        "What class is the initial consonant?",
+        "Is there a tone mark written?",
+        "Live or dead syllable?",
+        "What tone results?"
+      ],
+      "action_calls": 1
+    },
+    {
+      "word": "ยาง",
+      "total_steps": 4,
+      "prompts": [
+        "What class is the initial consonant?",
+        "Is there a tone mark written?",
+        "Live or dead syllable?",
+        "What tone results?"
+      ],
+      "action_calls": 1
+    },
+    {
+      "word": "ยาม",
+      "total_steps": 4,
+      "prompts": [
+        "What class is the initial consonant?",
+        "Is there a tone mark written?",
+        "Live or dead syllable?",
+        "What tone results?"
+      ],
+      "action_calls": 1
+    },
+    {
+      "word": "ดี",
+      "total_steps": 4,
+      "prompts": [
+        "What class is the initial consonant?",
+        "Is there a tone mark written?",
+        "Live or dead syllable?",
+        "What tone results?"
+      ],
+      "action_calls": 1
+    },
+    {
+      "word": "กิน",
+      "total_steps": 4,
+      "prompts": [
+        "What class is the initial consonant?",
+        "Is there a tone mark written?",
+        "Live or dead syllable?",
+        "What tone results?"
+      ],
+      "action_calls": 1
+    }
+  ],
+  "unknown": []
+}

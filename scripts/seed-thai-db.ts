@@ -22,6 +22,7 @@ import * as schema from "../lib/db/schema";
 import { ALL_THAI_ITEMS } from "../seed/thai/items";
 import {
   DRILLED_UNITS,
+  assertUnitMasteryScopingGuard,
   findUnreachableDrillableIds,
   maxAchievablePercentForUnit,
 } from "../lib/thai/reachability";
@@ -135,6 +136,7 @@ async function main() {
 
   assertEveryDrillableItemIsReachable();
   assertEveryUnitCanReach100Percent();
+  assertUnitMasteryScopingGuard(ALL_THAI_ITEMS);
 
   // 1. Delete items no longer in the content module.
   const doomed = await db

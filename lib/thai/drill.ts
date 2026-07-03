@@ -18,7 +18,7 @@ import { DRILL_ROUND_SIZE } from "./mastery";
 import { getProgressByItemIds } from "./queries";
 import { allReachableDrillTypesForItem, computeReachableIds } from "./reachability";
 import { TONE_LABELS, TONE_ORDER } from "./tone";
-import type { DrillOption, DrillQuestion, DrillRound, DrillType } from "./types";
+import type { DrillOption, DrillQuestion, DrillRound, DrillStep, DrillType } from "./types";
 
 type ItemRow = typeof thaiItems.$inferSelect;
 
@@ -48,7 +48,75 @@ const VALID_KINDS_FOR_DRILL_TYPE: Record<DrillType, string[]> = {
   "audio-letter": ["consonant"],
   "audio-form": ["vowel"],
   "audio-tone": ["tone-word"],
+  "audio-word": ["syllable"],
+  "tone-assembly": ["syllable"],
+  "mark-tone": ["syllable"],
+  "word-ipa": ["syllable"],
 };
+
+// M13/A3: mechanical mutation of a full IPA reading along exactly one
+// dimension — tone, vowel length, or final — for word-ipa distractors. These
+// operate on the already-verified IPA strings from seed/thai/items.ts (never
+// inventing new Thai/IPA content); they are pure Unicode-combining-mark
+// substitutions, matching the exact diacritic convention already used
+// throughout the seed content (verified against the corpus: macron U+0304 =
+// mid, grave U+0300 = low, circumflex U+0302 = falling, acute U+0301 = high,
+// caron U+030C = rising; length marker U+02D0 "ː"; unreleased-final marker
+// U+031A "̚" following k/t/p).
+const TONE_DIACRITIC: Record<Tone, string> = {
+  mid: "̄",
+  low: "̀",
+  falling: "̂",
+  high: "́",
+  rising: "̌",
+};
+const ALL_TONE_DIACRITICS = Object.values(TONE_DIACRITIC);
+const FINAL_IPA: Record<string, string> = {
+  k: "k̚",
+  t: "t̚",
+  p: "p̚",
+  m: "m",
+  n: "n",
+  ŋ: "ŋ",
+  j: "j",
+  w: "w",
+};
+
+// Retone the LAST tone-diacritic occurrence in an IPA string (the main/final
+// syllable's — the one seed/thai/items.ts's metadata.tone describes) to a
+// different tone. Returns null if the string has no tone diacritic at all.
+function retoneIpa(ipa: string, targetTone: string): string | null {
+  const nfd = ipa.normalize("NFD");
+  let lastIdx = -1;
+  for (const d of ALL_TONE_DIACRITICS) {
+    const idx = nfd.lastIndexOf(d);
+    if (idx > lastIdx) lastIdx = idx;
+  }
+  if (lastIdx === -1) return null;
+  const targetDiacritic = TONE_DIACRITIC[targetTone as Tone];
+  if (!targetDiacritic) return null;
+  return (nfd.slice(0, lastIdx) + targetDiacritic + nfd.slice(lastIdx + 1)).normalize("NFC");
+}
+
+// Mutate vowel length by dropping the first long-vowel marker "ː" — returns
+// null if the string has none (nothing to shorten; the fallback pool covers
+// this case in ipaDistractors).
+function mutateLengthIpa(ipa: string): string | null {
+  const idx = ipa.indexOf("ː");
+  if (idx === -1) return null;
+  return ipa.slice(0, idx) + ipa.slice(idx + 1);
+}
+
+// Mutate the final consonant sound using the same confusable groups the
+// word-final/letter-final drills already use (finalSoundDistractors below) —
+// returns [] if the word has no trailing final in FINAL_IPA form to swap.
+function mutateFinalIpa(ipa: string, correctFinal: string): string[] {
+  const correctRepr = FINAL_IPA[correctFinal];
+  if (!correctRepr || !ipa.endsWith(correctRepr)) return [];
+  const base = ipa.slice(0, ipa.length - correctRepr.length);
+  const alts = (FINAL_GROUPS[correctFinal] ?? []).filter((f) => f !== correctFinal);
+  return alts.map((f) => base + FINAL_IPA[f]).filter((v) => v !== ipa);
+}
 
 function shuffled<T>(arr: T[]): T[] {
   const copy = [...arr];
@@ -101,6 +169,20 @@ export function expectedAnswerFor(item: ItemRow, drillType: DrillType): string |
       return item.display;
     case "audio-tone":
       return (meta.tone as string | undefined) ?? null;
+    case "audio-word":
+      // Hear the word's clip, pick the word (same reverse-of-forward shape as
+      // audio-letter/audio-form).
+      return item.display;
+    case "word-ipa":
+      return item.initialIpa;
+    case "mark-tone":
+    case "tone-assembly":
+      // Both resolve to the word's FINAL tone — tone-assembly's per-step
+      // branching feedback is client-side only (buildToneAssemblySteps); the
+      // server only ever verifies the final answer, same as every other
+      // drill type (M13/A2 contract: "One thai_attempts row per completed
+      // question ... expected vs chosen FINAL tone").
+      return (meta.tone as string | null | undefined) ?? null;
     default:
       return null;
   }
@@ -146,6 +228,18 @@ async function fetchConsonantsWithFinal(): Promise<ItemRow[]> {
   return rows.filter((r) => r.finalIpa !== null);
 }
 
+// The full word bank (kind "syllable", all tagged unit:6) — the shared
+// subject source for unit 6's own session AND units 10/11 (M13), which
+// source their subjects from this same set rather than from items tagged
+// unit:10/unit:11 (no such items exist; mirrors unit 6's own cross-unit
+// sourcing of units 2-5 consonants for letter-final).
+async function fetchWordBankItems(): Promise<ItemRow[]> {
+  return db
+    .select()
+    .from(thaiItems)
+    .where(and(eq(thaiItems.kind, "syllable"), eq(thaiItems.drillable, true)));
+}
+
 interface Subject {
   item: ItemRow;
   drillTypes: DrillType[];
@@ -186,8 +280,42 @@ async function buildSubjectPool(unit: number): Promise<Subject[]> {
     const consonants = consonantsWithFinal.filter((i) => reachable.has(i.id));
     return [
       ...consonants.map((item) => ({ item, drillTypes: ["letter-final"] as DrillType[] })),
-      ...words.map((item) => ({ item, drillTypes: ["word-final"] as DrillType[] })),
+      // M13/A4: each word's drillTypes are built per-item — word-final only
+      // when finalSound is real, audio-word only when the clip has actually
+      // landed (gated on audioUrl, same pattern as audio-letter/audio-form/
+      // audio-tone). A word with neither degrades to an empty array and is
+      // dropped, same as any other unit-9-before-the-batch subject (A4).
+      ...words
+        .map((item) => {
+          const meta = metadataOf(item);
+          const drillTypes: DrillType[] = [];
+          if (meta.finalSound !== null && meta.finalSound !== undefined) drillTypes.push("word-final");
+          if (item.audioUrl) drillTypes.push("audio-word");
+          return { item, drillTypes };
+        })
+        .filter((s) => s.drillTypes.length > 0),
     ];
+  }
+  if (unit === 10) {
+    const items = await fetchWordBankItems();
+    const reachable = computeReachableIds(10, items);
+    return items
+      .filter((item) => reachable.has(item.id))
+      .map((item) => {
+        const meta = metadataOf(item);
+        const drillTypes: DrillType[] = [];
+        if (meta.asmEligible === true) drillTypes.push("tone-assembly");
+        if (meta.toneMark != null) drillTypes.push("mark-tone");
+        return { item, drillTypes };
+      })
+      .filter((s) => s.drillTypes.length > 0);
+  }
+  if (unit === 11) {
+    const items = await fetchWordBankItems();
+    const reachable = computeReachableIds(11, items);
+    return items
+      .filter((item) => reachable.has(item.id))
+      .map((item) => ({ item, drillTypes: ["word-ipa"] as DrillType[] }));
   }
   if (unit === 7 || unit === 8) {
     const items = await fetchUnitItems(unit);
@@ -268,6 +396,157 @@ function vowelDistractors(pool: ItemRow[], correct: ItemRow, byForm: boolean): D
 
 function toneDistractors(correct: string): DrillOption[] {
   return TONE_ORDER.filter((t) => t !== correct).map((t) => ({ value: t, label: TONE_LABELS[t] }));
+}
+
+// M13/A4: audio-word distractors — prefer other words sharing the correct
+// word's final sound (adversarial, per A4's "adversarial distractors" ask),
+// falling back to the general pool.
+function wordDistractors(pool: ItemRow[], correct: ItemRow): DrillOption[] {
+  const correctMeta = metadataOf(correct);
+  const sameFinal = pool.filter((p) => {
+    if (p.id === correct.id) return false;
+    const finalSound = correctMeta.finalSound;
+    return finalSound != null && metadataOf(p).finalSound === finalSound;
+  });
+  const others = pool.filter((p) => p.id !== correct.id);
+  const seen = new Set([correct.display]);
+  const options: DrillOption[] = [];
+  for (const candidate of [...pick(sameFinal, 6), ...pick(others, 20)]) {
+    const value = candidate.display;
+    if (seen.has(value)) continue;
+    seen.add(value);
+    options.push({ value, label: value });
+    if (options.length >= 3) break;
+  }
+  return options;
+}
+
+// M13/A3: word-ipa distractors — each mutates exactly one dimension of the
+// correct full IPA (tone / vowel length / final), falling back to other
+// words' full IPA from the pool when a word doesn't have enough single-
+// dimension mutations available (e.g. an open-syllable word has no final to
+// mutate; a word already at its shortest phonetic length has no "ː" to drop).
+function ipaDistractors(item: ItemRow, pool: ItemRow[]): DrillOption[] {
+  const meta = metadataOf(item);
+  const correct = item.initialIpa;
+  if (!correct) return [];
+
+  const candidates = new Set<string>();
+  for (const t of TONE_ORDER) {
+    const mutated = retoneIpa(correct, t);
+    if (mutated && mutated !== correct) candidates.add(mutated);
+  }
+  const lengthMutated = mutateLengthIpa(correct);
+  if (lengthMutated && lengthMutated !== correct) candidates.add(lengthMutated);
+  const finalSound = meta.finalSound as string | null | undefined;
+  if (finalSound) {
+    for (const alt of mutateFinalIpa(correct, finalSound)) candidates.add(alt);
+  }
+
+  const seen = new Set([correct]);
+  const options: DrillOption[] = [];
+  for (const c of shuffled([...candidates])) {
+    if (seen.has(c)) continue;
+    seen.add(c);
+    options.push({ value: c, label: c });
+    if (options.length >= 3) break;
+  }
+  if (options.length < 3) {
+    const others = pool.filter((p) => p.id !== item.id && p.initialIpa && !seen.has(p.initialIpa));
+    for (const candidate of pick(others, others.length)) {
+      const value = candidate.initialIpa as string;
+      if (seen.has(value)) continue;
+      seen.add(value);
+      options.push({ value, label: value });
+      if (options.length >= 3) break;
+    }
+  }
+  return options;
+}
+
+// M13/A2: builds the branching `tone-assembly` steps for one word, per the
+// research doc's own flowchart (§6): class -> mark present? -> [marked:
+// mark+class tone] / [unmarked: live/dead -> (dead:) vowel length -> tone].
+// Returns null if the item's metadata can't support a full branch (defensive
+// — buildSubjectPool/canDrillTypeScore already gate on asmEligible+tone+
+// initialClass, so this should not happen for a real subject).
+function buildToneAssemblySteps(meta: Record<string, unknown>): DrillStep[] | null {
+  const cls = meta.initialClass as string | null | undefined;
+  const tone = meta.tone as string | null | undefined;
+  const toneMark = meta.toneMark as string | null | undefined;
+  const live = meta.live as string | null | undefined;
+  const vowelLength = meta.vowelLength as string | null | undefined;
+  if (!cls || !tone) return null;
+
+  const toneStep = (key: string): DrillStep => ({
+    key,
+    prompt: "What tone results?",
+    correct: tone,
+    options: shuffled(TONE_ORDER.map((t) => ({ value: t, label: TONE_LABELS[t] }))),
+  });
+
+  const steps: DrillStep[] = [
+    {
+      key: "class",
+      prompt: "What class is the initial consonant?",
+      correct: cls,
+      options: shuffled((["mid", "high", "low"] as const).map((c) => ({ value: c, label: c }))),
+    },
+    {
+      key: "markPresent",
+      prompt: "Is there a tone mark written?",
+      correct: toneMark ? "yes" : "no",
+      options: shuffled([
+        { value: "yes", label: "Yes" },
+        { value: "no", label: "No" },
+      ]),
+    },
+  ];
+
+  if (toneMark) {
+    steps.push({ ...toneStep("markTone"), prompt: "Given the mark and class, what tone results?" });
+    return steps;
+  }
+
+  if (!live) return null;
+  steps.push({
+    key: "liveDead",
+    prompt: "Live or dead syllable?",
+    correct: live,
+    options: shuffled([
+      { value: "live", label: "Live" },
+      { value: "dead", label: "Dead" },
+    ]),
+  });
+
+  if (live === "live") {
+    steps.push(toneStep("tone"));
+    return steps;
+  }
+
+  // live === "dead" here. Per the research doc (§6: "④ Dead: how long is the
+  // vowel? (length only matters for the Low class)" — worked example: "Mid +
+  // dead → low (for Mid class, length makes no difference)") and
+  // lib/thai/tone.ts's own TONE_GRID_ROWS (Mid/High resolve to `low` for BOTH
+  // "dead, short" and "dead, long"), the vowel-length step is only meaningful
+  // for the Low class — Mid/High class dead syllables go straight from
+  // live/dead to the tone step. Review round-1 HIGH fix: this step was
+  // previously asked unconditionally, teaching an incorrect mental model for
+  // the 20/100 word-bank rows that are unmarked+dead+mid/high class.
+  if (cls === "low") {
+    if (!vowelLength) return null;
+    steps.push({
+      key: "vowelLength",
+      prompt: "Short or long vowel?",
+      correct: vowelLength,
+      options: shuffled([
+        { value: "short", label: "Short" },
+        { value: "long", label: "Long" },
+      ]),
+    });
+  }
+  steps.push(toneStep("tone"));
+  return steps;
 }
 
 function buildQuestion(subject: Subject, drillType: DrillType, pool: ItemRow[]): DrillQuestion | null {
@@ -396,6 +675,72 @@ function buildQuestion(subject: Subject, drillType: DrillType, pool: ItemRow[]):
         { value: correct, label: TONE_LABELS[correct as Tone] },
         ...distractors,
       ]),
+    };
+  }
+
+  if (drillType === "audio-word") {
+    if (!audioUrl) return null;
+    const distractors = wordDistractors(pool, item);
+    if (distractors.length < 3) return null;
+    return {
+      itemId: item.id,
+      drillType,
+      prompt: "",
+      promptKind: "audio",
+      gloss: meta.gloss as string,
+      audioUrl,
+      correct,
+      options: shuffled([{ value: correct, label: correct }, ...distractors]),
+    };
+  }
+
+  if (drillType === "word-ipa") {
+    const distractors = ipaDistractors(item, pool);
+    if (distractors.length < 3) return null;
+    return {
+      itemId: item.id,
+      drillType,
+      prompt: item.display,
+      promptKind: "syllable",
+      gloss: meta.gloss as string,
+      audioUrl,
+      correct,
+      options: shuffled([{ value: correct, label: correct }, ...distractors]),
+    };
+  }
+
+  if (drillType === "mark-tone") {
+    const distractors = toneDistractors(correct);
+    if (distractors.length < 4) return null;
+    return {
+      itemId: item.id,
+      drillType,
+      prompt: item.display,
+      promptKind: "syllable",
+      gloss: meta.gloss as string,
+      audioUrl,
+      correct,
+      options: shuffled([
+        { value: correct, label: TONE_LABELS[correct as Tone] },
+        ...distractors,
+      ]),
+    };
+  }
+
+  if (drillType === "tone-assembly") {
+    const steps = buildToneAssemblySteps(meta);
+    if (!steps) return null;
+    const finalStep = steps[steps.length - 1];
+    return {
+      itemId: item.id,
+      drillType,
+      prompt: item.display,
+      promptKind: "syllable",
+      gloss: meta.gloss as string,
+      audioUrl,
+      correct: finalStep.correct,
+      options: finalStep.options,
+      steps,
     };
   }
 

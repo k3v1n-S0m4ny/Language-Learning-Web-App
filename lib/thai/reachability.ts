@@ -49,7 +49,17 @@ export type DrillTypeId =
   | "form-sound"
   | "audio-letter"
   | "audio-form"
-  | "audio-tone";
+  | "audio-tone"
+  // M13/A2-A4: audio-word (unit 6, word-bank listening), tone-assembly and
+  // mark-tone (unit 10, tone-rules engine), word-ipa (unit 11, syllable
+  // decode). All four are only ever offered from the unit-6 word bank's items
+  // (item.unit === 6) inside a LATER unit's session — the exact same
+  // cross-unit-sourcing shape unit 6's own letter-final already has for
+  // units 2-5 consonants.
+  | "audio-word"
+  | "tone-assembly"
+  | "mark-tone"
+  | "word-ipa";
 
 export interface ReachabilityItem {
   id: string;
@@ -65,8 +75,11 @@ function metadataOf(item: ReachabilityItem): Record<string, unknown> {
   return (item.metadata ?? {}) as Record<string, unknown>;
 }
 
-// Units with a drill mechanic (unit 1 is lesson-only; 10-14 unbuilt).
-export const DRILLED_UNITS = [2, 3, 4, 5, 6, 7, 8, 9] as const;
+// Units with a drill mechanic (unit 1 is lesson-only; 12-14 unbuilt as of
+// M13). 10 and 11 added in M13 — both source their subjects from the unit-6
+// word bank rather than from items tagged unit:10/11 (mirrors unit 6's own
+// cross-unit sourcing of units 2-5 consonants for letter-final).
+export const DRILLED_UNITS = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11] as const;
 
 function addTo(map: Map<string, DrillTypeId[]>, id: string, drillType: DrillTypeId): void {
   const list = map.get(id);
@@ -114,6 +127,36 @@ function canDrillTypeScore(item: ReachabilityItem, drillType: DrillTypeId): bool
       return item.kind === "vowel" && canEverHaveAudio(item);
     case "audio-tone":
       return item.kind === "tone-word" && canEverHaveAudio(item);
+    // M13/A4: audio-word is structurally required for every unit-6 word-bank
+    // item — canEverHaveAudio already returns true unconditionally for kind
+    // "syllable" (real, sayable text always exists), so this can never
+    // deadlock the way the two hidden-vowel rows once did for audio-form.
+    case "audio-word":
+      return item.kind === "syllable" && canEverHaveAudio(item);
+    // M13/A2: tone-assembly only ever applies to asm-eligible words (the
+    // artifact's "asm" column) that resolve to a real class + tone — the
+    // seed-time invariant (assertEveryUnitCanReach100Percent) fails loudly if
+    // reachableDrillTypesForUnit(10, ...) below ever offers it for anything
+    // else.
+    case "tone-assembly":
+      return (
+        item.kind === "syllable" &&
+        metadataOf(item).asmEligible === true &&
+        metadataOf(item).tone != null &&
+        metadataOf(item).initialClass != null
+      );
+    // M13/A2: mark-tone only ever applies to marked words with a resolved tone.
+    case "mark-tone":
+      return (
+        item.kind === "syllable" && metadataOf(item).toneMark != null && metadataOf(item).tone != null
+      );
+    // M13/A3: word-ipa is structurally answerable for every word-bank row —
+    // every SyllableItem carries a full IPA reading (initialIpa) regardless
+    // of finalSound/asmEligible/toneMark, and the drill's distractor pool
+    // (100 words) is always large enough for a fallback mutation or pool pick
+    // (see lib/thai/drill.ts's ipaDistractors).
+    case "word-ipa":
+      return item.kind === "syllable";
     default:
       return false;
   }
@@ -158,6 +201,16 @@ export function reachableDrillTypesForUnit(
       const finalSound = metadataOf(i).finalSound;
       if (finalSound !== null && finalSound !== undefined) addTo(map, i.id, "word-final");
     }
+    // audio-word subjects (M13/A4): every unit-6 word-bank row, regardless of
+    // finalSound — this is what makes the M11-era finalSound-gated 9 rows
+    // (ปลา, ดี, มือ, คา, ขา, ข่า, นา, มา, ไป) reachable again once drillable
+    // flipped to true for them in M13 (previously they had NO reachable path
+    // in unit 6 at all). Adding this requirement can legitimately re-lock a
+    // learner's existing unit-6 percentage until the new audio clips are
+    // synthesized and they re-drill (A4, M12 precedent for this exact shape).
+    for (const i of allItems) {
+      if (i.kind === "syllable" && i.unit === 6 && i.drillable) addTo(map, i.id, "audio-word");
+    }
     return map;
   }
 
@@ -179,6 +232,36 @@ export function reachableDrillTypesForUnit(
       if (i.kind === "tone-word" && i.unit === 9 && i.drillable) {
         addTo(map, i.id, "audio-tone");
       }
+    }
+    return map;
+  }
+
+  // M13/A2: unit 10's session sources its subjects from the unit-6 word
+  // bank (same cross-unit-sourcing shape as unit 6's own letter-final for
+  // units 2-5 consonants) — no item is tagged unit:10.
+  if (unit === 10) {
+    for (const i of allItems) {
+      if (i.kind !== "syllable" || i.unit !== 6 || !i.drillable) continue;
+      const meta = metadataOf(i);
+      if (meta.asmEligible === true) addTo(map, i.id, "tone-assembly");
+      // Review round-1 LOW fix (defense in depth): mirror canDrillTypeScore's
+      // "mark-tone" predicate exactly (toneMark != null AND tone != null) —
+      // previously this only checked toneMark, so a future word-bank row
+      // shipping a mark without a resolved tone would have silently dropped
+      // out of maxAchievablePercentForUnit's 100% check instead of failing
+      // loudly at the offending row. Currently a no-op against real data (0
+      // rows have toneMark set without tone set), but keeps the two
+      // independently-written cross-checks actually in agreement.
+      if (meta.toneMark != null && meta.tone != null) addTo(map, i.id, "mark-tone");
+    }
+    return map;
+  }
+
+  // M13/A3: unit 11's session likewise sources word-ipa subjects from the
+  // full unit-6 word bank — every drillable syllable row is eligible.
+  if (unit === 11) {
+    for (const i of allItems) {
+      if (i.kind === "syllable" && i.unit === 6 && i.drillable) addTo(map, i.id, "word-ipa");
     }
     return map;
   }
@@ -278,4 +361,89 @@ export function maxAchievablePercentForUnit(unit: number, allItems: Reachability
     if (item && types.every((dt) => canDrillTypeScore(item, dt))) achievable++;
   }
   return Math.round((achievable / reachable.size) * 100);
+}
+
+// STRICT per-UNIT mastery stats (M11/A1; moved here from lib/thai/queries.ts
+// in M13/A6 residual #2). Purely a function of `reachableDrillTypesForUnit`
+// (never the cross-unit `allReachableDrillTypesForItem` union — see this
+// file's header, CRITICAL 1) and a learner's already-fetched mastered-set
+// map, so it has zero DB dependency and can be called from
+// scripts/seed-thai-db.ts (which must never import anything that
+// transitively pulls in "@/lib/db" — see this file's header) as well as from
+// lib/thai/queries.ts::getUnitSummaries.
+export function unitMasteryStats(
+  unit: number,
+  masteredByItem: Map<string, Set<string>>,
+  allItems: ReachabilityItem[],
+): { total: number; mastered: number } {
+  const reachable = reachableDrillTypesForUnit(unit, allItems);
+  let mastered = 0;
+  for (const [itemId, requiredTypes] of reachable) {
+    const masteredSet = masteredByItem.get(itemId);
+    if (masteredSet && requiredTypes.every((dt) => masteredSet.has(dt))) mastered++;
+  }
+  return { total: reachable.size, mastered };
+}
+
+// M13/A6 residual #2 — mechanical regression guard against the exact
+// CRITICAL 1 bug class from the M12 review (this file's header): a crafted,
+// DB-free synthetic fixture proves `unitMasteryStats` requires a unit's OWN
+// reachable drill types, not a cross-unit-only one. Run from
+// scripts/seed-thai-db.ts on every seed refresh, so a future edit that
+// reintroduces `allReachableDrillTypesForItem`'s cross-unit union into
+// getUnitSummaries' per-unit percentage (the architecture-shape regression
+// the M12 review flagged as only documentation-guarded, not mechanically
+// checked) gets caught the next time the seed script runs.
+export function assertUnitMasteryScopingGuard(allItems: ReachabilityItem[]): void {
+  // A real unit-2 consonant that also has a final sound, so it is reachable
+  // via letter-final — but ONLY from unit 6's own session, never unit 2's.
+  const sample = allItems.find(
+    (i) => i.kind === "consonant" && i.unit === 2 && i.drillable && i.finalIpa !== null,
+  );
+  if (!sample) {
+    throw new Error(
+      "Unlock-math regression guard could not run: no unit-2 consonant with a final sound " +
+        "was found in the seed content to build the synthetic fixture against.",
+    );
+  }
+
+  // Negative fixture: this item is "mastered" ONLY for letter-final (the
+  // cross-unit-only type) — its own unit's required types (letter-sound,
+  // letter-class) are deliberately left unmastered.
+  const crossUnitOnly = new Map<string, Set<string>>([[sample.id, new Set(["letter-final"])]]);
+  const { mastered: crossUnitMastered } = unitMasteryStats(2, crossUnitOnly, allItems);
+  if (crossUnitMastered !== 0) {
+    throw new Error(
+      "Unlock-math regression guard FAILED: unitMasteryStats(2, ...) counted an item as " +
+        "mastered using only a cross-unit drill type (letter-final, reachable exclusively " +
+        "from unit 6's own session), instead of requiring unit 2's own reachable types " +
+        "(letter-sound, letter-class). This is the exact M12 review CRITICAL 1 deadlock bug " +
+        "class (see this file's header) — lib/thai/queries.ts::getUnitSummaries must derive " +
+        "percentMastered from reachableDrillTypesForUnit(unit, ...) directly, never from the " +
+        "cross-unit allReachableDrillTypesForItem union.",
+    );
+  }
+
+  // Positive control: mastering EVERY one of unit 2's own required types for
+  // this item (letter-sound + letter-class, plus audio-letter if the item
+  // structurally supports audio — derived from reachableDrillTypesForUnit
+  // itself, not hardcoded, so this stays correct regardless of which drill
+  // types unit 2's own session offers) — but NOT the cross-unit letter-final
+  // — must count the item as mastered for unit 2's own percentage. Proves the
+  // guard isn't trivially "always return 0".
+  const ownUnitRequiredTypes = reachableDrillTypesForUnit(2, allItems).get(sample.id) ?? [];
+  const ownUnitOnly = new Map<string, Set<string>>([[sample.id, new Set(ownUnitRequiredTypes)]]);
+  const { mastered: ownUnitMastered } = unitMasteryStats(2, ownUnitOnly, allItems);
+  if (ownUnitMastered !== 1) {
+    throw new Error(
+      "Unlock-math regression guard FAILED (positive control): unitMasteryStats(2, ...) did " +
+        "not count an item mastered via its own unit-2 required types " +
+        `(${ownUnitRequiredTypes.join(", ")}) as mastered.`,
+    );
+  }
+
+  console.log(
+    "[reachability] OK — unitMasteryStats correctly scopes unit 2's own percentage to its " +
+      "own reachable drill types (M13/A6 unlock-math regression guard).",
+  );
 }

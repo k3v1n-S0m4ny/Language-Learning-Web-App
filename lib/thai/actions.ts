@@ -25,6 +25,10 @@ const KNOWN_DRILL_TYPES: DrillType[] = [
   "audio-letter",
   "audio-form",
   "audio-tone",
+  "audio-word",
+  "tone-assembly",
+  "mark-tone",
+  "word-ipa",
 ];
 
 // Persist the Learner's Mandarin/Thai mode choice (A3). Server Actions are
@@ -140,15 +144,25 @@ export async function submitThaiAttempt(
   // LATER unit's session than the item's own home unit (e.g. a unit
   // 2-5 consonant's letter-final is drilled inside unit 6), so the gating
   // unit is "whichever unit's session offers this exact pair", not
-  // `item.unit`. Unit 2 (and unit 1's lesson marker, which never reaches
-  // this action) are always available.
+  // `item.unit`. Unit 1's lesson marker never reaches this action.
+  //
+  // M13/A6 residual #1: unit 2 is NOT unconditionally available — it is only
+  // submittable once unit 1's lesson marker has been read, same as every
+  // other built unit's gate (getUnitSummaries already computes unit 2's own
+  // `unlocked` from `unit1LessonComplete`; this used to be bypassed by an
+  // `gatingUnit > 2` check that skipped the summaries lookup entirely for
+  // unit 2).
   const gatingUnit = unitOfferingDrillType(itemId, drillType as DrillTypeId, ALL_THAI_ITEMS);
   if (gatingUnit === null) throw new Error("Drill type does not apply to this item");
-  if (gatingUnit > 2) {
-    const summaries = await getUnitSummaries(learnerId);
-    const gatingUnitSummary = summaries.find((s) => s.unit === gatingUnit);
-    if (!gatingUnitSummary?.unlocked) throw new Error("Unit not unlocked");
-  }
+  // Review round-1 LOW fix: `gatingUnit` can never be < 2 here — every
+  // element of `DRILLED_UNITS` (lib/thai/reachability.ts) is >= 2, and the
+  // `=== null` check above already rejected the only other case. The unlock
+  // check below is therefore unconditional (was previously gated on a
+  // `gatingUnit >= 2` tautology left over from the A6.1 fix, which changed a
+  // real `> 2` bypass into a condition that could never be false).
+  const summaries = await getUnitSummaries(learnerId);
+  const gatingUnitSummary = summaries.find((s) => s.unit === gatingUnit);
+  if (!gatingUnitSummary?.unlocked) throw new Error("Unit not unlocked");
 
   const correct = expected === chosen;
 

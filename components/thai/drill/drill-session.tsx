@@ -3,8 +3,11 @@
 import { useMemo, useState, useTransition } from "react";
 import Link from "next/link";
 import { getUnitProgressSnapshot, submitThaiAttempt } from "@/lib/thai/actions";
+import { TONE_LABELS } from "@/lib/thai/tone";
 import type { DrillOption, DrillQuestion } from "@/lib/thai/types";
+import type { Tone } from "@/seed/thai/types";
 import { AudioPlayButton } from "@/components/thai/audio-play-button";
+import { ToneAssemblyQuestion } from "./tone-assembly-question";
 
 interface Props {
   unit: number;
@@ -41,14 +44,16 @@ export function DrillSession({ unit, questions, nextUnitWasUnlocked }: Props) {
     );
   }
 
-  function answer(option: DrillOption) {
+  function submitAnswer(value: string) {
     if (phase !== "answering" || pending) return;
-    setChosen(option.value);
+    setChosen(value);
     startTransition(async () => {
       // itemId/drillType only — the server re-derives the expected answer
       // from thai_items rather than trusting a client-supplied value (M11
-      // review round 2, HIGH fix).
-      const result = await submitThaiAttempt(question.itemId, question.drillType, option.value);
+      // review round 2, HIGH fix). For tone-assembly, `value` is the FINAL
+      // step's chosen tone — every earlier step's feedback is local-only
+      // (M13/A2 contract: one attempt row per completed question).
+      const result = await submitThaiAttempt(question.itemId, question.drillType, value);
       setLastCorrect(result.correct);
       if (result.correct) setCorrectCount((c) => c + 1);
       if (result.newlyMastered) {
@@ -56,6 +61,10 @@ export function DrillSession({ unit, questions, nextUnitWasUnlocked }: Props) {
       }
       setPhase("revealed");
     });
+  }
+
+  function answer(option: DrillOption) {
+    submitAnswer(option.value);
   }
 
   function next() {
@@ -100,6 +109,15 @@ export function DrillSession({ unit, questions, nextUnitWasUnlocked }: Props) {
     );
   }
 
+  // word-ipa (M13/A3): gloss + audio are revealed only after answering, so
+  // the pronunciation clip can't be used to guess the tone/length before the
+  // learner has committed — unlike the other drill types' always-visible
+  // "hear it" hint, which predates this requirement.
+  const hideAudioUntilRevealed = question.drillType === "word-ipa";
+  // audio-word's options are real Thai words (need Noto Sans Thai shaping),
+  // unlike every other drill type's options (IPA/class/tone-label strings).
+  const optionFont = question.drillType === "audio-word" ? "font-thai text-2xl" : "font-mono text-lg";
+
   return (
     <div className="flex flex-col gap-6">
       <div className="text-xs font-medium uppercase tracking-wide text-foreground-muted">
@@ -120,9 +138,11 @@ export function DrillSession({ unit, questions, nextUnitWasUnlocked }: Props) {
             {question.prompt}
           </div>
         )}
-        {question.promptKind !== "audio" && question.audioUrl && (
-          <AudioPlayButton url={question.audioUrl} label="▶ Hear it" size="sm" />
-        )}
+        {question.promptKind !== "audio" &&
+          question.audioUrl &&
+          (!hideAudioUntilRevealed || phase === "revealed") && (
+            <AudioPlayButton url={question.audioUrl} label="▶ Hear it" size="sm" />
+          )}
         {phase === "revealed" && question.gloss && (
           <div className="text-sm italic text-foreground-muted animate-fade-in">
             &lsquo;{question.gloss}&rsquo;
@@ -130,28 +150,40 @@ export function DrillSession({ unit, questions, nextUnitWasUnlocked }: Props) {
         )}
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
-        {optionOrder.map((option) => {
-          const isChosen = chosen === option.value;
-          const isCorrectOption = option.value === question.correct;
-          let style = "border-border-base bg-surface hover:bg-background";
-          if (phase === "revealed") {
-            if (isCorrectOption) style = "border-success bg-success text-white";
-            else if (isChosen) style = "border-clay bg-clay text-on-earthy";
-          }
-          return (
-            <button
-              key={option.value}
-              type="button"
-              disabled={phase === "revealed" || pending}
-              onClick={() => answer(option)}
-              className={`rounded-xl border-2 px-4 py-3 text-center font-mono text-lg transition-colors disabled:cursor-default ${style}`}
-            >
-              {option.label}
-            </button>
-          );
-        })}
-      </div>
+      {question.drillType === "tone-assembly" && question.steps ? (
+        phase === "answering" ? (
+          <ToneAssemblyQuestion steps={question.steps} disabled={pending} onFinalStepAnswered={submitAnswer} />
+        ) : (
+          chosen && (
+            <div className="text-sm text-foreground-muted">
+              Your final answer: <b className="text-foreground">{TONE_LABELS[chosen as Tone] ?? chosen}</b>
+            </div>
+          )
+        )
+      ) : (
+        <div className="grid grid-cols-2 gap-3">
+          {optionOrder.map((option) => {
+            const isChosen = chosen === option.value;
+            const isCorrectOption = option.value === question.correct;
+            let style = "border-border-base bg-surface hover:bg-background";
+            if (phase === "revealed") {
+              if (isCorrectOption) style = "border-success bg-success text-white";
+              else if (isChosen) style = "border-clay bg-clay text-on-earthy";
+            }
+            return (
+              <button
+                key={option.value}
+                type="button"
+                disabled={phase === "revealed" || pending}
+                onClick={() => answer(option)}
+                className={`rounded-xl border-2 px-4 py-3 text-center transition-colors disabled:cursor-default ${optionFont} ${style}`}
+              >
+                {option.label}
+              </button>
+            );
+          })}
+        </div>
+      )}
 
       {phase === "revealed" && (
         <button
