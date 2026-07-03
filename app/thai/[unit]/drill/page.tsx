@@ -6,7 +6,7 @@ import { getUnitSummaries } from "@/lib/thai/queries";
 import { UNIT_TITLES } from "@/seed/thai/items";
 import { DrillSession } from "@/components/thai/drill/drill-session";
 
-const DRILLABLE_UNITS = new Set([2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
+const DRILLABLE_UNITS = new Set([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]);
 
 export default async function ThaiDrillPage({
   params,

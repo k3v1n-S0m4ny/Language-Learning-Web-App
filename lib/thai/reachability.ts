@@ -59,7 +59,16 @@ export type DrillTypeId =
   | "audio-word"
   | "tone-assembly"
   | "mark-tone"
-  | "word-ipa";
+  | "word-ipa"
+  // M14/A2: unit 12 (special signs & silent leaders), unit 13 (numerals),
+  // unit 14 (spaceless-reading tap-split). The FINAL Read-Thai milestone.
+  | "sign-function"
+  | "leader-tone"
+  | "audio-leader"
+  | "numeral-value"
+  | "value-numeral"
+  | "audio-numeral"
+  | "phrase-split";
 
 export interface ReachabilityItem {
   id: string;
@@ -75,11 +84,13 @@ function metadataOf(item: ReachabilityItem): Record<string, unknown> {
   return (item.metadata ?? {}) as Record<string, unknown>;
 }
 
-// Units with a drill mechanic (unit 1 is lesson-only; 12-14 unbuilt as of
-// M13). 10 and 11 added in M13 — both source their subjects from the unit-6
-// word bank rather than from items tagged unit:10/11 (mirrors unit 6's own
-// cross-unit sourcing of units 2-5 consonants for letter-final).
-export const DRILLED_UNITS = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11] as const;
+// Units with a drill mechanic (unit 1 is lesson-only). 10 and 11 added in
+// M13 — both source their subjects from the unit-6 word bank rather than
+// from items tagged unit:10/11 (mirrors unit 6's own cross-unit sourcing of
+// units 2-5 consonants for letter-final). 12, 13, 14 added in M14 (the FINAL
+// Read-Thai milestone) — all three DO have their own items tagged
+// unit:12/13/14 (special-sign+leader-word, numeral, phrase respectively).
+export const DRILLED_UNITS = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14] as const;
 
 function addTo(map: Map<string, DrillTypeId[]>, id: string, drillType: DrillTypeId): void {
   const list = map.get(id);
@@ -97,9 +108,21 @@ function addTo(map: Map<string, DrillTypeId[]>, id: string, drillType: DrillType
 // audio-gated drill type must never be structurally required for them.
 function canEverHaveAudio(item: ReachabilityItem): boolean {
   if (item.kind === "vowel") return item.display.includes("◌");
-  // Consonants (acrophonic name), syllables (the word itself), and tone-words
-  // (the word itself) always have real, sayable text.
-  return item.kind === "consonant" || item.kind === "syllable" || item.kind === "tone-word";
+  // M14: special-sign rows have no sayable form of their own (the glyph is a
+  // silent modifier, not a word) and phrase rows are never audio-drilled
+  // (A2) — both structurally can never have audio, same shape as the two
+  // hidden-vowel rows above.
+  if (item.kind === "special-sign" || item.kind === "phrase") return false;
+  // Consonants (acrophonic name), syllables (the word itself), tone-words
+  // (the word itself), leader-words (the word itself), and numerals (the
+  // spoken digit name) always have real, sayable text.
+  return (
+    item.kind === "consonant" ||
+    item.kind === "syllable" ||
+    item.kind === "tone-word" ||
+    item.kind === "leader-word" ||
+    item.kind === "numeral"
+  );
 }
 
 // Independent structural check — "could this (item, drillType) pair EVER
@@ -157,6 +180,26 @@ function canDrillTypeScore(item: ReachabilityItem, drillType: DrillTypeId): bool
     // (see lib/thai/drill.ts's ipaDistractors).
     case "word-ipa":
       return item.kind === "syllable";
+    // M14/A2: sign-function is structurally answerable for every special-sign
+    // row (each has its own functionKey — no gap possible, only 4 rows exist).
+    case "sign-function":
+      return item.kind === "special-sign";
+    // leader-tone requires a resolved tone (every leader-word row has one —
+    // mirrors mark-tone's defense-in-depth double-check above).
+    case "leader-tone":
+      return item.kind === "leader-word" && meta.tone != null;
+    case "audio-leader":
+      return item.kind === "leader-word" && canEverHaveAudio(item);
+    case "numeral-value":
+    case "value-numeral":
+      return item.kind === "numeral";
+    case "audio-numeral":
+      return item.kind === "numeral" && canEverHaveAudio(item);
+    // phrase-split requires a non-empty boundaries array (the seed-time
+    // assertPhraseBoundariesValid check in scripts/seed-thai-db.ts further
+    // verifies every boundaries array is well-formed and re-splits correctly).
+    case "phrase-split":
+      return item.kind === "phrase" && Array.isArray(meta.boundaries) && (meta.boundaries as unknown[]).length > 0;
     default:
       return false;
   }
@@ -262,6 +305,42 @@ export function reachableDrillTypesForUnit(
   if (unit === 11) {
     for (const i of allItems) {
       if (i.kind === "syllable" && i.unit === 6 && i.drillable) addTo(map, i.id, "word-ipa");
+    }
+    return map;
+  }
+
+  // M14/A2: unit 12 sources BOTH its own kinds — special-sign (sign-function)
+  // and leader-word (leader-tone, + audio-leader once a clip exists). Unlike
+  // units 10/11, these items ARE tagged unit:12 (not cross-unit-sourced).
+  if (unit === 12) {
+    for (const i of allItems) {
+      if (i.unit !== 12 || !i.drillable) continue;
+      if (i.kind === "special-sign") addTo(map, i.id, "sign-function");
+      if (i.kind === "leader-word") {
+        addTo(map, i.id, "leader-tone");
+        if (canEverHaveAudio(i)) addTo(map, i.id, "audio-leader");
+      }
+    }
+    return map;
+  }
+
+  // M14/A2: unit 13 — every numeral is drillable both directions plus audio
+  // (once a clip exists).
+  if (unit === 13) {
+    for (const i of allItems) {
+      if (i.kind !== "numeral" || i.unit !== 13 || !i.drillable) continue;
+      addTo(map, i.id, "numeral-value");
+      addTo(map, i.id, "value-numeral");
+      if (canEverHaveAudio(i)) addTo(map, i.id, "audio-numeral");
+    }
+    return map;
+  }
+
+  // M14/A2: unit 14 — every phrase is a phrase-split subject (never
+  // audio-gated — canEverHaveAudio is false for kind "phrase").
+  if (unit === 14) {
+    for (const i of allItems) {
+      if (i.kind === "phrase" && i.unit === 14 && i.drillable) addTo(map, i.id, "phrase-split");
     }
     return map;
   }

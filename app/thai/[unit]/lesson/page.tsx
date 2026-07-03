@@ -7,9 +7,12 @@ import type { ToneMark } from "@/seed/thai/types";
 import {
   FINALS,
   HIGH_CONSONANTS,
+  LEADER_WORDS,
   LOW_CONSONANTS_A,
   LOW_CONSONANTS_B,
   MID_CONSONANTS,
+  NUMERALS,
+  SPECIAL_SIGNS,
   UNIT_TITLES,
   VOWELS_A,
   VOWELS_B,
@@ -17,13 +20,16 @@ import {
 } from "@/seed/thai/items";
 import { ConsonantTable } from "@/components/thai/lessons/consonant-table";
 import { FinalsTable } from "@/components/thai/lessons/finals-table";
+import { NumeralsLesson } from "@/components/thai/lessons/numerals-lesson";
+import { SpacelessReadingLesson } from "@/components/thai/lessons/spaceless-reading-lesson";
+import { SpecialSignsLesson } from "@/components/thai/lessons/special-signs-lesson";
 import { SyllableDecodeLesson } from "@/components/thai/lessons/syllable-decode-lesson";
 import { ToneEarLesson } from "@/components/thai/lessons/tone-ear-lesson";
 import { ToneRulesLesson } from "@/components/thai/lessons/tone-rules-lesson";
 import { Unit1Lesson } from "@/components/thai/lessons/unit1-lesson";
 import { VowelTable } from "@/components/thai/lessons/vowel-table";
 
-const BUILT_LESSON_UNITS = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
+const BUILT_LESSON_UNITS = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]);
 
 // M13/A2: groups the word bank's marked rows by tone mark, for the unit 10
 // lesson's "one example per mark" section.
@@ -65,7 +71,7 @@ export default async function ThaiLessonPage({
         >
           Back to units
         </Link>
-        {unit < 11 && (
+        {unit < 14 && (
           <Link
             href={`/thai/${unit + 1}/lesson`}
             className="rounded-full border border-border-base px-4 py-1.5 text-xs font-medium text-foreground-muted transition-colors hover:bg-surface"
@@ -95,6 +101,9 @@ export default async function ThaiLessonPage({
       {unit === 9 && toneWords && <ToneEarLesson words={toneWords} />}
       {unit === 10 && <ToneRulesLesson markedExamples={markedExamplesByMark()} />}
       {unit === 11 && <SyllableDecodeLesson words={WORD_BANK} />}
+      {unit === 12 && <SpecialSignsLesson signs={SPECIAL_SIGNS} leaders={LEADER_WORDS} />}
+      {unit === 13 && <NumeralsLesson numerals={NUMERALS} />}
+      {unit === 14 && <SpacelessReadingLesson />}
 
       {unit !== 1 && summary?.unlocked && (
         <Link

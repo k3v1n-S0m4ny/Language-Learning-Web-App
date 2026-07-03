@@ -162,10 +162,102 @@ export interface ToneWordItem {
   };
 }
 
+// Unit 12 (M14/A1): the four small marks that steer reading but aren't part
+// of the core class+live/dead+mark tone grid (research doc §8 "Small marks
+// above and around letters" table, quoted verbatim in the M14 Validation
+// Contract). Not drillable via the tone system — each has its own
+// `sign-function` recognition drill instead (glyph -> function label).
+export interface SpecialSignItem {
+  kind: "special-sign";
+  id: string; // e.g. "special-sign:garan"
+  unit: number; // 12
+  display: string; // the glyph, e.g. "◌์"
+  initialIpa: null;
+  finalIpa: null;
+  consonantClass: null;
+  drillable: true;
+  metadata: {
+    signName: string; // Thai name + IPA, e.g. "การันต์ /kāː.rān/"
+    functionKey: "silencer" | "shortener" | "repeat" | "abbreviation";
+    functionLabel: string; // the sign-function MC drill's option text
+    example: { thai: string; ipa: string; gloss: string };
+  };
+}
+
+// Unit 12 (M14/A1): silent tone-leader words — a silent High-class ห (or,
+// in exactly four words, a silent Mid-class อ) hands its class's tone
+// behaviour to a Low-class sonorant that has no High-class twin of its own
+// (research doc §8 "Silent tone-leaders: ห and อ"). A distinct kind from
+// SyllableItem (not reused) so unit-12 drill sourcing is self-contained and
+// can never be accidentally pulled into the unit-6/10/11 word-bank queries,
+// which filter on kind==="syllable" && unit===6.
+export interface LeaderWordItem {
+  kind: "leader-word";
+  id: string; // e.g. "leader-word:หมา"
+  unit: number; // 12
+  display: string; // the word, e.g. "หมา"
+  initialIpa: string; // full IPA reading (no slashes), e.g. "mǎː"
+  finalIpa: null;
+  consonantClass: null;
+  drillable: true;
+  metadata: {
+    leaderChar: "ห" | "อ";
+    baseConsonant: string; // the sonorant that receives the leader's class, e.g. "ม"
+    tone: Tone;
+    gloss: string;
+    derivation: string; // e.g. "High(via ห)+live → rising"
+  };
+}
+
+// Unit 13 (M14/A1): the ten Thai digit glyphs and their spoken names
+// (research doc §9 "Thai numerals").
+export interface NumeralItem {
+  kind: "numeral";
+  id: string; // e.g. "numeral:๓"
+  unit: number; // 13
+  display: string; // the digit glyph, e.g. "๓"
+  initialIpa: null;
+  finalIpa: null;
+  consonantClass: null;
+  drillable: true;
+  metadata: {
+    value: number; // 0-9
+    name: string; // the Thai spelling of the digit name, e.g. "สาม"
+    nameIpa: string; // full IPA reading (no slashes), e.g. "sǎːm"
+    tone: Tone;
+  };
+}
+
+// Unit 14 (M14/A1): continuous (spaceless) phrases for the tap-boundary
+// syllable-splitting widget (research doc §10 "Reading text without
+// spaces"). `boundaries` are code-point indices ([...display]) at which a
+// new syllable starts (index 0 excluded) — verified at seed time
+// (scripts/seed-thai-db.ts::assertPhraseBoundariesValid) to reproduce
+// `syllables[i].thai` when `display` is split at them.
+export interface PhraseItem {
+  kind: "phrase";
+  id: string; // e.g. "phrase:ไปโรงเรียน"
+  unit: number; // 14
+  display: string; // the continuous phrase, e.g. "ไปโรงเรียน"
+  initialIpa: null;
+  finalIpa: null;
+  consonantClass: null;
+  drillable: true;
+  metadata: {
+    syllables: { thai: string; ipa: string; gloss: string }[];
+    boundaries: number[];
+    gloss: string; // whole-phrase gloss
+  };
+}
+
 export type ThaiItem =
   | ConsonantItem
   | FinalItem
   | VowelItem
   | SyllableItem
   | LessonMarkerItem
-  | ToneWordItem;
+  | ToneWordItem
+  | SpecialSignItem
+  | LeaderWordItem
+  | NumeralItem
+  | PhraseItem;

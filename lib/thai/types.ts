@@ -29,7 +29,15 @@ export type DrillType =
   | "audio-word"
   | "tone-assembly"
   | "mark-tone"
-  | "word-ipa";
+  | "word-ipa"
+  // M14/A2 (units 12-14, the FINAL Read-Thai milestone).
+  | "sign-function"
+  | "leader-tone"
+  | "audio-leader"
+  | "numeral-value"
+  | "value-numeral"
+  | "audio-numeral"
+  | "phrase-split";
 
 export interface DrillOption {
   value: string;
@@ -67,6 +75,27 @@ export interface DrillQuestion {
   // client walks through before submitting the final tone as this
   // question's answer (see components/thai/drill/tone-assembly-question.tsx).
   steps?: DrillStep[];
+  // M14/A5: only set for drillType "phrase-split" — the render data for the
+  // tap-boundary widget (components/thai/drill/phrase-split-question.tsx).
+  // `chars` is the phrase split into code-point elements ([...display]);
+  // `syllables` is the client-side-only IPA/gloss reinforcement shown after
+  // a correct (or revealed) split — never logged (mirrors tone-assembly's
+  // per-step feedback contract: only the FINAL serialized boundary set is a
+  // server-verified attempt, via `correct`/`serializeBoundaries` below).
+  phrase?: {
+    chars: string[];
+    syllables: { thai: string; ipa: string; gloss: string }[];
+  };
+}
+
+// M14/A5: canonical serialization of a phrase's boundary-index set — the
+// single source of truth both the server (lib/thai/drill.ts's
+// expectedAnswerFor) and the client (components/thai/drill/
+// phrase-split-question.tsx) use, so a learner's tapped set and the seed
+// content's `boundaries` array always compare as equal strings when they
+// represent the same set (order- and duplicate-insensitive).
+export function serializeBoundaries(boundaries: number[]): string {
+  return [...new Set(boundaries)].sort((a, b) => a - b).join(",");
 }
 
 export interface DrillRound {

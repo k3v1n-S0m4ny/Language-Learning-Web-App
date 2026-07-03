@@ -18,7 +18,7 @@ import { DRILL_ROUND_SIZE } from "./mastery";
 import { getProgressByItemIds } from "./queries";
 import { allReachableDrillTypesForItem, computeReachableIds } from "./reachability";
 import { TONE_LABELS, TONE_ORDER } from "./tone";
-import type { DrillOption, DrillQuestion, DrillRound, DrillStep, DrillType } from "./types";
+import { serializeBoundaries, type DrillOption, type DrillQuestion, type DrillRound, type DrillStep, type DrillType } from "./types";
 
 type ItemRow = typeof thaiItems.$inferSelect;
 
@@ -52,7 +52,30 @@ const VALID_KINDS_FOR_DRILL_TYPE: Record<DrillType, string[]> = {
   "tone-assembly": ["syllable"],
   "mark-tone": ["syllable"],
   "word-ipa": ["syllable"],
+  // M14/A2.
+  "sign-function": ["special-sign"],
+  "leader-tone": ["leader-word"],
+  "audio-leader": ["leader-word"],
+  "numeral-value": ["numeral"],
+  "value-numeral": ["numeral"],
+  "audio-numeral": ["numeral"],
+  "phrase-split": ["phrase"],
 };
+
+// M14/A4: curated visually/aurally confusable Thai-digit VALUE groups (not
+// glyph pairs) — {3,7}, {6,9}, {4,5}, {1,9} per the content bank's curator
+// suggestion. Digits 0, 2, 8 have no curated partner and fall back to the
+// general pool, same shape as finalSoundDistractors' FINAL_GROUPS fallback.
+const DIGIT_CONFUSABLE_GROUPS: Record<number, number[]> = {
+  1: [9],
+  3: [7],
+  4: [5],
+  5: [4],
+  6: [9],
+  7: [3],
+  9: [1, 6],
+};
+const ALL_DIGITS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 // M13/A3: mechanical mutation of a full IPA reading along exactly one
 // dimension — tone, vowel length, or final — for word-ipa distractors. These
@@ -183,6 +206,33 @@ export function expectedAnswerFor(item: ItemRow, drillType: DrillType): string |
       // drill type (M13/A2 contract: "One thai_attempts row per completed
       // question ... expected vs chosen FINAL tone").
       return (meta.tone as string | null | undefined) ?? null;
+    // M14/A3: sign-function's answer is the sign's own functionKey.
+    case "sign-function":
+      return (meta.functionKey as string | undefined) ?? null;
+    // M14/A3: leader-tone resolves to the leader word's final (post-leader)
+    // tone — the whole teaching point of the drill.
+    case "leader-tone":
+      return (meta.tone as Tone | undefined) ?? null;
+    // M14/A3: audio-leader is the reverse-of-forward shape (hear the clip,
+    // pick the written spelling) — same pattern as audio-letter/audio-word.
+    case "audio-leader":
+      return item.display;
+    // M14/A4: numeral-value's answer is the Arabic digit value as a string.
+    case "numeral-value":
+      return meta.value != null ? String(meta.value) : null;
+    // M14/A4: value-numeral / audio-numeral both resolve to the Thai numeral
+    // glyph itself (reverse-of-forward shape for audio-numeral).
+    case "value-numeral":
+    case "audio-numeral":
+      return item.display;
+    // M14/A5: phrase-split's answer is the canonical boundary-index set,
+    // serialized identically to how the client serializes its tapped set
+    // (serializeBoundaries — the single shared source of truth).
+    case "phrase-split": {
+      const boundaries = meta.boundaries as number[] | undefined;
+      if (!Array.isArray(boundaries) || boundaries.length === 0) return null;
+      return serializeBoundaries(boundaries);
+    }
     default:
       return null;
   }
@@ -337,6 +387,47 @@ async function buildSubjectPool(unit: number): Promise<Subject[]> {
       .filter((item) => reachable.has(item.id) && item.audioUrl)
       .map((item) => ({ item, drillTypes: ["audio-tone"] as DrillType[] }));
   }
+  // M14/A3: unit 12 sources BOTH its own kinds — special-sign
+  // (sign-function) and leader-word (leader-tone, + audio-leader once a clip
+  // exists). Unlike units 10/11, these rows are tagged unit:12 directly.
+  if (unit === 12) {
+    const items = await fetchUnitItems(12);
+    const reachable = computeReachableIds(12, items);
+    return items
+      .filter((item) => reachable.has(item.id))
+      .map((item) => {
+        const drillTypes: DrillType[] = [];
+        if (item.kind === "special-sign") drillTypes.push("sign-function");
+        if (item.kind === "leader-word") {
+          drillTypes.push("leader-tone");
+          if (item.audioUrl) drillTypes.push("audio-leader");
+        }
+        return { item, drillTypes };
+      })
+      .filter((s) => s.drillTypes.length > 0);
+  }
+  // M14/A4: unit 13 — every numeral is drillable both directions plus audio
+  // once a clip exists.
+  if (unit === 13) {
+    const items = await fetchUnitItems(13);
+    const reachable = computeReachableIds(13, items);
+    return items
+      .filter((item) => reachable.has(item.id))
+      .map((item) => {
+        const drillTypes: DrillType[] = ["numeral-value", "value-numeral"];
+        if (item.audioUrl) drillTypes.push("audio-numeral");
+        return { item, drillTypes };
+      });
+  }
+  // M14/A5: unit 14 — every phrase is a phrase-split subject (never
+  // audio-gated).
+  if (unit === 14) {
+    const items = await fetchUnitItems(14);
+    const reachable = computeReachableIds(14, items);
+    return items
+      .filter((item) => reachable.has(item.id))
+      .map((item) => ({ item, drillTypes: ["phrase-split"] as DrillType[] }));
+  }
   return [];
 }
 
@@ -417,6 +508,72 @@ function wordDistractors(pool: ItemRow[], correct: ItemRow): DrillOption[] {
     seen.add(value);
     options.push({ value, label: value });
     if (options.length >= 3) break;
+  }
+  return options;
+}
+
+// M14/A3: sign-function distractors — the other three special-sign rows'
+// own (functionKey, functionLabel) pairs. Only 4 rows exist total, so this
+// always yields exactly 3 distractors when `pool` is the full unit-12 pool.
+function signFunctionDistractors(pool: ItemRow[], correct: ItemRow): DrillOption[] {
+  return pool
+    .filter((p) => p.kind === "special-sign" && p.id !== correct.id)
+    .map((p) => {
+      const m = metadataOf(p);
+      return { value: m.functionKey as string, label: m.functionLabel as string };
+    });
+}
+
+// M14/A3: audio-leader spelling distractors — prefer the adversarial
+// "leaderless base" spelling (drop the leading leaderChar codepoint, e.g.
+// หมา -> มา) per A3's own worked example, falling back to other leader
+// words' spellings (same-family confusable).
+function leaderSpellingDistractors(pool: ItemRow[], correct: ItemRow): DrillOption[] {
+  const leaders = pool.filter((p) => p.kind === "leader-word");
+  const seen = new Set([correct.display]);
+  const options: DrillOption[] = [];
+
+  const leaderless = [...correct.display].slice(1).join("");
+  if (leaderless && !seen.has(leaderless)) {
+    options.push({ value: leaderless, label: leaderless });
+    seen.add(leaderless);
+  }
+
+  const others = leaders.filter((p) => p.id !== correct.id && p.display && !seen.has(p.display));
+  for (const candidate of pick(others, others.length)) {
+    if (options.length >= 3) break;
+    if (seen.has(candidate.display)) continue;
+    seen.add(candidate.display);
+    options.push({ value: candidate.display, label: candidate.display });
+  }
+  return options;
+}
+
+// M14/A4: Thai-digit VALUE distractors (0-9), biased toward the curated
+// DIGIT_CONFUSABLE_GROUPS, falling back to the remaining digits — same shape
+// as finalSoundDistractors' FINAL_GROUPS fallback.
+function digitValueDistractors(correctValue: number): number[] {
+  const preferred = (DIGIT_CONFUSABLE_GROUPS[correctValue] ?? []).filter((v) => v !== correctValue);
+  const rest = ALL_DIGITS.filter((v) => v !== correctValue && !preferred.includes(v));
+  const chosen: number[] = [];
+  for (const v of [...pick(preferred, preferred.length), ...pick(rest, rest.length)]) {
+    if (chosen.length >= 3) break;
+    if (!chosen.includes(v)) chosen.push(v);
+  }
+  return chosen;
+}
+
+// M14/A4: renders digitValueDistractors as Thai-numeral-glyph options (for
+// value-numeral / audio-numeral, whose options are numeral glyphs rather
+// than Arabic digit strings) — looked up from the unit-13 pool by value.
+function numeralGlyphDistractors(pool: ItemRow[], correctValue: number): DrillOption[] {
+  const byValue = new Map(
+    pool.filter((p) => p.kind === "numeral").map((p) => [metadataOf(p).value as number, p]),
+  );
+  const options: DrillOption[] = [];
+  for (const v of digitValueDistractors(correctValue)) {
+    const item = byValue.get(v);
+    if (item) options.push({ value: item.display, label: item.display });
   }
   return options;
 }
@@ -741,6 +898,137 @@ function buildQuestion(subject: Subject, drillType: DrillType, pool: ItemRow[]):
       correct: finalStep.correct,
       options: finalStep.options,
       steps,
+    };
+  }
+
+  // M14/A3: sign-function — glyph shown big (promptKind "consonant" reuses
+  // the same single-glyph font-thai-5xl styling as a letter), 4 options =
+  // the four function labels.
+  if (drillType === "sign-function") {
+    const distractors = signFunctionDistractors(pool, item);
+    if (distractors.length < 3) return null;
+    return {
+      itemId: item.id,
+      drillType,
+      prompt: item.display,
+      promptKind: "consonant",
+      correct,
+      options: shuffled([{ value: correct, label: meta.functionLabel as string }, ...distractors]),
+    };
+  }
+
+  // M14/A3: leader-tone — 5-way MC over every tone (toneDistractors already
+  // returns all 4 OTHER tones, so combined with `correct` every one of the
+  // five tones is an option — this structurally guarantees the "tone the
+  // word would have WITHOUT the leader" adversarial distractor A3 asks for
+  // is always present, since there is nowhere else for it to hide among 5
+  // total tones). Reveal shows the derivation string + gloss (A3) via the
+  // `gloss` field.
+  if (drillType === "leader-tone") {
+    const distractors = toneDistractors(correct);
+    if (distractors.length < 4) return null;
+    return {
+      itemId: item.id,
+      drillType,
+      prompt: item.display,
+      promptKind: "syllable",
+      gloss: `${meta.gloss as string} — ${meta.derivation as string}`,
+      correct,
+      options: shuffled([
+        { value: correct, label: TONE_LABELS[correct as Tone] },
+        ...distractors,
+      ]),
+    };
+  }
+
+  // M14/A3: audio-leader — hear the clip, pick the spelling; degrades
+  // gracefully (returns null, sampling nothing) until the clip lands (A2/A4
+  // contract).
+  if (drillType === "audio-leader") {
+    if (!audioUrl) return null;
+    const distractors = leaderSpellingDistractors(pool, item);
+    if (distractors.length < 3) return null;
+    return {
+      itemId: item.id,
+      drillType,
+      prompt: "",
+      promptKind: "audio",
+      gloss: meta.gloss as string,
+      audioUrl,
+      correct,
+      options: shuffled([{ value: correct, label: correct }, ...distractors]),
+    };
+  }
+
+  // M14/A4: numeral-value — Thai numeral glyph shown big, options = Arabic
+  // digit strings.
+  if (drillType === "numeral-value") {
+    const value = meta.value as number;
+    const distractors = digitValueDistractors(value).map((v) => ({ value: String(v), label: String(v) }));
+    if (distractors.length < 3) return null;
+    return {
+      itemId: item.id,
+      drillType,
+      prompt: item.display,
+      promptKind: "consonant",
+      correct,
+      options: shuffled([{ value: correct, label: correct }, ...distractors]),
+    };
+  }
+
+  // M14/A4: value-numeral — Arabic digit shown, options = Thai numeral
+  // glyphs.
+  if (drillType === "value-numeral") {
+    const value = meta.value as number;
+    const distractors = numeralGlyphDistractors(pool, value);
+    if (distractors.length < 3) return null;
+    return {
+      itemId: item.id,
+      drillType,
+      prompt: String(value),
+      // "vowel" is reused purely for its styling bucket (mono font, not
+      // font-thai) — the prompt is a bare Arabic digit string, not a vowel.
+      promptKind: "vowel",
+      correct,
+      options: shuffled([{ value: correct, label: correct }, ...distractors]),
+    };
+  }
+
+  // M14/A4: audio-numeral — hear the spoken digit name, pick the numeral
+  // glyph; degrades gracefully until the clip lands.
+  if (drillType === "audio-numeral") {
+    if (!audioUrl) return null;
+    const value = meta.value as number;
+    const distractors = numeralGlyphDistractors(pool, value);
+    if (distractors.length < 3) return null;
+    return {
+      itemId: item.id,
+      drillType,
+      prompt: "",
+      promptKind: "audio",
+      audioUrl,
+      correct,
+      options: shuffled([{ value: correct, label: correct }, ...distractors]),
+    };
+  }
+
+  // M14/A5: phrase-split — not MC; the widget itself is the question. Carries
+  // `phrase` (chars + syllables) for components/thai/drill/
+  // phrase-split-question.tsx to render; `options` is unused (empty) for
+  // this drill type.
+  if (drillType === "phrase-split") {
+    const boundaries = meta.boundaries as number[] | undefined;
+    const syllables = meta.syllables as { thai: string; ipa: string; gloss: string }[] | undefined;
+    if (!boundaries?.length || !syllables?.length) return null;
+    return {
+      itemId: item.id,
+      drillType,
+      prompt: item.display,
+      promptKind: "syllable",
+      gloss: meta.gloss as string,
+      correct,
+      options: [],
+      phrase: { chars: [...item.display], syllables },
     };
   }
 

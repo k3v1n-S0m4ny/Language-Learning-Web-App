@@ -123,6 +123,62 @@ function assertEveryUnitCanReach100Percent(): void {
   );
 }
 
+// M14/A5 seed-time assertion: for every unit-14 phrase, `boundaries` must be
+// strictly increasing, in range 1..len-1 (code-point indices, [...display]),
+// and splitting `display` at them must reproduce `syllables[i].thai`
+// concatenation exactly. Catches a mis-counted index (the exact failure mode
+// the M14 content bank's own re-verification note flags) before it ever
+// reaches a learner, since the `phrase-split` drill's server-side expected
+// answer is derived directly from this same `boundaries` array
+// (lib/thai/drill.ts::expectedAnswerFor).
+function assertPhraseBoundariesValid(): void {
+  const problems: string[] = [];
+  let checked = 0;
+  for (const item of ALL_THAI_ITEMS) {
+    if (item.kind !== "phrase") continue;
+    checked++;
+    const { boundaries, syllables } = item.metadata;
+    const chars = [...item.display];
+    const len = chars.length;
+
+    if (!boundaries.length) {
+      problems.push(`${item.id}: boundaries array is empty`);
+      continue;
+    }
+    for (let i = 0; i < boundaries.length; i++) {
+      const b = boundaries[i];
+      if (b < 1 || b > len - 1) {
+        problems.push(`${item.id}: boundary ${b} out of range 1..${len - 1}`);
+      }
+      if (i > 0 && boundaries[i] <= boundaries[i - 1]) {
+        problems.push(`${item.id}: boundaries ${boundaries.join(",")} not strictly increasing`);
+      }
+    }
+
+    const cuts = [0, ...boundaries, len];
+    const rebuilt: string[] = [];
+    for (let i = 0; i < cuts.length - 1; i++) {
+      rebuilt.push(chars.slice(cuts[i], cuts[i + 1]).join(""));
+    }
+    const expected = syllables.map((s) => s.thai);
+    if (rebuilt.length !== expected.length || rebuilt.some((r, i) => r !== expected[i])) {
+      problems.push(
+        `${item.id}: boundaries [${boundaries.join(",")}] split display into ` +
+          `[${rebuilt.join("|")}] but syllables are [${expected.join("|")}]`,
+      );
+    }
+  }
+  if (problems.length) {
+    throw new Error(
+      ["Phrase boundary invariant violated:", ...problems.map((p) => `  - ${p}`)].join("\n"),
+    );
+  }
+  console.log(
+    `[phrase-boundaries] OK — every unit-14 phrase (${checked} checked) has boundaries that ` +
+      "reproduce its syllable split exactly.",
+  );
+}
+
 async function main() {
   if (!ALL_THAI_ITEMS.length) {
     throw new Error("seed/thai/items.ts has no items — aborting.");
@@ -137,6 +193,7 @@ async function main() {
   assertEveryDrillableItemIsReachable();
   assertEveryUnitCanReach100Percent();
   assertUnitMasteryScopingGuard(ALL_THAI_ITEMS);
+  assertPhraseBoundariesValid();
 
   // 1. Delete items no longer in the content module.
   const doomed = await db

@@ -51,8 +51,9 @@ async function fetchMasteredDrillTypesByItem(learnerId: string): Promise<Map<str
 // can run a regression guard against it without importing this DB-backed
 // module.
 
-// The 14-unit map for the Thai-mode home screen (A4). Units 1-9 reflect real
-// progress; 10-14 render as locked "coming soon" placeholders (no content yet).
+// The 14-unit map for the Thai-mode home screen (A4). All 14 units are built
+// (BUILT_UNITS = [1..14] as of M14) — the "coming soon" placeholder branch in
+// components/thai/unit-row.tsx is retained for safety but is no longer reachable.
 export async function getUnitSummaries(learnerId: string): Promise<UnitSummary[]> {
   const masteredByItem = await fetchMasteredDrillTypesByItem(learnerId);
 

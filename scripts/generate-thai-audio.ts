@@ -3,10 +3,12 @@
  *
  * Reads the typed Thai seed (seed/thai/items.ts), builds the full clip
  * manifest — consonant letter names, vowel sounds (carrier-อ demonstration
- * form), tone-ear minimal-pair words, and drillable word-bank syllables —
- * synthesizes each with Google Chirp3-HD voice th-TH-Chirp3-HD-Achernar (the
- * bake-off winner, owner sign-off 2026-07-03), uploads to Vercel Blob under
- * audio/thai/, and writes the resulting URL back into thai_items.audioUrl.
+ * form), tone-ear minimal-pair words, drillable word-bank syllables,
+ * silent-leader words (unit 12, M14/A6), and spoken numeral names (unit 13,
+ * M14/A6 — the digit NAME, not the glyph) — synthesizes each with Google
+ * Chirp3-HD voice th-TH-Chirp3-HD-Achernar (the bake-off winner, owner
+ * sign-off 2026-07-03), uploads to Vercel Blob under audio/thai/, and writes
+ * the resulting URL back into thai_items.audioUrl.
  *
  * Blob paths are keyed by a hash of (provider, model, voice, language, text)
  * — NOT text alone — so a future voice change can never silently reuse a
@@ -76,6 +78,15 @@ async function buildManifest(): Promise<ClipSpec[]> {
       text = item.display;
     } else if (item.kind === "syllable" && item.drillable) {
       text = item.display;
+    } else if (item.kind === "leader-word" && item.drillable) {
+      // M14/A6: the leader word's own display (e.g. "หมา") — a real, sayable
+      // word (the silent leader is part of its normal spelling/pronunciation,
+      // nothing to strip).
+      text = item.display;
+    } else if (item.kind === "numeral" && item.drillable) {
+      // M14/A6: the spoken digit NAME (e.g. "หนึ่ง" for ๑), NOT the bare
+      // glyph — the glyph alone has no pronunciation of its own.
+      text = item.metadata.name;
     }
     if (!text) continue;
     clips.push({ itemId: item.id, text });

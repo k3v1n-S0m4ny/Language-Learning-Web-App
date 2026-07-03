@@ -29,6 +29,14 @@ const KNOWN_DRILL_TYPES: DrillType[] = [
   "tone-assembly",
   "mark-tone",
   "word-ipa",
+  // M14/A2.
+  "sign-function",
+  "leader-tone",
+  "audio-leader",
+  "numeral-value",
+  "value-numeral",
+  "audio-numeral",
+  "phrase-split",
 ];
 
 // Persist the Learner's Mandarin/Thai mode choice (A3). Server Actions are

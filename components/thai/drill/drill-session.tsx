@@ -7,6 +7,7 @@ import { TONE_LABELS } from "@/lib/thai/tone";
 import type { DrillOption, DrillQuestion } from "@/lib/thai/types";
 import type { Tone } from "@/seed/thai/types";
 import { AudioPlayButton } from "@/components/thai/audio-play-button";
+import { PhraseSplitQuestion } from "./phrase-split-question";
 import { ToneAssemblyQuestion } from "./tone-assembly-question";
 
 interface Props {
@@ -117,6 +118,10 @@ export function DrillSession({ unit, questions, nextUnitWasUnlocked }: Props) {
   // audio-word's options are real Thai words (need Noto Sans Thai shaping),
   // unlike every other drill type's options (IPA/class/tone-label strings).
   const optionFont = question.drillType === "audio-word" ? "font-thai text-2xl" : "font-mono text-lg";
+  // M14/A5: phrase-split is not MC at all — the tap-boundary widget IS the
+  // question (it renders the phrase itself), so the standard prompt box +
+  // options grid are skipped entirely for this drill type.
+  const isPhraseSplit = question.drillType === "phrase-split" && !!question.phrase;
 
   return (
     <div className="flex flex-col gap-6">
@@ -124,33 +129,42 @@ export function DrillSession({ unit, questions, nextUnitWasUnlocked }: Props) {
         Question {index + 1} / {total}
       </div>
 
-      <div className="flex flex-col items-center gap-4 rounded-xl border border-border-base bg-surface p-8">
-        {question.promptKind === "audio" ? (
-          question.audioUrl && <AudioPlayButton url={question.audioUrl} label="▶ Play clip" />
-        ) : (
-          <div
-            className={`text-center ${
-              question.promptKind === "consonant" || question.promptKind === "syllable"
-                ? "font-thai text-5xl"
-                : "font-mono text-3xl"
-            } text-foreground`}
-          >
-            {question.prompt}
-          </div>
-        )}
-        {question.promptKind !== "audio" &&
-          question.audioUrl &&
-          (!hideAudioUntilRevealed || phase === "revealed") && (
-            <AudioPlayButton url={question.audioUrl} label="▶ Hear it" size="sm" />
+      {!isPhraseSplit && (
+        <div className="flex flex-col items-center gap-4 rounded-xl border border-border-base bg-surface p-8">
+          {question.promptKind === "audio" ? (
+            question.audioUrl && <AudioPlayButton url={question.audioUrl} label="▶ Play clip" />
+          ) : (
+            <div
+              className={`text-center ${
+                question.promptKind === "consonant" || question.promptKind === "syllable"
+                  ? "font-thai text-5xl"
+                  : "font-mono text-3xl"
+              } text-foreground`}
+            >
+              {question.prompt}
+            </div>
           )}
-        {phase === "revealed" && question.gloss && (
-          <div className="text-sm italic text-foreground-muted animate-fade-in">
-            &lsquo;{question.gloss}&rsquo;
-          </div>
-        )}
-      </div>
+          {question.promptKind !== "audio" &&
+            question.audioUrl &&
+            (!hideAudioUntilRevealed || phase === "revealed") && (
+              <AudioPlayButton url={question.audioUrl} label="▶ Hear it" size="sm" />
+            )}
+          {phase === "revealed" && question.gloss && (
+            <div className="text-sm italic text-foreground-muted animate-fade-in">
+              &lsquo;{question.gloss}&rsquo;
+            </div>
+          )}
+        </div>
+      )}
 
-      {question.drillType === "tone-assembly" && question.steps ? (
+      {isPhraseSplit ? (
+        <PhraseSplitQuestion
+          phrase={question.phrase!}
+          correct={question.correct}
+          disabled={pending}
+          onSubmit={submitAnswer}
+        />
+      ) : question.drillType === "tone-assembly" && question.steps ? (
         phase === "answering" ? (
           <ToneAssemblyQuestion steps={question.steps} disabled={pending} onFinalStepAnswered={submitAnswer} />
         ) : (
@@ -196,7 +210,7 @@ export function DrillSession({ unit, questions, nextUnitWasUnlocked }: Props) {
         </button>
       )}
 
-      {lastCorrect === false && phase === "revealed" && (
+      {lastCorrect === false && phase === "revealed" && !isPhraseSplit && (
         <div className="text-xs text-foreground-muted">
           Correct answer: <span className="font-mono">{question.correct}</span>
         </div>

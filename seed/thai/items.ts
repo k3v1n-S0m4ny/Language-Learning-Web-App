@@ -11,6 +11,10 @@
 import type {
   ConsonantItem,
   FinalItem,
+  LeaderWordItem,
+  NumeralItem,
+  PhraseItem,
+  SpecialSignItem,
   SyllableItem,
   ThaiItem,
   ToneWordItem,
@@ -299,6 +303,81 @@ export const TONE_WORDS: ToneWordItem[] = [
   { kind: "tone-word", id: "tone-word:หนา", unit: 9, display: "หนา", initialIpa: "nǎː", finalIpa: null, consonantClass: "high", drillable: true, metadata: { tone: "rising", family: "naa-silent-leader", gloss: "thick (silent ห leader)" } },
 ];
 
+// --- Unit 12: Special signs (4) --------------------------------------------
+// Verbatim from research doc §8 "Small marks above and around letters"
+// (quoted in the M14 Validation Contract) — no external verification needed.
+export const SPECIAL_SIGNS: SpecialSignItem[] = [
+  { kind: "special-sign", id: "special-sign:garan", unit: 12, display: "◌์", initialIpa: null, finalIpa: null, consonantClass: null, drillable: true, metadata: { signName: "การันต์ /kāː.rān/", functionKey: "silencer", functionLabel: "Silences the letter beneath it (and often the one before)", example: { thai: "จันทร์", ipa: "tɕān", gloss: "moon (the ทร is silent)" } } },
+  { kind: "special-sign", id: "special-sign:maitaikhu", unit: 12, display: "◌็", initialIpa: null, finalIpa: null, consonantClass: null, drillable: true, metadata: { signName: "ไม้ไต่คู้ /máj tàj kʰúː/", functionKey: "shortener", functionLabel: "Shortens the vowel (esp. เ, แ in closed syllables)", example: { thai: "เด็ก", ipa: "dèk̚", gloss: "child" } } },
+  { kind: "special-sign", id: "special-sign:maiyamok", unit: 12, display: "ๆ", initialIpa: null, finalIpa: null, consonantClass: null, drillable: true, metadata: { signName: "ไม้ยมก /máj já.mók̚/", functionKey: "repeat", functionLabel: "Repeat — say the preceding word twice", example: { thai: "เด็ก ๆ", ipa: "dèk̚ dèk̚", gloss: "children" } } },
+  { kind: "special-sign", id: "special-sign:paiyannoi", unit: 12, display: "ฯ", initialIpa: null, finalIpa: null, consonantClass: null, drillable: true, metadata: { signName: "ไปยาลน้อย /pāj.jāːn.nɔ́ːj/", functionKey: "abbreviation", functionLabel: "Marks a conventional abbreviation of a longer formal phrase", example: { thai: "กรุงเทพฯ", ipa: "", gloss: "e.g. an abbreviation of a longer formal name (Bangkok)" } } },
+];
+
+// --- Unit 12: Silent tone-leader words (12) --------------------------------
+// Verbatim from `.claude/plans/m14-content-leaders.md` (Wiktionary-verified
+// 2026-07-03) — 4 อ-leader words (mandatory, all four everyday cases per the
+// research doc) + 8 ห-leader words spanning ม ญ น ล ย ร ว.
+export const LEADER_WORDS: LeaderWordItem[] = [
+  { kind: "leader-word", id: "leader-word:อย่า", unit: 12, display: "อย่า", initialIpa: "jàː", finalIpa: null, consonantClass: null, drillable: true, metadata: { leaderChar: "อ", baseConsonant: "ย", tone: "low", gloss: "don't", derivation: "Mid(via อ)+mai-ek → low" } },
+  { kind: "leader-word", id: "leader-word:อยาก", unit: 12, display: "อยาก", initialIpa: "jàːk̚", finalIpa: null, consonantClass: null, drillable: true, metadata: { leaderChar: "อ", baseConsonant: "ย", tone: "low", gloss: "to want", derivation: "Mid(via อ)+dead → low" } },
+  { kind: "leader-word", id: "leader-word:อย่าง", unit: 12, display: "อย่าง", initialIpa: "jàːŋ", finalIpa: null, consonantClass: null, drillable: true, metadata: { leaderChar: "อ", baseConsonant: "ย", tone: "low", gloss: "kind, type", derivation: "Mid(via อ)+mai-ek → low" } },
+  { kind: "leader-word", id: "leader-word:อยู่", unit: 12, display: "อยู่", initialIpa: "jùː", finalIpa: null, consonantClass: null, drillable: true, metadata: { leaderChar: "อ", baseConsonant: "ย", tone: "low", gloss: "to be at", derivation: "Mid(via อ)+mai-ek → low" } },
+  { kind: "leader-word", id: "leader-word:หมา", unit: 12, display: "หมา", initialIpa: "mǎː", finalIpa: null, consonantClass: null, drillable: true, metadata: { leaderChar: "ห", baseConsonant: "ม", tone: "rising", gloss: "dog", derivation: "High(via ห)+live → rising" } },
+  { kind: "leader-word", id: "leader-word:หนา", unit: 12, display: "หนา", initialIpa: "nǎː", finalIpa: null, consonantClass: null, drillable: true, metadata: { leaderChar: "ห", baseConsonant: "น", tone: "rising", gloss: "thick", derivation: "High(via ห)+live → rising" } },
+  { kind: "leader-word", id: "leader-word:หนู", unit: 12, display: "หนู", initialIpa: "nǔː", finalIpa: null, consonantClass: null, drillable: true, metadata: { leaderChar: "ห", baseConsonant: "น", tone: "rising", gloss: "rat/mouse", derivation: "High(via ห)+live → rising" } },
+  { kind: "leader-word", id: "leader-word:หญิง", unit: 12, display: "หญิง", initialIpa: "jǐŋ", finalIpa: null, consonantClass: null, drillable: true, metadata: { leaderChar: "ห", baseConsonant: "ญ", tone: "rising", gloss: "woman/female", derivation: "High(via ห)+live → rising" } },
+  { kind: "leader-word", id: "leader-word:หลาย", unit: 12, display: "หลาย", initialIpa: "lǎːj", finalIpa: null, consonantClass: null, drillable: true, metadata: { leaderChar: "ห", baseConsonant: "ล", tone: "rising", gloss: "many", derivation: "High(via ห)+live → rising" } },
+  { kind: "leader-word", id: "leader-word:หยุด", unit: 12, display: "หยุด", initialIpa: "jùt̚", finalIpa: null, consonantClass: null, drillable: true, metadata: { leaderChar: "ห", baseConsonant: "ย", tone: "low", gloss: "to stop", derivation: "High(via ห)+dead → low" } },
+  { kind: "leader-word", id: "leader-word:หรือ", unit: 12, display: "หรือ", initialIpa: "rɯ̌ː", finalIpa: null, consonantClass: null, drillable: true, metadata: { leaderChar: "ห", baseConsonant: "ร", tone: "rising", gloss: "or", derivation: "High(via ห)+live → rising" } },
+  { kind: "leader-word", id: "leader-word:หวาน", unit: 12, display: "หวาน", initialIpa: "wǎːn", finalIpa: null, consonantClass: null, drillable: true, metadata: { leaderChar: "ห", baseConsonant: "ว", tone: "rising", gloss: "sweet", derivation: "High(via ห)+live → rising" } },
+];
+
+// --- Unit 13: Numerals ๐-๙ (10) ---------------------------------------------
+// Verbatim from `.claude/plans/m14-content-numerals.md` (Wiktionary-verified
+// 2026-07-03). ๑ teaches the citation LOW tone /nɯ̀ŋ/ — the colloquial mid
+// variant is a known, noted register variant, not an error.
+export const NUMERALS: NumeralItem[] = [
+  { kind: "numeral", id: "numeral:๐", unit: 13, display: "๐", initialIpa: null, finalIpa: null, consonantClass: null, drillable: true, metadata: { value: 0, name: "ศูนย์", nameIpa: "sǔːn", tone: "rising" } },
+  { kind: "numeral", id: "numeral:๑", unit: 13, display: "๑", initialIpa: null, finalIpa: null, consonantClass: null, drillable: true, metadata: { value: 1, name: "หนึ่ง", nameIpa: "nɯ̀ŋ", tone: "low" } },
+  { kind: "numeral", id: "numeral:๒", unit: 13, display: "๒", initialIpa: null, finalIpa: null, consonantClass: null, drillable: true, metadata: { value: 2, name: "สอง", nameIpa: "sɔ̌ːŋ", tone: "rising" } },
+  { kind: "numeral", id: "numeral:๓", unit: 13, display: "๓", initialIpa: null, finalIpa: null, consonantClass: null, drillable: true, metadata: { value: 3, name: "สาม", nameIpa: "sǎːm", tone: "rising" } },
+  { kind: "numeral", id: "numeral:๔", unit: 13, display: "๔", initialIpa: null, finalIpa: null, consonantClass: null, drillable: true, metadata: { value: 4, name: "สี่", nameIpa: "sìː", tone: "low" } },
+  { kind: "numeral", id: "numeral:๕", unit: 13, display: "๕", initialIpa: null, finalIpa: null, consonantClass: null, drillable: true, metadata: { value: 5, name: "ห้า", nameIpa: "hâː", tone: "falling" } },
+  { kind: "numeral", id: "numeral:๖", unit: 13, display: "๖", initialIpa: null, finalIpa: null, consonantClass: null, drillable: true, metadata: { value: 6, name: "หก", nameIpa: "hòk̚", tone: "low" } },
+  { kind: "numeral", id: "numeral:๗", unit: 13, display: "๗", initialIpa: null, finalIpa: null, consonantClass: null, drillable: true, metadata: { value: 7, name: "เจ็ด", nameIpa: "tɕèt̚", tone: "low" } },
+  { kind: "numeral", id: "numeral:๘", unit: 13, display: "๘", initialIpa: null, finalIpa: null, consonantClass: null, drillable: true, metadata: { value: 8, name: "แปด", nameIpa: "pɛ̀ːt̚", tone: "low" } },
+  { kind: "numeral", id: "numeral:๙", unit: 13, display: "๙", initialIpa: null, finalIpa: null, consonantClass: null, drillable: true, metadata: { value: 9, name: "เก้า", nameIpa: "kâːw", tone: "falling" } },
+];
+
+// --- Unit 14: Spaceless-reading phrases (20) --------------------------------
+// Verbatim from `.claude/plans/m14-content-phrases.md` (every constituent word
+// Wiktionary-verified 2026-07-03). `boundaries` are code-point indices
+// ([...display]) — verified at seed time (assertPhraseBoundariesValid in
+// scripts/seed-thai-db.ts) to reproduce `syllables[i].thai` when `display` is
+// split at them. Graded easy (2 syllables) -> harder (4 syllables).
+export const PHRASES: PhraseItem[] = [
+  { kind: "phrase", id: "phrase:ไปไหน", unit: 14, display: "ไปไหน", initialIpa: null, finalIpa: null, consonantClass: null, drillable: true, metadata: { syllables: [{ thai: "ไป", ipa: "pāj", gloss: "go" }, { thai: "ไหน", ipa: "nǎj", gloss: "where" }], boundaries: [2], gloss: "where are you going?" } },
+  { kind: "phrase", id: "phrase:โรงเรียน", unit: 14, display: "โรงเรียน", initialIpa: null, finalIpa: null, consonantClass: null, drillable: true, metadata: { syllables: [{ thai: "โรง", ipa: "rōːŋ", gloss: "building" }, { thai: "เรียน", ipa: "rīan", gloss: "study" }], boundaries: [3], gloss: "school" } },
+  { kind: "phrase", id: "phrase:กินข้าว", unit: 14, display: "กินข้าว", initialIpa: null, finalIpa: null, consonantClass: null, drillable: true, metadata: { syllables: [{ thai: "กิน", ipa: "kīn", gloss: "eat" }, { thai: "ข้าว", ipa: "kʰâːw", gloss: "rice" }], boundaries: [3], gloss: "eat (a meal)" } },
+  { kind: "phrase", id: "phrase:ไก่ทอด", unit: 14, display: "ไก่ทอด", initialIpa: null, finalIpa: null, consonantClass: null, drillable: true, metadata: { syllables: [{ thai: "ไก่", ipa: "kàj", gloss: "chicken" }, { thai: "ทอด", ipa: "tʰɔ̂ːt̚", gloss: "deep-fried" }], boundaries: [3], gloss: "fried chicken" } },
+  { kind: "phrase", id: "phrase:ปลาทอง", unit: 14, display: "ปลาทอง", initialIpa: null, finalIpa: null, consonantClass: null, drillable: true, metadata: { syllables: [{ thai: "ปลา", ipa: "plāː", gloss: "fish" }, { thai: "ทอง", ipa: "tʰɔ̄ːŋ", gloss: "gold" }], boundaries: [3], gloss: "goldfish" } },
+  { kind: "phrase", id: "phrase:น้ำแข็ง", unit: 14, display: "น้ำแข็ง", initialIpa: null, finalIpa: null, consonantClass: null, drillable: true, metadata: { syllables: [{ thai: "น้ำ", ipa: "náːm", gloss: "water" }, { thai: "แข็ง", ipa: "kʰɛ̌ŋ", gloss: "hard" }], boundaries: [3], gloss: "ice" } },
+  { kind: "phrase", id: "phrase:เด็กดี", unit: 14, display: "เด็กดี", initialIpa: null, finalIpa: null, consonantClass: null, drillable: true, metadata: { syllables: [{ thai: "เด็ก", ipa: "dèk̚", gloss: "child" }, { thai: "ดี", ipa: "dīː", gloss: "good" }], boundaries: [4], gloss: "good/well-behaved child" } },
+  { kind: "phrase", id: "phrase:แมวกินปลา", unit: 14, display: "แมวกินปลา", initialIpa: null, finalIpa: null, consonantClass: null, drillable: true, metadata: { syllables: [{ thai: "แมว", ipa: "mɛ̄ːw", gloss: "cat" }, { thai: "กิน", ipa: "kīn", gloss: "eats" }, { thai: "ปลา", ipa: "plāː", gloss: "fish" }], boundaries: [3, 6], gloss: "the cat eats fish" } },
+  { kind: "phrase", id: "phrase:ไปโรงเรียน", unit: 14, display: "ไปโรงเรียน", initialIpa: null, finalIpa: null, consonantClass: null, drillable: true, metadata: { syllables: [{ thai: "ไป", ipa: "pāj", gloss: "go" }, { thai: "โรง", ipa: "rōːŋ", gloss: "building" }, { thai: "เรียน", ipa: "rīan", gloss: "study" }], boundaries: [2, 5], gloss: "go to school" } },
+  { kind: "phrase", id: "phrase:กินข้าวเช้า", unit: 14, display: "กินข้าวเช้า", initialIpa: null, finalIpa: null, consonantClass: null, drillable: true, metadata: { syllables: [{ thai: "กิน", ipa: "kīn", gloss: "eat" }, { thai: "ข้าว", ipa: "kʰâːw", gloss: "rice/meal" }, { thai: "เช้า", ipa: "tɕʰáːw", gloss: "morning" }], boundaries: [3, 7], gloss: "eat breakfast" } },
+  { kind: "phrase", id: "phrase:นักเรียนดี", unit: 14, display: "นักเรียนดี", initialIpa: null, finalIpa: null, consonantClass: null, drillable: true, metadata: { syllables: [{ thai: "นัก", ipa: "nák̚", gloss: "-er (agent)" }, { thai: "เรียน", ipa: "rīan", gloss: "study" }, { thai: "ดี", ipa: "dīː", gloss: "good" }], boundaries: [3, 8], gloss: "good student" } },
+  { kind: "phrase", id: "phrase:แมวสีดำ", unit: 14, display: "แมวสีดำ", initialIpa: null, finalIpa: null, consonantClass: null, drillable: true, metadata: { syllables: [{ thai: "แมว", ipa: "mɛ̄ːw", gloss: "cat" }, { thai: "สี", ipa: "sǐː", gloss: "colour" }, { thai: "ดำ", ipa: "dām", gloss: "black" }], boundaries: [3, 5], gloss: "black cat" } },
+  { kind: "phrase", id: "phrase:ไปทำงาน", unit: 14, display: "ไปทำงาน", initialIpa: null, finalIpa: null, consonantClass: null, drillable: true, metadata: { syllables: [{ thai: "ไป", ipa: "pāj", gloss: "go" }, { thai: "ทำ", ipa: "tʰām", gloss: "do" }, { thai: "งาน", ipa: "ŋāːn", gloss: "work" }], boundaries: [2, 4], gloss: "go to work" } },
+  { kind: "phrase", id: "phrase:เด็กกินนม", unit: 14, display: "เด็กกินนม", initialIpa: null, finalIpa: null, consonantClass: null, drillable: true, metadata: { syllables: [{ thai: "เด็ก", ipa: "dèk̚", gloss: "child" }, { thai: "กิน", ipa: "kīn", gloss: "consumes" }, { thai: "นม", ipa: "nōm", gloss: "milk" }], boundaries: [4, 7], gloss: "the child drinks milk" } },
+  { kind: "phrase", id: "phrase:ปลาสองตัว", unit: 14, display: "ปลาสองตัว", initialIpa: null, finalIpa: null, consonantClass: null, drillable: true, metadata: { syllables: [{ thai: "ปลา", ipa: "plāː", gloss: "fish" }, { thai: "สอง", ipa: "sɔ̌ːŋ", gloss: "two" }, { thai: "ตัว", ipa: "tūa", gloss: "(animal classifier)" }], boundaries: [3, 6], gloss: "two fish" } },
+  { kind: "phrase", id: "phrase:หมากินข้าว", unit: 14, display: "หมากินข้าว", initialIpa: null, finalIpa: null, consonantClass: null, drillable: true, metadata: { syllables: [{ thai: "หมา", ipa: "mǎː", gloss: "dog" }, { thai: "กิน", ipa: "kīn", gloss: "eats" }, { thai: "ข้าว", ipa: "kʰâːw", gloss: "rice" }], boundaries: [3, 6], gloss: "the dog eats rice" } },
+  { kind: "phrase", id: "phrase:ไปโรงเรียนไทย", unit: 14, display: "ไปโรงเรียนไทย", initialIpa: null, finalIpa: null, consonantClass: null, drillable: true, metadata: { syllables: [{ thai: "ไป", ipa: "pāj", gloss: "go" }, { thai: "โรง", ipa: "rōːŋ", gloss: "building" }, { thai: "เรียน", ipa: "rīan", gloss: "study" }, { thai: "ไทย", ipa: "tʰāj", gloss: "Thai" }], boundaries: [2, 5, 10], gloss: "go to a Thai school" } },
+  { kind: "phrase", id: "phrase:เด็กไปโรงเรียน", unit: 14, display: "เด็กไปโรงเรียน", initialIpa: null, finalIpa: null, consonantClass: null, drillable: true, metadata: { syllables: [{ thai: "เด็ก", ipa: "dèk̚", gloss: "child" }, { thai: "ไป", ipa: "pāj", gloss: "go" }, { thai: "โรง", ipa: "rōːŋ", gloss: "building" }, { thai: "เรียน", ipa: "rīan", gloss: "study" }], boundaries: [4, 6, 9], gloss: "the child goes to school" } },
+  { kind: "phrase", id: "phrase:แมวกินปลาทู", unit: 14, display: "แมวกินปลาทู", initialIpa: null, finalIpa: null, consonantClass: null, drillable: true, metadata: { syllables: [{ thai: "แมว", ipa: "mɛ̄ːw", gloss: "cat" }, { thai: "กิน", ipa: "kīn", gloss: "eats" }, { thai: "ปลา", ipa: "plāː", gloss: "fish" }, { thai: "ทู", ipa: "tʰūː", gloss: "mackerel" }], boundaries: [3, 6, 9], gloss: "the cat eats mackerel" } },
+  { kind: "phrase", id: "phrase:ไปกินข้าวเช้า", unit: 14, display: "ไปกินข้าวเช้า", initialIpa: null, finalIpa: null, consonantClass: null, drillable: true, metadata: { syllables: [{ thai: "ไป", ipa: "pāj", gloss: "go" }, { thai: "กิน", ipa: "kīn", gloss: "eat" }, { thai: "ข้าว", ipa: "kʰâːw", gloss: "rice" }, { thai: "เช้า", ipa: "tɕʰáːw", gloss: "morning" }], boundaries: [2, 5, 9], gloss: "go eat breakfast" } },
+];
+
 // Unit 1 is lesson-only ("complete when read") — see LessonMarkerItem doc comment.
 export const UNIT_1_LESSON_MARKER_ID = "lesson-marker:unit-1";
 
@@ -323,14 +402,18 @@ export const ALL_THAI_ITEMS: ThaiItem[] = [
   ...ALL_VOWELS,
   ...WORD_BANK,
   ...TONE_WORDS,
+  ...SPECIAL_SIGNS,
+  ...LEADER_WORDS,
+  ...NUMERALS,
+  ...PHRASES,
 ];
 
-// Units 1-11 built (10-11 added in M13); 12-14 render as locked "coming soon"
-// (no items yet). Units 10 and 11 have no items of their own unit:10/11 — like
-// unit 6's letter-final drill (sourced from units 2-5), their drill subjects
-// are the unit-6 word bank, drilled inside the unit 10/11 session per
-// lib/thai/reachability.ts.
-export const BUILT_UNITS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] as const;
+// Units 1-14 built (12-14 added in M14 — the FINAL Read-Thai milestone; the
+// 14-unit course is now complete). Units 10 and 11 have no items of their own
+// unit:10/11 — like unit 6's letter-final drill (sourced from units 2-5),
+// their drill subjects are the unit-6 word bank, drilled inside the unit
+// 10/11 session per lib/thai/reachability.ts.
+export const BUILT_UNITS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14] as const;
 export const TOTAL_UNITS = 14;
 
 export const UNIT_TITLES: Record<number, string> = {
