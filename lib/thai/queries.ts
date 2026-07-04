@@ -1,4 +1,5 @@
 import { and, eq, inArray } from "drizzle-orm";
+import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { thaiItems, thaiProgress } from "@/lib/db/schema";
 import {
@@ -9,6 +10,7 @@ import {
   UNIT_TITLES,
 } from "@/seed/thai/items";
 import { LESSON_READ_DRILL_TYPE, isUnitUnlocked, percentMastered } from "./mastery";
+import { isThaiQaUnlockEmail } from "./qa-access";
 import { unitMasteryStats } from "./reachability";
 import type { UnitSummary } from "./types";
 
@@ -55,6 +57,19 @@ async function fetchMasteredDrillTypesByItem(learnerId: string): Promise<Map<str
 // (BUILT_UNITS = [1..14] as of M14) — the "coming soon" placeholder branch in
 // components/thai/unit-row.tsx is retained for safety but is no longer reachable.
 export async function getUnitSummaries(learnerId: string): Promise<UnitSummary[]> {
+  // Owner-approved QA bypass (lib/thai/qa-access.ts) — for exactly one email,
+  // force every BUILT unit's exposed `unlocked` flag true, so the owner can
+  // QA any unit without grinding the 90%-mastery gate. Resolving auth() here
+  // is safe: every caller of getUnitSummaries/getUnitSummary is request-
+  // scoped, and a missing session or any other learner's session simply
+  // yields qaUnlockAll = false (normal gating, unaffected). Real mastery
+  // numbers below are computed identically either way — only the exposed
+  // `unlocked` flag is overridden, and the previousUnitUnlocksNext
+  // propagation math still uses the REAL computed unlock state, not this
+  // override.
+  const session = await auth();
+  const qaUnlockAll = isThaiQaUnlockEmail(session?.user?.email);
+
   const masteredByItem = await fetchMasteredDrillTypesByItem(learnerId);
 
   const unit1LessonComplete =
@@ -109,7 +124,7 @@ export async function getUnitSummaries(learnerId: string): Promise<UnitSummary[]
       totalItems: total,
       masteredItems: masteredCount,
       percentMastered: pct,
-      unlocked,
+      unlocked: qaUnlockAll ? true : unlocked,
       lessonOnly: false,
       lessonComplete: true, // built-unit lessons are always readable (A4)
     });
