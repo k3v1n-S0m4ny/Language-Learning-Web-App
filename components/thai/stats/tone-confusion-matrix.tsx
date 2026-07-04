@@ -1,5 +1,18 @@
+import type { Tone } from "@/seed/thai/types";
 import type { ToneConfusionCell } from "@/lib/thai/stats";
 import { TONE_LABELS, TONE_ORDER } from "@/lib/thai/tone";
+
+// Header text colour keyed to the glass-native --thai-tone-* palette
+// (Phase 2) — ties the matrix's row/column headers back to the same tone
+// hues used by ToneSparkline/ClassBadge elsewhere. AA-verified as 4.5:1+
+// small text in both themes (see the table in globals.css).
+const TONE_HEADER_CLASS: Record<Tone, string> = {
+  mid: "text-thai-tone-mid",
+  low: "text-thai-tone-low",
+  falling: "text-thai-tone-falling",
+  high: "text-thai-tone-high",
+  rising: "text-thai-tone-rising",
+};
 
 // 5x5 grid: expected tone (row) vs chosen tone (column) — A5. Same earthy
 // intensity scale as FailureHeatmap, keyed off each row's own max so one
@@ -41,7 +54,7 @@ export function ToneConfusionMatrix({ cells }: { cells: ToneConfusionCell[] }) {
             {TONE_ORDER.map((tone) => (
               <th
                 key={tone}
-                className="px-2 py-1 text-center text-xs font-medium uppercase tracking-wide text-foreground-muted"
+                className={`px-2 py-1 text-center text-xs font-semibold uppercase tracking-wide ${TONE_HEADER_CLASS[tone]}`}
               >
                 {TONE_LABELS[tone]}
               </th>
@@ -54,7 +67,7 @@ export function ToneConfusionMatrix({ cells }: { cells: ToneConfusionCell[] }) {
             const rowMax = Math.max(0, ...row.map((c) => c.count));
             return (
               <tr key={expected}>
-                <th className="px-2 py-1 text-left text-xs font-medium text-foreground-muted">
+                <th className={`px-2 py-1 text-left text-xs font-semibold ${TONE_HEADER_CLASS[expected]}`}>
                   {TONE_LABELS[expected]}
                 </th>
                 {TONE_ORDER.map((chosen) => {

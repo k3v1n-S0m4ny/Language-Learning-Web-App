@@ -51,7 +51,7 @@ export function PhraseSplitQuestion({ phrase, correct, disabled, onSubmit }: Pro
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex flex-wrap items-center justify-center gap-0 rounded-xl border border-border-base bg-surface p-8">
+      <div className="flex flex-wrap items-center justify-center gap-0 rounded-[var(--r-lg)] border border-border-base bg-surface p-8">
         {phrase.chars.map((char, i) => (
           <span key={i} className="flex items-center">
             {i > 0 && (
@@ -61,7 +61,7 @@ export function PhraseSplitQuestion({ phrase, correct, disabled, onSubmit }: Pro
                 onClick={() => toggle(i)}
                 aria-label={`Toggle syllable boundary before position ${i}`}
                 aria-pressed={selected.has(i)}
-                className={`mx-0.5 h-8 w-2 shrink-0 rounded-full transition-colors disabled:cursor-default ${
+                className={`mx-0.5 h-8 w-2 shrink-0 rounded-[var(--r-pill)] transition-colors disabled:cursor-default ${
                   checked
                     ? correctSet.has(i) && selected.has(i)
                       ? "bg-success"
@@ -71,12 +71,15 @@ export function PhraseSplitQuestion({ phrase, correct, disabled, onSubmit }: Pro
                           ? "bg-clay"
                           : "bg-transparent"
                     : selected.has(i)
-                      ? "bg-brand"
-                      : "bg-border-base hover:bg-brand/50"
+                      ? "bg-accent"
+                      : "bg-border-base hover:bg-accent/50"
                 }`}
               />
             )}
-            <span className="font-thai text-4xl text-foreground">{char}</span>
+            {/* Prominent-ink Thai glyph (~1.6x a11y bump — a consonant only
+                fills ~50% of its font-size, the rest reserved for stacked
+                vowels/tone marks). */}
+            <span className="font-thai text-[3.6rem] text-foreground">{char}</span>
           </span>
         ))}
       </div>
@@ -86,7 +89,7 @@ export function PhraseSplitQuestion({ phrase, correct, disabled, onSubmit }: Pro
           type="button"
           onClick={check}
           disabled={disabled}
-          className="w-fit self-center rounded-full bg-brand px-6 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+          className="w-fit self-center rounded-[var(--r-pill)] bg-accent px-6 py-2 text-sm font-semibold text-on-earthy transition-opacity hover:opacity-90 disabled:opacity-60"
         >
           Check
         </button>
@@ -95,7 +98,7 @@ export function PhraseSplitQuestion({ phrase, correct, disabled, onSubmit }: Pro
       {checked && (
         <div className="flex flex-col gap-2 animate-fade-in">
           {phrase.syllables.map((s, i) => (
-            <div key={i} className="flex flex-wrap items-center gap-3 rounded-lg bg-background px-3 py-2 text-sm">
+            <div key={i} className="flex flex-wrap items-center gap-3 rounded-[var(--r-md)] bg-background px-3 py-2 text-sm">
               <span className="font-thai text-xl text-foreground">{s.thai}</span>
               <span className="font-mono text-xs text-foreground-muted">[{s.ipa}]</span>
               <span className="text-xs italic text-foreground-muted">&lsquo;{s.gloss}&rsquo;</span>

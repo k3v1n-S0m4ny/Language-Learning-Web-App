@@ -4,11 +4,11 @@ import { ModeToggle } from "./mode-toggle";
 import { SignOutButton } from "./sign-out-button";
 import { ThemeToggle } from "./ui/theme-toggle";
 
-// Floating glass top bar (Phase 1). Sticky over the ambient mesh; recedes
-// (dims) while a review/drill session is in progress, restoring on
-// hover/focus so the controls are never truly unreachable. Only the
-// Mandarin greeting is wired here — Thai's own header stays untouched
-// (Phase 2 per the build-order plan).
+// Floating glass top bar (Phase 1: Mandarin; Phase 2: wired into ThaiHome
+// too). Sticky over the ambient mesh; recedes (dims) while a review/drill
+// session is in progress, restoring on hover/focus so the controls are
+// never truly unreachable. Renders either language's greeting based on
+// `activeMode`.
 export function TopBar({
   activeMode,
   learnerName,

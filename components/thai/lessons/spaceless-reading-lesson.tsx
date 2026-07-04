@@ -5,7 +5,7 @@
 export function SpacelessReadingLesson() {
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-col gap-3 rounded-xl border border-border-base bg-surface p-5">
+      <div className="flex flex-col gap-3 rounded-[var(--r-lg)] border border-border-base bg-surface p-5">
         <h2 className="text-sm font-semibold text-foreground">The final hurdle: no spaces</h2>
         <p className="text-sm text-foreground-muted">
           Thai does not put spaces between words; a sentence is a continuous
@@ -44,9 +44,10 @@ export function SpacelessReadingLesson() {
       <div className="flex flex-col gap-3">
         <h3 className="text-sm font-semibold text-foreground-muted">Worked examples</h3>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <div className="rounded-xl border border-border-base bg-surface p-4">
-            <div className="font-thai text-2xl text-foreground">
-              ไป<span className="text-brand">·</span>โรง<span className="text-brand">·</span>เรียน
+          <div className="rounded-[var(--r-lg)] border border-border-base bg-surface p-4">
+            {/* Prominent-ink Thai phrase — ~1.6x a11y bump. */}
+            <div className="font-thai text-[2.4rem] text-foreground">
+              ไป<span className="text-foreground-muted">·</span>โรง<span className="text-foreground-muted">·</span>เรียน
             </div>
             <p className="mt-2 text-sm text-foreground-muted">
               The leading vowels break it apart: ไ&hellip; starts ไป pāj
@@ -55,9 +56,10 @@ export function SpacelessReadingLesson() {
               &lsquo;to go to school&rsquo;.
             </p>
           </div>
-          <div className="rounded-xl border border-border-base bg-surface p-4">
-            <div className="font-thai text-2xl text-foreground">
-              แมว<span className="text-brand">·</span>กิน<span className="text-brand">·</span>ปลา
+          <div className="rounded-[var(--r-lg)] border border-border-base bg-surface p-4">
+            {/* Prominent-ink Thai phrase — ~1.6x a11y bump. */}
+            <div className="font-thai text-[2.4rem] text-foreground">
+              แมว<span className="text-foreground-muted">·</span>กิน<span className="text-foreground-muted">·</span>ปลา
             </div>
             <p className="mt-2 text-sm text-foreground-muted">
               แ&hellip; announces แมว mɛ̄ːw &lsquo;cat&rsquo;; the final น
@@ -69,7 +71,7 @@ export function SpacelessReadingLesson() {
         </div>
       </div>
 
-      <div className="rounded-xl border border-border-base bg-surface p-5 text-sm text-foreground-muted">
+      <div className="rounded-[var(--r-lg)] border border-border-base bg-surface p-5 text-sm text-foreground-muted">
         <p>
           Fluent word-spotting comes from vocabulary as much as from rules:
           the more words you recognise on sight, the more the boundaries

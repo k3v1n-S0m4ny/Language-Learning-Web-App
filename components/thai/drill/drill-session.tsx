@@ -39,7 +39,7 @@ export function DrillSession({ unit, questions, nextUnitWasUnlocked }: Props) {
 
   if (!total) {
     return (
-      <div className="rounded-xl border border-border-base bg-surface p-6 text-sm text-foreground-muted">
+      <div className="rounded-[var(--r-lg)] border border-border-base bg-surface p-6 text-sm text-foreground-muted">
         No drill questions are available for this unit yet.
       </div>
     );
@@ -86,7 +86,7 @@ export function DrillSession({ unit, questions, nextUnitWasUnlocked }: Props) {
   if (phase === "summary" && summary) {
     const unlockedThisRound = summary.nextUnitNewlyUnlocked && !nextUnitWasUnlocked;
     return (
-      <div className="flex flex-col gap-6 rounded-xl border border-border-base bg-surface p-6 animate-slide-up-fade">
+      <div className="flex flex-col gap-6 rounded-[var(--r-lg)] border border-border-base bg-surface p-6 animate-slide-up-fade">
         <h2 className="text-lg font-semibold text-foreground">Round complete</h2>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
           <StatTile label="Score" value={`${correctCount} / ${total}`} />
@@ -94,14 +94,14 @@ export function DrillSession({ unit, questions, nextUnitWasUnlocked }: Props) {
           <StatTile label={`Unit ${unit}`} value={`${summary.percentMastered}%`} />
         </div>
         {unlockedThisRound && (
-          <div className="rounded-lg bg-highlight px-4 py-3 text-sm font-semibold text-on-earthy animate-pop-in">
+          <div className="rounded-[var(--r-md)] bg-highlight px-4 py-3 text-sm font-semibold text-on-earthy animate-pop-in">
             🎉 Unit {summary.nextUnit} unlocked!
           </div>
         )}
         <div className="flex gap-2">
           <Link
             href="/"
-            className="rounded-full bg-brand px-5 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+            className="rounded-[var(--r-pill)] bg-accent px-5 py-2 text-sm font-semibold text-on-earthy transition-opacity hover:opacity-90"
           >
             Back to units
           </Link>
@@ -117,7 +117,9 @@ export function DrillSession({ unit, questions, nextUnitWasUnlocked }: Props) {
   const hideAudioUntilRevealed = question.drillType === "word-ipa";
   // audio-word's options are real Thai words (need Noto Sans Thai shaping),
   // unlike every other drill type's options (IPA/class/tone-label strings).
-  const optionFont = question.drillType === "audio-word" ? "font-thai text-2xl" : "font-mono text-lg";
+  // Thai-script options get the ~1.6x a11y glyph-size bump (a Thai consonant
+  // only fills ~50% of its font-size); Latin/IPA-string options don't need it.
+  const optionFont = question.drillType === "audio-word" ? "font-thai text-[2.4rem]" : "font-mono text-lg";
   // M14/A5: phrase-split is not MC at all — the tap-boundary widget IS the
   // question (it renders the phrase itself), so the standard prompt box +
   // options grid are skipped entirely for this drill type.
@@ -130,14 +132,14 @@ export function DrillSession({ unit, questions, nextUnitWasUnlocked }: Props) {
       </div>
 
       {!isPhraseSplit && (
-        <div className="flex flex-col items-center gap-4 rounded-xl border border-border-base bg-surface p-8">
+        <div className="flex flex-col items-center gap-4 rounded-[var(--r-lg)] border border-border-base bg-surface p-8">
           {question.promptKind === "audio" ? (
             question.audioUrl && <AudioPlayButton url={question.audioUrl} label="▶ Play clip" />
           ) : (
             <div
               className={`text-center ${
                 question.promptKind === "consonant" || question.promptKind === "syllable"
-                  ? "font-thai text-5xl"
+                  ? "font-thai text-[4.8rem]"
                   : "font-mono text-3xl"
               } text-foreground`}
             >
@@ -179,7 +181,9 @@ export function DrillSession({ unit, questions, nextUnitWasUnlocked }: Props) {
           {optionOrder.map((option) => {
             const isChosen = chosen === option.value;
             const isCorrectOption = option.value === question.correct;
-            let style = "border-border-base bg-surface hover:bg-background";
+            // Explicit text-foreground on the default state — UA default
+            // button text colour is black, invisible on a dark surface (a11y).
+            let style = "border-border-base bg-surface text-foreground hover:bg-background";
             if (phase === "revealed") {
               if (isCorrectOption) style = "border-success bg-success text-white";
               else if (isChosen) style = "border-clay bg-clay text-on-earthy";
@@ -190,7 +194,7 @@ export function DrillSession({ unit, questions, nextUnitWasUnlocked }: Props) {
                 type="button"
                 disabled={phase === "revealed" || pending}
                 onClick={() => answer(option)}
-                className={`rounded-xl border-2 px-4 py-3 text-center transition-colors disabled:cursor-default ${optionFont} ${style}`}
+                className={`rounded-[var(--r-lg)] border-2 px-4 py-3 text-center transition-colors disabled:cursor-default ${optionFont} ${style}`}
               >
                 {option.label}
               </button>
@@ -204,7 +208,7 @@ export function DrillSession({ unit, questions, nextUnitWasUnlocked }: Props) {
           type="button"
           onClick={next}
           disabled={pending}
-          className="w-fit self-end rounded-full bg-brand px-5 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+          className="w-fit self-end rounded-[var(--r-pill)] bg-accent px-5 py-2 text-sm font-semibold text-on-earthy transition-opacity hover:opacity-90 disabled:opacity-60"
         >
           {index + 1 < total ? "Next" : "Finish round"}
         </button>
@@ -221,7 +225,7 @@ export function DrillSession({ unit, questions, nextUnitWasUnlocked }: Props) {
 
 function StatTile({ label, value }: { label: string; value: string | number }) {
   return (
-    <div className="rounded-xl bg-background p-3">
+    <div className="rounded-[var(--r-md)] bg-background p-3">
       <div className="text-xs text-foreground-muted">{label}</div>
       <div className="mt-1 text-lg font-semibold text-foreground">{value}</div>
     </div>

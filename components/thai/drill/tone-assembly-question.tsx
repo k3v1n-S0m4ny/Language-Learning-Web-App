@@ -49,7 +49,9 @@ export function ToneAssemblyQuestion({ steps, disabled, onFinalStepAnswered }: P
         {step.options.map((option) => {
           const isChosen = chosen === option.value;
           const isCorrectOption = option.value === step.correct;
-          let style = "border-border-base bg-surface hover:bg-background";
+          // Explicit text-foreground on the default state (a11y — UA default
+          // button text colour is black, invisible on a dark surface).
+          let style = "border-border-base bg-surface text-foreground hover:bg-background";
           if (answered) {
             if (isCorrectOption) style = "border-success bg-success text-white";
             else if (isChosen) style = "border-clay bg-clay text-on-earthy";
@@ -60,7 +62,7 @@ export function ToneAssemblyQuestion({ steps, disabled, onFinalStepAnswered }: P
               type="button"
               disabled={answered || disabled}
               onClick={() => choose(option)}
-              className={`rounded-xl border-2 px-4 py-3 text-center font-mono text-base transition-colors disabled:cursor-default ${style}`}
+              className={`rounded-[var(--r-lg)] border-2 px-4 py-3 text-center font-mono text-base transition-colors disabled:cursor-default ${style}`}
             >
               {option.label}
             </button>
@@ -71,7 +73,7 @@ export function ToneAssemblyQuestion({ steps, disabled, onFinalStepAnswered }: P
         <button
           type="button"
           onClick={continueToNextStep}
-          className="w-fit self-end rounded-full bg-brand px-5 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+          className="w-fit self-end rounded-[var(--r-pill)] bg-accent px-5 py-2 text-sm font-semibold text-on-earthy transition-opacity hover:opacity-90"
         >
           Continue
         </button>

@@ -19,13 +19,13 @@ export default async function ThaiStatsPage() {
   const stats = await getThaiStats(learnerId, new Date());
 
   return (
-    <main className="min-h-dvh bg-background px-6 py-8">
+    <main className="min-h-dvh px-6 py-8">
       <LangSync activeMode="thai" />
       <div className="mx-auto mb-8 flex max-w-3xl items-center justify-between gap-4">
         <h1 className="text-xl font-semibold text-foreground">Read Thai — Progress</h1>
         <Link
           href="/"
-          className="rounded-full border border-border-base px-4 py-1.5 text-xs font-medium text-foreground-muted transition-colors hover:bg-surface"
+          className="rounded-[var(--r-pill)] border border-border-base px-4 py-1.5 text-xs font-medium text-foreground-muted transition-colors hover:bg-surface"
         >
           Back to units
         </Link>

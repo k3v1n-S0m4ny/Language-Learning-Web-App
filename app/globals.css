@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+/* The repo-committed handoff docs under .claude/ contain prose shaped like
+   utility classes (e.g. "rounded-[var(--r-lg/md/pill)]" as shorthand). Tailwind
+   v4 auto-scans the whole project for candidate classes, so it would try to
+   generate CSS from that prose and emit an "Unexpected token" warning. Exclude
+   the directory from the source scan — no app code lives there. */
+@source not "../.claude";
+
 /* ==========================================================================
    Semantic color tokens — earthy base palette + WCAG-checked bright accents.
    Light values are set in :root; dark mode overrides live in the media query.
@@ -77,6 +84,49 @@
    │ above so tone-1/3/4 pass in both themes too. Same hue family, barely │
    │ perceptible shift.) tone-neutral aliases --foreground-muted, which   │
    │ is independently AA-verified above.                                  │
+   └──────────────────────────────────────────────────────────────────────┘
+
+   --- Phase 2 (glass redesign — Read-Thai) additions ---
+   Computed via the same WCAG relative-luminance formula (throwaway Node
+   script, not committed — values below are the result), verified against
+   the ACTUAL surfaces these tokens render on in both themes.
+
+   ┌──────────────────────────────────────────────────────────────────────┐
+   │ ClassBadge — filled chip. Text is always --color-on-earthy (#1A1A1A) │
+   │ Phase 0's raw saturated hues FAILED as small text/thin fills in      │
+   │ light mode (teal #0D9488 on white ~ 3.74:1, amber #D97706 ~ 3.19:1 — │
+   │ both below the 4.5:1 floor; violet #7C3AED ~ 5.70:1 already passed).│
+   │ Rather than use the hue as text-on-white, the chip is redesigned as  │
+   │ near-black text on a LIGHTENED tint of the same hue family (same     │
+   │ approach the earthy palette already uses for e.g. peach/sand):      │
+   │ LIGHT:                                                               │
+   │   #1A1A1A on #CCFBF1 (class-mid, was #0D9488)   | 15.45:1 PASS (AA) │
+   │   #1A1A1A on #FEF3C7 (class-high, was #D97706)  | 15.63:1 PASS (AA) │
+   │   #1A1A1A on #EDE9FE (class-low, was #7C3AED)   | 14.66:1 PASS (AA) │
+   │ DARK (kept the bake-off north-star bright values — already          │
+   │ compliant with near-black text, no change needed):                  │
+   │   #1A1A1A on #2DD4BF (class-mid)                |  9.35:1 PASS (AA) │
+   │   #1A1A1A on #FBBF24 (class-high)               | 10.43:1 PASS (AA) │
+   │   #1A1A1A on #A78BFA (class-low)                |  6.40:1 PASS (AA) │
+   ├───────────────────────────────────────────────────────────────────┤
+   │ Tone hues — used as TEXT (tone labels, tone-confusion-matrix        │
+   │ headers) need 4.5:1; as graphical STROKE (tone-sparkline polylines) │
+   │ need 3:1. One token serves both consumers, so it is tuned to the    │
+   │ stricter (4.5:1 text) floor. LIGHT (on white #FFFFFF): mid/falling/ │
+   │ rising already cleared 4.5:1 unchanged; low and high did not and    │
+   │ were darkened within the same hue family:                          │
+   │   #64748B (tone-mid, unchanged)                 |  4.76:1 PASS (AA) │
+   │   #0369A1 (tone-low, was #0284C7 @ 4.10:1 FAIL) |  5.93:1 PASS (AA) │
+   │   #DC2626 (tone-falling, unchanged)             |  4.83:1 PASS (AA) │
+   │   #15803D (tone-high, was #16A34A @ 3.30:1 FAIL)|  5.02:1 PASS (AA) │
+   │   #C026D3 (tone-rising, unchanged)              |  4.71:1 PASS (AA) │
+   │ DARK (on #232A28): all five Phase-0 north-star values already clear│
+   │ 4.5:1, no change needed:                                            │
+   │   #94A3B8 (tone-mid)                            |  5.71:1 PASS (AA) │
+   │   #38BDF8 (tone-low)                            |  6.84:1 PASS (AA) │
+   │   #F87171 (tone-falling)                        |  5.30:1 PASS (AA) │
+   │   #4ADE80 (tone-high)                           |  8.41:1 PASS (AA) │
+   │   #E879F9 (tone-rising)                         |  5.95:1 PASS (AA) │
    └──────────────────────────────────────────────────────────────────────┘
    ========================================================================== */
 
@@ -168,14 +218,19 @@
   --tone-neutral: var(--foreground-muted);
 
   /* Read-Thai restyled systems (glass-native). Light-mode values here; the
-     [data-theme="dark"] block brightens them. Consumed in P2. */
-  --thai-class-mid: #0d9488;
-  --thai-class-high: #d97706;
-  --thai-class-low: #7c3aed;
+     [data-theme="dark"] block brightens them.
+     Class hues are AA-tuned as ClassBadge chip BACKGROUNDS (near-black text
+     on a lightened tint — the raw saturated hues failed 4.5:1 as text-on-
+     white). Tone hues serve BOTH text (tone labels/matrix headers, 4.5:1)
+     and stroke (sparkline, 3:1) — low/high were darkened to clear 4.5:1;
+     mid/falling/rising already did. See the AA table above for the numbers. */
+  --thai-class-mid: #ccfbf1;
+  --thai-class-high: #fef3c7;
+  --thai-class-low: #ede9fe;
   --thai-tone-mid: #64748b;
-  --thai-tone-low: #0284c7;
+  --thai-tone-low: #0369a1;
   --thai-tone-falling: #dc2626;
-  --thai-tone-high: #16a34a;
+  --thai-tone-high: #15803d;
   --thai-tone-rising: #c026d3;
 
   /* Per-language accents default to Mandarin until [data-lang] is set. */
@@ -262,6 +317,18 @@
   --color-accent: var(--accent);
   --color-accent-2: var(--accent-2);
   --color-accent-3: var(--accent-3);
+
+  /* Read-Thai class + tone systems as utilities (Phase 2): bg-thai-class-mid,
+     text-thai-tone-falling, border-thai-class-high, etc. SVG stroke/fill
+     consumers (sparkline, matrix) read the raw var() directly instead. */
+  --color-thai-class-mid: var(--thai-class-mid);
+  --color-thai-class-high: var(--thai-class-high);
+  --color-thai-class-low: var(--thai-class-low);
+  --color-thai-tone-mid: var(--thai-tone-mid);
+  --color-thai-tone-low: var(--thai-tone-low);
+  --color-thai-tone-falling: var(--thai-tone-falling);
+  --color-thai-tone-high: var(--thai-tone-high);
+  --color-thai-tone-rising: var(--thai-tone-rising);
 
   /* Pill radius utility (rounded-pill) */
   --radius-pill: var(--r-pill);

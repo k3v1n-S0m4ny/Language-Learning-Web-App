@@ -44,7 +44,7 @@ export function SyllableDecodeLesson({ words }: { words: SyllableItem[] }) {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-col gap-3 rounded-xl border border-border-base bg-surface p-5">
+      <div className="flex flex-col gap-3 rounded-[var(--r-lg)] border border-border-base bg-surface p-5">
         <h2 className="text-sm font-semibold text-foreground">Reading a syllable&rsquo;s full IPA</h2>
         <p className="text-sm text-foreground-muted">
           Every Thai syllable decodes into initial consonant + vowel +
@@ -65,13 +65,14 @@ export function SyllableDecodeLesson({ words }: { words: SyllableItem[] }) {
             return (
               <div
                 key={item.id}
-                className="flex flex-col gap-2 rounded-xl border border-border-base bg-surface p-4"
+                className="flex flex-col gap-2 rounded-[var(--r-lg)] border border-border-base bg-surface p-4"
               >
                 <span className="text-xs font-medium uppercase tracking-wide text-foreground-muted">
                   {label}
                 </span>
+                {/* Prominent-ink Thai glyph — ~1.6x a11y bump. */}
                 <div className="flex items-center gap-3">
-                  <span className="font-thai text-3xl text-foreground">{item.display}</span>
+                  <span className="font-thai text-5xl text-foreground">{item.display}</span>
                   <span className="font-mono text-sm text-foreground-muted">[{item.initialIpa}]</span>
                 </div>
                 <div className="flex flex-wrap items-center gap-2 text-xs text-foreground-muted">
@@ -93,7 +94,7 @@ export function SyllableDecodeLesson({ words }: { words: SyllableItem[] }) {
         </div>
       </div>
 
-      <div className="rounded-xl border border-border-base bg-surface p-5 text-sm text-foreground-muted">
+      <div className="rounded-[var(--r-lg)] border border-border-base bg-surface p-5 text-sm text-foreground-muted">
         <p>
           The drill below shows a word and asks you to pick its correct full
           IPA reading from four options. The three wrong options each change

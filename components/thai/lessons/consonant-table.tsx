@@ -6,7 +6,7 @@ import { ClassBadge } from "./class-badge";
 // mirror of this content (A5: lessons and drills share one source of truth).
 export function ConsonantTable({ items }: { items: ConsonantItem[] }) {
   return (
-    <div className="overflow-x-auto rounded-xl border border-border-base">
+    <div className="overflow-x-auto rounded-[var(--r-lg)] border border-border-base">
       <table className="w-full text-sm">
         <thead>
           <tr className="border-b border-border-base bg-background text-xs uppercase tracking-wide text-foreground-muted">
@@ -21,7 +21,8 @@ export function ConsonantTable({ items }: { items: ConsonantItem[] }) {
         <tbody>
           {items.map((item) => (
             <tr key={item.id} className="border-b border-border-base last:border-0">
-              <td className="font-thai px-3 py-2 text-2xl">
+              {/* Prominent-ink Thai glyph — ~1.6x a11y bump. */}
+              <td className="font-thai px-3 py-2 text-[2.4rem]">
                 {item.display}
                 {item.metadata.obsolete && (
                   <span className="ml-2 align-middle text-[10px] font-sans font-normal uppercase text-foreground-muted">

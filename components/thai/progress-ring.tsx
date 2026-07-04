@@ -13,7 +13,9 @@ export function ProgressRing({
 }) {
   const clamped = Math.max(0, Math.min(100, percent));
   const offset = CIRCUMFERENCE * (1 - clamped / 100);
-  const color = locked ? "var(--foreground-muted)" : "var(--color-brand)";
+  // Active stroke uses the per-language accent (saffron in the Thai
+  // [data-lang="thai"] context) instead of the old shared --color-brand.
+  const color = locked ? "var(--foreground-muted)" : "var(--accent)";
 
   return (
     <svg width={SIZE} height={SIZE} viewBox={`0 0 ${SIZE} ${SIZE}`} className="shrink-0">

@@ -34,9 +34,10 @@ export function ToneEarLesson({ words }: { words: ToneWordWithAudio[] }) {
                 return (
                   <div
                     key={item.id}
-                    className="flex flex-col items-center gap-2 rounded-xl border border-border-base bg-surface p-4"
+                    className="flex flex-col items-center gap-2 rounded-[var(--r-lg)] border border-border-base bg-surface p-4"
                   >
-                    <span className="font-thai text-3xl text-foreground">{item.display}</span>
+                    {/* Prominent-ink Thai glyph — ~1.6x a11y bump. */}
+                    <span className="font-thai text-5xl text-foreground">{item.display}</span>
                     <span className="font-mono text-xs text-foreground-muted">
                       [{item.initialIpa}]
                     </span>

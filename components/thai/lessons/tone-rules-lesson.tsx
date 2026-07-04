@@ -17,7 +17,7 @@ export function ToneRulesLesson({
 }) {
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-col gap-3 rounded-xl border border-border-base bg-surface p-5">
+      <div className="flex flex-col gap-3 rounded-[var(--r-lg)] border border-border-base bg-surface p-5">
         <h2 className="text-sm font-semibold text-foreground">
           Four ingredients decide a syllable&rsquo;s tone
         </h2>
@@ -37,9 +37,11 @@ export function ToneRulesLesson({
             return (
               <div
                 key={mark}
-                className="flex flex-col items-center gap-1 rounded-xl border border-border-base bg-surface p-4"
+                className="flex flex-col items-center gap-1 rounded-[var(--r-lg)] border border-border-base bg-surface p-4"
               >
-                <span className="font-thai text-3xl text-foreground">ก{info.glyph.replace("◌", "")}</span>
+                {/* Prominent-ink Thai glyph — ~1.6x a11y bump (a consonant
+                    only fills ~50% of its font-size). */}
+                <span className="font-thai text-5xl text-foreground">ก{info.glyph.replace("◌", "")}</span>
                 <span className="font-thai text-sm text-foreground-muted">{info.nameThai}</span>
                 <span className="font-mono text-xs text-foreground-muted">[{info.nameIpa}]</span>
               </div>
@@ -50,7 +52,7 @@ export function ToneRulesLesson({
 
       <div className="flex flex-col gap-3">
         <h3 className="text-sm font-semibold text-foreground-muted">The tone grid</h3>
-        <div className="overflow-x-auto rounded-xl border border-border-base">
+        <div className="overflow-x-auto rounded-[var(--r-lg)] border border-border-base">
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-surface text-foreground-muted">
@@ -98,9 +100,9 @@ export function ToneRulesLesson({
             return (
               <div
                 key={mark}
-                className="flex items-center gap-3 rounded-xl border border-border-base bg-surface p-4"
+                className="flex items-center gap-3 rounded-[var(--r-lg)] border border-border-base bg-surface p-4"
               >
-                <span className="font-thai text-3xl text-foreground">{example.display}</span>
+                <span className="font-thai text-5xl text-foreground">{example.display}</span>
                 <div className="flex flex-col gap-1">
                   <span className="font-mono text-xs text-foreground-muted">[{example.initialIpa}]</span>
                   <div className="flex items-center gap-2">
