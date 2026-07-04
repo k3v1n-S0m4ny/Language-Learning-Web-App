@@ -128,6 +128,67 @@
    │   #4ADE80 (tone-high)                           |  8.41:1 PASS (AA) │
    │   #E879F9 (tone-rising)                         |  5.95:1 PASS (AA) │
    └──────────────────────────────────────────────────────────────────────┘
+
+   --- Phase 3 (glass redesign — Stats + celebrations) additions ---
+   Computed via the same WCAG relative-luminance formula (throwaway Node
+   script, not committed — values below are the result). The dataviz skill
+   guidance referenced by the Phase 3 brief could not be located on disk in
+   this environment (searched ~/.claude/skills and the whole user profile —
+   no dataviz skill files found), so the heat ramp below instead follows
+   standard sequential-scale dataviz practice directly: one single-hue
+   (warm/red) 5-stop ramp with monotonically increasing saturation/depth, a
+   quiet near-neutral floor, modelled on ColorBrewer's OrRd sequential class
+   (a well-established, colourblind-considered severity palette) — NOT tied
+   to any --accent hue, since this is a GENERIC severity scale shared by two
+   different components (failure-heatmap, tone-confusion-matrix), not a
+   class/tone/language colour. See glass-redesign-phase3.impl.md for the
+   full reasoning.
+
+   ┌──────────────────────────────────────────────────────────────────────┐
+   │ Heat ramp — text (small "%"/count labels) needs 4.5:1. Each stop's    │
+   │ own "ink" token is pre-selected (near-black or a light ink) per stop  │
+   │ so consumers never have to branch text colour themselves.            │
+   │ LIGHT (ramp modelled on ColorBrewer OrRd-5; heat-3 hand-tuned off the │
+   │ stock swatch, which measured 4.44:1 — just under AA — to clear it):  │
+   │   #1A1A1A on #FEF0D9 (heat-0)   | 15.48:1 PASS (AA) — ink: #1A1A1A   │
+   │   #1A1A1A on #FDD49E (heat-1)   | 12.50:1 PASS (AA) — ink: #1A1A1A   │
+   │   #1A1A1A on #FC8D59 (heat-2)   |  7.54:1 PASS (AA) — ink: #1A1A1A   │
+   │   #1A1A1A on #E8511E (heat-3)   |  4.66:1 PASS (AA) — ink: #1A1A1A   │
+   │   #FFFFFF on #B30000 (heat-4)   |  7.20:1 PASS (AA) — ink: #FFFFFF   │
+   │ (#1A1A1A on #B30000 only measures 2.42:1 — fails; #FFFFFF ink used   │
+   │ for heat-4 instead, hence the per-stop ink token.)                   │
+   │ DARK (deeper/muted at the floor, brighter at the ceiling — mirrors   │
+   │ how the Thai tone and class tokens invert light/dark treatment):     │
+   │   #ECEFEC on #361708 (heat-0)   | 14.13:1 PASS (AA) — ink: #ECEFEC   │
+   │   #ECEFEC on #622A0E (heat-1)   |  9.76:1 PASS (AA) — ink: #ECEFEC   │
+   │   #ECEFEC on #863913 (heat-2)   |  6.95:1 PASS (AA) — ink: #ECEFEC   │
+   │   #ECEFEC on #AA4918 (heat-3)   |  4.93:1 PASS (AA) — ink: #ECEFEC   │
+   │   #1A1A1A on #E67237 (heat-4)   |  5.66:1 PASS (AA) — ink: #1A1A1A   │
+   │ (Every intermediate lightness between each theme's floor/ceiling was │
+   │ swept in 2-4% steps to confirm no stop falls in the ~L 0.18-0.40     │
+   │ luminance band where NEITHER black nor white text clears 4.5:1 —     │
+   │ several initial candidates did and were discarded; see the impl      │
+   │ summary for the swept values.)                                       │
+   ├────────────────────────────────────────────────────────────────────┤
+   │ Accent-as-text checks (StatCard `accent` prop, glass tooltips) —     │
+   │ raw --accent used as small TEXT fails AA on a light surface, so the  │
+   │ number itself always stays --foreground; accent is confined to a    │
+   │ small decorative (non-text) label rule instead:                     │
+   │   #12B886 (jade) on #FFFFFF card    |  2.55:1 FAIL — not used as text│
+   │   #F59E0B (saffron) on #FFFFFF card |  2.15:1 FAIL — not used as text│
+   │   #12B886 (jade) on #232A28 card    |  5.74:1 PASS — still avoided,  │
+   │   #F59E0B (saffron) on #232A28 card |  6.82:1 PASS — for ONE shared  │
+   │ rule across both themes rather than a per-theme text-colour branch. │
+   │ (Same finding as Phase 2's audio-play-button note — consistent with │
+   │ that precedent.) Glass-tooltip text is always --foreground, never   │
+   │ --accent, for the same reason.                                      │
+   ├────────────────────────────────────────────────────────────────────┤
+   │ FSRS rating-breakdown chart (rating-chart.tsx) now consumes the SAME │
+   │ --rate-* tokens as the on-screen rating buttons (previously a       │
+   │ separate, older earthy hex set) — already AA-verified in the Phase 1│
+   │ block above (4.57-8.20:1 on --color-on-earthy); re-confirmed here,  │
+   │ unchanged, since this is a token reuse, not a new colour.           │
+   └──────────────────────────────────────────────────────────────────────┘
    ========================================================================== */
 
 :root {
@@ -244,6 +305,21 @@
   --rate-hard: #f2740d;
   --rate-good: #2e9e63;
   --rate-easy: #43c88f;
+
+  /* Heat ramp (Phase 3) — generic 5-stop sequential severity scale shared by
+     failure-heatmap.tsx and tone-confusion-matrix.tsx. NOT an --accent hue
+     (this scale must read the same regardless of active language). Each
+     stop pairs with its own "ink" (text) token — see the AA table above. */
+  --heat-0: #fef0d9;
+  --heat-0-ink: #1a1a1a;
+  --heat-1: #fdd49e;
+  --heat-1-ink: #1a1a1a;
+  --heat-2: #fc8d59;
+  --heat-2-ink: #1a1a1a;
+  --heat-3: #e8511e;
+  --heat-3-ink: #1a1a1a;
+  --heat-4: #b30000;
+  --heat-4-ink: #ffffff;
 }
 
 /* Dark overrides for the glass + palette tokens (semantic core handled above). */
@@ -270,6 +346,20 @@
   --thai-tone-falling: #f87171;
   --thai-tone-high: #4ade80;
   --thai-tone-rising: #e879f9;
+
+  /* Heat ramp (Phase 3) — deeper/muted at the floor, brighter at the
+     ceiling, mirroring how the Thai class/tone tokens invert light vs dark
+     treatment. See the AA table above. */
+  --heat-0: #361708;
+  --heat-0-ink: #ecefec;
+  --heat-1: #622a0e;
+  --heat-1-ink: #ecefec;
+  --heat-2: #863913;
+  --heat-2-ink: #ecefec;
+  --heat-3: #aa4918;
+  --heat-3-ink: #ecefec;
+  --heat-4: #e67237;
+  --heat-4-ink: #1a1a1a;
 }
 
 /* Per-language accent + ambient-mesh tints. [data-lang] is set on <html> by

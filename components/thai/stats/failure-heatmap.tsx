@@ -1,18 +1,20 @@
 import type { FailureHeatmapRow } from "@/lib/thai/stats";
+import { heatCellClass } from "./heat-scale";
 
-// Intensity scale for failure rate — earthy palette, darker = worse.
+// Intensity scale for failure rate (Phase 3: shared glass-native heat ramp,
+// 0 = perfect / quiet, 4 = highest failure rate).
 function cellColor(rate: number): string {
-  if (rate === 0) return "bg-easy";
-  if (rate < 25) return "bg-sage";
-  if (rate < 50) return "bg-highlight";
-  if (rate < 75) return "bg-peach";
-  return "bg-clay";
+  if (rate === 0) return heatCellClass(0);
+  if (rate < 25) return heatCellClass(1);
+  if (rate < 50) return heatCellClass(2);
+  if (rate < 75) return heatCellClass(3);
+  return heatCellClass(4);
 }
 
 export function FailureHeatmap({ rows }: { rows: FailureHeatmapRow[] }) {
   if (!rows.length) {
     return (
-      <div className="flex h-24 items-center justify-center rounded-lg bg-background text-sm text-foreground-muted">
+      <div className="flex h-24 items-center justify-center rounded-[var(--r-md)] bg-background text-sm text-foreground-muted">
         No drill attempts yet
       </div>
     );
@@ -26,7 +28,7 @@ export function FailureHeatmap({ rows }: { rows: FailureHeatmapRow[] }) {
         <div
           key={row.itemId}
           title={`${row.failures}/${row.attempts} missed`}
-          className={`flex flex-col items-center justify-center gap-0.5 rounded-lg p-2 text-on-earthy ${cellColor(row.failureRate)}`}
+          className={`flex flex-col items-center justify-center gap-0.5 rounded-[var(--r-md)] p-2 ${cellColor(row.failureRate)}`}
         >
           <span className="font-thai text-lg leading-none">{row.display}</span>
           <span className="text-[10px] font-semibold">{row.failureRate}%</span>

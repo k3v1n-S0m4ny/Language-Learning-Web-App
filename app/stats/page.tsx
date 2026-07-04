@@ -5,6 +5,8 @@ import { getLearnersStats } from "@/lib/review/stats";
 import { ReviewsChart } from "@/components/stats/reviews-chart";
 import { ForecastChart } from "@/components/stats/forecast-chart";
 import { RatingChart } from "@/components/stats/rating-chart";
+import { CountUp } from "@/components/ui/count-up";
+import { StatCard } from "@/components/ui/stat-card";
 import type { LearnerStats } from "@/lib/review/stats";
 
 // Stats page — read-only progress view for both learners side by side.
@@ -19,16 +21,16 @@ export default async function StatsPage() {
   const learners = await getLearnersStats(new Date());
 
   return (
-    <main className="min-h-dvh bg-background px-6 py-8">
+    // No bg-background here (Phase 3) — the global ambient mesh shows
+    // through, matching app/page.tsx.
+    <main className="min-h-dvh px-6 py-8">
       <LangSync activeMode="mandarin" />
       {/* Header with back link (A1) */}
       <div className="mx-auto mb-8 flex max-w-5xl items-center justify-between gap-4">
-        <h1 className="text-xl font-semibold text-foreground">
-          Progress
-        </h1>
+        <h1 className="text-display text-foreground">Progress</h1>
         <Link
           href="/"
-          className="rounded-full border border-border-base px-4 py-1.5 text-xs font-medium text-foreground-muted transition-colors hover:bg-surface"
+          className="rounded-[var(--r-pill)] border border-border-base px-4 py-1.5 text-xs font-medium text-foreground-muted transition-colors hover:bg-surface"
         >
           Back to study
         </Link>
@@ -44,25 +46,36 @@ export default async function StatsPage() {
   );
 }
 
-// One column per learner (A3). Server component — charts are the only
-// client-rendered parts, passed data as props.
+// One column per learner (A3). Server component — charts (and the count-up
+// hero figure) are the only client-rendered parts, passed data as props.
+// Content surface (a stats card the learner reads), so it stays the same
+// "solid elevated" recipe as the flip-card faces — border + bg-surface +
+// var(--glass-shadow) — never actual .glass blur behind the figures (Phase 3).
 function LearnerColumn({ stats }: { stats: LearnerStats }) {
   const pct =
     stats.total > 0 ? Math.round((stats.seen / stats.total) * 100) : 0;
 
   return (
-    <section className="flex flex-col gap-6 rounded-2xl border border-border-base bg-surface p-6">
+    <section className="flex flex-col gap-6 rounded-[var(--r-lg)] border border-border-base bg-surface p-6 shadow-[var(--glass-shadow)]">
       {/* Learner label */}
       <h2 className="text-base font-semibold text-foreground">
         {stats.displayName}
       </h2>
 
-      {/* Cards learned / mature / total (A4) + leech count */}
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <StatTile label="Seen" value={`${stats.seen} / ${stats.total}`} sub={`${pct}%`} />
-        <StatTile label="Mature" value={stats.mature} />
-        <StatTile label="Streak" value={`${stats.streak}d`} />
-        <StatTile label="Leeches" value={stats.leechCount} />
+      {/* Hero moment: one count-up figure per column (Phase 3) */}
+      <StatCard
+        hero
+        accent
+        label="Cards seen"
+        value={<CountUp value={stats.seen} />}
+        sub={`${pct}% of ${stats.total}`}
+      />
+
+      {/* Cards mature / streak / leech count (A4) */}
+      <div className="grid grid-cols-3 gap-3">
+        <StatCard label="Mature" value={stats.mature} />
+        <StatCard label="Streak" value={`${stats.streak}d`} />
+        <StatCard label="Leeches" value={stats.leechCount} />
       </div>
 
       {/* Reviews over the last 30 days (A5) */}
@@ -83,28 +96,6 @@ function LearnerColumn({ stats }: { stats: LearnerStats }) {
         <RatingChart ratingCounts={stats.ratingCounts} />
       </div>
     </section>
-  );
-}
-
-function StatTile({
-  label,
-  value,
-  sub,
-}: {
-  label: string;
-  value: string | number;
-  sub?: string;
-}) {
-  return (
-    <div className="rounded-xl bg-background p-3">
-      <div className="text-xs text-foreground-muted">{label}</div>
-      <div className="mt-1 text-lg font-semibold text-foreground">
-        {value}
-      </div>
-      {sub && (
-        <div className="text-xs text-foreground-muted opacity-60">{sub}</div>
-      )}
-    </div>
   );
 }
 

@@ -7,6 +7,7 @@ import { TONE_LABELS } from "@/lib/thai/tone";
 import type { DrillOption, DrillQuestion } from "@/lib/thai/types";
 import type { Tone } from "@/seed/thai/types";
 import { AudioPlayButton } from "@/components/thai/audio-play-button";
+import { Celebration } from "@/components/ui/celebration";
 import { PhraseSplitQuestion } from "./phrase-split-question";
 import { ToneAssemblyQuestion } from "./tone-assembly-question";
 
@@ -94,9 +95,15 @@ export function DrillSession({ unit, questions, nextUnitWasUnlocked }: Props) {
           <StatTile label={`Unit ${unit}`} value={`${summary.percentMastered}%`} />
         </div>
         {unlockedThisRound && (
-          <div className="rounded-[var(--r-md)] bg-highlight px-4 py-3 text-sm font-semibold text-on-earthy animate-pop-in">
-            🎉 Unit {summary.nextUnit} unlocked!
-          </div>
+          // Genuine milestone (unit unlock) — the confetti burst is
+          // reserved for exactly this event, gated by unlockedThisRound
+          // itself (already true only once per round, since it requires
+          // !nextUnitWasUnlocked — see the Props/computation above).
+          <Celebration show>
+            <div className="rounded-[var(--r-md)] bg-highlight px-4 py-3 text-sm font-semibold text-on-earthy animate-pop-in">
+              🎉 Unit {summary.nextUnit} unlocked!
+            </div>
+          </Celebration>
         )}
         <div className="flex gap-2">
           <Link

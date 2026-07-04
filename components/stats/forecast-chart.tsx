@@ -12,22 +12,29 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { useReducedMotion } from "motion/react";
 import type { DayCount } from "@/lib/review/stats";
+import {
+  glassTooltipContentStyle,
+  glassTooltipItemStyle,
+  glassTooltipLabelStyle,
+} from "./glass-tooltip";
 
 interface ForecastChartProps {
   data: DayCount[];
 }
 
-// Success green (#1A7A40) — darkened from original #1F8A4C to pass WCAG AA
-// (white-on-success 5.4:1 ≥ 4.5:1). Matches --color-success in globals.css.
-const BAR_FILL = "#1a7a40";
+// Series colour is the per-language accent (Phase 3), replacing the old
+// hardcoded success-green hex — resolves to Mandarin jade here.
+const BAR_FILL = "var(--accent)";
 
 export function ForecastChart({ data }: ForecastChartProps) {
+  const reduceMotion = useReducedMotion();
   const hasData = data.some((d) => d.count > 0);
 
   if (!hasData) {
     return (
-      <div className="flex h-40 items-center justify-center rounded-lg bg-background text-sm text-foreground-muted">
+      <div className="flex h-40 items-center justify-center rounded-[var(--r-md)] bg-background text-sm text-foreground-muted">
         Nothing due in the next 7 days
       </div>
     );
@@ -41,9 +48,16 @@ export function ForecastChart({ data }: ForecastChartProps) {
         <YAxis tick={{ fontSize: 10 }} allowDecimals={false} />
         <Tooltip
           formatter={(value) => [value, "Due"]}
-          contentStyle={{ fontSize: 12 }}
+          contentStyle={glassTooltipContentStyle}
+          labelStyle={glassTooltipLabelStyle}
+          itemStyle={glassTooltipItemStyle}
         />
-        <Bar dataKey="count" fill={BAR_FILL} radius={[2, 2, 0, 0]} />
+        <Bar
+          dataKey="count"
+          fill={BAR_FILL}
+          radius={[4, 4, 0, 0]}
+          isAnimationActive={!reduceMotion}
+        />
       </BarChart>
     </ResponsiveContainer>
   );

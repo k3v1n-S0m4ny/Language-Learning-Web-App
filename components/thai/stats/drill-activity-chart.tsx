@@ -9,15 +9,24 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { useReducedMotion } from "motion/react";
 import type { DayCount } from "@/lib/review/stats";
+import {
+  glassTooltipContentStyle,
+  glassTooltipItemStyle,
+  glassTooltipLabelStyle,
+} from "@/components/stats/glass-tooltip";
 
-const BAR_FILL = "#62736f";
+// Series colour is the per-language accent (Phase 3) — resolves to Thai
+// saffron via [data-lang="thai"], set by <LangSync> on this page.
+const BAR_FILL = "var(--accent)";
 
 export function DrillActivityChart({ data }: { data: DayCount[] }) {
+  const reduceMotion = useReducedMotion();
   const hasData = data.some((d) => d.count > 0);
   if (!hasData) {
     return (
-      <div className="flex h-40 items-center justify-center rounded-lg bg-background text-sm text-foreground-muted">
+      <div className="flex h-40 items-center justify-center rounded-[var(--r-md)] bg-background text-sm text-foreground-muted">
         No drill activity yet
       </div>
     );
@@ -39,9 +48,16 @@ export function DrillActivityChart({ data }: { data: DayCount[] }) {
         <YAxis tick={{ fontSize: 10 }} allowDecimals={false} />
         <Tooltip
           formatter={(value) => [value, "Attempts"]}
-          contentStyle={{ fontSize: 12 }}
+          contentStyle={glassTooltipContentStyle}
+          labelStyle={glassTooltipLabelStyle}
+          itemStyle={glassTooltipItemStyle}
         />
-        <Bar dataKey="count" fill={BAR_FILL} radius={[2, 2, 0, 0]} />
+        <Bar
+          dataKey="count"
+          fill={BAR_FILL}
+          radius={[4, 4, 0, 0]}
+          isAnimationActive={!reduceMotion}
+        />
       </BarChart>
     </ResponsiveContainer>
   );

@@ -47,6 +47,23 @@ export function ReviewSession({
   function rate(rating: RatingValue) {
     startTransition(async () => {
       await submitReview(card.id, rating);
+      // One-shot gate signal for the Mandarin "deck cleared" celebration
+      // (Phase 3, components/empty-state.tsx): marks that the learner rated
+      // at least one review THIS session, so EmptyState can distinguish
+      // "just finished a review session" from "idle revisit, nothing due" —
+      // confetti is reserved for the former only. Written AFTER a
+      // successful await (post-review fix: previously written before the
+      // await, so a failed submitReview — network error, auth expiry,
+      // invalid rating — still counted toward the gate) so only a
+      // genuinely-completed review arms the celebration. sessionStorage
+      // (not localStorage) so this naturally resets on a new tab/session;
+      // wrapped in try/catch for private-mode/storage-disabled, matching
+      // the same guard used by ui/theme-toggle.tsx elsewhere in the app.
+      try {
+        sessionStorage.setItem("review-session:rated", "1");
+      } catch {
+        /* private mode / storage disabled — celebration gate simply won't fire */
+      }
     });
   }
 
