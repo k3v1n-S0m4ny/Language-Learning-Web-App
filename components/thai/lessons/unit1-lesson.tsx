@@ -57,7 +57,7 @@ export function Unit1Lesson({ alreadyRead }: { alreadyRead: boolean }) {
           {CONSONANT_SYMBOLS.map((s) => (
             <div
               key={s.symbol}
-              className="flex items-baseline gap-3 rounded-lg bg-surface px-3 py-2"
+              className="flex items-baseline gap-3 rounded-[var(--r-md)] bg-surface px-3 py-2"
             >
               <span className="w-12 shrink-0 font-mono text-base font-semibold text-foreground">
                 [{s.symbol}]
@@ -70,7 +70,7 @@ export function Unit1Lesson({ alreadyRead }: { alreadyRead: boolean }) {
           {VOWEL_SYMBOLS.map((s) => (
             <div
               key={s.symbol}
-              className="flex items-baseline gap-3 rounded-lg bg-surface px-3 py-2"
+              className="flex items-baseline gap-3 rounded-[var(--r-md)] bg-surface px-3 py-2"
             >
               <span className="w-12 shrink-0 font-mono text-base font-semibold text-foreground">
                 [{s.symbol}]
@@ -106,7 +106,7 @@ export function Unit1Lesson({ alreadyRead }: { alreadyRead: boolean }) {
             await markUnit1LessonRead();
           })
         }
-        className="w-fit rounded-full bg-brand px-5 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+        className="w-fit rounded-[var(--r-pill)] bg-accent px-5 py-2 text-sm font-semibold text-on-earthy transition-opacity hover:opacity-90 disabled:opacity-60"
       >
         {alreadyRead ? "Read ✓" : pending ? "Marking as read…" : "Mark unit 1 as read"}
       </button>

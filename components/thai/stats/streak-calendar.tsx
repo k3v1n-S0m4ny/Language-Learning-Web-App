@@ -15,8 +15,8 @@ export function StreakCalendar({ days }: { days: StreakDay[] }) {
             <div
               key={day.key}
               title={day.key}
-              className={`h-3 w-3 rounded-sm ${
-                day.hasActivity ? "bg-brand" : "bg-border-base opacity-50"
+              className={`h-3 w-3 rounded-[3px] ${
+                day.hasActivity ? "bg-accent" : "bg-border-base opacity-50"
               }`}
             />
           ))}

@@ -1,11 +1,12 @@
-import Link from "next/link";
 import { getUnitSummaries } from "@/lib/thai/queries";
-import { ModeToggle } from "@/components/mode-toggle";
-import { SignOutButton } from "@/components/sign-out-button";
+import { TopBar } from "@/components/top-bar";
 import { UnitRow } from "./unit-row";
 
 // Thai-mode home screen (A4): the 14-unit vertical map replaces the Mandarin
-// study screen entirely when learner_settings.active_mode = 'thai'.
+// study screen entirely when learner_settings.active_mode = 'thai'. Phase 2:
+// the inline header row is replaced by the shared floating glass <TopBar>
+// (already renders the Thai "สวัสดี" greeting); no bg-background on <main> so
+// the ambient mesh shows through, matching the Mandarin home (app/page.tsx).
 export async function ThaiHome({
   learnerId,
   learnerName,
@@ -16,27 +17,11 @@ export async function ThaiHome({
   const units = await getUnitSummaries(learnerId);
 
   return (
-    <main className="flex min-h-dvh flex-col items-center gap-8 bg-background px-6 py-8">
-      <div className="flex w-full max-w-2xl items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <span className="text-sm text-foreground-muted">
-            สวัสดี{learnerName ? `, ${learnerName}` : ""}
-          </span>
-          <ModeToggle activeMode="thai" />
-        </div>
-        <div className="flex items-center gap-2">
-          <Link
-            href="/thai/stats"
-            className="rounded-full border border-border-base px-4 py-1.5 text-xs font-medium text-foreground-muted transition-colors hover:bg-surface"
-          >
-            Stats
-          </Link>
-          <SignOutButton />
-        </div>
-      </div>
+    <main className="flex min-h-dvh flex-col items-center gap-8 px-6 py-8">
+      <TopBar activeMode="thai" learnerName={learnerName} statsHref="/thai/stats" />
 
       <div className="flex w-full max-w-2xl flex-col gap-3">
-        <h1 className="text-lg font-semibold text-foreground">Read Thai</h1>
+        <h1 className="text-display text-foreground">Read Thai</h1>
         {units.map((summary) => (
           <UnitRow key={summary.unit} summary={summary} />
         ))}

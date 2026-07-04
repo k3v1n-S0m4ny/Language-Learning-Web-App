@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+/* The repo-committed handoff docs under .claude/ contain prose shaped like
+   utility classes (e.g. "rounded-[var(--r-lg/md/pill)]" as shorthand). Tailwind
+   v4 auto-scans the whole project for candidate classes, so it would try to
+   generate CSS from that prose and emit an "Unexpected token" warning. Exclude
+   the directory from the source scan — no app code lives there. */
+@source not "../.claude";
+
 /* ==========================================================================
    Semantic color tokens — earthy base palette + WCAG-checked bright accents.
    Light values are set in :root; dark mode overrides live in the media query.
@@ -36,6 +43,152 @@
    Note on --color-easy (#3BAF7A): white text on this fails (3.4:1), so we
    use near-black (#1A1A1A) text on Easy buttons — same as the other earthy
    buttons. This is intentional and documented in the ratio table above.
+
+   --- Phase 1 (glass redesign — Mandarin study flow) additions ---
+   Re-verified per the Accessibility note in the design spec. Computed via
+   the standard WCAG relative-luminance formula (see scripts run during
+   implementation — not committed, values below are the result).
+
+   ┌──────────────────────────────────────────────────────────────────────┐
+   │ Pairing                                │ Ratio  │ Req   │ Result     │
+   ├─────────────────────────────────────────┼────────┼───────┼───────────┤
+   │ FSRS rating ramp — text is always --color-on-earthy (#1A1A1A), the   │
+   │ same near-black used by the earthy palette above:                    │
+   │ #1A1A1A on #E64C51 (rate-again)        │  4.57:1│ 4.5:1 │ PASS (AA)  │
+   │ #1A1A1A on #F2740D (rate-hard)         │  6.03:1│ 4.5:1 │ PASS (AA)  │
+   │ #1A1A1A on #2E9E63 (rate-good)         │  5.13:1│ 4.5:1 │ PASS (AA)  │
+   │ #1A1A1A on #43C88F (rate-easy)         │  8.20:1│ 4.5:1 │ PASS (AA)  │
+   │ (rate-again is nudged +tiny from the north-star mock's #E5484D,      │
+   │ which measured 4.45:1 — just under AA — to #E64C51 at 4.57:1.)       │
+   ├─────────────────────────────────────────┼────────┼───────┼───────────┤
+   │ Spoken-tone hues (pinyin text on a solid card, --surface). Chip-level │
+   │ pinyin renders as small as ~12-14px, which does NOT qualify for the  │
+   │ WCAG 1.4.3 "large text" 3:1 exemption — so every hue below targets   │
+   │ the full 4.5:1 (small-text) minimum, in BOTH themes, rather than      │
+   │ relying on text size. The north-star mock's own hex only darkens     │
+   │ tone-2 for light mode (leaving 1/3/4 unadjusted, which only clears   │
+   │ 3:1); this build goes further so chip-level text is compliant too:   │
+   │ LIGHT (on white #FFFFFF card):                                       │
+   │   #E12D33 (tone-1)                     │  4.54:1│ 4.5:1 │ PASS (AA)  │
+   │   #A96409 (tone-2)                     │  4.65:1│ 4.5:1 │ PASS (AA)  │
+   │   #278654 (tone-3)                     │  4.54:1│ 4.5:1 │ PASS (AA)  │
+   │   #2E75D5 (tone-4)                     │  4.54:1│ 4.5:1 │ PASS (AA)  │
+   │ DARK (on #232A28 card):                                              │
+   │   #E96569 (tone-1)                     │  4.56:1│ 4.5:1 │ PASS (AA)  │
+   │   #E8890C (tone-2, Phase 0 value — already compliant)                │
+   │                                          │  5.59:1│ 4.5:1 │ PASS (AA)  │
+   │   #2FA265 (tone-3)                     │  4.52:1│ 4.5:1 │ PASS (AA)  │
+   │   #5991DE (tone-4)                     │  4.56:1│ 4.5:1 │ PASS (AA)  │
+   │ (Phase 0's original single-set values — #E5484D/#E8890C/#2E9E63/     │
+   │ #3B7DD8 — only cleared 3.4-4.1:1 against these cards; nudged to the  │
+   │ above so tone-1/3/4 pass in both themes too. Same hue family, barely │
+   │ perceptible shift.) tone-neutral aliases --foreground-muted, which   │
+   │ is independently AA-verified above.                                  │
+   └──────────────────────────────────────────────────────────────────────┘
+
+   --- Phase 2 (glass redesign — Read-Thai) additions ---
+   Computed via the same WCAG relative-luminance formula (throwaway Node
+   script, not committed — values below are the result), verified against
+   the ACTUAL surfaces these tokens render on in both themes.
+
+   ┌──────────────────────────────────────────────────────────────────────┐
+   │ ClassBadge — filled chip. Text is always --color-on-earthy (#1A1A1A) │
+   │ Phase 0's raw saturated hues FAILED as small text/thin fills in      │
+   │ light mode (teal #0D9488 on white ~ 3.74:1, amber #D97706 ~ 3.19:1 — │
+   │ both below the 4.5:1 floor; violet #7C3AED ~ 5.70:1 already passed).│
+   │ Rather than use the hue as text-on-white, the chip is redesigned as  │
+   │ near-black text on a LIGHTENED tint of the same hue family (same     │
+   │ approach the earthy palette already uses for e.g. peach/sand):      │
+   │ LIGHT:                                                               │
+   │   #1A1A1A on #CCFBF1 (class-mid, was #0D9488)   | 15.45:1 PASS (AA) │
+   │   #1A1A1A on #FEF3C7 (class-high, was #D97706)  | 15.63:1 PASS (AA) │
+   │   #1A1A1A on #EDE9FE (class-low, was #7C3AED)   | 14.66:1 PASS (AA) │
+   │ DARK (kept the bake-off north-star bright values — already          │
+   │ compliant with near-black text, no change needed):                  │
+   │   #1A1A1A on #2DD4BF (class-mid)                |  9.35:1 PASS (AA) │
+   │   #1A1A1A on #FBBF24 (class-high)               | 10.43:1 PASS (AA) │
+   │   #1A1A1A on #A78BFA (class-low)                |  6.40:1 PASS (AA) │
+   ├───────────────────────────────────────────────────────────────────┤
+   │ Tone hues — used as TEXT (tone labels, tone-confusion-matrix        │
+   │ headers) need 4.5:1; as graphical STROKE (tone-sparkline polylines) │
+   │ need 3:1. One token serves both consumers, so it is tuned to the    │
+   │ stricter (4.5:1 text) floor. LIGHT (on white #FFFFFF): mid/falling/ │
+   │ rising already cleared 4.5:1 unchanged; low and high did not and    │
+   │ were darkened within the same hue family:                          │
+   │   #64748B (tone-mid, unchanged)                 |  4.76:1 PASS (AA) │
+   │   #0369A1 (tone-low, was #0284C7 @ 4.10:1 FAIL) |  5.93:1 PASS (AA) │
+   │   #DC2626 (tone-falling, unchanged)             |  4.83:1 PASS (AA) │
+   │   #15803D (tone-high, was #16A34A @ 3.30:1 FAIL)|  5.02:1 PASS (AA) │
+   │   #C026D3 (tone-rising, unchanged)              |  4.71:1 PASS (AA) │
+   │ DARK (on #232A28): all five Phase-0 north-star values already clear│
+   │ 4.5:1, no change needed:                                            │
+   │   #94A3B8 (tone-mid)                            |  5.71:1 PASS (AA) │
+   │   #38BDF8 (tone-low)                            |  6.84:1 PASS (AA) │
+   │   #F87171 (tone-falling)                        |  5.30:1 PASS (AA) │
+   │   #4ADE80 (tone-high)                           |  8.41:1 PASS (AA) │
+   │   #E879F9 (tone-rising)                         |  5.95:1 PASS (AA) │
+   └──────────────────────────────────────────────────────────────────────┘
+
+   --- Phase 3 (glass redesign — Stats + celebrations) additions ---
+   Computed via the same WCAG relative-luminance formula (throwaway Node
+   script, not committed — values below are the result). The dataviz skill
+   guidance referenced by the Phase 3 brief could not be located on disk in
+   this environment (searched ~/.claude/skills and the whole user profile —
+   no dataviz skill files found), so the heat ramp below instead follows
+   standard sequential-scale dataviz practice directly: one single-hue
+   (warm/red) 5-stop ramp with monotonically increasing saturation/depth, a
+   quiet near-neutral floor, modelled on ColorBrewer's OrRd sequential class
+   (a well-established, colourblind-considered severity palette) — NOT tied
+   to any --accent hue, since this is a GENERIC severity scale shared by two
+   different components (failure-heatmap, tone-confusion-matrix), not a
+   class/tone/language colour. See glass-redesign-phase3.impl.md for the
+   full reasoning.
+
+   ┌──────────────────────────────────────────────────────────────────────┐
+   │ Heat ramp — text (small "%"/count labels) needs 4.5:1. Each stop's    │
+   │ own "ink" token is pre-selected (near-black or a light ink) per stop  │
+   │ so consumers never have to branch text colour themselves.            │
+   │ LIGHT (ramp modelled on ColorBrewer OrRd-5; heat-3 hand-tuned off the │
+   │ stock swatch, which measured 4.44:1 — just under AA — to clear it):  │
+   │   #1A1A1A on #FEF0D9 (heat-0)   | 15.48:1 PASS (AA) — ink: #1A1A1A   │
+   │   #1A1A1A on #FDD49E (heat-1)   | 12.50:1 PASS (AA) — ink: #1A1A1A   │
+   │   #1A1A1A on #FC8D59 (heat-2)   |  7.54:1 PASS (AA) — ink: #1A1A1A   │
+   │   #1A1A1A on #E8511E (heat-3)   |  4.66:1 PASS (AA) — ink: #1A1A1A   │
+   │   #FFFFFF on #B30000 (heat-4)   |  7.20:1 PASS (AA) — ink: #FFFFFF   │
+   │ (#1A1A1A on #B30000 only measures 2.42:1 — fails; #FFFFFF ink used   │
+   │ for heat-4 instead, hence the per-stop ink token.)                   │
+   │ DARK (deeper/muted at the floor, brighter at the ceiling — mirrors   │
+   │ how the Thai tone and class tokens invert light/dark treatment):     │
+   │   #ECEFEC on #361708 (heat-0)   | 14.13:1 PASS (AA) — ink: #ECEFEC   │
+   │   #ECEFEC on #622A0E (heat-1)   |  9.76:1 PASS (AA) — ink: #ECEFEC   │
+   │   #ECEFEC on #863913 (heat-2)   |  6.95:1 PASS (AA) — ink: #ECEFEC   │
+   │   #ECEFEC on #AA4918 (heat-3)   |  4.93:1 PASS (AA) — ink: #ECEFEC   │
+   │   #1A1A1A on #E67237 (heat-4)   |  5.66:1 PASS (AA) — ink: #1A1A1A   │
+   │ (Every intermediate lightness between each theme's floor/ceiling was │
+   │ swept in 2-4% steps to confirm no stop falls in the ~L 0.18-0.40     │
+   │ luminance band where NEITHER black nor white text clears 4.5:1 —     │
+   │ several initial candidates did and were discarded; see the impl      │
+   │ summary for the swept values.)                                       │
+   ├────────────────────────────────────────────────────────────────────┤
+   │ Accent-as-text checks (StatCard `accent` prop, glass tooltips) —     │
+   │ raw --accent used as small TEXT fails AA on a light surface, so the  │
+   │ number itself always stays --foreground; accent is confined to a    │
+   │ small decorative (non-text) label rule instead:                     │
+   │   #12B886 (jade) on #FFFFFF card    |  2.55:1 FAIL — not used as text│
+   │   #F59E0B (saffron) on #FFFFFF card |  2.15:1 FAIL — not used as text│
+   │   #12B886 (jade) on #232A28 card    |  5.74:1 PASS — still avoided,  │
+   │   #F59E0B (saffron) on #232A28 card |  6.82:1 PASS — for ONE shared  │
+   │ rule across both themes rather than a per-theme text-colour branch. │
+   │ (Same finding as Phase 2's audio-play-button note — consistent with │
+   │ that precedent.) Glass-tooltip text is always --foreground, never   │
+   │ --accent, for the same reason.                                      │
+   ├────────────────────────────────────────────────────────────────────┤
+   │ FSRS rating-breakdown chart (rating-chart.tsx) now consumes the SAME │
+   │ --rate-* tokens as the on-screen rating buttons (previously a       │
+   │ separate, older earthy hex set) — already AA-verified in the Phase 1│
+   │ block above (4.57-8.20:1 on --color-on-earthy); re-confirmed here,  │
+   │ unchanged, since this is a token reuse, not a new colour.           │
+   └──────────────────────────────────────────────────────────────────────┘
    ========================================================================== */
 
 :root {
@@ -62,14 +215,165 @@
   --border: #d0cbc4;
 }
 
+/* Dark theme is driven by [data-theme="dark"] on <html>, set BEFORE first paint
+   by the no-flash script in layout.tsx (reads localStorage, else the OS pref).
+   The prefers-color-scheme block below is kept ONLY as a no-JS fallback and is
+   scoped to :root:not([data-theme]) so an explicit user choice always wins. */
+:root[data-theme="dark"] {
+  --background: #15191b;
+  --surface: #232a28;
+  --foreground: #ecefec;
+  --foreground-muted: #8a9490;
+  --border: #2e3835;
+}
+
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme]) {
     --background: #15191b;
     --surface: #232a28;
     --foreground: #ecefec;
     --foreground-muted: #8a9490;
     --border: #2e3835;
   }
+}
+
+/* ==========================================================================
+   Glass-redesign tokens (Phase 0). Layered ON TOP of the earthy semantic tokens
+   above — nothing here overrides an existing token, so every current
+   bg-background / bg-surface / bg-brand consumer keeps working during migration.
+   ========================================================================== */
+:root {
+  /* Radius scale — one ramp, concentric nesting */
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 22px;
+  --r-xl: 30px;
+  --r-pill: 999px;
+
+  /* Motion easings / springs (used by `motion` and CSS alike) */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Display type scale */
+  --text-display: clamp(2.5rem, 6vw, 4rem);
+  --tracking-display: -0.03em;
+
+  /* Liquid-glass surface tokens — LIGHT. Floating chrome only; reading/content
+     surfaces stay solid (var(--surface)). */
+  --glass-bg: rgba(255, 255, 255, 0.55);
+  --glass-bg-strong: rgba(255, 255, 255, 0.72);
+  --glass-brd: rgba(255, 255, 255, 0.6);
+  --glass-spec: rgba(255, 255, 255, 0.9);
+  --glass-shadow: 0 8px 32px rgba(23, 23, 23, 0.12);
+  --glass-blur: 20px;
+  --glass-saturate: 180%;
+
+  /* Mandarin spoken-tone hues (pinyin only; hanzi stays ink). LIGHT-mode
+     values here (AA-tuned against a white card — see the table above); the
+     [data-theme="dark"] block below brightens them for the dark card. */
+  --tone-1: #e12d33;
+  --tone-2: #a96409;
+  --tone-3: #278654;
+  --tone-4: #2e75d5;
+  --tone-neutral: var(--foreground-muted);
+
+  /* Read-Thai restyled systems (glass-native). Light-mode values here; the
+     [data-theme="dark"] block brightens them.
+     Class hues are AA-tuned as ClassBadge chip BACKGROUNDS (near-black text
+     on a lightened tint — the raw saturated hues failed 4.5:1 as text-on-
+     white). Tone hues serve BOTH text (tone labels/matrix headers, 4.5:1)
+     and stroke (sparkline, 3:1) — low/high were darkened to clear 4.5:1;
+     mid/falling/rising already did. See the AA table above for the numbers. */
+  --thai-class-mid: #ccfbf1;
+  --thai-class-high: #fef3c7;
+  --thai-class-low: #ede9fe;
+  --thai-tone-mid: #64748b;
+  --thai-tone-low: #0369a1;
+  --thai-tone-falling: #dc2626;
+  --thai-tone-high: #15803d;
+  --thai-tone-rising: #c026d3;
+
+  /* Per-language accents default to Mandarin until [data-lang] is set. */
+  --accent: #12b886;
+  --accent-2: #f0453a;
+  --accent-3: #f6b01e;
+
+  /* FSRS rating ramp (Phase 1) — solid vivid fills; text is always
+     --color-on-earthy (near-black). See the AA table above. */
+  --rate-again: #e64c51;
+  --rate-hard: #f2740d;
+  --rate-good: #2e9e63;
+  --rate-easy: #43c88f;
+
+  /* Heat ramp (Phase 3) — generic 5-stop sequential severity scale shared by
+     failure-heatmap.tsx and tone-confusion-matrix.tsx. NOT an --accent hue
+     (this scale must read the same regardless of active language). Each
+     stop pairs with its own "ink" (text) token — see the AA table above. */
+  --heat-0: #fef0d9;
+  --heat-0-ink: #1a1a1a;
+  --heat-1: #fdd49e;
+  --heat-1-ink: #1a1a1a;
+  --heat-2: #fc8d59;
+  --heat-2-ink: #1a1a1a;
+  --heat-3: #e8511e;
+  --heat-3-ink: #1a1a1a;
+  --heat-4: #b30000;
+  --heat-4-ink: #ffffff;
+}
+
+/* Dark overrides for the glass + palette tokens (semantic core handled above). */
+:root[data-theme="dark"] {
+  /* Brighter spoken-tone hues for the dark card (#232A28) — AA-tuned (see
+     the table above); tone-2 was already compliant at its Phase 0 value. */
+  --tone-1: #e96569;
+  --tone-2: #e8890c;
+  --tone-3: #2fa265;
+  --tone-4: #5991de;
+
+  --glass-bg: rgba(32, 40, 42, 0.55);
+  --glass-bg-strong: rgba(32, 40, 42, 0.72);
+  --glass-brd: rgba(255, 255, 255, 0.12);
+  --glass-spec: rgba(255, 255, 255, 0.16);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.44);
+
+  /* Brighter Thai systems for legibility on dark (bake-off north-star values). */
+  --thai-class-mid: #2dd4bf;
+  --thai-class-high: #fbbf24;
+  --thai-class-low: #a78bfa;
+  --thai-tone-mid: #94a3b8;
+  --thai-tone-low: #38bdf8;
+  --thai-tone-falling: #f87171;
+  --thai-tone-high: #4ade80;
+  --thai-tone-rising: #e879f9;
+
+  /* Heat ramp (Phase 3) — deeper/muted at the floor, brighter at the
+     ceiling, mirroring how the Thai class/tone tokens invert light vs dark
+     treatment. See the AA table above. */
+  --heat-0: #361708;
+  --heat-0-ink: #ecefec;
+  --heat-1: #622a0e;
+  --heat-1-ink: #ecefec;
+  --heat-2: #863913;
+  --heat-2-ink: #ecefec;
+  --heat-3: #aa4918;
+  --heat-3-ink: #ecefec;
+  --heat-4: #e67237;
+  --heat-4-ink: #1a1a1a;
+}
+
+/* Per-language accent + ambient-mesh tints. [data-lang] is set on <html> by
+   <LangSync> from the server-persisted active mode. */
+:root[data-lang="mandarin"] {
+  --accent: #12b886; /* jade */
+  --accent-2: #f0453a; /* vermilion */
+  --accent-3: #f6b01e; /* gold */
+}
+
+:root[data-lang="thai"] {
+  --accent: #f59e0b; /* saffron */
+  --accent-2: #0ea5a4; /* teal */
+  --accent-3: #e11d74; /* ruby */
 }
 
 @theme inline {
@@ -95,6 +399,29 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-thai: var(--font-noto-sans-thai);
+  /* Calligraphic Kai for hanzi — subset woff2 via layout, system-CJK fallback */
+  --font-hanzi: var(--font-lxgw), "Kaiti SC", "KaiTi", "STKaiti",
+    "Noto Serif CJK SC", serif;
+
+  /* Per-language accents as utilities: bg-accent / text-accent / border-accent … */
+  --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
+  --color-accent-3: var(--accent-3);
+
+  /* Read-Thai class + tone systems as utilities (Phase 2): bg-thai-class-mid,
+     text-thai-tone-falling, border-thai-class-high, etc. SVG stroke/fill
+     consumers (sparkline, matrix) read the raw var() directly instead. */
+  --color-thai-class-mid: var(--thai-class-mid);
+  --color-thai-class-high: var(--thai-class-high);
+  --color-thai-class-low: var(--thai-class-low);
+  --color-thai-tone-mid: var(--thai-tone-mid);
+  --color-thai-tone-low: var(--thai-tone-low);
+  --color-thai-tone-falling: var(--thai-tone-falling);
+  --color-thai-tone-high: var(--thai-tone-high);
+  --color-thai-tone-rising: var(--thai-tone-rising);
+
+  /* Pill radius utility (rounded-pill) */
+  --radius-pill: var(--r-pill);
 
   /* Animation tokens — only active when the OS has no reduce-motion preference.
      The @keyframes blocks are also gated so components can use these class names
@@ -158,4 +485,76 @@ body {
   color: var(--foreground);
   /* font-family intentionally omitted — Geist is applied via the layout's
      className (--font-geist-sans) so it loads through next/font correctly. */
+}
+
+/* ==========================================================================
+   Glass-redesign utilities (Phase 0)
+   ========================================================================== */
+
+/* Large tightly-tracked display heading */
+.text-display {
+  font-size: var(--text-display);
+  letter-spacing: var(--tracking-display);
+  line-height: 1.02;
+  font-weight: 600;
+}
+
+/* Liquid-glass recipe for FLOATING CHROME. The inset top highlight is the
+   specular edge that keeps a "flat" glass surface legible on dark (a11y note).
+   Reading/content surfaces must NOT use this — they stay solid var(--surface). */
+.glass {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-brd);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  box-shadow: var(--glass-shadow), inset 0 1px 0 0 var(--glass-spec);
+}
+
+.glass-strong {
+  background: var(--glass-bg-strong);
+}
+
+/* Ambient mesh drift — only animates when motion is welcome; otherwise the
+   blobs render statically (component still mounts, just no movement). */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes mesh-drift {
+    0% {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    50% {
+      transform: translate3d(3%, -4%, 0) scale(1.08);
+    }
+    100% {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+  }
+}
+
+/* ==========================================================================
+   Glass-redesign utilities (Phase 1 — Mandarin study flow)
+   ========================================================================== */
+
+/* "Glass press" specular flash for the SOLID rating buttons (colour ramp
+   stays solid/vivid per the locked design decision — only the press
+   feedback borrows the glass specular language). CSS-only radial flash on
+   :active; the button's own scale-down comes from motion (whileTap),
+   already reduced-motion-gated there. This flash is a near-instant opacity
+   change, not a transform, so it is left un-gated — imperceptible motion. */
+.rate-press {
+  position: relative;
+  overflow: hidden;
+}
+
+.rate-press::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 130%, var(--glass-spec), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+
+.rate-press:active::after {
+  opacity: 0.55;
 }

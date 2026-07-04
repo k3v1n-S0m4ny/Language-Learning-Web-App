@@ -29,7 +29,7 @@ export function SpecialSignsLesson({
           live/dead + tone-mark rules do not cover. You will not meet them in
           every sentence, but it is worth recognising each on sight.
         </p>
-        <div className="overflow-x-auto rounded-xl border border-border-base">
+        <div className="overflow-x-auto rounded-[var(--r-lg)] border border-border-base">
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-surface text-foreground-muted">
@@ -42,7 +42,8 @@ export function SpecialSignsLesson({
               {signs.map((sign) => (
                 <tr key={sign.id} className="border-t border-border-base">
                   <td className="px-3 py-2">
-                    <span className="font-thai text-3xl text-foreground">{sign.display}</span>
+                    {/* Prominent-ink Thai glyph — ~1.6x a11y bump. */}
+                    <span className="font-thai text-5xl text-foreground">{sign.display}</span>
                   </td>
                   <td className="px-3 py-2">
                     <span className="font-thai text-sm text-foreground">{sign.metadata.signName}</span>
@@ -67,7 +68,7 @@ export function SpecialSignsLesson({
         </div>
       </div>
 
-      <div className="flex flex-col gap-3 rounded-xl border border-border-base bg-surface p-5">
+      <div className="flex flex-col gap-3 rounded-[var(--r-lg)] border border-border-base bg-surface p-5">
         <h3 className="text-sm font-semibold text-foreground">
           Silent tone-leaders: ห and อ
         </h3>
@@ -80,12 +81,12 @@ export function SpecialSignsLesson({
         </p>
         <div className="flex flex-wrap gap-6">
           <div className="flex items-center gap-2">
-            <span className="font-thai text-3xl text-foreground">นา</span>
+            <span className="font-thai text-5xl text-foreground">นา</span>
             <span className="font-mono text-sm text-foreground-muted">nāː</span>
             <span className="text-xs italic text-foreground-muted">&lsquo;rice field&rsquo; (Low + live → mid)</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="font-thai text-3xl text-foreground">หนา</span>
+            <span className="font-thai text-5xl text-foreground">หนา</span>
             <span className="font-mono text-sm text-foreground-muted">nǎː</span>
             <span className="text-xs italic text-foreground-muted">&lsquo;thick&rsquo; (now High-class rules → rising)</span>
           </div>
@@ -96,7 +97,7 @@ export function SpecialSignsLesson({
           &lsquo;to want&rsquo;, อย่าง jàːŋ &lsquo;kind, type&rsquo;, and อยู่
           jùː &lsquo;to be at&rsquo; — forcing Mid-class rules.
         </p>
-        <div className="rounded-lg bg-background p-4 text-sm text-foreground-muted">
+        <div className="rounded-[var(--r-md)] bg-background p-4 text-sm text-foreground-muted">
           <span className="font-semibold text-foreground">Worked example: </span>
           The word หมา begins with a silent ห before ม. It is a live syllable
           with no tone mark. The silent ห imposes High-class rules; High +
@@ -114,9 +115,10 @@ export function SpecialSignsLesson({
           {[...orLeaders, ...hoLeaders].map((word) => (
             <div
               key={word.id}
-              className="flex items-center gap-3 rounded-xl border border-border-base bg-surface p-3"
+              className="flex items-center gap-3 rounded-[var(--r-lg)] border border-border-base bg-surface p-3"
             >
-              <span className="font-thai text-2xl text-foreground">{word.display}</span>
+              {/* Prominent-ink Thai glyph — ~1.6x a11y bump. */}
+              <span className="font-thai text-[2.4rem] text-foreground">{word.display}</span>
               <div className="flex flex-col gap-0.5">
                 <span className="font-mono text-xs text-foreground-muted">[{word.initialIpa}]</span>
                 <div className="flex items-center gap-2">
@@ -134,7 +136,7 @@ export function SpecialSignsLesson({
         </div>
       </div>
 
-      <div className="rounded-xl border border-border-base bg-surface p-5 text-sm text-foreground-muted">
+      <div className="rounded-[var(--r-lg)] border border-border-base bg-surface p-5 text-sm text-foreground-muted">
         <p>
           Two consonants side by side at the start of a syllable can also be
           a <b>true cluster</b> (both pronounced together as a blend, as in

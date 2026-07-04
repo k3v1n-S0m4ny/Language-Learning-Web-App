@@ -9,14 +9,23 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { useReducedMotion } from "motion/react";
 import type { UnitAccuracy } from "@/lib/thai/stats";
+import {
+  glassTooltipContentStyle,
+  glassTooltipItemStyle,
+  glassTooltipLabelStyle,
+} from "@/components/stats/glass-tooltip";
 
-const BAR_FILL = "#1a7a40";
+// Series colour is the per-language accent (Phase 3) — resolves to Thai
+// saffron via [data-lang="thai"], set by <LangSync> on this page.
+const BAR_FILL = "var(--accent)";
 
 export function AccuracyByUnitChart({ data }: { data: UnitAccuracy[] }) {
+  const reduceMotion = useReducedMotion();
   if (!data.length) {
     return (
-      <div className="flex h-40 items-center justify-center rounded-lg bg-background text-sm text-foreground-muted">
+      <div className="flex h-40 items-center justify-center rounded-[var(--r-md)] bg-background text-sm text-foreground-muted">
         No drill attempts yet
       </div>
     );
@@ -32,9 +41,16 @@ export function AccuracyByUnitChart({ data }: { data: UnitAccuracy[] }) {
         <YAxis tick={{ fontSize: 10 }} domain={[0, 100]} allowDecimals={false} />
         <Tooltip
           formatter={(value) => [`${value}%`, "Accuracy"]}
-          contentStyle={{ fontSize: 12 }}
+          contentStyle={glassTooltipContentStyle}
+          labelStyle={glassTooltipLabelStyle}
+          itemStyle={glassTooltipItemStyle}
         />
-        <Bar dataKey="percent" fill={BAR_FILL} radius={[2, 2, 0, 0]} />
+        <Bar
+          dataKey="percent"
+          fill={BAR_FILL}
+          radius={[4, 4, 0, 0]}
+          isAnimationActive={!reduceMotion}
+        />
       </BarChart>
     </ResponsiveContainer>
   );

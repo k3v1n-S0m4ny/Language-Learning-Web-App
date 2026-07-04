@@ -51,5 +51,8 @@ next-env.d.ts
 # local git worktrees for agent isolation
 /.claude/worktrees/
 
+# LXGW WenKai source TTF cache (large; only the subset woff2 is committed)
+/scripts/.font-cache/
+
 .vercel
 .env*

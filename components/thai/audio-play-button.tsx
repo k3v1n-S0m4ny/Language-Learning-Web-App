@@ -27,12 +27,19 @@ export function AudioPlayButton({
 
   const sizeClass = size === "sm" ? "px-3 py-1 text-xs" : "px-4 py-2 text-sm";
 
+  // Glass pill (Phase 2): quiet glass chrome reading as an audio affordance
+  // atop the flat drill/lesson content. Label text stays text-foreground
+  // rather than the raw accent hue — saffron text measures ~2.15:1 on the
+  // near-white glass surface (checked with a throwaway script), nowhere
+  // near the 4.5:1 small-text AA floor; the .glass recipe's own border/
+  // specular edge is what marks the button, not a colour tint on the text.
+  // Behavior unchanged.
   return (
     <button
       type="button"
       onClick={play}
       disabled={playing}
-      className={`rounded-full border border-border-base bg-surface font-medium text-foreground-muted transition-colors hover:bg-background disabled:opacity-60 ${sizeClass}`}
+      className={`glass rounded-[var(--r-pill)] font-medium text-foreground transition-colors hover:bg-[var(--glass-bg-strong)] disabled:opacity-60 ${sizeClass}`}
     >
       {playing ? "Playing…" : label}
     </button>

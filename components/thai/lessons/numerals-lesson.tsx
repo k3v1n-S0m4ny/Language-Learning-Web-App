@@ -11,7 +11,7 @@ export function NumeralsLesson({ numerals }: { numerals: NumeralItem[] }) {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-col gap-3 rounded-xl border border-border-base bg-surface p-5">
+      <div className="flex flex-col gap-3 rounded-[var(--r-lg)] border border-border-base bg-surface p-5">
         <h2 className="text-sm font-semibold text-foreground">Thai digits and their values</h2>
         <p className="text-sm text-foreground-muted">
           Thai has its own set of digits. Western numerals are common in
@@ -22,9 +22,10 @@ export function NumeralsLesson({ numerals }: { numerals: NumeralItem[] }) {
           {sorted.map((n) => (
             <div
               key={n.id}
-              className="flex flex-col items-center gap-1 rounded-xl border border-border-base bg-background p-3"
+              className="flex flex-col items-center gap-1 rounded-[var(--r-lg)] border border-border-base bg-background p-3"
             >
-              <span className="font-thai text-3xl text-foreground">{n.display}</span>
+              {/* Prominent-ink Thai digit glyph — ~1.6x a11y bump. */}
+              <span className="font-thai text-5xl text-foreground">{n.display}</span>
               <span className="text-xs font-semibold text-foreground-muted">{n.metadata.value}</span>
             </div>
           ))}
@@ -37,7 +38,7 @@ export function NumeralsLesson({ numerals }: { numerals: NumeralItem[] }) {
 
       <div className="flex flex-col gap-3">
         <h3 className="text-sm font-semibold text-foreground-muted">Spoken digit names</h3>
-        <div className="overflow-x-auto rounded-xl border border-border-base">
+        <div className="overflow-x-auto rounded-[var(--r-lg)] border border-border-base">
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-surface text-foreground-muted">
@@ -52,7 +53,8 @@ export function NumeralsLesson({ numerals }: { numerals: NumeralItem[] }) {
               {sorted.map((n) => (
                 <tr key={n.id} className="border-t border-border-base">
                   <td className="px-3 py-2">
-                    <span className="font-thai text-2xl text-foreground">{n.display}</span>
+                    {/* Prominent-ink Thai digit glyph — ~1.6x a11y bump. */}
+                    <span className="font-thai text-[2.4rem] text-foreground">{n.display}</span>
                   </td>
                   <td className="px-3 py-2 text-foreground-muted">{n.metadata.value}</td>
                   <td className="px-3 py-2">

@@ -8,7 +8,7 @@ export function VowelTable({ items }: { items: VowelItem[] }) {
   if (paired) {
     const pairIds = [...new Set(items.map((i) => i.metadata.pairId))];
     return (
-      <div className="overflow-x-auto rounded-xl border border-border-base">
+      <div className="overflow-x-auto rounded-[var(--r-lg)] border border-border-base">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-border-base bg-background text-xs uppercase tracking-wide text-foreground-muted">
@@ -28,9 +28,10 @@ export function VowelTable({ items }: { items: VowelItem[] }) {
               );
               return (
                 <tr key={pairId} className="border-b border-border-base last:border-0">
-                  <td className="font-thai px-3 py-2 text-xl">{short?.display}</td>
+                  {/* Prominent-ink Thai glyphs — ~1.6x a11y bump. */}
+                  <td className="font-thai px-3 py-2 text-3xl">{short?.display}</td>
                   <td className="px-3 py-2 font-mono">{short && `[${short.initialIpa}]`}</td>
-                  <td className="font-thai px-3 py-2 text-xl">{long?.display}</td>
+                  <td className="font-thai px-3 py-2 text-3xl">{long?.display}</td>
                   <td className="px-3 py-2 font-mono">{long && `[${long.initialIpa}]`}</td>
                 </tr>
               );
@@ -59,10 +60,10 @@ export function VowelTable({ items }: { items: VowelItem[] }) {
               {byCategory[cat].map((item) => (
                 <div
                   key={item.id}
-                  className="flex flex-col gap-1 rounded-xl border border-border-base bg-surface p-4"
+                  className="flex flex-col gap-1 rounded-[var(--r-lg)] border border-border-base bg-surface p-4"
                 >
                   <div className="flex items-baseline gap-3">
-                    <span className="font-thai text-xl text-foreground">{item.display}</span>
+                    <span className="font-thai text-3xl text-foreground">{item.display}</span>
                     <span className="font-mono text-foreground-muted">
                       [{item.initialIpa}]
                     </span>

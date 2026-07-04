@@ -2,13 +2,19 @@ import Link from "next/link";
 import type { UnitSummary } from "@/lib/thai/types";
 import { ProgressRing } from "./progress-ring";
 
+// Glass-native unit-map row (Phase 2): the unit map is a "floating chrome"
+// surface per the design system, so the .glass recipe is sanctioned here
+// (unlike the flat drill/lesson content surfaces). Concentric capsule
+// radius; Drill CTA uses the Thai accent (saffron via [data-lang="thai"]);
+// Lesson stays a quiet glass/ghost link. All existing links/lessonOnly/
+// unlocked/Repractice logic preserved verbatim.
 export function UnitRow({ summary }: { summary: UnitSummary }) {
   const { unit, title, built, unlocked, lessonOnly, percentMastered } = summary;
   const locked = !built || !unlocked;
 
   return (
     <div
-      className={`flex items-center gap-4 rounded-xl border border-border-base bg-surface p-4 ${
+      className={`glass flex items-center gap-4 rounded-[var(--r-lg)] p-4 ${
         locked ? "opacity-60" : ""
       }`}
     >
@@ -33,14 +39,14 @@ export function UnitRow({ summary }: { summary: UnitSummary }) {
         <div className="flex shrink-0 gap-2">
           <Link
             href={`/thai/${unit}/lesson`}
-            className="rounded-full border border-border-base px-3 py-1.5 text-xs font-medium text-foreground-muted transition-colors hover:bg-background"
+            className="rounded-[var(--r-pill)] px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-[var(--glass-bg-strong)]"
           >
             Lesson
           </Link>
           {!lessonOnly && unlocked && (
             <Link
               href={`/thai/${unit}/drill`}
-              className="rounded-full bg-brand px-3 py-1.5 text-xs font-medium text-white transition-opacity hover:opacity-90"
+              className="rounded-[var(--r-pill)] bg-accent px-3 py-1.5 text-xs font-medium text-on-earthy transition-opacity hover:opacity-90"
             >
               {percentMastered >= 100 ? "Repractice" : "Drill"}
             </Link>

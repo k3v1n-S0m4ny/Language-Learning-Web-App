@@ -18,6 +18,7 @@ import {
   VOWELS_B,
   WORD_BANK,
 } from "@/seed/thai/items";
+import { LangSync } from "@/components/lang-sync";
 import { ConsonantTable } from "@/components/thai/lessons/consonant-table";
 import { FinalsTable } from "@/components/thai/lessons/finals-table";
 import { NumeralsLesson } from "@/components/thai/lessons/numerals-lesson";
@@ -63,18 +64,19 @@ export default async function ThaiLessonPage({
   const toneWords = unit === 9 ? await getToneWords() : null;
 
   return (
-    <main className="mx-auto flex min-h-dvh max-w-3xl flex-col gap-6 bg-background px-6 py-8">
+    <main className="mx-auto flex min-h-dvh max-w-3xl flex-col gap-6 px-6 py-8">
+      <LangSync activeMode="thai" />
       <div className="flex items-center justify-between gap-4">
         <Link
           href="/"
-          className="rounded-full border border-border-base px-4 py-1.5 text-xs font-medium text-foreground-muted transition-colors hover:bg-surface"
+          className="rounded-[var(--r-pill)] border border-border-base px-4 py-1.5 text-xs font-medium text-foreground-muted transition-colors hover:bg-surface"
         >
           Back to units
         </Link>
         {unit < 14 && (
           <Link
             href={`/thai/${unit + 1}/lesson`}
-            className="rounded-full border border-border-base px-4 py-1.5 text-xs font-medium text-foreground-muted transition-colors hover:bg-surface"
+            className="rounded-[var(--r-pill)] border border-border-base px-4 py-1.5 text-xs font-medium text-foreground-muted transition-colors hover:bg-surface"
           >
             Next unit →
           </Link>
@@ -108,7 +110,7 @@ export default async function ThaiLessonPage({
       {unit !== 1 && summary?.unlocked && (
         <Link
           href={`/thai/${unit}/drill`}
-          className="w-fit rounded-full bg-brand px-5 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+          className="w-fit rounded-[var(--r-pill)] bg-accent px-5 py-2 text-sm font-semibold text-on-earthy transition-opacity hover:opacity-90"
         >
           Start drilling this unit
         </Link>
