@@ -30,7 +30,7 @@ export const MID_CONSONANTS: ConsonantItem[] = [
   { kind: "consonant", id: "consonant:ด", unit: 2, display: "ด", initialIpa: "d", finalIpa: "t", consonantClass: "mid", drillable: true, metadata: { name: "ด เด็ก", meaning: "child" } },
   { kind: "consonant", id: "consonant:ต", unit: 2, display: "ต", initialIpa: "t", finalIpa: "t", consonantClass: "mid", drillable: true, metadata: { name: "ต เต่า", meaning: "turtle" } },
   { kind: "consonant", id: "consonant:บ", unit: 2, display: "บ", initialIpa: "b", finalIpa: "p", consonantClass: "mid", drillable: true, metadata: { name: "บ ใบไม้", meaning: "leaf" } },
-  { kind: "consonant", id: "consonant:ป", unit: 2, display: "ป", initialIpa: "p", finalIpa: "p", consonantClass: "mid", drillable: true, metadata: { name: "ป ปลา", meaning: "fish" } },
+  { kind: "consonant", id: "consonant:ป", unit: 2, display: "ป", initialIpa: "p", finalIpa: "p", consonantClass: "mid", drillable: true, metadata: { name: "ป ปลา", meaning: "fish", spokenName: "ปอ ปลา" } },
   { kind: "consonant", id: "consonant:อ", unit: 2, display: "อ", initialIpa: "ʔ", finalIpa: null, consonantClass: "mid", drillable: true, metadata: { name: "อ อ่าง", meaning: "basin" } },
 ];
 

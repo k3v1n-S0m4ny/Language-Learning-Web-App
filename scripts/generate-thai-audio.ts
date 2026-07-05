@@ -70,8 +70,11 @@ async function buildManifest(): Promise<ClipSpec[]> {
     let text: string | null = null;
     if (item.kind === "consonant" && item.drillable) {
       // The acrophonic name (e.g. "ก ไก่") — used both as the unit 2-5 lesson
-      // clip and as the audio-letter drill's prompt clip.
-      text = item.metadata.name;
+      // clip and as the audio-letter drill's prompt clip. `spokenName` (an
+      // optional per-consonant override, e.g. ป → "ปอ ปลา") is preferred when
+      // present so TTS says the letter's real name instead of the bare glyph,
+      // which some consonants (e.g. the /bp/ plosive ป) render abruptly.
+      text = item.metadata.spokenName ?? item.metadata.name;
     } else if (item.kind === "vowel") {
       text = deriveVowelAudioText(item.display);
     } else if (item.kind === "tone-word") {

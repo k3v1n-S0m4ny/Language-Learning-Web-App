@@ -1,115 +1,100 @@
-# Review Summary — Glass Redesign, Phase 0 (Foundation)
+# Review Summary — Unit 2 Flashcard Pilot (Read-Thai)
 
 ## Result
-PASS-WITH-NITS — both prior blocking findings (CRITICAL build break, MEDIUM `[data-lang]` gap) are re-verified fixed. One new LOW finding surfaced during re-verification (drill page's locked-unit branch still doesn't set `[data-lang]`). Remaining LOW nits (roving-tabindex, codepoint upper bound, theme-toggle server-snapshot flash) are accepted as non-blocking follow-ups for Phase 0, per coordinator direction.
+PASS
 
-## Re-verification pass (2026-07-04)
-Coordinator reported two fixes applied on top of the original review. Re-checked adversarially — read the actual diffs myself, did not trust the message — before re-running gates.
+## Re-review pass (round 2)
+Coordinator reported fixes for both the round-1 CRITICAL and MEDIUM findings. Re-checked adversarially — read the actual diffs myself against `origin/main`, did not trust the message — then re-ran every gate command fresh.
 
-1. **CRITICAL build break (theme-toggle.tsx) — RESOLVED, confirmed.**
-   `components/ui/theme-toggle.tsx:28` now reads `useSyncExternalStore<Theme>(subscribe, getSnapshot, () => "light")` (explicit generic argument pins `T = Theme`, so the untyped `() => "light"` no longer widens the inference to `string`). Read the file directly to confirm the exact diff before re-running anything.
-   Re-ran clean (`rm -rf .next && npm run build`) **twice is unnecessary this time since the fresh run itself is definitive** — ran once with a clean `.next`: **exit 0**, TypeScript step now reports `Finished TypeScript in 5.0s` (previously `Failed to type check`), 6/6 static pages generated, all 7 routes listed. Also ran a standalone `npx tsc --noEmit -p tsconfig.json`: **exit 0**, zero errors project-wide (previously reported the one theme-toggle error as the project's only error — now gone, nothing else appeared in its place).
+1. **CRITICAL (empty-queue crash) — RESOLVED, confirmed.**
+   `components/thai/drill/flashcard-session.tsx` now has an explicit guard between the `if (summary) {...}` block and the main render:
+   ```
+   if (!current) {
+     return (
+       <div className="rounded-[var(--r-lg)] border border-border-base bg-surface p-6 text-sm text-foreground-muted">
+         Finishing…
+       </div>
+     );
+   }
+   ```
+   This sits exactly in the gap I flagged: after `setQueue(rest)` (rest=[]) commits its own render but before `getUnitProgressSnapshot`'s result lands in `summary`. Traced the render order by hand again: `if (summary)` is checked first (so once the snapshot arrives, "Deck cleared" renders correctly, not stuck on "Finishing…"), and `if (!current)` is checked second, before line ~123's `current.glyph` dereference — so the crash path is gone. I did not find a case where `!current` is reachable outside this exact completion window (the "Missed it" branch always rotates rather than shrinking the queue, so `current` stays defined there). One residual, non-blocking gap: if `getUnitProgressSnapshot` itself throws (network error), there's still no try/catch, so the UI would be stuck on "Finishing…" forever rather than erroring — but that's a pre-existing gap shared with `DrillSession`'s identical unguarded `await getUnitProgressSnapshot(unit)` call, not a regression introduced by this fix, and not something the original finding asked to fix.
 
-2. **MEDIUM `[data-lang]` gap — RESOLVED for the primary render path of all four routes, one narrow sub-branch still missing it (new LOW finding).**
-   Confirmed by reading each file directly (not the coordinator's list):
-   - `app/stats/page.tsx:23` — `<LangSync activeMode="mandarin" />` — present, unconditional (single return path).
-   - `app/thai/stats/page.tsx:23` — `<LangSync activeMode="thai" />` — present, unconditional (single return path).
-   - `app/thai/[unit]/lesson/page.tsx:68` — `<LangSync activeMode="thai" />` — present, unconditional (single return path).
-   - `app/thai/[unit]/drill/page.tsx:52` — `<LangSync activeMode="thai" />` — present, **but only in the main (unlocked-unit) return branch**. The early-return "locked unit" branch (lines 32–46, rendered when `!current?.unlocked`) has its own separate `<main>` and does **not** render `<LangSync>`. A learner who deep-links to a still-locked Thai unit's drill URL would see that page with whatever `[data-lang]` was last set (or the default Mandarin accent, on a fresh/hard-reload visit) instead of Thai. Same invisible-in-Phase-0 caveat as the original finding (mesh only, low opacity, no accents on content surfaces yet) — flagging as LOW, not blocking, since it's a narrow edge state (locked-unit view of one route) rather than the broad every-route gap originally found. Worth a one-line fix (hoist `<LangSync activeMode="thai" />` above the `if (!current?.unlocked)` branch) whenever this file is next touched.
-
-Re-ran `npm run lint` fresh: **exit 0**, clean — unaffected by either fix (as expected, no lint-relevant code changed).
+2. **MEDIUM (grandfather applied at only one site) — RESOLVED, confirmed.**
+   `isRequiredTypeMastered(masteredSet, requiredType)` (`lib/thai/reachability.ts`) is now the single definition of the letter-sound → letter-read alias (`masteredSet.has(requiredType) || (requiredType === "letter-read" && masteredSet.has("letter-sound"))`), and all three consumers I flagged now route through it:
+   - `unitMasteryStats` (reachability.ts) — the old ad-hoc `unit === 2` branch is gone; it's now `requiredTypes.every((dt) => isRequiredTypeMastered(masteredSet, dt))` unconditionally, so behavior for every other unit is provably unchanged (plain `masteredSet.has(dt)` whenever `dt !== "letter-read"`).
+   - `buildDrillRound` sampling weight (`lib/thai/drill.ts:1063-1067`) — now builds `masteredSet` from the learner's progress rows and calls the same helper; a legacy-mastered unit-2 consonant now correctly weights as `fullyMastered` even without a `letter-read` row.
+   - `submitThaiAttempt`'s `itemFullyMastered`/`newlyMastered` (`lib/thai/actions.ts:230-246`) — the DB query for "other required types" now explicitly widens to include `"letter-sound"` whenever `"letter-read"` is required (`queryTypes`), so the legacy row is actually fetched before the helper is applied; without this widening the helper alone couldn't have fixed it (the row would never have been queried), so this is the correct fix, not just a cosmetic wrapper.
+   - Verified the alias is one-directional (letter-sound does NOT get satisfied by letter-read; other required types never accept the alias) both via the new test and via my own probe (below) — matches the intent ("both measure the same competency" only in the legacy→new direction).
 
 ## Files Reviewed (cumulative, both passes)
-- `app/globals.css`
-- `app/layout.tsx`
-- `components/ambient-mesh.tsx`
-- `components/lang-sync.tsx`
-- `components/ui/glass-panel.tsx`
-- `components/ui/glass-button.tsx`
-- `components/ui/segmented-control.tsx`
-- `components/ui/theme-toggle.tsx` (re-read this pass — confirmed the `<Theme>` generic fix)
-- `app/page.tsx`
-- `components/thai/thai-home.tsx`
-- `components/mode-toggle.tsx` (unchanged, read for consumer-safety cross-check)
-- `scripts/subset-hanzi-font.ts`
-- `.gitignore`, `package.json`
-- `lib/db/schema.ts` (read to verify `words.hanzi`/`cards.headword` column names used by the subset script)
-- `app/stats/page.tsx`, `app/thai/stats/page.tsx`, `app/thai/[unit]/drill/page.tsx`, `app/thai/[unit]/lesson/page.tsx` (new this pass — verify `<LangSync>` wiring)
-- `.claude/plans/active-plan.md`, `.claude/plans/implementation-summary.md`, `C:\Users\User\.claude\plans\act-like-a-designer-toasty-yao.md`
+- lib/thai/reachability.ts
+- lib/thai/types.ts
+- lib/thai/drill.ts
+- lib/thai/flashcards.ts
+- lib/thai/actions.ts
+- components/thai/drill/flashcard-session.tsx
+- components/thai/drill/drill-session.tsx (comparison baseline for the completion-race pattern)
+- app/thai/[unit]/drill/page.tsx
+- lib/thai/flashcard-mastery.test.ts (re-read this pass — new `isRequiredTypeMastered` test)
+- lib/thai/queries.ts, lib/thai/mastery.ts, lib/db/schema.ts (dependency check)
+- seed/thai/items.ts (unit-2 content shape check)
+- lib/thai/actions.ts, lib/thai/drill.ts, lib/thai/reachability.ts (re-read this pass — full diff of both fixes against origin/main)
 
 ## Findings
 
 ### CRITICAL
-- None open. (Prior: `theme-toggle.tsx:43` build-breaking type error — RESOLVED, see re-verification pass above.)
+- None open. (Round 1: empty-queue crash in `flashcard-session.tsx` on clearing the last card — RESOLVED, see re-review pass above.)
 
 ### MEDIUM
-- None open. (Prior: `[data-lang]` wired into only `/` — RESOLVED for the primary path of every mode-specific route; one narrow sub-branch remains, downgraded to LOW below.)
+- None open. (Round 1: grandfather clause applied only to `unitMasteryStats`, inconsistent with `allReachableDrillTypesForItem` consumers — RESOLVED, see re-review pass above.)
 
-### LOW
-- **`app/thai/[unit]/drill/page.tsx:32-46` — locked-unit branch doesn't set `[data-lang]`.** New finding from this re-verification pass; see detail above. Not blocking Phase 0 (invisible today), but should be fixed in the same pass that closes out the broader `[data-lang]` work, not deferred indefinitely.
-- **`components/ui/segmented-control.tsx` — radiogroup lacks roving tabindex.** Every `role="radio"` `<button>` is independently focusable via Tab; the ARIA Authoring Practices pattern for `role="radiogroup"` expects a single roving tab stop with arrow-key navigation between options. Functionally reachable today (Tab + Enter/Space both work); not explicitly required by the spec's accessibility bullets. Accepted as a non-blocking follow-up per coordinator direction — revisit before this primitive is reused for the mode toggle in Phase 1.
-- **`scripts/subset-hanzi-font.ts:63` — unbounded codepoint range.** `if (cp >= 0x3400) chars.add(ch);` has no upper bound; harmless today (`fontTools.subset` silently drops glyphs missing from the source TTF rather than erroring) but imprecise. Accepted as a non-blocking follow-up per coordinator direction.
-- **Theme-toggle server-snapshot flash risk — still not visually verified.** `getServerSnapshot` remains hardcoded to `() => "light"` (only its *type* changed this pass, not its value/behavior). For a returning dark-theme learner, the toggle's active-pill indicator computes against `"light"` during the SSR-matching hydration pass, then corrects once `useSyncExternalStore` detects the DOM already says `"dark"`. This is the React-recommended pattern and the correction typically lands pre-paint (no hydration-mismatch warning), but was not observed in a live browser this session either time (no persistent `next dev`/`next start` was started, per instructions both times). Carried forward as residual risk, not re-tested.
+### LOW (carried forward, non-blocking)
+- **`lib/thai/actions.ts:265`** — the `item.kind !== "consonant"` check in `submitFlashcardGrade` is currently unreachable dead-code protection (every unit-2 item is `kind: "consonant"`, confirmed against `seed/thai/items.ts:26-34`); cheap, correct defense-in-depth, no action needed.
+- **`lib/thai/drill.ts:44-49`** (`"letter-read": ["consonant"]` in `VALID_KINDS_FOR_DRILL_TYPE`) — confirmed genuinely inert (no `case "letter-read"` in `expectedAnswerFor`, and `KNOWN_DRILL_TYPES` excludes it from `submitThaiAttempt`); no exploit path.
+- **No RTL/component test for the flashcard client loop.** The new `isRequiredTypeMastered` unit test is good, targeted coverage for the MEDIUM fix, but the CRITICAL fix (the `!current` guard) still has no automated test — the pure-function suite can't exercise React render timing. A React Testing Library test simulating "grade the last card with a delayed/mocked `getUnitProgressSnapshot`, assert no throw and 'Finishing…' or the summary eventually renders" would close this gap. Not blocking (I independently traced the render order by hand and consider the fix correct), but worth adding before this pilot gets more usage.
+- **`getUnitProgressSnapshot` failure path.** If that call rejects, `FlashcardSession` is stuck on "Finishing…" indefinitely with no retry/error UI — pre-existing pattern shared with `DrillSession`, not a regression from either fix, not blocking this review.
 
 ## Assertions Checked
-- **`npm run build` passes (Phase 0 exit criterion):** PASS (re-verified this session, clean `.next`, exit 0) — previously FAIL, now resolved.
-- **TypeScript project-wide clean:** PASS (`npx tsc --noEmit` exit 0, zero errors) — previously exactly one error (theme-toggle.tsx), now zero.
-- **`[data-lang]` driven on every mode-specific route's primary render path:** PASS for `/`, `/stats`, `/thai/stats`, `/thai/[unit]/lesson`, and the unlocked-unit path of `/thai/[unit]/drill`. Not yet PASS for the locked-unit sub-branch of `/thai/[unit]/drill` (see LOW finding above).
-- **Migration safety (no semantic token removed, dark values preserved):** PASS — unchanged since original review pass, re-confirmed no further edits to `app/globals.css` this pass (`git diff` scope for this pass was limited to `theme-toggle.tsx` + the four route files).
-- **`@theme inline` correctness (`--font-hanzi`, `--radius-pill`, `--color-accent`):** PASS — re-confirmed present and correct in the freshly generated `.next/static/chunks/*.css` from this pass's successful build (not just the prior failed-build's compile-phase artifact).
-- **Explicit `color` on buttons, reduced-motion no-ops, focus states preserved, hanzi-subset read-only-ness:** unchanged since original pass (no relevant files touched this round) — still PASS, not re-derived from scratch this pass since nothing in scope changed.
-- **`motion`/font bundle impact:** now measurable (build succeeds) but page/first-load JS size numbers were not captured this pass — see Residual Risk.
+- **A1 (self-report can't be abused to unlock beyond the rules): PASS** (unchanged from round 1 — this code path wasn't touched by either fix).
+- **A2 (unlock math: clearing all 9 → 100% → unit 3 unlocks; grandfather doesn't over/under-count the gate itself): PASS.** Re-verified independently this pass (probe below) against the refactored `isRequiredTypeMastered`-based `unitMasteryStats` — identical results to round 1 (unit 2: 100% max-achievable, grandfather test passes, cross-unit-only fixture correctly rejected).
+- **A3 (no dangling unit-2 MCQ code path): PASS** (unchanged).
+- **A4 (seed-time invariants still hold after the refactor): PASS** — re-ran the guard functions fresh against `ALL_THAI_ITEMS` post-fix (see Commands Run): all 13 drilled units still show 100% max-achievable / 0 orphans, `assertUnitMasteryScopingGuard` still passes.
+- **A5 (client loop correctness): PASS** — the `!current` guard closes the exact race identified in round 1; traced render ordering by hand (see re-review pass notes) and found no remaining path where `current.glyph` is dereferenced while `current` is `undefined`.
+- **New assertion this pass — grandfather consistency across all mastery-check call sites: PASS.** All three consumers (`unitMasteryStats`, `buildDrillRound` weight, `submitThaiAttempt` badge) now route through the single `isRequiredTypeMastered` definition; confirmed `submitThaiAttempt`'s DB query was also widened (`queryTypes`) so the legacy row is actually fetched, not just theoretically eligible for the helper.
 
-## Commands Run (this re-verification pass — fresh, not trusting the coordinator's claims)
-- `rm -rf .next && npm run build` — exit 0:
+## Commands Run (this re-review pass — fresh, not trusting the coordinator's claims)
+- `npm test` — exit 0:
   ```
-  ▲ Next.js 16.2.6 (Turbopack)
-  - Environments: .env.local
-
-    Creating an optimized production build ...
-  ✓ Compiled successfully in 4.0s
-    Running TypeScript ...
-    Finished TypeScript in 5.0s ...
-    Collecting page data using 10 workers ...
-    Generating static pages using 10 workers (0/6) ...
-    Generating static pages using 10 workers (1/6)
-    Generating static pages using 10 workers (2/6)
-    Generating static pages using 10 workers (4/6)
-  ✓ Generating static pages using 10 workers (6/6) in 464ms
-    Finalizing page optimization ...
-
-  Route (app)
-  ┌ ƒ /
-  ├ ○ /_not-found
-  ├ ƒ /api/auth/[...nextauth]
-  ├ ƒ /stats
-  ├ ƒ /thai/[unit]/drill
-  ├ ƒ /thai/[unit]/lesson
-  └ ƒ /thai/stats
-
-  ƒ Proxy (Middleware)
-  ○  (Static)   prerendered as static content
-  ƒ  (Dynamic)  server-rendered on demand
+  ✔ isRequiredTypeMastered: legacy letter-sound satisfies letter-read, nothing else does (0.1082ms)
+  ...
+  ℹ tests 37
+  ℹ pass 37
+  ℹ fail 0
   ```
-  **Agrees with the coordinator's claim** — build is genuinely green, confirmed independently with a clean `.next`.
-- `npx tsc --noEmit -p tsconfig.json` — exit 0, no output (zero errors project-wide). Cross-check beyond just the build's own type-check phase.
-- `npm run lint` — exit 0:
+  Agrees with the coordinator's claimed 37/37 (36 + 1 new helper test).
+- `npx tsc --noEmit` — exit 0, no output. Agrees with coordinator's claim.
+- `npx eslint app/thai/[unit]/drill/page.tsx components/thai/drill/flashcard-session.tsx lib/thai/actions.ts lib/thai/drill.ts lib/thai/flashcards.ts lib/thai/reachability.ts lib/thai/types.ts lib/thai/flashcard-mastery.test.ts` — exit 0, no output. Agrees with coordinator's claim.
+- Independent probe (scratch `.ts` file inside the repo for import resolution, deleted after use; confirmed via `git status --porcelain` that nothing but the reviewed diff remains): re-ran `maxAchievablePercentForUnit`/`findUnreachableDrillableIds` for all 13 `DRILLED_UNITS` plus `assertUnitMasteryScopingGuard`, and directly exercised `isRequiredTypeMastered`:
   ```
-  > language-learning-web-app@0.1.0 lint
-  > eslint
+  unit 2: maxAchievable=100% orphans=0
+  unit 3: maxAchievable=100% orphans=0
+  ...
+  unit 14: maxAchievable=100% orphans=0
+  [reachability] OK — unitMasteryStats correctly scopes unit 2's own percentage to its own reachable drill types (M13/A6 unlock-math regression guard).
+  letter-read<-letter-sound: true
+  letter-sound<-letter-read (should be false): false
+  letter-final<-letter-sound (should be false): false
+  ALL GUARDS OK
   ```
-  Clean, matches prior result — unaffected by either fix, as expected.
-- Direct file reads (not the coordinator's summary) of `theme-toggle.tsx`, `app/stats/page.tsx`, `app/thai/stats/page.tsx`, `app/thai/[unit]/drill/page.tsx`, `app/thai/[unit]/lesson/page.tsx` — used to independently locate the exact line-level diff and discover the locked-unit-branch gap the coordinator's message didn't mention.
-- `grep -n "LangSync" app/**` — used to enumerate every `<LangSync>` call site across the whole `app/` tree in one pass, to catch anything the coordinator's four-file list might have missed (it didn't miss any route, but the drill page's list of *branches* wasn't disclosed).
+  No DB touched (pure in-memory functions); no `next build` run, per instruction.
 
 ## Residual Risk
-- Drill page locked-unit branch `[data-lang]` gap (new LOW finding) — cheap fix, should land before this becomes visible in Phase 2/3.
-- Theme-toggle server-snapshot hydration-flash question remains unobserved in a live browser (no `next dev`/`next start` was run persistently, per instructions both review passes) — recommend QA do the dark-theme hard-reload check called out above.
-- No live-browser / chrome-devtools MCP verification has been done in either pass (reduced-motion emulation, FOUC-on-load, contrast checks) — still purely code-verified. This was true of the original pass too and remains the single biggest gap before Phase 0 can be considered fully proven end-to-end; recommend QA cover this explicitly.
-- AA re-verification of new functional colors remains correctly deferred to Phase 4 per the plan.
-- `motion`/font bundle-size impact is now measurable (build succeeds) but numbers weren't captured this pass — worth a quick look before merging, not blocking.
+- No RTL/component test covers the exact CRITICAL bug class (async-transition render race); recommend adding one, not blocking.
+- `getUnitProgressSnapshot` failure path has no error handling in either `FlashcardSession` or `DrillSession` — pre-existing gap, not introduced by these fixes, not blocking.
+- `submitFlashcardGrade`'s self-report trust model (no server-side "did you actually flip the card" check) remains an intentional, documented design choice, not a gap.
+- This worktree's `.claude/plans/` previously held stale, unrelated glass-redesign plan content; there is still no feature-local `active-plan.md` for this pilot to check assertions against beyond the task brief.
 
 ## Procedure Compliance
-- Plan consulted before review: yes (`active-plan.md` + locked design spec, both passes)
-- Implementation summary read: yes (original pass); coordinator's fix-report treated as an unverified claim, not evidence, this pass — re-derived everything from source files and fresh command output
-- Review summary written: yes (this file, updated in place for the re-verification pass)
+- Plan consulted before review: yes (active-plan.md read both passes; found unrelated/stale, noted)
+- Implementation summary read: yes (both passes; round 2's updated implementation-summary.md read and cross-checked against the actual diff rather than trusted at face value)
+- Review summary written: yes (this file, updated in place for the re-review pass)

@@ -2,10 +2,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { auth } from "@/auth";
 import { buildDrillRound } from "@/lib/thai/drill";
+import { buildFlashcardDeck, FLASHCARD_UNIT } from "@/lib/thai/flashcards";
 import { getUnitSummaries } from "@/lib/thai/queries";
 import { UNIT_TITLES } from "@/seed/thai/items";
 import { LangSync } from "@/components/lang-sync";
 import { DrillSession } from "@/components/thai/drill/drill-session";
+import { FlashcardSession } from "@/components/thai/drill/flashcard-session";
 
 const DRILLABLE_UNITS = new Set([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]);
 
@@ -46,7 +48,11 @@ export default async function ThaiDrillPage({
     );
   }
 
-  const round = await buildDrillRound(learnerId, unit);
+  // Unit 2 is the flashcard pilot (self-graded clear-the-deck loop); every
+  // other drilled unit uses the multiple-choice round.
+  const isFlashcardUnit = unit === FLASHCARD_UNIT;
+  const round = isFlashcardUnit ? null : await buildDrillRound(learnerId, unit);
+  const cards = isFlashcardUnit ? await buildFlashcardDeck(learnerId, unit) : [];
 
   return (
     <main className="mx-auto flex min-h-dvh max-w-2xl flex-col gap-6 page-gutter pb-[calc(5rem+var(--safe-bottom))] sm:pb-8">
@@ -68,16 +74,24 @@ export default async function ThaiDrillPage({
 
       <div>
         <div className="text-xs font-medium uppercase tracking-wide text-foreground-muted">
-          Unit {unit} · Drill
+          Unit {unit} · {isFlashcardUnit ? "Flashcards" : "Drill"}
         </div>
         <h1 className="text-xl font-semibold text-foreground">{UNIT_TITLES[unit]}</h1>
       </div>
 
-      <DrillSession
-        unit={unit}
-        questions={round.questions}
-        nextUnitWasUnlocked={nextUnitWasUnlocked}
-      />
+      {isFlashcardUnit ? (
+        <FlashcardSession
+          unit={unit}
+          cards={cards}
+          nextUnitWasUnlocked={nextUnitWasUnlocked}
+        />
+      ) : (
+        <DrillSession
+          unit={unit}
+          questions={round!.questions}
+          nextUnitWasUnlocked={nextUnitWasUnlocked}
+        />
+      )}
     </main>
   );
 }

@@ -7,10 +7,12 @@ import { db } from "@/lib/db";
 import { learnerSettings, thaiAttempts, thaiItems, thaiProgress } from "@/lib/db/schema";
 import { ALL_THAI_ITEMS, UNIT_1_LESSON_MARKER_ID } from "@/seed/thai/items";
 import { expectedAnswerFor } from "./drill";
+import { FLASHCARD_DRILL_TYPE, FLASHCARD_UNIT } from "./flashcards";
 import { LESSON_READ_DRILL_TYPE, MASTERY_STREAK } from "./mastery";
 import { getUnitSummaries } from "./queries";
 import {
   allReachableDrillTypesForItem,
+  isRequiredTypeMastered,
   unitOfferingDrillType,
   type DrillTypeId,
 } from "./reachability";
@@ -228,6 +230,13 @@ export async function submitThaiAttempt(
     if (otherRequired.length === 0) {
       itemFullyMastered = true;
     } else {
+      // Include the legacy letter-sound alias in the query so the unit-2
+      // flashcard grandfather (isRequiredTypeMastered) can see a pre-pilot
+      // learner's letter-sound row — otherwise it would be filtered out here
+      // and the item could never re-badge as fully mastered.
+      const queryTypes: DrillTypeId[] = otherRequired.includes("letter-read")
+        ? [...otherRequired, "letter-sound"]
+        : otherRequired;
       const otherRows = await db
         .select({ drillType: thaiProgress.drillType, masteredAt: thaiProgress.masteredAt })
         .from(thaiProgress)
@@ -235,16 +244,95 @@ export async function submitThaiAttempt(
           and(
             eq(thaiProgress.learnerId, learnerId),
             eq(thaiProgress.itemId, itemId),
-            inArray(thaiProgress.drillType, otherRequired),
+            inArray(thaiProgress.drillType, queryTypes),
           ),
         );
-      itemFullyMastered = otherRequired.every((dt) =>
-        otherRows.some((r) => r.drillType === dt && r.masteredAt !== null),
+      const masteredSet = new Set(
+        otherRows.filter((r) => r.masteredAt !== null).map((r) => r.drillType),
       );
+      itemFullyMastered = otherRequired.every((dt) => isRequiredTypeMastered(masteredSet, dt));
     }
   }
 
   return { correct, newlyMastered: itemFullyMastered, streak: progressRow.streak };
+}
+
+// Unit 2 flashcard pilot: record one self-graded card ("knew it" / "missed
+// it"). Unlike submitThaiAttempt there is no objective answer to re-derive —
+// the learner grades themselves — so this action trusts `knewIt` for the
+// SELF-REPORTED card only. It cannot be abused to unlock later units against
+// the rules: the itemId is validated to be a real unit-2 consonant, and unit
+// 3 only unlocks once ALL nine unit-2 cards are read-mastered, exactly the
+// same 100%-of-the-unit gate every other unit uses (getUnitSummaries).
+//
+// Clear-the-deck-once (owner-approved 2026-07-05): a single "knew it" masters
+// the card immediately (masteredAt set, then frozen — the 3-streak MCQ rule
+// does NOT apply to flashcards). "Missed it" resets the streak but never
+// un-masters a card already cleared in an earlier pass. Atomic upsert for the
+// same concurrency reason submitThaiAttempt uses one (neon-http has no
+// interactive transactions).
+export async function submitFlashcardGrade(
+  itemId: string,
+  knewIt: boolean,
+): Promise<{ mastered: boolean }> {
+  const session = await auth();
+  const learnerId = session?.user?.id;
+  if (!learnerId) throw new Error("Unauthorized");
+
+  if (!itemId || typeof knewIt !== "boolean") {
+    throw new Error("Invalid attempt payload");
+  }
+
+  const [item] = await db.select().from(thaiItems).where(eq(thaiItems.id, itemId));
+  if (!item) throw new Error("Unknown item");
+  // Structural guard: only the unit-2 mid-class consonants are self-graded
+  // flashcards. Anything else must go through submitThaiAttempt's re-derived
+  // scoring, never this trusted path.
+  if (item.unit !== FLASHCARD_UNIT || item.kind !== "consonant" || !item.drillable) {
+    throw new Error("Item is not a unit-2 flashcard");
+  }
+
+  // Unlock gate (mirrors submitThaiAttempt): unit 2 is only submittable once
+  // unit 1's lesson marker has been read — getUnitSummaries computes unit 2's
+  // own `unlocked` from that. A directly-POSTed grade for a locked unit is
+  // rejected here regardless of what the UI rendered.
+  const summaries = await getUnitSummaries(learnerId);
+  const unit2 = summaries.find((s) => s.unit === FLASHCARD_UNIT);
+  if (!unit2?.unlocked) throw new Error("Unit not unlocked");
+
+  await db.execute(sql`
+    INSERT INTO thai_progress (learner_id, item_id, drill_type, streak, last_seen, mastered_at)
+    VALUES (
+      ${learnerId},
+      ${itemId},
+      ${FLASHCARD_DRILL_TYPE},
+      CASE WHEN ${knewIt} THEN 1 ELSE 0 END,
+      now(),
+      CASE WHEN ${knewIt} THEN now() ELSE NULL END
+    )
+    ON CONFLICT (learner_id, item_id, drill_type) DO UPDATE SET
+      streak = CASE WHEN ${knewIt} THEN thai_progress.streak + 1 ELSE 0 END,
+      last_seen = now(),
+      mastered_at = CASE
+        WHEN thai_progress.mastered_at IS NOT NULL THEN thai_progress.mastered_at
+        WHEN ${knewIt} THEN now()
+        ELSE thai_progress.mastered_at
+      END
+  `);
+
+  // Audit log — the self-report is stored verbatim (no objective `expected`
+  // exists for a flashcard, so both columns record the grade itself).
+  await db.insert(thaiAttempts).values({
+    learnerId,
+    itemId,
+    drillType: FLASHCARD_DRILL_TYPE,
+    expected: "self:known",
+    chosen: knewIt ? "self:known" : "self:missed",
+    correct: knewIt,
+    timestamp: new Date(),
+  });
+
+  return { mastered: knewIt };
 }
 
 // Read-only snapshot used by the drill summary screen (A6: "unit %, unlock

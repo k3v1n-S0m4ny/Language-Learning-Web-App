@@ -24,6 +24,12 @@ export interface ConsonantItem {
   metadata: {
     name: string; // acrophonic name, e.g. "ก ไก่"
     meaning: string; // e.g. "chicken"
+    // Optional TTS override: the letter's full SPOKEN name (e.g. ป → "ปอ ปลา")
+    // when the displayed `name`'s bare leading glyph is synthesized badly.
+    // Preferred by scripts/generate-thai-audio.ts; `name` is still what the
+    // lesson/flashcard shows. Absent = say `name` (the default for all
+    // consonants whose bare glyph reads fine).
+    spokenName?: string;
     obsolete?: boolean;
   };
 }

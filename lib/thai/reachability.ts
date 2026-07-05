@@ -44,6 +44,10 @@
 export type DrillTypeId =
   | "letter-sound"
   | "letter-class"
+  // Unit 2 flashcard self-graded recognition (pilot) — unit 2's ONLY required
+  // drill type, replacing the letter-sound/letter-class/audio-letter trio. See
+  // the `unit === 2` branch of reachableDrillTypesForUnit below.
+  | "letter-read"
   | "letter-final"
   | "word-final"
   | "form-sound"
@@ -137,6 +141,9 @@ function canDrillTypeScore(item: ReachabilityItem, drillType: DrillTypeId): bool
   switch (drillType) {
     case "letter-sound":
     case "letter-class":
+    // letter-read (unit 2 flashcard) is answerable for any consonant — it is
+    // pure self-graded recognition of the glyph, needing no other content.
+    case "letter-read":
       return item.kind === "consonant";
     case "audio-letter":
       return item.kind === "consonant" && canEverHaveAudio(item);
@@ -217,7 +224,20 @@ export function reachableDrillTypesForUnit(
 ): Map<string, DrillTypeId[]> {
   const map = new Map<string, DrillTypeId[]>();
 
-  if (unit >= 2 && unit <= 5) {
+  // Unit 2 (flashcard pilot): the nine mid-class consonants are drilled as
+  // self-graded "read the letter" flashcards, not multiple-choice. A card is
+  // reachable through exactly one drill type — letter-read — so clearing the
+  // deck once (one "knew it" per card, see lib/thai/actions.ts::
+  // submitFlashcardGrade) takes the unit to 100% and unlocks unit 3. Units
+  // 3-5 keep the original letter-sound/letter-class/audio-letter MCQ trio.
+  if (unit === 2) {
+    for (const i of allItems) {
+      if (i.unit === 2 && i.drillable) addTo(map, i.id, "letter-read");
+    }
+    return map;
+  }
+
+  if (unit >= 3 && unit <= 5) {
     for (const i of allItems) {
       if (i.unit === unit && i.drillable) {
         addTo(map, i.id, "letter-sound");
@@ -442,6 +462,24 @@ export function maxAchievablePercentForUnit(unit: number, allItems: Reachability
   return Math.round((achievable / reachable.size) * 100);
 }
 
+// Unit 2 flashcard grandfather (owner-approved 2026-07-05): the legacy MCQ
+// `letter-sound` streak satisfies the new `letter-read` requirement — both
+// measure the same competency (recognising a consonant's sound), so a learner
+// who cleared unit 2 under the old rule is never re-locked, re-sampled, or
+// stripped of a "mastered" badge. This is the SINGLE definition of that
+// equivalence; every place that checks a required drill type against a
+// learner's mastered set (unitMasteryStats for the unlock gate, buildDrillRound
+// sampling weight, and submitThaiAttempt's item-level newlyMastered) routes
+// through it so the grandfather can never drift out of sync between call sites.
+export function isRequiredTypeMastered(
+  masteredSet: Set<string>,
+  requiredType: DrillTypeId,
+): boolean {
+  if (masteredSet.has(requiredType)) return true;
+  if (requiredType === "letter-read" && masteredSet.has("letter-sound")) return true;
+  return false;
+}
+
 // STRICT per-UNIT mastery stats (M11/A1; moved here from lib/thai/queries.ts
 // in M13/A6 residual #2). Purely a function of `reachableDrillTypesForUnit`
 // (never the cross-unit `allReachableDrillTypesForItem` union — see this
@@ -459,7 +497,10 @@ export function unitMasteryStats(
   let mastered = 0;
   for (const [itemId, requiredTypes] of reachable) {
     const masteredSet = masteredByItem.get(itemId);
-    if (masteredSet && requiredTypes.every((dt) => masteredSet.has(dt))) mastered++;
+    if (!masteredSet) continue;
+    // isRequiredTypeMastered carries the unit-2 letter-read/letter-sound
+    // grandfather; for every other unit it is a plain masteredSet.has(dt).
+    if (requiredTypes.every((dt) => isRequiredTypeMastered(masteredSet, dt))) mastered++;
   }
   return { total: reachable.size, mastered };
 }
@@ -487,16 +528,16 @@ export function assertUnitMasteryScopingGuard(allItems: ReachabilityItem[]): voi
   }
 
   // Negative fixture: this item is "mastered" ONLY for letter-final (the
-  // cross-unit-only type) — its own unit's required types (letter-sound,
-  // letter-class) are deliberately left unmastered.
+  // cross-unit-only type) — its own unit's required type (letter-read, and its
+  // grandfathered legacy proxy letter-sound) is deliberately left unmastered.
   const crossUnitOnly = new Map<string, Set<string>>([[sample.id, new Set(["letter-final"])]]);
   const { mastered: crossUnitMastered } = unitMasteryStats(2, crossUnitOnly, allItems);
   if (crossUnitMastered !== 0) {
     throw new Error(
       "Unlock-math regression guard FAILED: unitMasteryStats(2, ...) counted an item as " +
         "mastered using only a cross-unit drill type (letter-final, reachable exclusively " +
-        "from unit 6's own session), instead of requiring unit 2's own reachable types " +
-        "(letter-sound, letter-class). This is the exact M12 review CRITICAL 1 deadlock bug " +
+        "from unit 6's own session), instead of requiring unit 2's own reachable type " +
+        "(letter-read). This is the exact M12 review CRITICAL 1 deadlock bug " +
         "class (see this file's header) — lib/thai/queries.ts::getUnitSummaries must derive " +
         "percentMastered from reachableDrillTypesForUnit(unit, ...) directly, never from the " +
         "cross-unit allReachableDrillTypesForItem union.",
@@ -504,10 +545,9 @@ export function assertUnitMasteryScopingGuard(allItems: ReachabilityItem[]): voi
   }
 
   // Positive control: mastering EVERY one of unit 2's own required types for
-  // this item (letter-sound + letter-class, plus audio-letter if the item
-  // structurally supports audio — derived from reachableDrillTypesForUnit
-  // itself, not hardcoded, so this stays correct regardless of which drill
-  // types unit 2's own session offers) — but NOT the cross-unit letter-final
+  // this item (letter-read — derived from reachableDrillTypesForUnit itself,
+  // not hardcoded, so this stays correct regardless of which drill types unit
+  // 2's own session offers) — but NOT the cross-unit letter-final
   // — must count the item as mastered for unit 2's own percentage. Proves the
   // guard isn't trivially "always return 0".
   const ownUnitRequiredTypes = reachableDrillTypesForUnit(2, allItems).get(sample.id) ?? [];

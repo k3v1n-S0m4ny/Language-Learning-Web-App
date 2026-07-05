@@ -16,7 +16,7 @@ import { ALL_THAI_ITEMS } from "@/seed/thai/items";
 import type { Tone } from "@/seed/thai/types";
 import { DRILL_ROUND_SIZE } from "./mastery";
 import { getProgressByItemIds } from "./queries";
-import { allReachableDrillTypesForItem, computeReachableIds } from "./reachability";
+import { allReachableDrillTypesForItem, computeReachableIds, isRequiredTypeMastered } from "./reachability";
 import { TONE_LABELS, TONE_ORDER } from "./tone";
 import { serializeBoundaries, type DrillOption, type DrillQuestion, type DrillRound, type DrillStep, type DrillType } from "./types";
 
@@ -42,6 +42,11 @@ const FINAL_GROUPS: Record<string, string[]> = {
 const VALID_KINDS_FOR_DRILL_TYPE: Record<DrillType, string[]> = {
   "letter-sound": ["consonant"],
   "letter-class": ["consonant"],
+  // Unit 2 flashcard: self-graded, so it never flows through expectedAnswerFor
+  // (which returns null for it — the switch has no case) nor submitThaiAttempt
+  // (KNOWN_DRILL_TYPES excludes it). Listed here only to satisfy the
+  // Record<DrillType, …> completeness check.
+  "letter-read": ["consonant"],
   "letter-final": ["consonant"],
   "word-final": ["syllable"],
   "form-sound": ["vowel"],
@@ -306,7 +311,10 @@ interface Subject {
 // unit-9 tone word before the paid audio batch has run) is dropped entirely
 // so it can never be picked into a round with nothing to ask about (A4).
 async function buildSubjectPool(unit: number): Promise<Subject[]> {
-  if (unit >= 2 && unit <= 5) {
+  // Unit 2 is the flashcard pilot (self-graded, no MCQ round) — its deck is
+  // built by lib/thai/flashcards.ts::buildFlashcardDeck, not here. Only units
+  // 3-5 use this MCQ letter-sound/letter-class/audio-letter pool.
+  if (unit >= 3 && unit <= 5) {
     const items = await fetchUnitItems(unit);
     const reachable = computeReachableIds(unit, items);
     return items
@@ -1053,10 +1061,10 @@ export async function buildDrillRound(learnerId: string, unit: number): Promise<
   // audio drill type hasn't shipped audio yet.
   const scored: { value: Subject; weight: number }[] = subjects.map((s) => {
     const rows = progress.get(s.item.id) ?? [];
+    const masteredSet = new Set(rows.filter((r) => r.masteredAt != null).map((r) => r.drillType));
     const required = allReachableDrillTypesForItem(s.item.id, ALL_THAI_ITEMS);
     const fullyMastered =
-      required.length > 0 &&
-      required.every((dt) => rows.some((r) => r.drillType === dt && r.masteredAt != null));
+      required.length > 0 && required.every((dt) => isRequiredTypeMastered(masteredSet, dt));
     const lastSeenMs = rows.reduce(
       (max, r) => Math.max(max, r.lastSeen ? r.lastSeen.getTime() : 0),
       0,

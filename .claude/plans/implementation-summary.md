@@ -1,66 +1,41 @@
-# Implementation Summary — Mobile-First UX-Polish Pass
+# Implementation summary — Unit 2 flashcard pilot
 
-Branch: `glass-redesign` (not committed — per plan's "do not commit unless the owner asks").
-Plan: `C:\Users\User\.claude\plans\last-time-we-redesigned-cozy-codd.md` (source of truth). Built in phase order 0→4.
-(Supersedes the earlier mobile-layout-balance-pass summary, which is committed as `e58cd38` and captured in `mobile-ux-polish.handoff.md`.)
+**Branch / worktree:** `worktree-thai-unit2-flashcards` (git worktree off `origin/main`)
+**Date:** 2026-07-05
+**Owner-approved design:** unit 2 only · clear-the-deck-once unlocks unit 3 · self-graded flip · grandfather legacy learners · ป audio fix deferred to a separate paid step.
 
-## Completed work (all 5 phases)
+## Completed work
 
-### Phase 0 — foundation (`app/globals.css`)
-- Global `:where(a,button,[role=button],[role=radio],[tabindex]):focus-visible` ring (2px `--accent`, offset 2px, `border-radius: inherit`) + opt-in `.focus-ring`. Closes the app's only-UA-default a11y gap.
-- `--safe-bottom: env(safe-area-inset-bottom, 0px)`.
-- Gated `@keyframes shake` (±6px translateX) + `correct-pulse` (scale 1→1.04→1) inside the existing `@media (prefers-reduced-motion: no-preference)` block; matching `--animate-shake` / `--animate-correct-pulse` in `@theme inline`.
-- `.tap-press` utility (gated `transition: transform .1s var(--ease-soft)`; `:active{scale(.97)}`) for server-component press feedback.
+Converted Read-Thai **unit 2** from a multiple-choice drill to a self-graded flashcard "clear-the-deck" loop. Units 3–14 are untouched.
 
-### Phase 1 — affordances
-- `.focus-ring` on drill MC option tiles (`drill-session.tsx`) and phrase-split boundary buttons (`phrase-split-question.tsx`).
-- Press feedback: `whileTap` spring (500/30, scale 0.97) on client controls (drill option tiles, Next/Finish, phrase-split Check); `.tap-press` CSS on server controls (all 5 back-link pills across the 4 non-home pages, unit-row Lesson/Drill links, lesson "Next unit →"/"Start drilling", drill summary "Back to units").
-- `unit-row.tsx`: hover-lift (`transition-shadow` + stronger `hover:shadow`) + `›` chevron with `group-hover:translate-x-0.5` on the CTAs.
+- **New drill type `letter-read`** (`lib/thai/types.ts`, `lib/thai/reachability.ts`). Unit 2 split out of the `2–5` branch of `reachableDrillTypesForUnit` → requires only `letter-read`; units 3–5 keep the `letter-sound`/`letter-class`/`audio-letter` trio. `canDrillTypeScore` teaches `letter-read` (consonant), keeping the seed-time 100%-achievable invariant green. `VALID_KINDS_FOR_DRILL_TYPE` completed in `lib/thai/drill.ts`.
+- **Deck loader** `lib/thai/flashcards.ts::buildFlashcardDeck` — the 9 mid consonants (glyph, sound, acrophonic name, gloss, audioUrl, alreadyRead) from the DB.
+- **Server action** `lib/thai/actions.ts::submitFlashcardGrade(itemId, knewIt)` — validates the item is a unit-2 drillable consonant, re-checks the unit-2 unlock gate server-side, atomically upserts `thai_progress` (one "knew it" masters immediately; "missed it" resets streak, never un-masters), logs a `thai_attempts` row. `letter-read` is deliberately **excluded** from `KNOWN_DRILL_TYPES`, so it cannot be routed through the hardened `submitThaiAttempt`.
+- **UI** `components/thai/drill/flashcard-session.tsx` — shuffled queue of all 9, front = glyph, flip → sound + name + gloss + audio, "Knew it"/"Missed it"; missed cards rotate to the back; deck cleared → completion screen + unit-3 unlock celebration. `app/thai/[unit]/drill/page.tsx` branches unit 2 → `FlashcardSession`.
+- **Grandfather** — a single shared definition `isRequiredTypeMastered(masteredSet, requiredType)` (`letter-sound` satisfies `letter-read`, one-directional) routed through **all three** mastery-check sites: `unitMasteryStats` (unlock gate), `buildDrillRound` sampling weight, and `submitThaiAttempt` item-level `newlyMastered`. Existing learners who cleared old unit 2 are not re-locked, re-sampled, or un-badged.
+- **Tests** `lib/thai/flashcard-mastery.test.ts` (7 tests): unit-2 reachability, units-3–5 unchanged, letter-read mastery, grandfather, cross-unit exclusion, `maxAchievablePercentForUnit(2)==100`, and the one-directional alias helper.
 
-### Phase 2 — `lib/ux/` (new module)
-- `prefs.ts` — localStorage + `useSyncExternalStore` (theme-toggle pattern). Keys `ux:haptics` (default on), `ux:sound` (default off). Imperative getters/setters + `useHapticsEnabled()`/`useSoundEnabled()` hooks; same-tab custom events + storage event.
-- `haptics.ts` — `haptic('tap'|'success'|'error'|'unlock')`, triple-gated (feature-detect + pref + reduced-motion), try/catch.
-- `sfx.ts` — `playSfx('correct'|'incorrect'|'unlock')` via lazy module-singleton AudioContext, triangle oscillator + gain envelope, no asset files, gated on sound-pref only.
-- `audio.ts` — the single `playAudio(url)` clip seam (returns the `HTMLAudioElement`). `audio-button.tsx` re-exports it (back-compat for `review-session`); `audio-play-button.tsx` refactored to call it while keeping its `playing` state.
+## Left undone (by design)
 
-### Phase 3 — animations (spring house-style, double-gated)
-- Drill answer feedback (`drill-session.tsx`): correct → `animate-correct-pulse` on the chosen tile + `haptic('success')` + `playSfx('correct')`; incorrect → `animate-shake` + `haptic('error')` + `playSfx('incorrect')`; fired inside the gesture-initiated submit transition. Unit-unlock → `haptic('unlock')` + `playSfx('unlock')` fired in the Finish-round transition (gesture-safe AudioContext), same condition as the confetti.
-- `progress-ring.tsx` → `"use client"` leaf animating `motion.circle` `strokeDashoffset` full→target (spring 120/20); reduced-motion → static final offset. `unit-row.tsx` stays a server component.
-- List stagger (CSS `animation-delay`, entrance-only): `thai-home.tsx` unit rows (`Math.min(i,10)*40ms`) + both stats pages' metric tiles (0/40/80ms). Added a server-safe `style` passthrough to `StatCard`.
-- New `app/template.tsx` (`"use client"`): route entrance fade+lift (spring 300/30); reduced-motion → plain wrapper. Entrance-only (no AnimatePresence).
+- **ป audio regeneration** — bad clip, a *paid* TTS step deferred per owner. Needs: locate `scripts/generate-thai-audio.ts` pipeline + the exact voice, then surface model + cost options for approval (no auto-pick). The flashcard works without it.
+- **No data migration / prod DB write.** `letter-read` is a text value in existing columns; the grandfather clause avoids any backfill.
+- Full `next build` not run (would hit the prod DB); relied on tsc + tests + lint.
 
-### Phase 4 — persistent bottom nav + navigation
-- New `components/bottom-nav.tsx` (`"use client"`, `sm:hidden`): floating `.glass` bar, `fixed inset-x-3 bottom-3`, `padding-bottom: calc(0.25rem + var(--safe-bottom))`, tap targets ≥48px. Tabs Study→`/`, Progress→`/stats`|`/thai/stats` by mode, Menu→glass popover (ModeToggle + ThemeToggle + Haptics/Sound toggles + SignOutButton). Active tab via `usePathname()`; `layoutId` spring indicator; mode read from `dataset.lang` via `useSyncExternalStore` on `langchange`. Recedes (opacity-50) during a session via `useSessionActive`.
-- New `components/ux-toggles.tsx` — Haptics/Sound `SegmentedControl`s for the menu.
-- New `lib/ux/session-focus.ts` — module-singleton store; `ReviewSession` (mount) + `DrillSession` (phase≠summary) set it active.
-- `lang-sync.tsx` — dispatches `langchange` after setting `dataset.lang`.
-- `layout.tsx` — mounts `<BottomNav signOut={<SignOutButton variant="ghost"/>}/>` globally (server passes the server-component SignOutButton as a prop).
-- Content clearance `pb-[calc(5rem+var(--safe-bottom))] sm:pb-8` on all 6 `<main>`s.
+## Commands run (verbatim, re-run after fixes)
 
-## Commands run (verbatim results)
-- `npx tsc --noEmit` after each phase → **exit 0** (all four checkpoints; `TSC_EXIT: 0`).
-- `npm run lint` → **exit 0** (`LINT_EXIT: 0`).
-- `npm run build` → **exit 0** (`BUILD_EXIT: 0`); `✓ Compiled successfully in 10.8s`, TypeScript passed, `✓ Generating static pages (6/6)`. (Pre-existing lockfile-root warning only — unrelated to this work.)
+- `npm test` → **37 pass, 0 fail** (exit 0)
+- `npx tsc --noEmit` → clean, no output (exit 0)
+- `npx eslint <8 changed files>` → clean, no output (exit 0)
 
-## Live verification (chrome-devtools MCP, 390×844×3 mobile + 1280 desktop, READ-ONLY on data)
-Verified against a fresh dev server on :3000 (killed a stale pre-edit server that threw a Turbopack "Jest worker" compile error on the drill route — NOT a code bug; fresh server served `/thai/2/drill 200` and every route clean).
-- **Home (Thai):** bottom nav renders (Study/Progress/Menu), Progress→`/thai/stats`; chevrons on CTAs; progress rings settle at correct offsets (100%→0, 11%→111.84/125.66, 0%→full); `scrollWidth==clientWidth` (no h-scroll); `data-lang=thai`.
-- **Menu popover:** all 4 toggles + Sign out; **haptics default On, sound default Off** (confirmed `localStorage` null→defaults; toggling sound wrote `ux:sound=on`, reset to `off`); closes on tap-away.
-- **Focus ring:** real keyboard Tab → first control `:focus-visible` matches, `2px solid rgb(245,158,11)` (= `--accent` saffron).
-- **Desktop (1280):** bottom nav `display:none` (`sm:hidden`); no h-scroll; TopBar owns desktop (no duplication).
-- **Drill (/thai/2/drill):** nav receded `opacity:0.5` (session-focus); 4 `.focus-ring` option tiles; clean console. Did NOT answer/press Check (DB writes).
-- **Stats (/thai/stats):** nav `opacity:1` (not a session); Progress tab `aria-current="page"`; 3 staggered tiles; clean console.
-- **Mode signal:** on `/stats`, `data-lang=mandarin` → nav Progress correctly re-points to `/stats` (proves langchange-driven mode read).
-- **Lesson (/thai/2/lesson):** 3 `.tap-press` els; clean console; no h-scroll.
-- Feature-detect confirmed: `navigator.vibrate` and `AudioContext` both present in test Chrome.
+## Issues discovered & resolved (from code review round 1)
 
-## Left undone / notes
-- **Not committed** (per plan). Working tree has all phase edits on `glass-redesign` plus unrelated `.claude/` bookkeeping.
-- Real haptic vibration and audible sfx require a physical device / speakers — verified the gating + pref plumbing + feature-detect, not the literal buzz/tone.
-- Reduced-motion: verified via the code path (motion `animate` target == static offset; keyframes gated in CSS) — chrome-devtools `emulate` did not expose a reduced-motion toggle in this session, so it was validated by construction rather than a live media emulation.
+1. **CRITICAL** — client crash on deck completion: React commits an empty-queue render in the gap between `setQueue([])` and `setSummary` (auto-batching doesn't span an await), crashing on `current.glyph`. **Fixed** with an `if (!current)` guard rendering a "Finishing…" placeholder before the main render.
+2. **MEDIUM** — grandfather applied only in `unitMasteryStats`, not the item-level checks driving unit-6 sampling + the "newly mastered" badge. **Fixed** by centralizing into `isRequiredTypeMastered` and routing all three sites through it.
 
 ## Spec deviations
-None. Nav tap targets are `min-h-[3rem]` (48px), exceeding the ≥44px spec.
+
+None. Design matches the owner-approved decisions (unit 2 only, clear-the-deck-once, self-graded, grandfather).
 
 ## Procedure compliance
-Built in strict phase order 0→4 (each phase's deps satisfied before the next). Typecheck gate after every phase; lint + build gate at the end; live read-only verification of every route. No rating/Check/drill completion (no DB writes) per the prod-DB-is-dev-DB constraint.
+
+Worked in an isolated worktree as instructed. Plan approved before implementation. Static verification (tests/tsc/lint) run and re-run after review fixes. Independent `code-reviewer` invoked; findings addressed and sent back for re-verification. ป audio held as a separate gated paid step per the paid-generation protocol.

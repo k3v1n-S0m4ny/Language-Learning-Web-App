@@ -19,6 +19,9 @@ export interface UnitSummary {
 export type DrillType =
   | "letter-sound"
   | "letter-class"
+  // Unit 2 flashcard self-graded recognition (pilot) — unit 2's only required
+  // drill type; see lib/thai/reachability.ts reachableDrillTypesForUnit.
+  | "letter-read"
   | "letter-final"
   | "word-final"
   | "form-sound"
