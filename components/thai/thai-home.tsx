@@ -1,4 +1,4 @@
-import { RESTRICTED_THAI_MAX_UNIT } from "@/lib/access";
+import { restrictedUnitOpen } from "@/lib/access";
 import { getUnitSummaries } from "@/lib/thai/queries";
 import { TopBar } from "@/components/top-bar";
 import { UnitRow } from "./unit-row";
@@ -43,7 +43,7 @@ export async function ThaiHome({
             <UnitRow
               summary={summary}
               lockedReason={
-                restricted && summary.unit > RESTRICTED_THAI_MAX_UNIT
+                restricted && !restrictedUnitOpen(summary.unit, summary.unlocked)
                   ? "In construction"
                   : undefined
               }

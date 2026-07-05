@@ -1,6 +1,10 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { isRestrictedLearner, RESTRICTED_THAI_MAX_UNIT } from "./access";
+import {
+  isRestrictedLearner,
+  restrictedUnitOpen,
+  RESTRICTED_THAI_MAX_UNIT,
+} from "./access";
 
 test("both listed restricted emails are restricted", () => {
   assert.equal(isRestrictedLearner("prancer@gmail.com"), true);
@@ -25,6 +29,21 @@ test("empty string / null / undefined are not restricted", () => {
   assert.equal(isRestrictedLearner(undefined), false);
 });
 
-test("Thai access is capped at unit 2", () => {
+test("Thai always-open ceiling is unit 2", () => {
   assert.equal(RESTRICTED_THAI_MAX_UNIT, 2);
+});
+
+test("units 1-2 are always open to a restricted tester (locked or not)", () => {
+  assert.equal(restrictedUnitOpen(1, false), true);
+  assert.equal(restrictedUnitOpen(2, false), true);
+});
+
+test("unit 3 opens for a tester only once it is unlocked (unit 2 finished)", () => {
+  assert.equal(restrictedUnitOpen(3, false), false);
+  assert.equal(restrictedUnitOpen(3, true), true);
+});
+
+test("units 4+ stay closed to a tester regardless of unlock", () => {
+  assert.equal(restrictedUnitOpen(4, true), false);
+  assert.equal(restrictedUnitOpen(5, true), false);
 });

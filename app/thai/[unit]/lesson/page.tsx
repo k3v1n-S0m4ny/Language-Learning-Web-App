@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { auth } from "@/auth";
-import { isRestrictedLearner, RESTRICTED_THAI_MAX_UNIT } from "@/lib/access";
+import { isRestrictedLearner, restrictedUnitOpen } from "@/lib/access";
 import { getToneWords, getUnitSummary } from "@/lib/thai/queries";
 import { TONE_MARK_ORDER } from "@/lib/thai/tone";
 import type { ToneMark } from "@/seed/thai/types";
@@ -63,13 +63,18 @@ export default async function ThaiLessonPage({
   const learnerId = session?.user?.id;
   if (!learnerId) return null;
 
-  // Restricted testers are capped at Thai unit 2 while units 3+ are under
-  // construction — higher units don't exist for them.
-  if (isRestrictedLearner(session.user?.email) && unit > RESTRICTED_THAI_MAX_UNIT) {
+  const summary = await getUnitSummary(learnerId, unit);
+
+  // Restricted testers: units 1-2 are always open; unit 3 opens once they
+  // finish unit 2 (its unlock flips at 90% mastery); units 4+ stay under
+  // construction. Enforced server-side, independent of the UI.
+  if (
+    isRestrictedLearner(session.user?.email) &&
+    !restrictedUnitOpen(unit, summary?.unlocked ?? false)
+  ) {
     notFound();
   }
 
-  const summary = await getUnitSummary(learnerId, unit);
   const toneWords = unit === 9 ? await getToneWords() : null;
 
   return (
