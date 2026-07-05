@@ -44,9 +44,10 @@
 export type DrillTypeId =
   | "letter-sound"
   | "letter-class"
-  // Unit 2 flashcard self-graded recognition (pilot) — unit 2's ONLY required
-  // drill type, replacing the letter-sound/letter-class/audio-letter trio. See
-  // the `unit === 2` branch of reachableDrillTypesForUnit below.
+  // Flashcard self-graded recognition (units 2-3) — the ONLY required drill
+  // type for those units, replacing the letter-sound/letter-class/audio-letter
+  // trio. See the `unit === 2 || unit === 3` branch of
+  // reachableDrillTypesForUnit below.
   | "letter-read"
   | "letter-final"
   | "word-final"
@@ -141,8 +142,8 @@ function canDrillTypeScore(item: ReachabilityItem, drillType: DrillTypeId): bool
   switch (drillType) {
     case "letter-sound":
     case "letter-class":
-    // letter-read (unit 2 flashcard) is answerable for any consonant — it is
-    // pure self-graded recognition of the glyph, needing no other content.
+    // letter-read (units 2-3 flashcards) is answerable for any consonant — it
+    // is pure self-graded recognition of the glyph, needing no other content.
     case "letter-read":
       return item.kind === "consonant";
     case "audio-letter":
@@ -224,20 +225,21 @@ export function reachableDrillTypesForUnit(
 ): Map<string, DrillTypeId[]> {
   const map = new Map<string, DrillTypeId[]>();
 
-  // Unit 2 (flashcard pilot): the nine mid-class consonants are drilled as
-  // self-graded "read the letter" flashcards, not multiple-choice. A card is
-  // reachable through exactly one drill type — letter-read — so clearing the
-  // deck once (one "knew it" per card, see lib/thai/actions.ts::
-  // submitFlashcardGrade) takes the unit to 100% and unlocks unit 3. Units
-  // 3-5 keep the original letter-sound/letter-class/audio-letter MCQ trio.
-  if (unit === 2) {
+  // Units 2-3 (flashcards): the mid-class and high-class consonants are
+  // drilled as self-graded "read the letter" flashcards, not multiple-choice.
+  // A card is reachable through exactly one drill type — letter-read — so
+  // clearing the deck once (one "knew it" per card, see
+  // lib/thai/actions.ts::submitFlashcardGrade) takes the unit to 100% and
+  // unlocks the next unit. Units 4-5 keep the original
+  // letter-sound/letter-class/audio-letter MCQ trio.
+  if (unit === 2 || unit === 3) {
     for (const i of allItems) {
-      if (i.unit === 2 && i.drillable) addTo(map, i.id, "letter-read");
+      if (i.unit === unit && i.drillable) addTo(map, i.id, "letter-read");
     }
     return map;
   }
 
-  if (unit >= 3 && unit <= 5) {
+  if (unit >= 4 && unit <= 5) {
     for (const i of allItems) {
       if (i.unit === unit && i.drillable) {
         addTo(map, i.id, "letter-sound");
@@ -462,15 +464,16 @@ export function maxAchievablePercentForUnit(unit: number, allItems: Reachability
   return Math.round((achievable / reachable.size) * 100);
 }
 
-// Unit 2 flashcard grandfather (owner-approved 2026-07-05): the legacy MCQ
+// Flashcard grandfather (units 2-3; owner-approved 2026-07-05): the legacy MCQ
 // `letter-sound` streak satisfies the new `letter-read` requirement — both
 // measure the same competency (recognising a consonant's sound), so a learner
-// who cleared unit 2 under the old rule is never re-locked, re-sampled, or
-// stripped of a "mastered" badge. This is the SINGLE definition of that
-// equivalence; every place that checks a required drill type against a
-// learner's mastered set (unitMasteryStats for the unlock gate, buildDrillRound
-// sampling weight, and submitThaiAttempt's item-level newlyMastered) routes
-// through it so the grandfather can never drift out of sync between call sites.
+// who cleared unit 2 (or unit 3, once generalized) under the old rule is
+// never re-locked, re-sampled, or stripped of a "mastered" badge. This is the
+// SINGLE definition of that equivalence; every place that checks a required
+// drill type against a learner's mastered set (unitMasteryStats for the
+// unlock gate, buildDrillRound sampling weight, and submitThaiAttempt's
+// item-level newlyMastered) routes through it so the grandfather can never
+// drift out of sync between call sites.
 export function isRequiredTypeMastered(
   masteredSet: Set<string>,
   requiredType: DrillTypeId,
@@ -498,7 +501,7 @@ export function unitMasteryStats(
   for (const [itemId, requiredTypes] of reachable) {
     const masteredSet = masteredByItem.get(itemId);
     if (!masteredSet) continue;
-    // isRequiredTypeMastered carries the unit-2 letter-read/letter-sound
+    // isRequiredTypeMastered carries the units 2-3 letter-read/letter-sound
     // grandfather; for every other unit it is a plain masteredSet.has(dt).
     if (requiredTypes.every((dt) => isRequiredTypeMastered(masteredSet, dt))) mastered++;
   }
@@ -514,16 +517,22 @@ export function unitMasteryStats(
 // getUnitSummaries' per-unit percentage (the architecture-shape regression
 // the M12 review flagged as only documentation-guarded, not mechanically
 // checked) gets caught the next time the seed script runs.
-export function assertUnitMasteryScopingGuard(allItems: ReachabilityItem[]): void {
-  // A real unit-2 consonant that also has a final sound, so it is reachable
-  // via letter-final — but ONLY from unit 6's own session, never unit 2's.
+//
+// Factored into a per-unit helper so the exact same invariant can be asserted
+// for both flashcard units (2 and 3) rather than only unit 2 — a future
+// regression specific to unit 3's unlock math (e.g. from the units 2-3
+// generalization) is caught the same way unit 2's already is.
+function assertUnitMasteryScopingGuardForUnit(unit: number, allItems: ReachabilityItem[]): void {
+  // A real consonant in this unit that also has a final sound, so it is
+  // reachable via letter-final — but ONLY from unit 6's own session, never
+  // this unit's.
   const sample = allItems.find(
-    (i) => i.kind === "consonant" && i.unit === 2 && i.drillable && i.finalIpa !== null,
+    (i) => i.kind === "consonant" && i.unit === unit && i.drillable && i.finalIpa !== null,
   );
   if (!sample) {
     throw new Error(
-      "Unlock-math regression guard could not run: no unit-2 consonant with a final sound " +
-        "was found in the seed content to build the synthetic fixture against.",
+      `Unlock-math regression guard could not run: no unit-${unit} consonant with a final ` +
+        "sound was found in the seed content to build the synthetic fixture against.",
     );
   }
 
@@ -531,12 +540,12 @@ export function assertUnitMasteryScopingGuard(allItems: ReachabilityItem[]): voi
   // cross-unit-only type) — its own unit's required type (letter-read, and its
   // grandfathered legacy proxy letter-sound) is deliberately left unmastered.
   const crossUnitOnly = new Map<string, Set<string>>([[sample.id, new Set(["letter-final"])]]);
-  const { mastered: crossUnitMastered } = unitMasteryStats(2, crossUnitOnly, allItems);
+  const { mastered: crossUnitMastered } = unitMasteryStats(unit, crossUnitOnly, allItems);
   if (crossUnitMastered !== 0) {
     throw new Error(
-      "Unlock-math regression guard FAILED: unitMasteryStats(2, ...) counted an item as " +
+      `Unlock-math regression guard FAILED: unitMasteryStats(${unit}, ...) counted an item as ` +
         "mastered using only a cross-unit drill type (letter-final, reachable exclusively " +
-        "from unit 6's own session), instead of requiring unit 2's own reachable type " +
+        `from unit 6's own session), instead of requiring unit ${unit}'s own reachable type ` +
         "(letter-read). This is the exact M12 review CRITICAL 1 deadlock bug " +
         "class (see this file's header) — lib/thai/queries.ts::getUnitSummaries must derive " +
         "percentMastered from reachableDrillTypesForUnit(unit, ...) directly, never from the " +
@@ -544,25 +553,30 @@ export function assertUnitMasteryScopingGuard(allItems: ReachabilityItem[]): voi
     );
   }
 
-  // Positive control: mastering EVERY one of unit 2's own required types for
-  // this item (letter-read — derived from reachableDrillTypesForUnit itself,
-  // not hardcoded, so this stays correct regardless of which drill types unit
-  // 2's own session offers) — but NOT the cross-unit letter-final
-  // — must count the item as mastered for unit 2's own percentage. Proves the
-  // guard isn't trivially "always return 0".
-  const ownUnitRequiredTypes = reachableDrillTypesForUnit(2, allItems).get(sample.id) ?? [];
+  // Positive control: mastering EVERY one of this unit's own required types
+  // for this item (letter-read — derived from reachableDrillTypesForUnit
+  // itself, not hardcoded, so this stays correct regardless of which drill
+  // types this unit's own session offers) — but NOT the cross-unit
+  // letter-final — must count the item as mastered for this unit's own
+  // percentage. Proves the guard isn't trivially "always return 0".
+  const ownUnitRequiredTypes = reachableDrillTypesForUnit(unit, allItems).get(sample.id) ?? [];
   const ownUnitOnly = new Map<string, Set<string>>([[sample.id, new Set(ownUnitRequiredTypes)]]);
-  const { mastered: ownUnitMastered } = unitMasteryStats(2, ownUnitOnly, allItems);
+  const { mastered: ownUnitMastered } = unitMasteryStats(unit, ownUnitOnly, allItems);
   if (ownUnitMastered !== 1) {
     throw new Error(
-      "Unlock-math regression guard FAILED (positive control): unitMasteryStats(2, ...) did " +
-        "not count an item mastered via its own unit-2 required types " +
+      `Unlock-math regression guard FAILED (positive control): unitMasteryStats(${unit}, ...) ` +
+        `did not count an item mastered via its own unit-${unit} required types ` +
         `(${ownUnitRequiredTypes.join(", ")}) as mastered.`,
     );
   }
 
   console.log(
-    "[reachability] OK — unitMasteryStats correctly scopes unit 2's own percentage to its " +
-      "own reachable drill types (M13/A6 unlock-math regression guard).",
+    `[reachability] OK — unitMasteryStats correctly scopes unit ${unit}'s own percentage to ` +
+      "its own reachable drill types (M13/A6 unlock-math regression guard).",
   );
+}
+
+export function assertUnitMasteryScopingGuard(allItems: ReachabilityItem[]): void {
+  assertUnitMasteryScopingGuardForUnit(2, allItems);
+  assertUnitMasteryScopingGuardForUnit(3, allItems);
 }

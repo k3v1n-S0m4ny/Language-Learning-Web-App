@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { auth } from "@/auth";
 import { isRestrictedLearner, restrictedUnitOpen } from "@/lib/access";
 import { buildDrillRound } from "@/lib/thai/drill";
-import { buildFlashcardDeck, FLASHCARD_UNIT, newShuffleSeed } from "@/lib/thai/flashcards";
+import { buildFlashcardDeck, FLASHCARD_UNITS, newShuffleSeed } from "@/lib/thai/flashcards";
 import { getUnitSummaries } from "@/lib/thai/queries";
 import { UNIT_TITLES } from "@/seed/thai/items";
 import { LangSync } from "@/components/lang-sync";
@@ -59,9 +59,9 @@ export default async function ThaiDrillPage({
     );
   }
 
-  // Unit 2 is the flashcard pilot (self-graded clear-the-deck loop); every
-  // other drilled unit uses the multiple-choice round.
-  const isFlashcardUnit = unit === FLASHCARD_UNIT;
+  // Units 2-3 use the flashcard mechanic (self-graded clear-the-deck loop);
+  // every other drilled unit uses the multiple-choice round.
+  const isFlashcardUnit = FLASHCARD_UNITS.has(unit);
   const round = isFlashcardUnit ? null : await buildDrillRound(learnerId, unit);
   const cards = isFlashcardUnit ? await buildFlashcardDeck(learnerId, unit) : [];
 

@@ -36,17 +36,17 @@ export const MID_CONSONANTS: ConsonantItem[] = [
 
 // --- Unit 3: High-class consonants (11; ฃ shown, not drilled) --------------
 export const HIGH_CONSONANTS: ConsonantItem[] = [
-  { kind: "consonant", id: "consonant:ข", unit: 3, display: "ข", initialIpa: "kʰ", finalIpa: "k", consonantClass: "high", drillable: true, metadata: { name: "ข ไข่", meaning: "egg" } },
-  { kind: "consonant", id: "consonant:ฃ", unit: 3, display: "ฃ", initialIpa: "kʰ", finalIpa: null, consonantClass: "high", drillable: false, metadata: { name: "ฃ ขวด", meaning: "bottle", obsolete: true } },
-  { kind: "consonant", id: "consonant:ฉ", unit: 3, display: "ฉ", initialIpa: "tɕʰ", finalIpa: null, consonantClass: "high", drillable: true, metadata: { name: "ฉ ฉิ่ง", meaning: "cymbals" } },
-  { kind: "consonant", id: "consonant:ฐ", unit: 3, display: "ฐ", initialIpa: "tʰ", finalIpa: "t", consonantClass: "high", drillable: true, metadata: { name: "ฐ ฐาน", meaning: "pedestal" } },
-  { kind: "consonant", id: "consonant:ถ", unit: 3, display: "ถ", initialIpa: "tʰ", finalIpa: "t", consonantClass: "high", drillable: true, metadata: { name: "ถ ถุง", meaning: "sack" } },
-  { kind: "consonant", id: "consonant:ผ", unit: 3, display: "ผ", initialIpa: "pʰ", finalIpa: null, consonantClass: "high", drillable: true, metadata: { name: "ผ ผึ้ง", meaning: "bee" } },
-  { kind: "consonant", id: "consonant:ฝ", unit: 3, display: "ฝ", initialIpa: "f", finalIpa: null, consonantClass: "high", drillable: true, metadata: { name: "ฝ ฝา", meaning: "lid" } },
-  { kind: "consonant", id: "consonant:ศ", unit: 3, display: "ศ", initialIpa: "s", finalIpa: "t", consonantClass: "high", drillable: true, metadata: { name: "ศ ศาลา", meaning: "pavilion" } },
-  { kind: "consonant", id: "consonant:ษ", unit: 3, display: "ษ", initialIpa: "s", finalIpa: "t", consonantClass: "high", drillable: true, metadata: { name: "ษ ฤๅษี", meaning: "hermit" } },
-  { kind: "consonant", id: "consonant:ส", unit: 3, display: "ส", initialIpa: "s", finalIpa: "t", consonantClass: "high", drillable: true, metadata: { name: "ส เสือ", meaning: "tiger" } },
-  { kind: "consonant", id: "consonant:ห", unit: 3, display: "ห", initialIpa: "h", finalIpa: null, consonantClass: "high", drillable: true, metadata: { name: "ห หีบ", meaning: "chest" } },
+  { kind: "consonant", id: "consonant:ข", unit: 3, display: "ข", initialIpa: "kʰ", finalIpa: "k", consonantClass: "high", drillable: true, metadata: { name: "ข ไข่", meaning: "egg", nameIpa: "kʰɔ̌ː kʰàj" } },
+  { kind: "consonant", id: "consonant:ฃ", unit: 3, display: "ฃ", initialIpa: "kʰ", finalIpa: null, consonantClass: "high", drillable: false, metadata: { name: "ฃ ขวด", meaning: "bottle", obsolete: true, nameIpa: "kʰɔ̌ː kʰùat" } },
+  { kind: "consonant", id: "consonant:ฉ", unit: 3, display: "ฉ", initialIpa: "tɕʰ", finalIpa: null, consonantClass: "high", drillable: true, metadata: { name: "ฉ ฉิ่ง", meaning: "cymbals", nameIpa: "tɕʰɔ̌ː tɕʰìŋ" } },
+  { kind: "consonant", id: "consonant:ฐ", unit: 3, display: "ฐ", initialIpa: "tʰ", finalIpa: "t", consonantClass: "high", drillable: true, metadata: { name: "ฐ ฐาน", meaning: "pedestal", nameIpa: "tʰɔ̌ː tʰǎːn" } },
+  { kind: "consonant", id: "consonant:ถ", unit: 3, display: "ถ", initialIpa: "tʰ", finalIpa: "t", consonantClass: "high", drillable: true, metadata: { name: "ถ ถุง", meaning: "sack", nameIpa: "tʰɔ̌ː tʰǔŋ" } },
+  { kind: "consonant", id: "consonant:ผ", unit: 3, display: "ผ", initialIpa: "pʰ", finalIpa: null, consonantClass: "high", drillable: true, metadata: { name: "ผ ผึ้ง", meaning: "bee", nameIpa: "pʰɔ̌ː pʰɯ̂ŋ" } },
+  { kind: "consonant", id: "consonant:ฝ", unit: 3, display: "ฝ", initialIpa: "f", finalIpa: null, consonantClass: "high", drillable: true, metadata: { name: "ฝ ฝา", meaning: "lid", nameIpa: "fɔ̌ː fǎː" } },
+  { kind: "consonant", id: "consonant:ศ", unit: 3, display: "ศ", initialIpa: "s", finalIpa: "t", consonantClass: "high", drillable: true, metadata: { name: "ศ ศาลา", meaning: "pavilion", nameIpa: "sɔ̌ː sǎːlāː" } },
+  { kind: "consonant", id: "consonant:ษ", unit: 3, display: "ษ", initialIpa: "s", finalIpa: "t", consonantClass: "high", drillable: true, metadata: { name: "ษ ฤๅษี", meaning: "hermit", nameIpa: "sɔ̌ː rɯ́ːsǐː" } },
+  { kind: "consonant", id: "consonant:ส", unit: 3, display: "ส", initialIpa: "s", finalIpa: "t", consonantClass: "high", drillable: true, metadata: { name: "ส เสือ", meaning: "tiger", nameIpa: "sɔ̌ː sɯ̌a" } },
+  { kind: "consonant", id: "consonant:ห", unit: 3, display: "ห", initialIpa: "h", finalIpa: null, consonantClass: "high", drillable: true, metadata: { name: "ห หีบ", meaning: "chest", nameIpa: "hɔ̌ː hìːp" } },
 ];
 
 // --- Unit 4: Low-class consonants A (12) ------------------------------------

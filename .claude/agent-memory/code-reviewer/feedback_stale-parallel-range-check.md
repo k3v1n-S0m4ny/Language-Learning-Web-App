@@ -1,0 +1,12 @@
+---
+name: stale-parallel-range-check
+description: When a unit/id range boundary is generalized in its source-of-truth function, grep for OTHER files with their own duplicate range check encoding the same boundary — plans often only list the source-of-truth file
+metadata:
+  type: feedback
+---
+
+When a plan generalizes a hardcoded boundary (e.g. `FLASHCARD_UNIT = 2` -> `FLASHCARD_UNITS = {2,3}`, narrowing an adjacent MCQ range from `>=3` to `>=4`), the plan's file list is usually built by tracing the single source-of-truth function (here `lib/thai/reachability.ts::reachableDrillTypesForUnit`) and its direct callers. It can still miss a DIFFERENT file that has its own independently-written numeric range check encoding the same conceptual boundary for a different purpose — e.g. `lib/thai/drill.ts::buildSubjectPool`'s own `if (unit >= 3 && unit <= 5)` branch (MCQ subject-pool construction), which is a separate hardcoded range from `reachability.ts`'s `unit >= 4 && unit <= 5`, and was never touched by the unit-3-flashcard generalization (glass-redesign branch, 2026-07-05).
+
+**Why:** The two ranges look like they should always move together (both describe "which units are MCQ, not flashcard"), but they are physically two different `if` conditions in two different files with no shared constant — nothing forces them to agree. When one is updated and the other isn't, the result is often dead code today (because a page-level gate like `isFlashcardUnit ? null : buildDrillRound(...)` prevents the stale branch from ever executing) but a landmine for later: if that gate is ever removed/loosened, or the stale function is called directly from a script/test, it silently produces MCQ questions with drill types the reachability layer no longer considers valid for that unit — and every answer submission then fails downstream (`unitOfferingDrillType` returns null), a confusing failure far from the actual root cause.
+
+**How to apply:** After confirming the primary source-of-truth range check was updated correctly, grep the whole repo for the OLD boundary value (e.g. `>= 3 && unit <= 5`, or `unit === 2`) rather than trusting the plan's file list is exhaustive. Flag any other file with its own copy of the same numeric range as at minimum a comment/consistency issue, even if it's provably dead code under the current call graph — note explicitly whether it's reachable today, and if not, describe the exact future trigger that would make it a live bug.

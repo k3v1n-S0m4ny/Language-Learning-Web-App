@@ -17,13 +17,13 @@ interface Props {
   shuffleSeed: number;
 }
 
-// Unit 2 flashcard pilot (owner-approved 2026-07-05): a self-graded
+// Flashcard units (2-3, owner-approved 2026-07-05): a self-graded
 // clear-the-deck loop, not multiple choice. Every card is revealed from the
 // start (no locked subset, no "due"): front = the glyph, flip to check the
 // sound + acrophonic name + audio, then self-grade "Knew it" / "Missed it".
 // A missed card goes to the BACK of the queue and must be cleared to finish;
-// clearing the whole deck once takes unit 2 to 100% and unlocks unit 3 (the
-// mastery/unlock math is server-side — see lib/thai/actions.ts::
+// clearing the whole deck once takes the unit to 100% and unlocks the next
+// one (the mastery/unlock math is server-side — see lib/thai/actions.ts::
 // submitFlashcardGrade + lib/thai/reachability.ts::unitMasteryStats).
 
 // Deterministic PRNG (mulberry32) so a shuffle can be reproduced from a seed.

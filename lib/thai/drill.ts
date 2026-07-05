@@ -311,10 +311,10 @@ interface Subject {
 // unit-9 tone word before the paid audio batch has run) is dropped entirely
 // so it can never be picked into a round with nothing to ask about (A4).
 async function buildSubjectPool(unit: number): Promise<Subject[]> {
-  // Unit 2 is the flashcard pilot (self-graded, no MCQ round) — its deck is
-  // built by lib/thai/flashcards.ts::buildFlashcardDeck, not here. Only units
-  // 3-5 use this MCQ letter-sound/letter-class/audio-letter pool.
-  if (unit >= 3 && unit <= 5) {
+  // Units 2-3 are flashcard units (self-graded, no MCQ round) — their decks
+  // are built by lib/thai/flashcards.ts::buildFlashcardDeck, not here. Only
+  // units 4-5 use this MCQ letter-sound/letter-class/audio-letter pool.
+  if (unit >= 4 && unit <= 5) {
     const items = await fetchUnitItems(unit);
     const reachable = computeReachableIds(unit, items);
     return items

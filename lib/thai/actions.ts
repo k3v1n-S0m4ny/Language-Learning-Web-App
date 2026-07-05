@@ -8,7 +8,7 @@ import { db } from "@/lib/db";
 import { learnerSettings, thaiAttempts, thaiItems, thaiProgress } from "@/lib/db/schema";
 import { ALL_THAI_ITEMS, UNIT_1_LESSON_MARKER_ID } from "@/seed/thai/items";
 import { expectedAnswerFor } from "./drill";
-import { FLASHCARD_DRILL_TYPE, FLASHCARD_UNIT } from "./flashcards";
+import { FLASHCARD_DRILL_TYPE, FLASHCARD_UNITS } from "./flashcards";
 import { LESSON_READ_DRILL_TYPE, MASTERY_STREAK } from "./mastery";
 import { getUnitSummaries } from "./queries";
 import {
@@ -238,7 +238,7 @@ export async function submitThaiAttempt(
     if (otherRequired.length === 0) {
       itemFullyMastered = true;
     } else {
-      // Include the legacy letter-sound alias in the query so the unit-2
+      // Include the legacy letter-sound alias in the query so the units 2-3
       // flashcard grandfather (isRequiredTypeMastered) can see a pre-pilot
       // learner's letter-sound row — otherwise it would be filtered out here
       // and the item could never re-badge as fully mastered.
@@ -265,13 +265,14 @@ export async function submitThaiAttempt(
   return { correct, newlyMastered: itemFullyMastered, streak: progressRow.streak };
 }
 
-// Unit 2 flashcard pilot: record one self-graded card ("knew it" / "missed
-// it"). Unlike submitThaiAttempt there is no objective answer to re-derive —
-// the learner grades themselves — so this action trusts `knewIt` for the
-// SELF-REPORTED card only. It cannot be abused to unlock later units against
-// the rules: the itemId is validated to be a real unit-2 consonant, and unit
-// 3 only unlocks once ALL nine unit-2 cards are read-mastered, exactly the
-// same 100%-of-the-unit gate every other unit uses (getUnitSummaries).
+// Flashcard pilot (units 2-3): record one self-graded card ("knew it" /
+// "missed it"). Unlike submitThaiAttempt there is no objective answer to
+// re-derive — the learner grades themselves — so this action trusts `knewIt`
+// for the SELF-REPORTED card only. It cannot be abused to unlock later units
+// against the rules: the itemId is validated to be a real flashcard-unit
+// consonant, and the NEXT unit only unlocks once ALL of the item's own unit's
+// cards are read-mastered, exactly the same 100%-of-the-unit gate every other
+// unit uses (getUnitSummaries).
 //
 // Clear-the-deck-once (owner-approved 2026-07-05): a single "knew it" masters
 // the card immediately (masteredAt set, then frozen — the 3-streak MCQ rule
@@ -293,20 +294,22 @@ export async function submitFlashcardGrade(
 
   const [item] = await db.select().from(thaiItems).where(eq(thaiItems.id, itemId));
   if (!item) throw new Error("Unknown item");
-  // Structural guard: only the unit-2 mid-class consonants are self-graded
+  // Structural guard: only consonants in a flashcard unit are self-graded
   // flashcards. Anything else must go through submitThaiAttempt's re-derived
   // scoring, never this trusted path.
-  if (item.unit !== FLASHCARD_UNIT || item.kind !== "consonant" || !item.drillable) {
-    throw new Error("Item is not a unit-2 flashcard");
+  if (!FLASHCARD_UNITS.has(item.unit) || item.kind !== "consonant" || !item.drillable) {
+    throw new Error("Item is not a flashcard-unit consonant");
   }
 
-  // Unlock gate (mirrors submitThaiAttempt): unit 2 is only submittable once
-  // unit 1's lesson marker has been read — getUnitSummaries computes unit 2's
-  // own `unlocked` from that. A directly-POSTed grade for a locked unit is
-  // rejected here regardless of what the UI rendered.
+  // Unlock gate (mirrors submitThaiAttempt): a unit is only submittable once
+  // it is itself unlocked — getUnitSummaries computes each unit's own
+  // `unlocked` from the previous unit's mastery. A directly-POSTed grade for
+  // a locked unit is rejected here regardless of what the UI rendered. Looked
+  // up by the item's OWN unit, not a hardcoded unit, so a unit-3 grade checks
+  // unit 3's unlock state, not unit 2's.
   const summaries = await getUnitSummaries(learnerId);
-  const unit2 = summaries.find((s) => s.unit === FLASHCARD_UNIT);
-  if (!unit2?.unlocked) throw new Error("Unit not unlocked");
+  const cardUnit = summaries.find((s) => s.unit === item.unit);
+  if (!cardUnit?.unlocked) throw new Error("Unit not unlocked");
 
   await db.execute(sql`
     INSERT INTO thai_progress (learner_id, item_id, drill_type, streak, last_seen, mastered_at)

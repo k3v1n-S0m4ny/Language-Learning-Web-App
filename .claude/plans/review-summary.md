@@ -1,100 +1,137 @@
-# Review Summary — Unit 2 Flashcard Pilot (Read-Thai)
+# Review Summary - Unit 3 flashcards (generalized from unit-2 pilot) + Name-IPA column
 
 ## Result
-PASS
+PASS (with one MEDIUM finding to fix before/soon after merge, and two LOW documentation nits — none block shipping)
 
-## Re-review pass (round 2)
-Coordinator reported fixes for both the round-1 CRITICAL and MEDIUM findings. Re-checked adversarially — read the actual diffs myself against `origin/main`, did not trust the message — then re-ran every gate command fresh.
-
-1. **CRITICAL (empty-queue crash) — RESOLVED, confirmed.**
-   `components/thai/drill/flashcard-session.tsx` now has an explicit guard between the `if (summary) {...}` block and the main render:
-   ```
-   if (!current) {
-     return (
-       <div className="rounded-[var(--r-lg)] border border-border-base bg-surface p-6 text-sm text-foreground-muted">
-         Finishing…
-       </div>
-     );
-   }
-   ```
-   This sits exactly in the gap I flagged: after `setQueue(rest)` (rest=[]) commits its own render but before `getUnitProgressSnapshot`'s result lands in `summary`. Traced the render order by hand again: `if (summary)` is checked first (so once the snapshot arrives, "Deck cleared" renders correctly, not stuck on "Finishing…"), and `if (!current)` is checked second, before line ~123's `current.glyph` dereference — so the crash path is gone. I did not find a case where `!current` is reachable outside this exact completion window (the "Missed it" branch always rotates rather than shrinking the queue, so `current` stays defined there). One residual, non-blocking gap: if `getUnitProgressSnapshot` itself throws (network error), there's still no try/catch, so the UI would be stuck on "Finishing…" forever rather than erroring — but that's a pre-existing gap shared with `DrillSession`'s identical unguarded `await getUnitProgressSnapshot(unit)` call, not a regression introduced by this fix, and not something the original finding asked to fix.
-
-2. **MEDIUM (grandfather applied at only one site) — RESOLVED, confirmed.**
-   `isRequiredTypeMastered(masteredSet, requiredType)` (`lib/thai/reachability.ts`) is now the single definition of the letter-sound → letter-read alias (`masteredSet.has(requiredType) || (requiredType === "letter-read" && masteredSet.has("letter-sound"))`), and all three consumers I flagged now route through it:
-   - `unitMasteryStats` (reachability.ts) — the old ad-hoc `unit === 2` branch is gone; it's now `requiredTypes.every((dt) => isRequiredTypeMastered(masteredSet, dt))` unconditionally, so behavior for every other unit is provably unchanged (plain `masteredSet.has(dt)` whenever `dt !== "letter-read"`).
-   - `buildDrillRound` sampling weight (`lib/thai/drill.ts:1063-1067`) — now builds `masteredSet` from the learner's progress rows and calls the same helper; a legacy-mastered unit-2 consonant now correctly weights as `fullyMastered` even without a `letter-read` row.
-   - `submitThaiAttempt`'s `itemFullyMastered`/`newlyMastered` (`lib/thai/actions.ts:230-246`) — the DB query for "other required types" now explicitly widens to include `"letter-sound"` whenever `"letter-read"` is required (`queryTypes`), so the legacy row is actually fetched before the helper is applied; without this widening the helper alone couldn't have fixed it (the row would never have been queried), so this is the correct fix, not just a cosmetic wrapper.
-   - Verified the alias is one-directional (letter-sound does NOT get satisfied by letter-read; other required types never accept the alias) both via the new test and via my own probe (below) — matches the intent ("both measure the same competency" only in the legacy→new direction).
-
-## Files Reviewed (cumulative, both passes)
-- lib/thai/reachability.ts
-- lib/thai/types.ts
-- lib/thai/drill.ts
-- lib/thai/flashcards.ts
-- lib/thai/actions.ts
-- components/thai/drill/flashcard-session.tsx
-- components/thai/drill/drill-session.tsx (comparison baseline for the completion-race pattern)
-- app/thai/[unit]/drill/page.tsx
-- lib/thai/flashcard-mastery.test.ts (re-read this pass — new `isRequiredTypeMastered` test)
-- lib/thai/queries.ts, lib/thai/mastery.ts, lib/db/schema.ts (dependency check)
-- seed/thai/items.ts (unit-2 content shape check)
-- lib/thai/actions.ts, lib/thai/drill.ts, lib/thai/reachability.ts (re-read this pass — full diff of both fixes against origin/main)
+## Files Reviewed
+- `.claude/plans/active-plan.md`
+- `.claude/plans/implementation-summary.md`
+- `lib/thai/flashcards.ts`
+- `app/thai/[unit]/drill/page.tsx`
+- `lib/thai/actions.ts` (`submitFlashcardGrade`, `submitThaiAttempt`)
+- `lib/thai/reachability.ts` (full file)
+- `lib/thai/flashcard-mastery.test.ts`
+- `components/thai/lessons/consonant-table.tsx`
+- `seed/thai/items.ts` (`MID_CONSONANTS`, `HIGH_CONSONANTS`, `LOW_CONSONANTS_A/B`)
+- `seed/thai/types.ts` (`ConsonantItem.metadata.nameIpa`)
+- `components/thai/drill/flashcard-session.tsx`
+- `lib/thai/drill.ts` (`buildSubjectPool`, `buildDrillRound` — not in the plan's file list, reviewed anyway since it consumes `reachableDrillTypesForUnit`)
+- `lib/thai/queries.ts` (`getUnitSummaries`, spot-check only)
+- `scripts/seed-thai-db.ts` (spot-check of the seed-time invariants, not modified by this change)
+- `git log --oneline -10`, `git status`, `git stash show -p` for working-tree state
 
 ## Findings
 
 ### CRITICAL
-- None open. (Round 1: empty-queue crash in `flashcard-session.tsx` on clearing the last card — RESOLVED, see re-review pass above.)
+None.
+
+### HIGH
+None. The unlock-check-per-item fix in `submitFlashcardGrade` is correct (`summaries.find(s => s.unit === item.unit)`, `lib/thai/actions.ts:303`), and the structural guard (`!FLASHCARD_UNITS.has(item.unit) || item.kind !== "consonant" || !item.drillable`, `lib/thai/actions.ts:292`) correctly excludes the obsolete `ฃ` (unit 3, `drillable:false`) from self-graded submission. No regression for unit 2: its unlock lookup resolves to the same `summaries.find(s => s.unit === 2)` as before, just derived from `item.unit` instead of hardcoded.
 
 ### MEDIUM
-- None open. (Round 1: grandfather clause applied only to `unitMasteryStats`, inconsistent with `allReachableDrillTypesForItem` consumers — RESOLVED, see re-review pass above.)
+- **`lib/thai/drill.ts:313-330` (`buildSubjectPool`) has a stale, now-inconsistent unit range and comment left over from this generalization.** The comment says "Unit 2 is the flashcard pilot ... Only units 3-5 use this MCQ letter-sound/letter-class/audio-letter pool" and the code branches on `if (unit >= 3 && unit <= 5)` — both wrong since unit 3 is now a flashcard unit, matching `reachableDrillTypesForUnit`'s own (correctly updated) `unit >= 4 && unit <= 5` MCQ branch in `lib/thai/reachability.ts:242`.
+  - Currently harmless in production: `app/thai/[unit]/drill/page.tsx:54` gates `buildDrillRound` behind `isFlashcardUnit ? null : ...`, and `buildDrillRound`/`buildSubjectPool` are called from nowhere else in the codebase (verified via grep — only that one call site).
+  - But it is a real landmine: if this branch is ever exercised directly for unit 3 (a future refactor that removes/loosens the `isFlashcardUnit` gate, a QA/admin script, or a test that calls `buildDrillRound(learnerId, 3)` directly), it would build an MCQ round hardcoding `letter-sound`/`letter-class`/`audio-letter` as the subject's `drillTypes` — types `reachableDrillTypesForUnit(3, ...)` no longer offers for unit 3 (it now returns `letter-read` only). The round would render (since `expectedAnswerFor` doesn't consult the unit), but every submitted answer would then be rejected by `submitThaiAttempt`'s `unitOfferingDrillType(itemId, "letter-sound", ALL_THAI_ITEMS)` returning `null` (no drilled unit's session offers that pair for a unit-3 item anymore) — throwing "Drill type does not apply to this item" for every single answer. A confusing, hard-to-diagnose failure mode if it's ever triggered.
+  - The plan's own step-2 file list (`.claude/plans/active-plan.md:39-44`) never mentions `lib/thai/drill.ts`, so this is a genuine spec gap, not something the implementer skipped against instructions — but it should still be fixed: narrow the range to `unit >= 4 && unit <= 5` and update the comment, for consistency with `reachability.ts`'s single-source-of-truth branch and to remove the landmine.
 
-### LOW (carried forward, non-blocking)
-- **`lib/thai/actions.ts:265`** — the `item.kind !== "consonant"` check in `submitFlashcardGrade` is currently unreachable dead-code protection (every unit-2 item is `kind: "consonant"`, confirmed against `seed/thai/items.ts:26-34`); cheap, correct defense-in-depth, no action needed.
-- **`lib/thai/drill.ts:44-49`** (`"letter-read": ["consonant"]` in `VALID_KINDS_FOR_DRILL_TYPE`) — confirmed genuinely inert (no `case "letter-read"` in `expectedAnswerFor`, and `KNOWN_DRILL_TYPES` excludes it from `submitThaiAttempt`); no exploit path.
-- **No RTL/component test for the flashcard client loop.** The new `isRequiredTypeMastered` unit test is good, targeted coverage for the MEDIUM fix, but the CRITICAL fix (the `!current` guard) still has no automated test — the pure-function suite can't exercise React render timing. A React Testing Library test simulating "grade the last card with a delayed/mocked `getUnitProgressSnapshot`, assert no throw and 'Finishing…' or the summary eventually renders" would close this gap. Not blocking (I independently traced the render order by hand and consider the fix correct), but worth adding before this pilot gets more usage.
-- **`getUnitProgressSnapshot` failure path.** If that call rejects, `FlashcardSession` is stuck on "Finishing…" indefinitely with no retry/error UI — pre-existing pattern shared with `DrillSession`, not a regression from either fix, not blocking this review.
+### LOW
+- `components/thai/drill/flashcard-session.tsx:20-27` — the file-level comment still says "Unit 2 flashcard pilot" and "clearing the whole deck once takes unit 2 to 100% and unlocks unit 3", both stale now that the component is genuinely unit-agnostic (it correctly uses the `unit`/`summary.nextUnit` props everywhere in actual code). Comment-only, no functional impact.
+- `seed/thai/items.ts:38` — comment "Unit 3: High-class consonants (11; ฃ shown, not drilled)" is accurate; no issue, noted only because it's the one place worth double-checking the drillable/obsolete split against `reachableDrillTypesForUnit(3)`'s reachable-count of 10 (confirmed matching, see Commands Run).
 
 ## Assertions Checked
-- **A1 (self-report can't be abused to unlock beyond the rules): PASS** (unchanged from round 1 — this code path wasn't touched by either fix).
-- **A2 (unlock math: clearing all 9 → 100% → unit 3 unlocks; grandfather doesn't over/under-count the gate itself): PASS.** Re-verified independently this pass (probe below) against the refactored `isRequiredTypeMastered`-based `unitMasteryStats` — identical results to round 1 (unit 2: 100% max-achievable, grandfather test passes, cross-unit-only fixture correctly rejected).
-- **A3 (no dangling unit-2 MCQ code path): PASS** (unchanged).
-- **A4 (seed-time invariants still hold after the refactor): PASS** — re-ran the guard functions fresh against `ALL_THAI_ITEMS` post-fix (see Commands Run): all 13 drilled units still show 100% max-achievable / 0 orphans, `assertUnitMasteryScopingGuard` still passes.
-- **A5 (client loop correctness): PASS** — the `!current` guard closes the exact race identified in round 1; traced render ordering by hand (see re-review pass notes) and found no remaining path where `current.glyph` is dereferenced while `current` is `undefined`.
-- **New assertion this pass — grandfather consistency across all mastery-check call sites: PASS.** All three consumers (`unitMasteryStats`, `buildDrillRound` weight, `submitThaiAttempt` badge) now route through the single `isRequiredTypeMastered` definition; confirmed `submitThaiAttempt`'s DB query was also widened (`queryTypes`) so the legacy row is actually fetched, not just theoretically eligible for the helper.
+- A1 (no lingering `FLASHCARD_UNIT` singular references): PASS — grepped the whole repo; only the plan and implementation-summary markdown files (historical narrative) reference the old singular name, no source file does.
+- A2 (`submitFlashcardGrade` unlock check derives the unit from the graded item, not hardcoded; no unit-2 regression): PASS — `lib/thai/actions.ts:303` uses `item.unit`; traced that this resolves identically to the old hardcoded-2 lookup for unit-2 items.
+- A3 (`reachableDrillTypesForUnit`'s unit ranges have no gap/overlap: unit 3 flashcard-only, units 4-5 still MCQ): PASS — `unit === 2 || unit === 3` (flashcard) and `unit >= 4 && unit <= 5` (MCQ) are disjoint and contiguous with the rest of the unit-6-through-14 branches; independently reproduced via a standalone probe (see Commands Run) — unit 2 → `{letter-read}` only, unit 3 → `{letter-read}` only, unit 4 → `{letter-sound, letter-class, audio-letter}`.
+- A4 (tests genuinely exercise unit 3, not a copy-paste of unit-2 fixture data with the unit number swapped): PASS — `lib/thai/flashcard-mastery.test.ts`'s `ITEMS` fixture uses distinct ids (`consonant:u2`/`u3`/`u4`), distinct glyphs (ก/ข/ค), and distinct `finalIpa` values (`k`/`t`/`k`) per unit; the 6 new unit-3 tests are structurally separate assertions against that unit-3-specific fixture data, not parameterized duplicates of the unit-2 ones.
+- A5 (re-run `tsc`, `eslint`, `test` myself, not trust pasted output): PASS — all three re-run independently below, results match the implementer's claims exactly (42/42 tests, clean tsc, clean lint). Also re-ran `npm run build` (implementer claimed success; reproduced).
+- Additional assertion I added — HIGH_CONSONANTS `nameIpa` values are non-empty, formatted consistently with `MID_CONSONANTS` (macron/grave/circumflex/acute/caron diacritics + `ː` length marker), and free of copy-paste duplication: PASS — scripted a duplicate-value scan across all `nameIpa: "..."` occurrences in `seed/thai/items.ts`; 30 total, 0 duplicates. I am not a Thai phonology expert and did not independently re-derive each transcription; the implementer's own handoff already flags two cross-checks against unit-6 syllable data (ขา → `kʰǎː`, ฝา → `fǎː`) and recommends owner spot-check, which I'd defer to as well.
 
-## Commands Run (this re-review pass — fresh, not trusting the coordinator's claims)
-- `npm test` — exit 0:
+## Commands Run
+All re-run fresh by me (not the implementer's pasted output), from repo root, current working tree (uncommitted generalization changes on top of the two cherry-picked commits `513d9a2`/`3b6724c`).
+
+- `npx tsc --noEmit` — exit 0
   ```
-  ✔ isRequiredTypeMastered: legacy letter-sound satisfies letter-read, nothing else does (0.1082ms)
+  (no output — clean)
+  ```
+- `npm run lint` — exit 0
+  ```
+  > language-learning-web-app@0.1.0 lint
+  > eslint
+  ```
+- `npm test` — exit 0
+  ```
+  ✔ unit 2 is reachable through letter-read ONLY (not the MCQ trio) (1.0304ms)
+  ✔ unit 3 is reachable through letter-read ONLY (generalized from the unit-2 pilot) (0.0843ms)
+  ✔ units 4-5 keep the original letter-sound/letter-class/audio-letter MCQ trio (0.0851ms)
   ...
-  ℹ tests 37
-  ℹ pass 37
+  ℹ tests 42
+  ℹ pass 42
   ℹ fail 0
+  ℹ duration_ms 231.379
   ```
-  Agrees with the coordinator's claimed 37/37 (36 + 1 new helper test).
-- `npx tsc --noEmit` — exit 0, no output. Agrees with coordinator's claim.
-- `npx eslint app/thai/[unit]/drill/page.tsx components/thai/drill/flashcard-session.tsx lib/thai/actions.ts lib/thai/drill.ts lib/thai/flashcards.ts lib/thai/reachability.ts lib/thai/types.ts lib/thai/flashcard-mastery.test.ts` — exit 0, no output. Agrees with coordinator's claim.
-- Independent probe (scratch `.ts` file inside the repo for import resolution, deleted after use; confirmed via `git status --porcelain` that nothing but the reviewed diff remains): re-ran `maxAchievablePercentForUnit`/`findUnreachableDrillableIds` for all 13 `DRILLED_UNITS` plus `assertUnitMasteryScopingGuard`, and directly exercised `isRequiredTypeMastered`:
+  Matches the implementer's claimed 42/42. No disagreement.
+- `npm run build` — exit 0
   ```
-  unit 2: maxAchievable=100% orphans=0
-  unit 3: maxAchievable=100% orphans=0
-  ...
-  unit 14: maxAchievable=100% orphans=0
+  ✓ Compiled successfully in 3.7s
+    Running TypeScript ...
+    Finished TypeScript in 3.9s ...
+  ✓ Generating static pages using 10 workers (6/6) in 482ms
+    Finalizing page optimization ...
+  Route (app)
+  ┌ ƒ /
+  ├ ○ /_not-found
+  ├ ƒ /api/auth/[...nextauth]
+  ├ ƒ /stats
+  ├ ƒ /thai/[unit]/drill
+  ├ ƒ /thai/[unit]/lesson
+  └ ƒ /thai/stats
+  ```
+  Matches the implementer's claimed success. No disagreement.
+- Standalone probe (own scratch `.mjs`, `file://`-imported `lib/thai/reachability.ts` + `seed/thai/items.ts` directly via `tsx`, independent of the implementer's own probe) — exit 0
+  ```
+  --- assertUnitMasteryScopingGuard (unit 2 + 3) ---
   [reachability] OK — unitMasteryStats correctly scopes unit 2's own percentage to its own reachable drill types (M13/A6 unlock-math regression guard).
-  letter-read<-letter-sound: true
-  letter-sound<-letter-read (should be false): false
-  letter-final<-letter-sound (should be false): false
-  ALL GUARDS OK
+  [reachability] OK — unitMasteryStats correctly scopes unit 3's own percentage to its own reachable drill types (M13/A6 unlock-math regression guard).
+  --- reachableDrillTypesForUnit(2) sample ---
+  size: 9 sample types: [ 'letter-read' ]
+  --- reachableDrillTypesForUnit(3) sample ---
+  size: 10 sample types: [ 'letter-read' ]
+  --- reachableDrillTypesForUnit(4) sample ---
+  size: 12 sample types: [ 'letter-sound', 'letter-class', 'audio-letter' ]
+  --- maxAchievablePercentForUnit for all DRILLED_UNITS ---
+  unit 2: max% = 100, orphans = 0
+  unit 3: max% = 100, orphans = 0
+  unit 4: max% = 100, orphans = 0
+  unit 5: max% = 100, orphans = 0
+  unit 6: max% = 100, orphans = 0
+  unit 7: max% = 100, orphans = 0
+  unit 8: max% = 100, orphans = 0
+  unit 9: max% = 100, orphans = 0
+  unit 10: max% = 100, orphans = 0
+  unit 11: max% = 100, orphans = 0
+  unit 12: max% = 100, orphans = 0
+  unit 13: max% = 100, orphans = 0
+  unit 14: max% = 100, orphans = 0
+  DONE
   ```
-  No DB touched (pure in-memory functions); no `next build` run, per instruction.
+  Confirms the implementer's own probe output independently (unit 3 reachable count of 10, 100% achievable, unit-2/3 scoping guard both pass, no unreachable-drillable-item orphans in any drilled unit).
+- Duplicate-`nameIpa` scan (own ad hoc `node -e`, not from the implementer) — exit 0
+  ```
+  duplicate nameIpa values: []
+  total nameIpa count: 30
+  ```
+- `git log --oneline -10`, `git status`, `git stash show -p stash@{0} --stat` — confirmed working tree state matches the handoff's description (two cherry-picked commits `513d9a2`/`3b6724c` on top of `d2fd41e`, generalization changes uncommitted, one stash entry containing only unrelated pre-existing plan/memory-doc changes, not this feature's logic).
+
+No disagreement found between my re-run results and the implementer's pasted output in `implementation-summary.md`.
 
 ## Residual Risk
-- No RTL/component test covers the exact CRITICAL bug class (async-transition render race); recommend adding one, not blocking.
-- `getUnitProgressSnapshot` failure path has no error handling in either `FlashcardSession` or `DrillSession` — pre-existing gap, not introduced by these fixes, not blocking.
-- `submitFlashcardGrade`'s self-report trust model (no server-side "did you actually flip the card" check) remains an intentional, documented design choice, not a gap.
-- This worktree's `.claude/plans/` previously held stale, unrelated glass-redesign plan content; there is still no feature-local `active-plan.md` for this pilot to check assertions against beyond the task brief.
+- `lib/thai/drill.ts`'s stale `unit >= 3 && unit <= 5` MCQ branch/comment (MEDIUM finding above) should be fixed for consistency, even though it is dead code today.
+- Unit-3 `nameIpa` transcription accuracy is not mechanically verifiable by this review (or by the implementer, per their own handoff) — owner spot-check is still the only real check on phonological correctness, per the plan's own caveat.
+- Unit-3 audio (`audioUrl`) remains largely ungenerated — explicitly called out by the plan as expected/out-of-scope, and `FlashcardSession` already degrades gracefully (omits the "Hear it" button) when absent. No code issue, just a content gap.
+- One pre-existing stash entry (`stash@{0}`) remains un-dropped per the implementer's note (blocked by the repo's safety hook without explicit user approval) — confirmed its contents are unrelated to this feature (plan/memory-doc changes only) and already reflected in the working tree, so it is inert, not a hidden risk to this change.
+- Manual `/thai/3/drill` walkthrough (flip/reveal, "Missed it" requeue, deck-clear celebration) from the plan's own Verification section was not performed by this review (no running dev server / DB session available in this review pass) — recommend the owner do this pass, or route it through qa-engineer, before considering the feature fully verified end-to-end.
 
 ## Procedure Compliance
-- Plan consulted before review: yes (active-plan.md read both passes; found unrelated/stale, noted)
-- Implementation summary read: yes (both passes; round 2's updated implementation-summary.md read and cross-checked against the actual diff rather than trusted at face value)
-- Review summary written: yes (this file, updated in place for the re-review pass)
+- Plan consulted before review: yes
+- Implementation summary read: yes
+- Review summary written: yes

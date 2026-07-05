@@ -13,6 +13,7 @@ export function ConsonantTable({ items }: { items: ConsonantItem[] }) {
             <tr className="border-b border-border-base bg-background text-xs uppercase tracking-wide text-foreground-muted">
               <th className="px-3 py-2 text-left">Letter</th>
               <th className="px-3 py-2 text-left">Name</th>
+              <th className="px-3 py-2 text-left">Name IPA</th>
               <th className="px-3 py-2 text-left">Meaning</th>
               <th className="px-3 py-2 text-left">Class</th>
               <th className="px-3 py-2 text-left">Initial</th>
@@ -53,6 +54,9 @@ export function ConsonantTable({ items }: { items: ConsonantItem[] }) {
                   )}
                 </td>
                 <td className="font-thai px-3 py-2">{item.metadata.name}</td>
+                <td className="px-3 py-2 font-mono text-foreground-muted">
+                  {item.metadata.nameIpa ? `[${item.metadata.nameIpa}]` : "—"}
+                </td>
                 <td className="px-3 py-2 text-foreground-muted">{item.metadata.meaning}</td>
                 <td className="px-3 py-2">
                   <ClassBadge consonantClass={item.consonantClass} />
