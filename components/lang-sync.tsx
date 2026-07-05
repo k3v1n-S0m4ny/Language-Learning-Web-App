@@ -10,6 +10,9 @@ import { useEffect } from "react";
 export function LangSync({ activeMode }: { activeMode: "mandarin" | "thai" }) {
   useEffect(() => {
     document.documentElement.dataset.lang = activeMode;
+    // Notify same-tab subscribers (the bottom nav reads mode from this dataset
+    // via useSyncExternalStore) — a dataset write emits no native event.
+    window.dispatchEvent(new Event("langchange"));
   }, [activeMode]);
   return null;
 }

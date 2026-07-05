@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 type StatCardProps = {
   label: string;
@@ -7,6 +7,10 @@ type StatCardProps = {
   hero?: boolean;
   accent?: boolean;
   className?: string;
+  // Server-safe passthrough for the entrance-stagger animation-delay (Phase 3
+  // list stagger) — the stats pages set `animate-slide-up-fade` via className
+  // and the per-tile delay here.
+  style?: CSSProperties;
 };
 
 // Glass-language metric card (Phase 3 stats hero + tiles). Server-safe shell
@@ -34,9 +38,11 @@ export function StatCard({
   hero = false,
   accent = false,
   className = "",
+  style,
 }: StatCardProps) {
   return (
     <div
+      style={style}
       className={`flex flex-col gap-1 rounded-[var(--r-lg)] border border-border-base bg-surface shadow-[var(--glass-shadow)] ${
         hero ? "gap-2 p-6" : "p-4"
       } ${className}`}

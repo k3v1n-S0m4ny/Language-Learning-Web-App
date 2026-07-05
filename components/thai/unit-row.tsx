@@ -14,8 +14,8 @@ export function UnitRow({ summary }: { summary: UnitSummary }) {
 
   return (
     <div
-      className={`glass flex items-center gap-3 rounded-[var(--r-lg)] p-3 sm:gap-4 sm:p-4 ${
-        locked ? "opacity-60" : ""
+      className={`glass flex items-center gap-3 rounded-[var(--r-lg)] p-3 shadow-[var(--glass-shadow)] transition-shadow sm:gap-4 sm:p-4 ${
+        locked ? "opacity-60" : "hover:shadow-[0_12px_40px_rgba(23,23,23,0.18)]"
       }`}
     >
       <ProgressRing percent={built ? percentMastered : 0} locked={locked} />
@@ -39,16 +39,28 @@ export function UnitRow({ summary }: { summary: UnitSummary }) {
         <div className="flex shrink-0 gap-2">
           <Link
             href={`/thai/${unit}/lesson`}
-            className="inline-flex min-h-[2.75rem] items-center rounded-[var(--r-pill)] px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-[var(--glass-bg-strong)] sm:min-h-[auto]"
+            className="tap-press group inline-flex min-h-[2.75rem] items-center gap-0.5 rounded-[var(--r-pill)] px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-[var(--glass-bg-strong)] sm:min-h-[auto]"
           >
             Lesson
+            <span
+              aria-hidden
+              className="transition-transform group-hover:translate-x-0.5"
+            >
+              ›
+            </span>
           </Link>
           {!lessonOnly && unlocked && (
             <Link
               href={`/thai/${unit}/drill`}
-              className="inline-flex min-h-[2.75rem] items-center rounded-[var(--r-pill)] bg-accent px-3 py-1.5 text-xs font-medium text-on-earthy transition-opacity hover:opacity-90 sm:min-h-[auto]"
+              className="tap-press group inline-flex min-h-[2.75rem] items-center gap-0.5 rounded-[var(--r-pill)] bg-accent px-3 py-1.5 text-xs font-medium text-on-earthy transition-opacity hover:opacity-90 sm:min-h-[auto]"
             >
               {percentMastered >= 100 ? "Repractice" : "Drill"}
+              <span
+                aria-hidden
+                className="transition-transform group-hover:translate-x-0.5"
+              >
+                ›
+              </span>
             </Link>
           )}
         </div>

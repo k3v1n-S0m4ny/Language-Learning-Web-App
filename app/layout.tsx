@@ -3,6 +3,8 @@ import { Geist, Geist_Mono, Noto_Sans_Thai } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import { AmbientMesh } from "@/components/ambient-mesh";
+import { BottomNav } from "@/components/bottom-nav";
+import { SignOutButton } from "@/components/sign-out-button";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -62,6 +64,11 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <AmbientMesh />
         {children}
+        {/* Mobile-only persistent nav (Phase 4). Mounted globally so it renders
+            on every route; self-resolves mode from <html data-lang>, so the
+            server layout needs no per-route query. SignOutButton is a server
+            component (sign-out server action), passed in as a prop. */}
+        <BottomNav signOut={<SignOutButton variant="ghost" />} />
       </body>
     </html>
   );
