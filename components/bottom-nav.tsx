@@ -32,7 +32,14 @@ function getLang(): ActiveMode {
 
 type TabKey = "study" | "progress" | "menu";
 
-export function BottomNav({ signOut }: { signOut: ReactNode }) {
+export function BottomNav({
+  signOut,
+  showModeToggle = true,
+}: {
+  signOut: ReactNode;
+  /** False hides the Mandarin/Thai switch (restricted testers have no Mandarin). */
+  showModeToggle?: boolean;
+}) {
   const pathname = usePathname();
   const reduceMotion = useReducedMotion();
   const sessionActive = useSessionActive();
@@ -95,9 +102,11 @@ export function BottomNav({ signOut }: { signOut: ReactNode }) {
           className="glass glass-strong fixed inset-x-3 bottom-[4.75rem] z-40 flex flex-col gap-4 rounded-[var(--r-lg)] p-4 animate-slide-up-fade sm:hidden"
           style={{ marginBottom: "var(--safe-bottom)" }}
         >
-          <MenuRow label="Language">
-            <ModeToggle activeMode={mode} />
-          </MenuRow>
+          {showModeToggle && (
+            <MenuRow label="Language">
+              <ModeToggle activeMode={mode} />
+            </MenuRow>
+          )}
           <MenuRow label="Theme">
             <ThemeToggle />
           </MenuRow>

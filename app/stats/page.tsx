@@ -1,5 +1,7 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { isRestrictedLearner } from "@/lib/access";
 import { LangSync } from "@/components/lang-sync";
 import { getLearnersStats } from "@/lib/review/stats";
 import { ReviewsChart } from "@/components/stats/reviews-chart";
@@ -16,6 +18,11 @@ export default async function StatsPage() {
   const session = await auth();
   if (!session?.user?.id) {
     return null;
+  }
+  // This page shows every learner's Mandarin progress side by side — restricted
+  // testers have no Mandarin access, so send them to the Thai progress view.
+  if (isRestrictedLearner(session.user.email)) {
+    redirect("/thai/stats");
   }
 
   const learners = await getLearnersStats(new Date());

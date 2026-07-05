@@ -3,6 +3,7 @@
 import { refresh } from "next/cache";
 import { and, eq, inArray, sql } from "drizzle-orm";
 import { auth } from "@/auth";
+import { isRestrictedLearner } from "@/lib/access";
 import { db } from "@/lib/db";
 import { learnerSettings, thaiAttempts, thaiItems, thaiProgress } from "@/lib/db/schema";
 import { ALL_THAI_ITEMS, UNIT_1_LESSON_MARKER_ID } from "@/seed/thai/items";
@@ -52,12 +53,19 @@ export async function setActiveMode(mode: ActiveMode) {
     throw new Error("Invalid mode");
   }
 
+  // Restricted testers are scoped to Read-Thai. This Server Action is reachable
+  // by direct POST, so coerce rather than trust: their mode can never become
+  // "mandarin", regardless of what the client sends.
+  const effectiveMode: ActiveMode = isRestrictedLearner(session.user?.email)
+    ? "thai"
+    : mode;
+
   await db
     .insert(learnerSettings)
-    .values({ learnerId, activeMode: mode })
+    .values({ learnerId, activeMode: effectiveMode })
     .onConflictDoUpdate({
       target: learnerSettings.learnerId,
-      set: { activeMode: mode },
+      set: { activeMode: effectiveMode },
     });
 
   refresh();

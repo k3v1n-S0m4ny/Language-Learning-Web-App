@@ -14,12 +14,15 @@ export function TopBar({
   learnerName,
   statsHref,
   receded = false,
+  showModeToggle = true,
 }: {
   activeMode: ActiveMode;
   learnerName: string | null | undefined;
   statsHref: string;
   /** True while a Card/drill is actively being studied — dims the bar. */
   receded?: boolean;
+  /** False hides the Mandarin/Thai switch (restricted testers have no Mandarin). */
+  showModeToggle?: boolean;
 }) {
   return (
     <header
@@ -36,7 +39,7 @@ export function TopBar({
         {learnerName ? `, ${learnerName}` : ""}
       </span>
       <span className="hidden flex-1 sm:block" />
-      <ModeToggle activeMode={activeMode} />
+      {showModeToggle && <ModeToggle activeMode={activeMode} />}
       <ThemeToggle />
       <Link
         href={statsHref}

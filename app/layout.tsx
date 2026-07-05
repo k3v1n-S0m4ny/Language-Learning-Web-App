@@ -8,6 +8,8 @@ import {
 } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
+import { auth } from "@/auth";
+import { isRestrictedLearner } from "@/lib/access";
 import { AmbientMesh } from "@/components/ambient-mesh";
 import { BottomNav } from "@/components/bottom-nav";
 import { SignOutButton } from "@/components/sign-out-button";
@@ -74,11 +76,16 @@ export const metadata: Metadata = {
   description: "Private Chinese spaced-repetition flashcards.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Restricted testers have no Mandarin flow — hide the mode toggle in the
+  // global mobile nav. Server-side guards enforce the scoping regardless.
+  const session = await auth();
+  const restricted = isRestrictedLearner(session?.user?.email);
+
   return (
     <html
       lang="en"
@@ -95,7 +102,7 @@ export default function RootLayout({
             on every route; self-resolves mode from <html data-lang>, so the
             server layout needs no per-route query. SignOutButton is a server
             component (sign-out server action), passed in as a prop. */}
-        <BottomNav signOut={<SignOutButton variant="ghost" />} />
+        <BottomNav signOut={<SignOutButton variant="ghost" />} showModeToggle={!restricted} />
       </body>
     </html>
   );

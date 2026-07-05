@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import { isRestrictedLearner } from "@/lib/access";
 import { ensureLearnerSettings, getStudyScreenData } from "@/lib/review/queries";
 import { EmptyState } from "@/components/empty-state";
 import { LangSync } from "@/components/lang-sync";
@@ -21,12 +22,15 @@ export default async function Home() {
   }
 
   const settings = await ensureLearnerSettings(learnerId);
+  // Restricted testers are scoped to Read-Thai — always show the Thai home,
+  // whatever their stored active_mode is, so they never reach the Mandarin flow.
+  const restricted = isRestrictedLearner(learner?.email);
 
-  if (settings.activeMode === "thai") {
+  if (restricted || settings.activeMode === "thai") {
     return (
       <>
         <LangSync activeMode="thai" />
-        <ThaiHome learnerId={learnerId} learnerName={learner?.name} />
+        <ThaiHome learnerId={learnerId} learnerName={learner?.name} restricted={restricted} />
       </>
     );
   }

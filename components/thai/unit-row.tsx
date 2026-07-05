@@ -8,9 +8,18 @@ import { ProgressRing } from "./progress-ring";
 // radius; Drill CTA uses the Thai accent (saffron via [data-lang="thai"]);
 // Lesson stays a quiet glass/ghost link. All existing links/lessonOnly/
 // unlocked/Repractice logic preserved verbatim.
-export function UnitRow({ summary }: { summary: UnitSummary }) {
+export function UnitRow({
+  summary,
+  lockedReason,
+}: {
+  summary: UnitSummary;
+  /** When set, force this row locked with this reason and hide its CTAs
+   *  (used to gate units above a restricted tester's ceiling). */
+  lockedReason?: string;
+}) {
   const { unit, title, built, unlocked, lessonOnly, percentMastered } = summary;
-  const locked = !built || !unlocked;
+  const forceLocked = Boolean(lockedReason);
+  const locked = forceLocked || !built || !unlocked;
 
   return (
     <div
@@ -18,24 +27,25 @@ export function UnitRow({ summary }: { summary: UnitSummary }) {
         locked ? "opacity-60" : "hover:shadow-[0_12px_40px_rgba(23,23,23,0.18)]"
       }`}
     >
-      <ProgressRing percent={built ? percentMastered : 0} locked={locked} />
+      <ProgressRing percent={built && !forceLocked ? percentMastered : 0} locked={locked} />
 
       <div className="min-w-0 flex-1">
         <div className="text-xs font-medium uppercase tracking-wide text-foreground-muted">
           Unit {unit}
         </div>
         <div className="truncate text-sm font-semibold text-foreground">{title}</div>
-        {!built && (
+        {forceLocked ? (
+          <div className="mt-0.5 text-xs text-foreground-muted">{lockedReason}</div>
+        ) : !built ? (
           <div className="mt-0.5 text-xs text-foreground-muted">Coming soon</div>
-        )}
-        {built && !unlocked && (
+        ) : !unlocked ? (
           <div className="mt-0.5 text-xs text-foreground-muted">
             Locked — reach 90% on the previous unit
           </div>
-        )}
+        ) : null}
       </div>
 
-      {built && (
+      {built && !forceLocked && (
         <div className="flex shrink-0 gap-2">
           <Link
             href={`/thai/${unit}/lesson`}

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { auth } from "@/auth";
+import { isRestrictedLearner, RESTRICTED_THAI_MAX_UNIT } from "@/lib/access";
 import { buildDrillRound } from "@/lib/thai/drill";
 import { buildFlashcardDeck, FLASHCARD_UNIT, newShuffleSeed } from "@/lib/thai/flashcards";
 import { getUnitSummaries } from "@/lib/thai/queries";
@@ -26,6 +27,12 @@ export default async function ThaiDrillPage({
   const session = await auth();
   const learnerId = session?.user?.id;
   if (!learnerId) return null;
+
+  // Restricted testers are capped at Thai unit 2 while units 3+ are under
+  // construction — higher units don't exist for them.
+  if (isRestrictedLearner(session.user?.email) && unit > RESTRICTED_THAI_MAX_UNIT) {
+    notFound();
+  }
 
   const summaries = await getUnitSummaries(learnerId);
   const current = summaries.find((s) => s.unit === unit);
