@@ -59,7 +59,7 @@ export default async function ThaiStatsPage() {
   const unitsWithData = stats.accuracyByUnit.length;
 
   return (
-    <main className="min-h-dvh px-6 py-8">
+    <main className="min-h-dvh page-gutter">
       <LangSync activeMode="thai" />
       <div className="mx-auto mb-8 flex max-w-3xl items-center justify-between gap-4">
         <h1 className="text-display text-foreground">Read Thai — Progress</h1>
@@ -81,7 +81,7 @@ export default async function ThaiStatsPage() {
           sub="cumulative"
         />
 
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 [&>*:last-child]:col-span-2 sm:[&>*:last-child]:col-span-1">
           <StatCard label="Streak" value={`${currentStreak}d`} />
           <StatCard label="Drills (30d)" value={drillAttempts30d} />
           <StatCard label="Units drilled" value={unitsWithData} />

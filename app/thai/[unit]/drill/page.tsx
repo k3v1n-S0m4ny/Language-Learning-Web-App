@@ -31,7 +31,7 @@ export default async function ThaiDrillPage({
 
   if (!current?.unlocked) {
     return (
-      <main className="mx-auto flex min-h-dvh max-w-2xl flex-col items-center justify-center gap-4 px-6 py-8 text-center">
+      <main className="mx-auto flex min-h-dvh max-w-2xl flex-col items-center justify-center gap-4 page-gutter text-center">
         <LangSync activeMode="thai" />
         <p className="text-sm text-foreground-muted">
           Unit {unit} is still locked — reach 90% on the previous unit first.
@@ -49,7 +49,7 @@ export default async function ThaiDrillPage({
   const round = await buildDrillRound(learnerId, unit);
 
   return (
-    <main className="mx-auto flex min-h-dvh max-w-2xl flex-col gap-6 px-6 py-8">
+    <main className="mx-auto flex min-h-dvh max-w-2xl flex-col gap-6 page-gutter">
       <LangSync activeMode="thai" />
       <div className="flex items-center justify-between gap-4">
         <Link

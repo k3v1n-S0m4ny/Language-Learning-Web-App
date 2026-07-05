@@ -27,7 +27,7 @@ export function WordChip({
   const [glossShown, setGlossShown] = useState(false);
 
   return (
-    <div className="glass relative flex min-w-[5.5rem] flex-col items-center gap-1 rounded-[var(--r-md)] px-3 py-2.5 animate-pop-in">
+    <div className="glass relative flex min-w-[4.5rem] flex-col items-center gap-1 rounded-[var(--r-md)] px-2.5 py-2.5 animate-pop-in sm:min-w-[5.5rem] sm:px-3">
       <div className="absolute right-1.5 top-1.5">
         <AudioButton url={word.audioUrl} label={`Play ${word.hanzi}`} size="sm" />
       </div>

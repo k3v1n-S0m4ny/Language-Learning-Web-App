@@ -51,7 +51,7 @@ export function PhraseSplitQuestion({ phrase, correct, disabled, onSubmit }: Pro
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex flex-wrap items-center justify-center gap-0 rounded-[var(--r-lg)] border border-border-base bg-surface p-8">
+      <div className="flex flex-wrap items-center justify-center gap-0 rounded-[var(--r-lg)] border border-border-base bg-surface p-4 sm:p-8">
         {phrase.chars.map((char, i) => (
           <span key={i} className="flex items-center">
             {i > 0 && (
@@ -61,7 +61,7 @@ export function PhraseSplitQuestion({ phrase, correct, disabled, onSubmit }: Pro
                 onClick={() => toggle(i)}
                 aria-label={`Toggle syllable boundary before position ${i}`}
                 aria-pressed={selected.has(i)}
-                className={`mx-0.5 h-8 w-2 shrink-0 rounded-[var(--r-pill)] transition-colors disabled:cursor-default ${
+                className={`mx-0.5 box-content h-6 w-0.5 shrink-0 rounded-[var(--r-pill)] bg-clip-content px-[11px] py-[10px] transition-colors disabled:cursor-default sm:box-border sm:h-8 sm:w-2 sm:px-0 sm:py-0 sm:bg-clip-border ${
                   checked
                     ? correctSet.has(i) && selected.has(i)
                       ? "bg-success"

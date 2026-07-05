@@ -36,7 +36,7 @@ export function RatingButtons({
 
   return (
     <div
-      className="grid w-full max-w-md grid-cols-4 gap-2 animate-slide-up-fade"
+      className="grid w-full max-w-md grid-cols-2 gap-2 animate-slide-up-fade sm:grid-cols-4"
       role="group"
       aria-label="Rate recall"
     >
@@ -48,10 +48,10 @@ export function RatingButtons({
           onClick={() => onRate(value)}
           whileTap={reduceMotion ? undefined : { scale: 0.92 }}
           transition={{ type: "spring", stiffness: 500, damping: 30 }}
-          className={`rate-press flex flex-col items-center gap-0.5 rounded-[var(--r-sm)] px-2 py-2.5 text-sm font-semibold text-on-earthy shadow-[inset_0_1px_0_0_rgba(255,255,255,0.28)] disabled:opacity-40 ${bg}`}
+          className={`rate-press flex flex-col items-center gap-0.5 rounded-[var(--r-sm)] px-2 py-3 text-sm font-semibold text-on-earthy shadow-[inset_0_1px_0_0_rgba(255,255,255,0.28)] disabled:opacity-40 sm:py-2.5 ${bg}`}
         >
           <span>{label}</span>
-          <span className="text-xs font-normal tabular-nums opacity-80">{hints[hintKey]}</span>
+          <span className="whitespace-nowrap text-xs font-normal tabular-nums opacity-80">{hints[hintKey]}</span>
         </motion.button>
       ))}
     </div>

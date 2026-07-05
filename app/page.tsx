@@ -35,7 +35,7 @@ export default async function Home() {
   const inSession = Boolean(card && hints);
 
   return (
-    <main className="flex min-h-dvh flex-col items-center gap-6 px-6 py-8">
+    <main className="flex min-h-dvh flex-col items-center gap-6 page-gutter">
       <LangSync activeMode="mandarin" />
       <TopBar
         activeMode="mandarin"

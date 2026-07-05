@@ -499,6 +499,16 @@ body {
   font-weight: 600;
 }
 
+/* Responsive page gutter: tighter rhythm on phones; desktop gutter restored at >=640px. */
+@utility page-gutter {
+  padding-inline: 1rem;
+  padding-block: 1.5rem;
+  @media (width >= 40rem) {
+    padding-inline: 1.5rem;
+    padding-block: 2rem;
+  }
+}
+
 /* Liquid-glass recipe for FLOATING CHROME. The inset top highlight is the
    specular edge that keeps a "flat" glass surface legible on dark (a11y note).
    Reading/content surfaces must NOT use this — they stay solid var(--surface). */

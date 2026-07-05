@@ -18,14 +18,14 @@ export function NumeralsLesson({ numerals }: { numerals: NumeralItem[] }) {
           everyday life, but the Thai digits still appear on documents,
           prices, signs, and banknotes, so they are worth a quick look.
         </p>
-        <div className="grid grid-cols-5 gap-3 sm:grid-cols-10">
+        <div className="grid grid-cols-5 gap-2 sm:grid-cols-10 sm:gap-3">
           {sorted.map((n) => (
             <div
               key={n.id}
-              className="flex flex-col items-center gap-1 rounded-[var(--r-lg)] border border-border-base bg-background p-3"
+              className="flex flex-col items-center gap-1 rounded-[var(--r-lg)] border border-border-base bg-background p-2 sm:p-3"
             >
               {/* Prominent-ink Thai digit glyph — ~1.6x a11y bump. */}
-              <span className="font-thai text-5xl text-foreground">{n.display}</span>
+              <span className="font-thai text-4xl text-foreground sm:text-5xl">{n.display}</span>
               <span className="text-xs font-semibold text-foreground-muted">{n.metadata.value}</span>
             </div>
           ))}

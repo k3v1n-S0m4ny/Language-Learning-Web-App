@@ -23,7 +23,7 @@ export default async function StatsPage() {
   return (
     // No bg-background here (Phase 3) — the global ambient mesh shows
     // through, matching app/page.tsx.
-    <main className="min-h-dvh px-6 py-8">
+    <main className="min-h-dvh page-gutter">
       <LangSync activeMode="mandarin" />
       {/* Header with back link (A1) */}
       <div className="mx-auto mb-8 flex max-w-5xl items-center justify-between gap-4">
@@ -72,7 +72,7 @@ function LearnerColumn({ stats }: { stats: LearnerStats }) {
       />
 
       {/* Cards mature / streak / leech count (A4) */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 [&>*:last-child]:col-span-2 sm:[&>*:last-child]:col-span-1">
         <StatCard label="Mature" value={stats.mature} />
         <StatCard label="Streak" value={`${stats.streak}d`} />
         <StatCard label="Leeches" value={stats.leechCount} />

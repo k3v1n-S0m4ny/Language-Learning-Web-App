@@ -12,7 +12,7 @@ export function SignOutButton({
 }) {
   const className =
     variant === "ghost"
-      ? "rounded-[var(--r-pill)] px-3 py-1.5 text-xs font-medium text-foreground-muted transition-colors hover:bg-[var(--glass-bg-strong)] hover:text-foreground active:scale-95"
+      ? "whitespace-nowrap rounded-[var(--r-pill)] px-3 py-1.5 text-xs font-medium text-foreground-muted transition-colors hover:bg-[var(--glass-bg-strong)] hover:text-foreground active:scale-95"
       : "rounded-full border border-border-base px-4 py-1.5 text-xs font-medium text-foreground-muted transition-colors hover:bg-surface active:scale-95";
 
   return (

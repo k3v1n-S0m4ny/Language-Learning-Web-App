@@ -64,7 +64,7 @@ export default async function ThaiLessonPage({
   const toneWords = unit === 9 ? await getToneWords() : null;
 
   return (
-    <main className="mx-auto flex min-h-dvh max-w-3xl flex-col gap-6 px-6 py-8">
+    <main className="mx-auto flex min-h-dvh max-w-3xl flex-col gap-6 page-gutter">
       <LangSync activeMode="thai" />
       <div className="flex items-center justify-between gap-4">
         <Link

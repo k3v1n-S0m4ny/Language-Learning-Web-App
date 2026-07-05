@@ -17,7 +17,7 @@ export async function ThaiHome({
   const units = await getUnitSummaries(learnerId);
 
   return (
-    <main className="flex min-h-dvh flex-col items-center gap-8 px-6 py-8">
+    <main className="flex min-h-dvh flex-col items-center gap-8 page-gutter">
       <TopBar activeMode="thai" learnerName={learnerName} statsHref="/thai/stats" />
 
       <div className="flex w-full max-w-2xl flex-col gap-3">
