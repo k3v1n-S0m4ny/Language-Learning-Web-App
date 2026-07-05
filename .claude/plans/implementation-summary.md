@@ -1,46 +1,66 @@
-# Implementation Summary — Glass Redesign, Phase 0 (Foundation)
+# Implementation Summary — Mobile-First UX-Polish Pass
 
-Branch: `glass-redesign` (off `main`). Implementer: main agent (direct build; design-token authoring). Read `active-plan.md` (Phase-0 slice) + `act-like-a-designer-toasty-yao.md` (locked spec) before building.
+Branch: `glass-redesign` (not committed — per plan's "do not commit unless the owner asks").
+Plan: `C:\Users\User\.claude\plans\last-time-we-redesigned-cozy-codd.md` (source of truth). Built in phase order 0→4.
+(Supersedes the earlier mobile-layout-balance-pass summary, which is committed as `e58cd38` and captured in `mobile-ux-polish.handoff.md`.)
 
-## Completed
-- **Token system** (`app/globals.css`): migrated dark mode from `@media prefers-color-scheme` to **`[data-theme="dark"]`** on `<html>`, with a `:root:not([data-theme])` media fallback for no-JS. Layered on (no existing token removed): radius scale `--r-sm..--r-xl/--r-pill`; easing/spring tokens (`--ease-spring/-out/-soft`); display scale (`--text-display`, `--tracking-display`); light+dark **glass tokens** (`--glass-bg/-strong/-brd/-spec/-shadow/-blur/-saturate`); Mandarin tone hues (`--tone-1..4`, neutral); Read-Thai restyled class+tone hues (light values + brighter `[data-theme="dark"]` values); per-language accents via `[data-lang="mandarin"|"thai"]`. Wired into `@theme inline`: `--font-hanzi` (with system-CJK fallback stack), `--color-accent/-2/-3`, `--radius-pill`. Added utilities: `.text-display`, `.glass`, `.glass-strong`, and the reduced-motion-gated `@keyframes mesh-drift`.
-- **No-flash theme** (`app/layout.tsx`): dependency-free inline `<script>` in `<head>` sets `[data-theme]` from `localStorage` else OS pref before paint; `<html suppressHydrationWarning>`.
-- **LXGW WenKai (Kai) hanzi font**: `scripts/subset-hanzi-font.ts` reads the deck's distinct hanzi from the **production DB (READ-ONLY** — `SELECT words.hanzi UNION cards.headword`), subsets the OFL v1.522 TTF with fonttools → `app/fonts/lxgw-wenkai-subset.woff2` (**196 glyphs, 36.9 KB**). Wired via `next/font/local` (`--font-lxgw`, `preload:false`) + `.font-hanzi` utility. Source TTF cached under gitignored `scripts/.font-cache/`.
-- **`motion` v12.42.2** installed.
-- **New components**: `components/ambient-mesh.tsx` (server; fixed `-z-10` accent-tinted blurred blobs, drift gated by the reduced-motion keyframe), `components/lang-sync.tsx` (client; sets `[data-lang]` from server mode), `components/ui/{glass-panel,glass-button,segmented-control,theme-toggle}.tsx`.
-- **Wiring**: `ThemeToggle` + `LangSync` added to the Mandarin home header (`app/page.tsx`) and Thai home header (`components/thai/thai-home.tsx`) so both modes can switch theme and drive `[data-lang]`.
+## Completed work (all 5 phases)
 
-## Left undone (by design — later phases)
-- Surface reskins (top bar, Mandarin card/flip/tone-colour, Thai drills, stats, celebrations) — Phases 1–4. Phase 0 is intentionally near-inert: existing semantic tokens still drive all current UI; glass primitives are available but not yet swapped into surfaces (so the ambient mesh currently sits behind opaque `bg-background` mains and only becomes visible once surfaces go translucent in P1+).
-- AA re-verification of the new functional colours (tone/class/accent) in both themes — Phase 4 audit.
+### Phase 0 — foundation (`app/globals.css`)
+- Global `:where(a,button,[role=button],[role=radio],[tabindex]):focus-visible` ring (2px `--accent`, offset 2px, `border-radius: inherit`) + opt-in `.focus-ring`. Closes the app's only-UA-default a11y gap.
+- `--safe-bottom: env(safe-area-inset-bottom, 0px)`.
+- Gated `@keyframes shake` (±6px translateX) + `correct-pulse` (scale 1→1.04→1) inside the existing `@media (prefers-reduced-motion: no-preference)` block; matching `--animate-shake` / `--animate-correct-pulse` in `@theme inline`.
+- `.tap-press` utility (gated `transition: transform .1s var(--ease-soft)`; `:active{scale(.97)}`) for server-component press feedback.
+
+### Phase 1 — affordances
+- `.focus-ring` on drill MC option tiles (`drill-session.tsx`) and phrase-split boundary buttons (`phrase-split-question.tsx`).
+- Press feedback: `whileTap` spring (500/30, scale 0.97) on client controls (drill option tiles, Next/Finish, phrase-split Check); `.tap-press` CSS on server controls (all 5 back-link pills across the 4 non-home pages, unit-row Lesson/Drill links, lesson "Next unit →"/"Start drilling", drill summary "Back to units").
+- `unit-row.tsx`: hover-lift (`transition-shadow` + stronger `hover:shadow`) + `›` chevron with `group-hover:translate-x-0.5` on the CTAs.
+
+### Phase 2 — `lib/ux/` (new module)
+- `prefs.ts` — localStorage + `useSyncExternalStore` (theme-toggle pattern). Keys `ux:haptics` (default on), `ux:sound` (default off). Imperative getters/setters + `useHapticsEnabled()`/`useSoundEnabled()` hooks; same-tab custom events + storage event.
+- `haptics.ts` — `haptic('tap'|'success'|'error'|'unlock')`, triple-gated (feature-detect + pref + reduced-motion), try/catch.
+- `sfx.ts` — `playSfx('correct'|'incorrect'|'unlock')` via lazy module-singleton AudioContext, triangle oscillator + gain envelope, no asset files, gated on sound-pref only.
+- `audio.ts` — the single `playAudio(url)` clip seam (returns the `HTMLAudioElement`). `audio-button.tsx` re-exports it (back-compat for `review-session`); `audio-play-button.tsx` refactored to call it while keeping its `playing` state.
+
+### Phase 3 — animations (spring house-style, double-gated)
+- Drill answer feedback (`drill-session.tsx`): correct → `animate-correct-pulse` on the chosen tile + `haptic('success')` + `playSfx('correct')`; incorrect → `animate-shake` + `haptic('error')` + `playSfx('incorrect')`; fired inside the gesture-initiated submit transition. Unit-unlock → `haptic('unlock')` + `playSfx('unlock')` fired in the Finish-round transition (gesture-safe AudioContext), same condition as the confetti.
+- `progress-ring.tsx` → `"use client"` leaf animating `motion.circle` `strokeDashoffset` full→target (spring 120/20); reduced-motion → static final offset. `unit-row.tsx` stays a server component.
+- List stagger (CSS `animation-delay`, entrance-only): `thai-home.tsx` unit rows (`Math.min(i,10)*40ms`) + both stats pages' metric tiles (0/40/80ms). Added a server-safe `style` passthrough to `StatCard`.
+- New `app/template.tsx` (`"use client"`): route entrance fade+lift (spring 300/30); reduced-motion → plain wrapper. Entrance-only (no AnimatePresence).
+
+### Phase 4 — persistent bottom nav + navigation
+- New `components/bottom-nav.tsx` (`"use client"`, `sm:hidden`): floating `.glass` bar, `fixed inset-x-3 bottom-3`, `padding-bottom: calc(0.25rem + var(--safe-bottom))`, tap targets ≥48px. Tabs Study→`/`, Progress→`/stats`|`/thai/stats` by mode, Menu→glass popover (ModeToggle + ThemeToggle + Haptics/Sound toggles + SignOutButton). Active tab via `usePathname()`; `layoutId` spring indicator; mode read from `dataset.lang` via `useSyncExternalStore` on `langchange`. Recedes (opacity-50) during a session via `useSessionActive`.
+- New `components/ux-toggles.tsx` — Haptics/Sound `SegmentedControl`s for the menu.
+- New `lib/ux/session-focus.ts` — module-singleton store; `ReviewSession` (mount) + `DrillSession` (phase≠summary) set it active.
+- `lang-sync.tsx` — dispatches `langchange` after setting `dataset.lang`.
+- `layout.tsx` — mounts `<BottomNav signOut={<SignOutButton variant="ghost"/>}/>` globally (server passes the server-component SignOutButton as a prop).
+- Content clearance `pb-[calc(5rem+var(--safe-bottom))] sm:pb-8` on all 6 `<main>`s.
 
 ## Commands run (verbatim results)
-- `npm i motion` → `added 4 packages, and removed 1 package` (exit 0).
-- `curl -sL … LXGWWenKai-Regular.ttf` → 25M cached (exit 0).
-- `python -c "import brotli"` → `brotli ok`; `npx tsx scripts/subset-hanzi-font.ts` → `Subsetting to 196 distinct glyphs… Wrote …lxgw-wenkai-subset.woff2 (36.9 KB)` (exit 0).
-- `npm run build` → **first attempt FAILED** (TS: `HTMLMotionProps` conflict on `onAnimationStart` in glass-button). Fixed by typing props as `HTMLMotionProps<"button">`. **Re-run PASSED**: `✓ Compiled successfully in 4.1s`, TypeScript finished, 6/6 static pages generated (exit 0).
-- `npm run lint` → **first attempt FAILED** (`react-hooks/set-state-in-effect` in theme-toggle). Fixed by rewriting to `useSyncExternalStore`. **Re-run PASSED**: clean (exit 0).
-- Dev smoke: `npm run dev` booted (`✓ Ready in 512ms`); `GET /` → 200 (via next-auth signin redirect). Prerendered `.next/server/app/_not-found.html` contains the no-flash script, a `mesh-drift` blob, and `suppressHydrationWarning`/`data-theme` — layout wiring confirmed in output.
+- `npx tsc --noEmit` after each phase → **exit 0** (all four checkpoints; `TSC_EXIT: 0`).
+- `npm run lint` → **exit 0** (`LINT_EXIT: 0`).
+- `npm run build` → **exit 0** (`BUILD_EXIT: 0`); `✓ Compiled successfully in 10.8s`, TypeScript passed, `✓ Generating static pages (6/6)`. (Pre-existing lockfile-root warning only — unrelated to this work.)
 
-## Issues discovered
-- **motion + HTML button prop typing**: spreading `ButtonHTMLAttributes` onto `motion.button` conflicts on `onAnimationStart`. Resolved with `HTMLMotionProps<"button">`.
-- **setState-in-effect lint**: reading `[data-theme]` after mount via `useEffect`+`setState` trips React 19's new rule. Resolved with `useSyncExternalStore` (also gains cross-tab sync).
-- **Workspace-root warning** (pre-existing): two lockfiles (`C:\Users\User\package-lock.json` + project). Next picks the wrong root. Not introduced here; left for a follow-up (`turbopack.root`).
+## Live verification (chrome-devtools MCP, 390×844×3 mobile + 1280 desktop, READ-ONLY on data)
+Verified against a fresh dev server on :3000 (killed a stale pre-edit server that threw a Turbopack "Jest worker" compile error on the drill route — NOT a code bug; fresh server served `/thai/2/drill 200` and every route clean).
+- **Home (Thai):** bottom nav renders (Study/Progress/Menu), Progress→`/thai/stats`; chevrons on CTAs; progress rings settle at correct offsets (100%→0, 11%→111.84/125.66, 0%→full); `scrollWidth==clientWidth` (no h-scroll); `data-lang=thai`.
+- **Menu popover:** all 4 toggles + Sign out; **haptics default On, sound default Off** (confirmed `localStorage` null→defaults; toggling sound wrote `ux:sound=on`, reset to `off`); closes on tap-away.
+- **Focus ring:** real keyboard Tab → first control `:focus-visible` matches, `2px solid rgb(245,158,11)` (= `--accent` saffron).
+- **Desktop (1280):** bottom nav `display:none` (`sm:hidden`); no h-scroll; TopBar owns desktop (no duplication).
+- **Drill (/thai/2/drill):** nav receded `opacity:0.5` (session-focus); 4 `.focus-ring` option tiles; clean console. Did NOT answer/press Check (DB writes).
+- **Stats (/thai/stats):** nav `opacity:1` (not a session); Progress tab `aria-current="page"`; 3 staggered tiles; clean console.
+- **Mode signal:** on `/stats`, `data-lang=mandarin` → nav Progress correctly re-points to `/stats` (proves langchange-driven mode read).
+- **Lesson (/thai/2/lesson):** 3 `.tap-press` els; clean console; no h-scroll.
+- Feature-detect confirmed: `navigator.vibrate` and `AudioContext` both present in test Chrome.
+
+## Left undone / notes
+- **Not committed** (per plan). Working tree has all phase edits on `glass-redesign` plus unrelated `.claude/` bookkeeping.
+- Real haptic vibration and audible sfx require a physical device / speakers — verified the gating + pref plumbing + feature-detect, not the literal buzz/tone.
+- Reduced-motion: verified via the code path (motion `animate` target == static offset; keyframes gated in CSS) — chrome-devtools `emulate` did not expose a reduced-motion toggle in this session, so it was validated by construction rather than a live media emulation.
 
 ## Spec deviations
-- None on design. One structural note: `[data-lang]` is set client-side via `LangSync` (effect) rather than pre-paint, because the root layout doesn't know the server-persisted mode without an extra per-route query. Accepted in the plan; imperceptible in P0 since accents aren't on content surfaces yet.
+None. Nav tap targets are `min-h-[3rem]` (48px), exceeding the ≥44px spec.
 
 ## Procedure compliance
-- Branched before work ([[vercel-prod-db-is-dev-db]]). DB access was READ-ONLY (subset script; no writes/migration). Handoff files written to project-local `.claude/plans/`. Font source cached in gitignored dir; only the tiny subset woff2 is committed. Direct build (design-token authoring) rather than implementer-agent delegation; code-reviewer pass to follow.
-
-## Post-review fixes (round 2)
-Code review returned **NEEDS-REWRITE** with one critical + one medium, both valid:
-- **[Critical] Build broke after the lint fix.** My earlier "build PASSED" was stale — that pass predated the `useSyncExternalStore` rewrite (done to satisfy lint), which I never re-built. The untyped `() => "light"` server snapshot widened the generic to `string`. **Fixed**: `useSyncExternalStore<Theme>(…)`. Lesson recorded: re-run *every* gate after *any* change, never trust a per-command pass from before a later edit.
-- **[Medium] `LangSync` only on `/`.** Added it to `app/stats/page.tsx` (mandarin), `app/thai/stats/page.tsx`, `app/thai/[unit]/drill/page.tsx`, `app/thai/[unit]/lesson/page.tsx` (thai) so `[data-lang]` is correct on every mode-specific route.
-
-Re-verification (clean `.next`): `npm run build` → **PASSED**, 6/6 static pages (exit 0). `npm run lint` → clean (exit 0).
-
-## Round 3 (reviewer re-confirm)
-Reviewer re-verified adversarially → **PASS-WITH-NITS**. Flagged one new LOW: the drill page's *locked-unit* early-return branch lacked `<LangSync>`. Fixed (added to that branch too). Remaining nits are LOW/non-blocking follow-ups (segmented-control roving-tabindex; subset codepoint upper bound; theoretical theme-toggle server-snapshot flash — unobserved). Post-fix `npm run build` (6/6) + `npm run lint` both green.
-
-## Status: Phase 0 COMPLETE — build + lint green, code review PASS-WITH-NITS. Ready for user preview review before Phase 1.
+Built in strict phase order 0→4 (each phase's deps satisfied before the next). Typecheck gate after every phase; lint + build gate at the end; live read-only verification of every route. No rating/Check/drill completion (no DB writes) per the prod-DB-is-dev-DB constraint.

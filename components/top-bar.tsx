@@ -23,11 +23,11 @@ export function TopBar({
 }) {
   return (
     <header
-      className={`glass sticky top-3 z-20 flex w-full max-w-2xl items-center gap-3 rounded-[var(--r-pill)] px-2 py-2 pl-4 transition-opacity duration-500 ${
+      className={`glass sticky top-3 z-20 flex w-full max-w-2xl items-center gap-1 rounded-[var(--r-pill)] px-2 py-2 pl-2 transition-opacity duration-500 sm:gap-3 sm:pl-4 ${
         receded ? "opacity-50 hover:opacity-100 focus-within:opacity-100" : "opacity-100"
       }`}
     >
-      <span className="flex items-center gap-1.5 text-sm font-semibold tracking-tight text-foreground">
+      <span className="hidden min-w-0 items-center gap-1.5 truncate text-sm font-semibold tracking-tight text-foreground sm:flex">
         {activeMode === "mandarin" ? (
           <span className="font-hanzi text-base">你好</span>
         ) : (
@@ -35,12 +35,12 @@ export function TopBar({
         )}
         {learnerName ? `, ${learnerName}` : ""}
       </span>
-      <span className="flex-1" />
+      <span className="hidden flex-1 sm:block" />
       <ModeToggle activeMode={activeMode} />
       <ThemeToggle />
       <Link
         href={statsHref}
-        className="rounded-[var(--r-pill)] px-3 py-1.5 text-xs font-medium text-foreground-muted transition-colors hover:bg-[var(--glass-bg-strong)] hover:text-foreground"
+        className="rounded-[var(--r-pill)] px-2 py-1.5 text-xs font-medium text-foreground-muted transition-colors hover:bg-[var(--glass-bg-strong)] hover:text-foreground sm:px-3"
       >
         Stats
       </Link>

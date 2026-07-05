@@ -43,8 +43,30 @@ export function ThemeToggle() {
       value={theme}
       onChange={apply}
       options={[
-        { value: "light", label: "Light", title: "Light theme" },
-        { value: "dark", label: "Dark", title: "Dark theme" },
+        {
+          value: "light",
+          label: (
+            <>
+              <span className="sm:hidden" aria-hidden>
+                ☀
+              </span>
+              <span className="hidden sm:inline">Light</span>
+            </>
+          ),
+          title: "Light theme",
+        },
+        {
+          value: "dark",
+          label: (
+            <>
+              <span className="sm:hidden" aria-hidden>
+                ☾
+              </span>
+              <span className="hidden sm:inline">Dark</span>
+            </>
+          ),
+          title: "Dark theme",
+        },
       ]}
     />
   );

@@ -14,17 +14,17 @@ export function UnitRow({ summary }: { summary: UnitSummary }) {
 
   return (
     <div
-      className={`glass flex items-center gap-4 rounded-[var(--r-lg)] p-4 ${
-        locked ? "opacity-60" : ""
+      className={`glass flex items-center gap-3 rounded-[var(--r-lg)] p-3 shadow-[var(--glass-shadow)] transition-shadow sm:gap-4 sm:p-4 ${
+        locked ? "opacity-60" : "hover:shadow-[0_12px_40px_rgba(23,23,23,0.18)]"
       }`}
     >
       <ProgressRing percent={built ? percentMastered : 0} locked={locked} />
 
-      <div className="flex-1">
+      <div className="min-w-0 flex-1">
         <div className="text-xs font-medium uppercase tracking-wide text-foreground-muted">
           Unit {unit}
         </div>
-        <div className="text-sm font-semibold text-foreground">{title}</div>
+        <div className="truncate text-sm font-semibold text-foreground">{title}</div>
         {!built && (
           <div className="mt-0.5 text-xs text-foreground-muted">Coming soon</div>
         )}
@@ -39,16 +39,28 @@ export function UnitRow({ summary }: { summary: UnitSummary }) {
         <div className="flex shrink-0 gap-2">
           <Link
             href={`/thai/${unit}/lesson`}
-            className="rounded-[var(--r-pill)] px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-[var(--glass-bg-strong)]"
+            className="tap-press group inline-flex min-h-[2.75rem] items-center gap-0.5 rounded-[var(--r-pill)] px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-[var(--glass-bg-strong)] sm:min-h-[auto]"
           >
             Lesson
+            <span
+              aria-hidden
+              className="transition-transform group-hover:translate-x-0.5"
+            >
+              ›
+            </span>
           </Link>
           {!lessonOnly && unlocked && (
             <Link
               href={`/thai/${unit}/drill`}
-              className="rounded-[var(--r-pill)] bg-accent px-3 py-1.5 text-xs font-medium text-on-earthy transition-opacity hover:opacity-90"
+              className="tap-press group inline-flex min-h-[2.75rem] items-center gap-0.5 rounded-[var(--r-pill)] bg-accent px-3 py-1.5 text-xs font-medium text-on-earthy transition-opacity hover:opacity-90 sm:min-h-[auto]"
             >
               {percentMastered >= 100 ? "Repractice" : "Drill"}
+              <span
+                aria-hidden
+                className="transition-transform group-hover:translate-x-0.5"
+              >
+                ›
+              </span>
             </Link>
           )}
         </div>

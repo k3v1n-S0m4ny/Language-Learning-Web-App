@@ -17,13 +17,22 @@ export async function ThaiHome({
   const units = await getUnitSummaries(learnerId);
 
   return (
-    <main className="flex min-h-dvh flex-col items-center gap-8 px-6 py-8">
+    <main className="flex min-h-dvh flex-col items-center gap-8 page-gutter pb-[calc(5rem+var(--safe-bottom))] sm:pb-8">
       <TopBar activeMode="thai" learnerName={learnerName} statsHref="/thai/stats" />
 
       <div className="flex w-full max-w-2xl flex-col gap-3">
         <h1 className="text-display text-foreground">Read Thai</h1>
-        {units.map((summary) => (
-          <UnitRow key={summary.unit} summary={summary} />
+        {units.map((summary, i) => (
+          // Entrance stagger (Phase 3): CSS animation-delay, gated keyframe →
+          // instant for reduce-motion. Capped at 10 steps so a long list never
+          // waits > ~0.4s before the last row appears.
+          <div
+            key={summary.unit}
+            className="animate-slide-up-fade"
+            style={{ animationDelay: `${Math.min(i, 10) * 40}ms` }}
+          >
+            <UnitRow summary={summary} />
+          </div>
         ))}
       </div>
     </main>

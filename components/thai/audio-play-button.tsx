@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { playAudio } from "@/lib/ux/audio";
 
 // Shared "hear it" control for anywhere a thai_items.audioUrl needs to be
 // played back — unit-9 listen-and-repeat tiles, audio-* drill prompts, and
@@ -18,11 +19,11 @@ export function AudioPlayButton({
 
   function play() {
     if (playing) return;
-    const audio = new Audio(url);
+    const audio = playAudio(url);
+    if (!audio) return;
     setPlaying(true);
     audio.addEventListener("ended", () => setPlaying(false));
     audio.addEventListener("error", () => setPlaying(false));
-    void audio.play();
   }
 
   const sizeClass = size === "sm" ? "px-3 py-1 text-xs" : "px-4 py-2 text-sm";

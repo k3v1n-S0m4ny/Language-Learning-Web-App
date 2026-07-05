@@ -31,14 +31,14 @@ export default async function ThaiDrillPage({
 
   if (!current?.unlocked) {
     return (
-      <main className="mx-auto flex min-h-dvh max-w-2xl flex-col items-center justify-center gap-4 px-6 py-8 text-center">
+      <main className="mx-auto flex min-h-dvh max-w-2xl flex-col items-center justify-center gap-4 page-gutter pb-[calc(5rem+var(--safe-bottom))] text-center sm:pb-8">
         <LangSync activeMode="thai" />
         <p className="text-sm text-foreground-muted">
           Unit {unit} is still locked — reach 90% on the previous unit first.
         </p>
         <Link
           href="/"
-          className="rounded-[var(--r-pill)] border border-border-base px-4 py-1.5 text-xs font-medium text-foreground-muted transition-colors hover:bg-surface"
+          className="tap-press rounded-[var(--r-pill)] border border-border-base px-4 py-1.5 text-xs font-medium text-foreground-muted transition-colors hover:bg-surface"
         >
           Back to units
         </Link>
@@ -49,18 +49,18 @@ export default async function ThaiDrillPage({
   const round = await buildDrillRound(learnerId, unit);
 
   return (
-    <main className="mx-auto flex min-h-dvh max-w-2xl flex-col gap-6 px-6 py-8">
+    <main className="mx-auto flex min-h-dvh max-w-2xl flex-col gap-6 page-gutter pb-[calc(5rem+var(--safe-bottom))] sm:pb-8">
       <LangSync activeMode="thai" />
       <div className="flex items-center justify-between gap-4">
         <Link
           href="/"
-          className="rounded-[var(--r-pill)] border border-border-base px-4 py-1.5 text-xs font-medium text-foreground-muted transition-colors hover:bg-surface"
+          className="tap-press rounded-[var(--r-pill)] border border-border-base px-4 py-1.5 text-xs font-medium text-foreground-muted transition-colors hover:bg-surface"
         >
           Back to units
         </Link>
         <Link
           href={`/thai/${unit}/lesson`}
-          className="rounded-[var(--r-pill)] border border-border-base px-4 py-1.5 text-xs font-medium text-foreground-muted transition-colors hover:bg-surface"
+          className="tap-press rounded-[var(--r-pill)] border border-border-base px-4 py-1.5 text-xs font-medium text-foreground-muted transition-colors hover:bg-surface"
         >
           Review lesson
         </Link>

@@ -1,7 +1,11 @@
 "use client";
 
-import { useMemo, useState, useTransition } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
 import Link from "next/link";
+import { motion, useReducedMotion } from "motion/react";
+import { haptic } from "@/lib/ux/haptics";
+import { playSfx } from "@/lib/ux/sfx";
+import { setSessionActive } from "@/lib/ux/session-focus";
 import { getUnitProgressSnapshot, submitThaiAttempt } from "@/lib/thai/actions";
 import { TONE_LABELS } from "@/lib/thai/tone";
 import type { DrillOption, DrillQuestion } from "@/lib/thai/types";
@@ -32,6 +36,18 @@ export function DrillSession({ unit, questions, nextUnitWasUnlocked }: Props) {
     nextUnit: number;
   } | null>(null);
   const [pending, startTransition] = useTransition();
+  const reduceMotion = useReducedMotion();
+  // House press spring (500/30) — shared by the option tiles and the flow
+  // buttons; no scale for reduced-motion users.
+  const pressSpring = { type: "spring" as const, stiffness: 500, damping: 30 };
+  const whileTapPress = reduceMotion ? undefined : { scale: 0.97 };
+
+  // Recede the bottom nav while actively drilling (Phase 4); restore it on the
+  // summary screen so the learner can navigate away, and on unmount.
+  useEffect(() => {
+    setSessionActive(phase !== "summary");
+    return () => setSessionActive(false);
+  }, [phase]);
 
   const question = questions[index];
   const total = questions.length;
@@ -57,7 +73,18 @@ export function DrillSession({ unit, questions, nextUnitWasUnlocked }: Props) {
       // (M13/A2 contract: one attempt row per completed question).
       const result = await submitThaiAttempt(question.itemId, question.drillType, value);
       setLastCorrect(result.correct);
-      if (result.correct) setCorrectCount((c) => c + 1);
+      // Answer feedback (Phase 3): haptics self-gate (feature + pref +
+      // reduced-motion); sound follows the mute pref only. The visual
+      // pulse/shake is driven off `lastCorrect` on the tile below, itself
+      // reduced-motion-gated by the CSS keyframe.
+      if (result.correct) {
+        setCorrectCount((c) => c + 1);
+        haptic("success");
+        playSfx("correct");
+      } else {
+        haptic("error");
+        playSfx("incorrect");
+      }
       if (result.newlyMastered) {
         setNewlyMasteredIds((ids) => [...ids, question.itemId]);
       }
@@ -79,6 +106,14 @@ export function DrillSession({ unit, questions, nextUnitWasUnlocked }: Props) {
     }
     startTransition(async () => {
       const snap = await getUnitProgressSnapshot(unit);
+      // Unlock feedback (Phase 3): fire from this gesture-initiated transition
+      // (pressing Finish) — not from the summary render — so the AudioContext
+      // is created inside a user gesture and the cue plays exactly once, on the
+      // same condition that shows the confetti below.
+      if (snap.nextUnitNewlyUnlocked && !nextUnitWasUnlocked) {
+        haptic("unlock");
+        playSfx("unlock");
+      }
       setSummary(snap);
       setPhase("summary");
     });
@@ -108,7 +143,7 @@ export function DrillSession({ unit, questions, nextUnitWasUnlocked }: Props) {
         <div className="flex gap-2">
           <Link
             href="/"
-            className="rounded-[var(--r-pill)] bg-accent px-5 py-2 text-sm font-semibold text-on-earthy transition-opacity hover:opacity-90"
+            className="tap-press rounded-[var(--r-pill)] bg-accent px-5 py-2 text-sm font-semibold text-on-earthy transition-opacity hover:opacity-90"
           >
             Back to units
           </Link>
@@ -191,34 +226,44 @@ export function DrillSession({ unit, questions, nextUnitWasUnlocked }: Props) {
             // Explicit text-foreground on the default state — UA default
             // button text colour is black, invisible on a dark surface (a11y).
             let style = "border-border-base bg-surface text-foreground hover:bg-background";
+            let feedbackAnim = "";
             if (phase === "revealed") {
               if (isCorrectOption) style = "border-success bg-success text-white";
               else if (isChosen) style = "border-clay bg-clay text-on-earthy";
+              // Pulse the learner's own choice when right; shake it when wrong.
+              // Keyframes are gated in globals.css → no-op under reduce-motion.
+              if (isChosen) {
+                feedbackAnim = lastCorrect ? "animate-correct-pulse" : "animate-shake";
+              }
             }
             return (
-              <button
+              <motion.button
                 key={option.value}
                 type="button"
                 disabled={phase === "revealed" || pending}
                 onClick={() => answer(option)}
-                className={`rounded-[var(--r-lg)] border-2 px-4 py-3 text-center transition-colors disabled:cursor-default ${optionFont} ${style}`}
+                whileTap={phase === "revealed" || pending ? undefined : whileTapPress}
+                transition={pressSpring}
+                className={`focus-ring rounded-[var(--r-lg)] border-2 px-4 py-3 text-center transition-colors disabled:cursor-default ${optionFont} ${style} ${feedbackAnim}`}
               >
                 {option.label}
-              </button>
+              </motion.button>
             );
           })}
         </div>
       )}
 
       {phase === "revealed" && (
-        <button
+        <motion.button
           type="button"
           onClick={next}
           disabled={pending}
+          whileTap={pending ? undefined : whileTapPress}
+          transition={pressSpring}
           className="w-fit self-end rounded-[var(--r-pill)] bg-accent px-5 py-2 text-sm font-semibold text-on-earthy transition-opacity hover:opacity-90 disabled:opacity-60"
         >
           {index + 1 < total ? "Next" : "Finish round"}
-        </button>
+        </motion.button>
       )}
 
       {lastCorrect === false && phase === "revealed" && !isPhraseSplit && (

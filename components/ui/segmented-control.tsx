@@ -53,7 +53,7 @@ export function SegmentedControl<T extends string>({
             title={option.title}
             disabled={disabled}
             onClick={() => onChange(option.value)}
-            className={`relative rounded-[var(--r-pill)] px-3 py-1.5 text-sm font-medium transition-colors disabled:cursor-not-allowed ${
+            className={`relative rounded-[var(--r-pill)] px-2.5 py-1.5 text-sm font-medium transition-colors disabled:cursor-not-allowed sm:px-3 ${
               active ? "text-foreground" : "text-foreground-muted hover:text-foreground"
             }`}
           >

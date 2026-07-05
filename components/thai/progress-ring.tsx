@@ -1,4 +1,13 @@
+"use client";
+
+import { motion, useReducedMotion } from "motion/react";
+
 // Small SVG progress ring for a unit's mastery percentage (A4).
+//
+// Client leaf (Phase 3): the active stroke animates from empty (full offset)
+// to its target offset on mount with a spring. This is a contained "use client"
+// boundary — unit-row.tsx stays a server component and simply renders this leaf.
+// Reduced-motion renders the static final offset (no animation).
 const SIZE = 44;
 const STROKE = 4;
 const RADIUS = (SIZE - STROKE) / 2;
@@ -11,6 +20,7 @@ export function ProgressRing({
   percent: number;
   locked: boolean;
 }) {
+  const reduceMotion = useReducedMotion();
   const clamped = Math.max(0, Math.min(100, percent));
   const offset = CIRCUMFERENCE * (1 - clamped / 100);
   // Active stroke uses the per-language accent (saffron in the Thai
@@ -27,7 +37,7 @@ export function ProgressRing({
         stroke="var(--border)"
         strokeWidth={STROKE}
       />
-      <circle
+      <motion.circle
         cx={SIZE / 2}
         cy={SIZE / 2}
         r={RADIUS}
@@ -35,9 +45,11 @@ export function ProgressRing({
         stroke={color}
         strokeWidth={STROKE}
         strokeDasharray={CIRCUMFERENCE}
-        strokeDashoffset={offset}
         strokeLinecap="round"
         transform={`rotate(-90 ${SIZE / 2} ${SIZE / 2})`}
+        initial={reduceMotion ? false : { strokeDashoffset: CIRCUMFERENCE }}
+        animate={{ strokeDashoffset: offset }}
+        transition={reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 120, damping: 20 }}
       />
       <text
         x="50%"

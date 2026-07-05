@@ -46,8 +46,8 @@ export function CardBack({
   const byWord = hasWordData ? sliceSandhiByWord(phraseSyllables, card.words) : [];
 
   return (
-    <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 overflow-y-auto rounded-[var(--r-xl)] border border-border-base bg-surface p-6 text-center shadow-[var(--glass-shadow)]">
-      <span className="absolute left-6 top-6 text-[10px] font-semibold uppercase tracking-[0.18em] text-foreground-muted">
+    <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 overflow-y-auto rounded-[var(--r-xl)] border border-border-base bg-surface p-4 text-center shadow-[var(--glass-shadow)] sm:gap-3 sm:p-6">
+      <span className="absolute left-4 top-4 text-[10px] font-semibold uppercase tracking-[0.18em] text-foreground-muted sm:left-6 sm:top-6">
         Answer
       </span>
 

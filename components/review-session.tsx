@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { submitReview } from "@/lib/review/actions";
+import { setSessionActive } from "@/lib/ux/session-focus";
 import type {
   IntervalHints,
   RatingValue,
@@ -35,6 +36,13 @@ export function ReviewSession({
   const [toneColorOn, setToneColorOn] = useState(true);
   const [pending, startTransition] = useTransition();
   const reduceMotion = useReducedMotion();
+
+  // Recede the bottom nav while a review session is on screen (Phase 4) — the
+  // store resets on unmount (e.g. deck cleared → EmptyState, or navigating away).
+  useEffect(() => {
+    setSessionActive(true);
+    return () => setSessionActive(false);
+  }, []);
 
   function reveal() {
     if (revealed) return;

@@ -1,13 +1,10 @@
 "use client";
 
-// Imperatively start playback from a URL. Safe to call with null — a no-op.
-// Intended for programmatic play triggered inside a user-gesture handler.
-export function playAudio(url: string | null): void {
-  if (!url) return;
-  new Audio(url).play().catch((err) => {
-    console.error("Audio playback failed", url, err);
-  });
-}
+// The low-level clip player now lives in lib/ux/audio.ts (the single URL-clip
+// seam). Re-exported here for back-compat with existing importers
+// (review-session, word-chip) that reach for it via this module.
+export { playAudio } from "@/lib/ux/audio";
+import { playAudio } from "@/lib/ux/audio";
 
 // Plays an Audio Clip from its Blob URL. Disabled (not hidden) when no clip
 // exists, so the layout stays stable. `size="sm"` is the compact per-word
