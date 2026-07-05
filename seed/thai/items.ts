@@ -23,15 +23,15 @@ import type {
 
 // --- Unit 2: Mid-class consonants (9) ---------------------------------------
 export const MID_CONSONANTS: ConsonantItem[] = [
-  { kind: "consonant", id: "consonant:ก", unit: 2, display: "ก", initialIpa: "k", finalIpa: "k", consonantClass: "mid", drillable: true, metadata: { name: "ก ไก่", meaning: "chicken" } },
-  { kind: "consonant", id: "consonant:จ", unit: 2, display: "จ", initialIpa: "tɕ", finalIpa: "t", consonantClass: "mid", drillable: true, metadata: { name: "จ จาน", meaning: "plate" } },
-  { kind: "consonant", id: "consonant:ฎ", unit: 2, display: "ฎ", initialIpa: "d", finalIpa: "t", consonantClass: "mid", drillable: true, metadata: { name: "ฎ ชฎา", meaning: "headdress" } },
-  { kind: "consonant", id: "consonant:ฏ", unit: 2, display: "ฏ", initialIpa: "t", finalIpa: "t", consonantClass: "mid", drillable: true, metadata: { name: "ฏ ปฏัก", meaning: "goad" } },
-  { kind: "consonant", id: "consonant:ด", unit: 2, display: "ด", initialIpa: "d", finalIpa: "t", consonantClass: "mid", drillable: true, metadata: { name: "ด เด็ก", meaning: "child" } },
-  { kind: "consonant", id: "consonant:ต", unit: 2, display: "ต", initialIpa: "t", finalIpa: "t", consonantClass: "mid", drillable: true, metadata: { name: "ต เต่า", meaning: "turtle" } },
-  { kind: "consonant", id: "consonant:บ", unit: 2, display: "บ", initialIpa: "b", finalIpa: "p", consonantClass: "mid", drillable: true, metadata: { name: "บ ใบไม้", meaning: "leaf" } },
-  { kind: "consonant", id: "consonant:ป", unit: 2, display: "ป", initialIpa: "p", finalIpa: "p", consonantClass: "mid", drillable: true, metadata: { name: "ป ปลา", meaning: "fish", spokenName: "ปอ ปลา" } },
-  { kind: "consonant", id: "consonant:อ", unit: 2, display: "อ", initialIpa: "ʔ", finalIpa: null, consonantClass: "mid", drillable: true, metadata: { name: "อ อ่าง", meaning: "basin" } },
+  { kind: "consonant", id: "consonant:ก", unit: 2, display: "ก", initialIpa: "k", finalIpa: "k", consonantClass: "mid", drillable: true, metadata: { name: "ก ไก่", meaning: "chicken", nameIpa: "kɔ̄ː kàj" } },
+  { kind: "consonant", id: "consonant:จ", unit: 2, display: "จ", initialIpa: "tɕ", finalIpa: "t", consonantClass: "mid", drillable: true, metadata: { name: "จ จาน", meaning: "plate", nameIpa: "tɕɔ̄ː tɕāːn" } },
+  { kind: "consonant", id: "consonant:ฎ", unit: 2, display: "ฎ", initialIpa: "d", finalIpa: "t", consonantClass: "mid", drillable: true, metadata: { name: "ฎ ชฎา", meaning: "headdress", nameIpa: "dɔ̄ː tɕʰádāː" } },
+  { kind: "consonant", id: "consonant:ฏ", unit: 2, display: "ฏ", initialIpa: "t", finalIpa: "t", consonantClass: "mid", drillable: true, metadata: { name: "ฏ ปฏัก", meaning: "goad", nameIpa: "tɔ̄ː pàtàk" } },
+  { kind: "consonant", id: "consonant:ด", unit: 2, display: "ด", initialIpa: "d", finalIpa: "t", consonantClass: "mid", drillable: true, metadata: { name: "ด เด็ก", meaning: "child", nameIpa: "dɔ̄ː dèk" } },
+  { kind: "consonant", id: "consonant:ต", unit: 2, display: "ต", initialIpa: "t", finalIpa: "t", consonantClass: "mid", drillable: true, metadata: { name: "ต เต่า", meaning: "turtle", nameIpa: "tɔ̄ː tàw" } },
+  { kind: "consonant", id: "consonant:บ", unit: 2, display: "บ", initialIpa: "b", finalIpa: "p", consonantClass: "mid", drillable: true, metadata: { name: "บ ใบไม้", meaning: "leaf", nameIpa: "bɔ̄ː bāj máːj" } },
+  { kind: "consonant", id: "consonant:ป", unit: 2, display: "ป", initialIpa: "p", finalIpa: "p", consonantClass: "mid", drillable: true, metadata: { name: "ป ปลา", meaning: "fish", spokenName: "ปอ ปลา", nameIpa: "pɔ̄ː plāː" } },
+  { kind: "consonant", id: "consonant:อ", unit: 2, display: "อ", initialIpa: "ʔ", finalIpa: null, consonantClass: "mid", drillable: true, metadata: { name: "อ อ่าง", meaning: "basin", nameIpa: "ʔɔ̄ː ʔàːŋ" } },
 ];
 
 // --- Unit 3: High-class consonants (11; ฃ shown, not drilled) --------------

@@ -12,8 +12,25 @@
 import { and, eq, inArray } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { thaiItems, thaiProgress } from "@/lib/db/schema";
+import { MID_CONSONANTS } from "@/seed/thai/items";
 
 export const FLASHCARD_UNIT = 2;
+
+// A fresh shuffle seed for one flashcard session. Kept here (a plain module
+// function, not a component) so the page can mint a per-request seed without
+// calling an impure primitive during render — the session component then
+// shuffles deterministically from it, keeping SSR and hydration in agreement.
+export function newShuffleSeed(): number {
+  return Math.floor(Math.random() * 2 ** 31);
+}
+
+// Name-IPA is reference content, not learner state, so it is read from the
+// typed seed module (single source of truth) rather than the DB — this avoids a
+// prod re-seed just to surface it. Keyed by item id; "" for any consonant that
+// has no `nameIpa` (the UI then simply omits the IPA line).
+const NAME_IPA_BY_ID = new Map<string, string>(
+  MID_CONSONANTS.map((c) => [c.id, c.metadata.nameIpa ?? ""]),
+);
 // The self-graded drill type unit 2's cards are mastered through, plus the
 // legacy MCQ type that grandfathers pre-pilot progress (kept in sync with the
 // grandfather clause in lib/thai/reachability.ts::unitMasteryStats).
@@ -24,7 +41,9 @@ export interface FlashcardCard {
   itemId: string;
   glyph: string; // the consonant, e.g. "ก"
   sound: string; // initial-position IPA, e.g. "k"
+  finalSound: string | null; // final-position IPA, e.g. "t"; null if it can't end a syllable (อ)
   name: string; // acrophonic name, e.g. "ก ไก่"
+  nameIpa: string; // full IPA of the name, e.g. "kɔ̄ː kàj"; "" if not authored
   gloss: string; // the name's meaning, e.g. "chicken"
   audioUrl: string | null; // the spoken-name clip, once the audio batch has run
   alreadyRead: boolean; // letter-read (or legacy letter-sound) already mastered
@@ -75,7 +94,9 @@ export async function buildFlashcardDeck(
       itemId: i.id,
       glyph: i.display,
       sound: i.initialIpa ?? "",
+      finalSound: i.finalIpa,
       name: (meta.name as string | undefined) ?? i.display,
+      nameIpa: NAME_IPA_BY_ID.get(i.id) ?? "",
       gloss: (meta.meaning as string | undefined) ?? "",
       audioUrl: i.audioUrl,
       alreadyRead: readMastered.has(i.id),

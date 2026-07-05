@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Noto_Sans_Thai } from "next/font/google";
+import {
+  Geist,
+  Geist_Mono,
+  Noto_Sans_Thai,
+  IBM_Plex_Sans_Thai,
+  IBM_Plex_Sans_Thai_Looped,
+} from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import { AmbientMesh } from "@/components/ambient-mesh";
@@ -23,6 +29,27 @@ const notoSansThai = Noto_Sans_Thai({
   variable: "--font-noto-sans-thai",
   subsets: ["thai"],
   weight: ["400", "500", "700"],
+});
+
+// Unit-2 flashcard "modern ⇄ classical" font switcher: the SAME IBM Plex Sans
+// Thai family in its looped (classical/textbook — the loops/หัว a beginner
+// learns) and loopless (modern signage/branding) cuts, so the toggle isolates
+// exactly the loop as the only variable. Only rendered on the unit-2 flashcard
+// view, so preload:false keeps every other route's font payload unchanged
+// (mirrors the on-demand hanzi font below).
+const ibmPlexThaiLooped = IBM_Plex_Sans_Thai_Looped({
+  variable: "--font-ibm-plex-thai-looped",
+  subsets: ["thai"],
+  weight: ["400", "600"],
+  display: "swap",
+  preload: false,
+});
+const ibmPlexThaiLoopless = IBM_Plex_Sans_Thai({
+  variable: "--font-ibm-plex-thai-loopless",
+  subsets: ["thai"],
+  weight: ["400", "600"],
+  display: "swap",
+  preload: false,
 });
 
 // Glass redesign (Phase 0) — calligraphic Kai for hanzi. Self-hosted subset
@@ -55,7 +82,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${notoSansThai.variable} ${lxgwWenKai.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${notoSansThai.variable} ${ibmPlexThaiLooped.variable} ${ibmPlexThaiLoopless.variable} ${lxgwWenKai.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <head>

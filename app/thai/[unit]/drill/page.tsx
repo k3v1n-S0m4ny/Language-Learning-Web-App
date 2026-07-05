@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { auth } from "@/auth";
 import { buildDrillRound } from "@/lib/thai/drill";
-import { buildFlashcardDeck, FLASHCARD_UNIT } from "@/lib/thai/flashcards";
+import { buildFlashcardDeck, FLASHCARD_UNIT, newShuffleSeed } from "@/lib/thai/flashcards";
 import { getUnitSummaries } from "@/lib/thai/queries";
 import { UNIT_TITLES } from "@/seed/thai/items";
 import { LangSync } from "@/components/lang-sync";
@@ -84,6 +84,9 @@ export default async function ThaiDrillPage({
           unit={unit}
           cards={cards}
           nextUnitWasUnlocked={nextUnitWasUnlocked}
+          // Per-request seed so the client shuffle matches this server render
+          // (no hydration mismatch) yet still varies each time the page loads.
+          shuffleSeed={newShuffleSeed()}
         />
       ) : (
         <DrillSession

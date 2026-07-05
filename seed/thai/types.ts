@@ -24,6 +24,12 @@ export interface ConsonantItem {
   metadata: {
     name: string; // acrophonic name, e.g. "ก ไก่"
     meaning: string; // e.g. "chicken"
+    // Full IPA reading of the acrophonic `name` (no slashes), e.g. "kɔ̄ː kàj".
+    // The letter-name portion is the mid-class bare name (long ɔː, mid tone);
+    // the acrophonic-word portion matches that word's reading elsewhere in the
+    // seed. Shown under the Thai name on the unit-2 flashcard; not in the DB
+    // (derived from this module — see lib/thai/flashcards.ts).
+    nameIpa?: string;
     // Optional TTS override: the letter's full SPOKEN name (e.g. ป → "ปอ ปลา")
     // when the displayed `name`'s bare leading glyph is synthesized badly.
     // Preferred by scripts/generate-thai-audio.ts; `name` is still what the

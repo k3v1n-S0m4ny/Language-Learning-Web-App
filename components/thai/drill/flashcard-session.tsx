@@ -11,6 +11,10 @@ interface Props {
   unit: number;
   cards: FlashcardCard[];
   nextUnitWasUnlocked: boolean;
+  // A per-request seed minted by the server component. The deck is shuffled
+  // deterministically from it so the server and client produce the SAME order
+  // (no hydration mismatch) while still varying session-to-session.
+  shuffleSeed: number;
 }
 
 // Unit 2 flashcard pilot (owner-approved 2026-07-05): a self-graded
@@ -22,23 +26,42 @@ interface Props {
 // mastery/unlock math is server-side — see lib/thai/actions.ts::
 // submitFlashcardGrade + lib/thai/reachability.ts::unitMasteryStats).
 
-function shuffle<T>(arr: T[]): T[] {
+// Deterministic PRNG (mulberry32) so a shuffle can be reproduced from a seed.
+// Using Math.random() directly would make the server and client shuffle
+// differently, desyncing the first card and throwing a hydration mismatch.
+function mulberry32(seed: number): () => number {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function shuffle<T>(arr: T[], seed: number): T[] {
+  const rng = mulberry32(seed);
   const copy = [...arr];
   for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(rng() * (i + 1));
     [copy[i], copy[j]] = [copy[j], copy[i]];
   }
   return copy;
 }
 
-export function FlashcardSession({ unit, cards, nextUnitWasUnlocked }: Props) {
+export function FlashcardSession({ unit, cards, nextUnitWasUnlocked, shuffleSeed }: Props) {
   const total = cards.length;
   // Shuffle once per session (useState initializer → stable across re-renders)
-  // so a card's position can't become a memorisation crutch. The queue holds
-  // exactly the not-yet-cleared cards, each once; a miss re-appends, never
-  // duplicates, so queue.length === total - clearedCount at all times.
-  const [queue, setQueue] = useState<FlashcardCard[]>(() => shuffle(cards));
+  // so a card's position can't become a memorisation crutch. Seeded from the
+  // server-minted `shuffleSeed` so SSR and hydration agree on the order. The
+  // queue holds exactly the not-yet-cleared cards, each once; a miss re-appends,
+  // never duplicates, so queue.length === total - clearedCount at all times.
+  const [queue, setQueue] = useState<FlashcardCard[]>(() => shuffle(cards, shuffleSeed));
   const [flipped, setFlipped] = useState(false);
+  // Modern ⇄ classical Thai letterform. Defaults to "looped" — the classical
+  // textbook form a beginner learns first; "loopless" is the modern signage cut.
+  // Applies to the big glyph and the Thai name (see `thaiFont` below).
+  const [thaiStyle, setThaiStyle] = useState<"looped" | "loopless">("looped");
   const [clearedIds, setClearedIds] = useState<Set<string>>(() => new Set());
   const [missedCount, setMissedCount] = useState(0);
   const [summary, setSummary] = useState<{
@@ -50,6 +73,7 @@ export function FlashcardSession({ unit, cards, nextUnitWasUnlocked }: Props) {
 
   const current = queue[0];
   const clearedCount = clearedIds.size;
+  const thaiFont = thaiStyle === "looped" ? "font-thai-looped" : "font-thai-loopless";
 
   if (!total) {
     return (
@@ -126,19 +150,50 @@ export function FlashcardSession({ unit, cards, nextUnitWasUnlocked }: Props) {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="text-xs font-medium uppercase tracking-wide text-foreground-muted">
-        Read {clearedCount} / {total}
-        {queue.length > 0 && ` · ${queue.length} to go`}
+      <div className="flex items-center justify-between gap-3">
+        <div className="text-xs font-medium uppercase tracking-wide text-foreground-muted">
+          Read {clearedCount} / {total}
+          {queue.length > 0 && ` · ${queue.length} to go`}
+        </div>
+        <div
+          role="group"
+          aria-label="Thai letterform style"
+          className="inline-flex rounded-[var(--r-pill)] border border-border-base p-0.5"
+        >
+          {(
+            [
+              ["looped", "Classical"],
+              ["loopless", "Modern"],
+            ] as const
+          ).map(([value, label]) => (
+            <button
+              key={value}
+              type="button"
+              onClick={() => setThaiStyle(value)}
+              aria-pressed={thaiStyle === value}
+              className={`rounded-[var(--r-pill)] px-3 py-1 text-xs font-medium transition-colors ${
+                thaiStyle === value
+                  ? "bg-accent text-on-earthy"
+                  : "text-foreground-muted hover:bg-background"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="flex min-h-[16rem] flex-col items-center justify-center gap-5 rounded-[var(--r-lg)] border border-border-base bg-surface p-8">
-        <div className="font-thai text-[6rem] leading-none text-foreground">{current.glyph}</div>
+        <div className={`${thaiFont} text-[6rem] leading-none text-foreground`}>{current.glyph}</div>
         {flipped ? (
-          <div className="flex flex-col items-center gap-2 animate-fade-in">
-            <div className="font-mono text-2xl text-foreground">/{current.sound}/</div>
-            <div className="font-thai text-lg text-foreground">{current.name}</div>
-            {current.gloss && (
-              <div className="text-sm italic text-foreground-muted">&lsquo;{current.gloss}&rsquo;</div>
+          <div className="flex flex-col items-center gap-3 animate-fade-in">
+            <div className="flex gap-3">
+              <SoundTile label="Initial" ipa={current.sound} />
+              <SoundTile label="Final" ipa={current.finalSound} />
+            </div>
+            <div className={`${thaiFont} text-lg text-foreground`}>{current.name}</div>
+            {current.nameIpa && (
+              <div className="font-mono text-sm text-foreground-muted">[{current.nameIpa}]</div>
             )}
             {current.audioUrl && <AudioPlayButton url={current.audioUrl} label="▶ Hear it" size="sm" />}
           </div>
@@ -185,6 +240,19 @@ export function FlashcardSession({ unit, cards, nextUnitWasUnlocked }: Props) {
           Say the sound out loud, then reveal to check.
         </p>
       )}
+    </div>
+  );
+}
+
+// A single labelled sound on the reveal — the letter's initial- vs
+// final-position IPA (Thai consonants often differ between the two, e.g. จ is
+// /tɕ/ initial but /t/ final). A null final (e.g. อ, which can't close a
+// syllable) renders "—".
+function SoundTile({ label, ipa }: { label: string; ipa: string | null }) {
+  return (
+    <div className="min-w-[5rem] rounded-[var(--r-md)] bg-background px-4 py-2 text-center">
+      <div className="text-[0.65rem] uppercase tracking-wide text-foreground-muted">{label}</div>
+      <div className="font-mono text-xl text-foreground">{ipa ? `/${ipa}/` : "—"}</div>
     </div>
   );
 }
