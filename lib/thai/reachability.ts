@@ -44,9 +44,9 @@
 export type DrillTypeId =
   | "letter-sound"
   | "letter-class"
-  // Flashcard self-graded recognition (units 2-3) — the ONLY required drill
+  // Flashcard self-graded recognition (units 2-4) — the ONLY required drill
   // type for those units, replacing the letter-sound/letter-class/audio-letter
-  // trio. See the `unit === 2 || unit === 3` branch of
+  // trio. See the `unit >= 2 && unit <= 4` branch of
   // reachableDrillTypesForUnit below.
   | "letter-read"
   | "letter-final"
@@ -142,7 +142,7 @@ function canDrillTypeScore(item: ReachabilityItem, drillType: DrillTypeId): bool
   switch (drillType) {
     case "letter-sound":
     case "letter-class":
-    // letter-read (units 2-3 flashcards) is answerable for any consonant — it
+    // letter-read (units 2-4 flashcards) is answerable for any consonant — it
     // is pure self-graded recognition of the glyph, needing no other content.
     case "letter-read":
       return item.kind === "consonant";
@@ -225,21 +225,21 @@ export function reachableDrillTypesForUnit(
 ): Map<string, DrillTypeId[]> {
   const map = new Map<string, DrillTypeId[]>();
 
-  // Units 2-3 (flashcards): the mid-class and high-class consonants are
-  // drilled as self-graded "read the letter" flashcards, not multiple-choice.
-  // A card is reachable through exactly one drill type — letter-read — so
-  // clearing the deck once (one "knew it" per card, see
+  // Units 2-4 (flashcards): the mid-class, high-class, and low-class-A
+  // consonants are drilled as self-graded "read the letter" flashcards, not
+  // multiple-choice. A card is reachable through exactly one drill type —
+  // letter-read — so clearing the deck once (one "knew it" per card, see
   // lib/thai/actions.ts::submitFlashcardGrade) takes the unit to 100% and
-  // unlocks the next unit. Units 4-5 keep the original
+  // unlocks the next unit. Unit 5 keeps the original
   // letter-sound/letter-class/audio-letter MCQ trio.
-  if (unit === 2 || unit === 3) {
+  if (unit >= 2 && unit <= 4) {
     for (const i of allItems) {
       if (i.unit === unit && i.drillable) addTo(map, i.id, "letter-read");
     }
     return map;
   }
 
-  if (unit >= 4 && unit <= 5) {
+  if (unit === 5) {
     for (const i of allItems) {
       if (i.unit === unit && i.drillable) {
         addTo(map, i.id, "letter-sound");
@@ -464,10 +464,10 @@ export function maxAchievablePercentForUnit(unit: number, allItems: Reachability
   return Math.round((achievable / reachable.size) * 100);
 }
 
-// Flashcard grandfather (units 2-3; owner-approved 2026-07-05): the legacy MCQ
+// Flashcard grandfather (units 2-4; owner-approved 2026-07-05): the legacy MCQ
 // `letter-sound` streak satisfies the new `letter-read` requirement — both
 // measure the same competency (recognising a consonant's sound), so a learner
-// who cleared unit 2 (or unit 3, once generalized) under the old rule is
+// who cleared unit 2 (or units 3-4, once generalized) under the old rule is
 // never re-locked, re-sampled, or stripped of a "mastered" badge. This is the
 // SINGLE definition of that equivalence; every place that checks a required
 // drill type against a learner's mastered set (unitMasteryStats for the
@@ -501,7 +501,7 @@ export function unitMasteryStats(
   for (const [itemId, requiredTypes] of reachable) {
     const masteredSet = masteredByItem.get(itemId);
     if (!masteredSet) continue;
-    // isRequiredTypeMastered carries the units 2-3 letter-read/letter-sound
+    // isRequiredTypeMastered carries the units 2-4 letter-read/letter-sound
     // grandfather; for every other unit it is a plain masteredSet.has(dt).
     if (requiredTypes.every((dt) => isRequiredTypeMastered(masteredSet, dt))) mastered++;
   }
@@ -519,9 +519,9 @@ export function unitMasteryStats(
 // checked) gets caught the next time the seed script runs.
 //
 // Factored into a per-unit helper so the exact same invariant can be asserted
-// for both flashcard units (2 and 3) rather than only unit 2 — a future
-// regression specific to unit 3's unlock math (e.g. from the units 2-3
-// generalization) is caught the same way unit 2's already is.
+// for every flashcard unit (2, 3, and 4) rather than only unit 2 — a future
+// regression specific to unit 3's or unit 4's unlock math (e.g. from the units
+// 2-4 generalization) is caught the same way unit 2's already is.
 function assertUnitMasteryScopingGuardForUnit(unit: number, allItems: ReachabilityItem[]): void {
   // A real consonant in this unit that also has a final sound, so it is
   // reachable via letter-final — but ONLY from unit 6's own session, never
@@ -579,4 +579,5 @@ function assertUnitMasteryScopingGuardForUnit(unit: number, allItems: Reachabili
 export function assertUnitMasteryScopingGuard(allItems: ReachabilityItem[]): void {
   assertUnitMasteryScopingGuardForUnit(2, allItems);
   assertUnitMasteryScopingGuardForUnit(3, allItems);
+  assertUnitMasteryScopingGuardForUnit(4, allItems);
 }
