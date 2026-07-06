@@ -5,10 +5,17 @@
  * manifest — consonant letter names, vowel sounds (carrier-อ demonstration
  * form), tone-ear minimal-pair words, drillable word-bank syllables,
  * silent-leader words (unit 12, M14/A6), and spoken numeral names (unit 13,
- * M14/A6 — the digit NAME, not the glyph) — synthesizes each with Google
- * Chirp3-HD voice th-TH-Chirp3-HD-Achernar (the bake-off winner, owner
- * sign-off 2026-07-03), uploads to Vercel Blob under audio/thai/, and writes
- * the resulting URL back into thai_items.audioUrl.
+ * M14/A6 — the digit NAME, not the glyph) — synthesizes each with the native
+ * Thai Google voice th-TH-Neural2-C, uploads to Vercel Blob under audio/thai/,
+ * and writes the resulting URL back into thai_items.audioUrl.
+ *
+ * VOICE HISTORY: originally th-TH-Chirp3-HD-Achernar (bake-off winner, owner
+ * sign-off 2026-07-03). Switched to th-TH-Neural2-C (owner sign-off
+ * 2026-07-06): the Chirp3-HD voices are Google GLOBAL multilingual personas
+ * and mispronounced / truncated rare Thai items — e.g. ฌ เฌอ (cho choe) came
+ * out foreign-sounding and clipped. The native Neural2 Thai voice renders
+ * those correctly. Switching the voice rehashes every blob path (voice is in
+ * the hash below), so the whole set regenerates cleanly onto the new voice.
  *
  * Blob paths are keyed by a hash of (provider, model, voice, language, text)
  * — NOT text alone — so a future voice change can never silently reuse a
@@ -36,10 +43,11 @@ const MANIFEST_PATH = `${OUT_DIR}/manifest.json`;
 const LEDGER_PATH = `${OUT_DIR}/ledger.json`;
 
 const PROVIDER = "google";
-const MODEL = "chirp3-hd";
-const VOICE = "th-TH-Chirp3-HD-Achernar";
+const MODEL = "neural2";
+const VOICE = "th-TH-Neural2-C";
 const LANGUAGE_CODE = "th-TH";
-const COST_PER_MILLION_CHARS_USD = 30;
+// Neural2 tier is $16/1M chars (Chirp3-HD was $30/1M).
+const COST_PER_MILLION_CHARS_USD = 16;
 
 const DRY_RUN = process.argv.includes("--dry") || process.env.DRY_RUN === "1";
 
@@ -181,6 +189,12 @@ async function main() {
         addRandomSuffix: false,
       });
       url = blob.url;
+      // Cache the just-uploaded blob so a later clip with IDENTICAL text (e.g.
+      // the same word appearing as two items) reuses it instead of re-putting
+      // the same pathname — which the Blob API rejects with "already exists".
+      // Matters on a full-voice-switch run where every path is new, so the
+      // initial `existing` snapshot can't already contain it.
+      existing.set(pathname, url);
       made++;
       console.log("uploaded");
     } else {
