@@ -60,6 +60,31 @@ export function expectedFinalAnswer(finalIpa: string | null): string {
   return finalIpa ?? NO_FINAL;
 }
 
+export type StartAction = "resume" | "retake" | "create";
+
+// Which branch lib/thai/exam-actions.ts::startOrResumeExam should take, given
+// the existing thai_exam_sessions row's status (or `null` if no row exists at
+// all yet). Factored out here, pure and DB-free, so lib/thai/exam.test.ts can
+// lock in the three-way routing contract directly.
+//
+// This is the decision logic the 2026-07-08 idempotent-create fix depends on:
+// two concurrent requests racing against a not-yet-persisted first-ever row
+// (Next dev renders a server component more than once per request —
+// streaming/prefetch — which is exactly how this surfaced) both see
+// `existingStatus === null` and MUST deterministically route to the same
+// branch ("create") — which is precisely why that branch's actual INSERT
+// then has to be idempotent (`onConflictDoNothing` + re-SELECT) rather than
+// assuming it's the only writer. This function only proves the ROUTING is
+// deterministic/pure; it can't exercise the database-level race itself
+// (that needs a real unique-constraint-enforcing Postgres, not a DB-free
+// unit test — see this codebase's existing "no DB in tests" contract,
+// lib/thai/reachability.ts's own header).
+export function decideStartAction(existingStatus: "in_progress" | "completed" | null): StartAction {
+  if (existingStatus === "in_progress") return "resume";
+  if (existingStatus === "completed") return "retake";
+  return "create";
+}
+
 export interface ExamCard {
   itemId: string;
   mode: ExamMode;

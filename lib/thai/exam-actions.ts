@@ -7,6 +7,7 @@ import { thaiAttempts, thaiExamSessions, thaiItems, thaiProgress } from "@/lib/d
 import { submitFlashcardGrade } from "./actions";
 import { expectedAnswerFor } from "./drill";
 import {
+  decideStartAction,
   EXAM_MODES,
   expectedFinalAnswer,
   fetchExamConsonants,
@@ -98,6 +99,23 @@ interface StartOrResumeResult {
   done: boolean;
 }
 
+// Builds the client-facing summary from an AUTHORITATIVE, already-persisted
+// ExamState — never from a locally-built object that might not (or might no
+// longer) match what's actually in the DB row. Every return path in
+// startOrResumeExam routes through this so resume/retake/fresh-create can
+// never disagree with the persisted row (2026-07-08 fix, see that function's
+// own header for the race this closes on the create path).
+async function buildStartResult(learnerId: string, state: ExamState): Promise<StartOrResumeResult> {
+  return {
+    firstCard: await hydrateHead(learnerId, state),
+    clearedCount: state.clearedCount,
+    total: state.total,
+    firstTry: state.firstTry,
+    slips: state.slips,
+    done: state.queue.length === 0,
+  };
+}
+
 // Persistence model (deviation from a naive "insert a new row every session"
 // design, documented in the implementation summary): exactly ONE
 // thai_exam_sessions row is ever kept per (learner, examKey) — its `status`
@@ -109,6 +127,23 @@ interface StartOrResumeResult {
 // toggles status satisfies the index trivially (there is only ever one row)
 // while the index itself still guards against a genuine concurrency bug (two
 // requests racing to insert two simultaneous "in_progress" rows).
+//
+// BLOCKING BUG FIX (2026-07-08, owner QA on localhost): the create path
+// (`existing` is null — a learner's very first-ever attempt) used to be a
+// plain SELECT-then-INSERT, which is a read-then-write race: Next dev renders
+// a server component more than once per request (streaming/prefetch), so two
+// concurrent invocations of this function can both see "no row" and both
+// attempt the INSERT — the second one violates
+// `thai_exam_sessions_learner_key_status_uq` and 500s. Fixed by making that
+// INSERT idempotent (`onConflictDoNothing` on the exact same unique-index
+// columns, so the LOSER's insert is a silent no-op instead of a thrown
+// duplicate-key error) and then re-SELECTing the row afterward — both the
+// winner and the loser of the race end up reading and returning the SAME
+// persisted row, rather than the loser crashing or returning a `state` object
+// it never actually managed to save. neon-http has no interactive
+// transactions, so `ON CONFLICT ... DO NOTHING` (not a transaction) is the
+// correct primitive here, same rationale as every other atomic upsert in this
+// codebase (see submitThaiAttempt's own header in lib/thai/actions.ts).
 export async function startOrResumeExam(
   examKey: string,
   summaries?: UnitSummary[],
@@ -126,28 +161,30 @@ export async function startOrResumeExam(
     .from(thaiExamSessions)
     .where(and(eq(thaiExamSessions.learnerId, learnerId), eq(thaiExamSessions.examKey, examKey)));
 
-  if (existing && existing.status === "in_progress") {
-    const state = existing.state as ExamState;
-    return {
-      firstCard: await hydrateHead(learnerId, state),
-      clearedCount: state.clearedCount,
-      total: state.total,
-      firstTry: state.firstTry,
-      slips: state.slips,
-      done: state.queue.length === 0,
-    };
+  // decideStartAction (lib/thai/exam-pure.ts) is the single, unit-tested
+  // source of truth for this routing — see its own header for why it's a
+  // pure function of `existing`'s status alone (deterministic even when two
+  // concurrent requests both observe `existing === undefined`, which is
+  // exactly the race the create-path fix below handles).
+  const action = decideStartAction(existing ? (existing.status as "in_progress" | "completed") : null);
+
+  if (action === "resume") {
+    return buildStartResult(learnerId, existing!.state as ExamState);
   }
 
+  // Either a retake (existing row is "completed") or a true first-ever
+  // attempt (no row at all) — both need a freshly-shuffled deck.
   const pool = await fetchExamConsonants();
   const seed = newShuffleSeed();
   const queue = interleaveDeck(
     pool.map((c) => ({ id: c.id, audioUrl: c.audioUrl })),
     seed,
   );
-  const state = initialExamState(seed, queue);
+  const freshState = initialExamState(seed, queue);
   const now = new Date();
 
-  if (existing) {
+  if (action === "retake") {
+    // Retake: UPDATE the existing (completed) row back to in_progress.
     // CRITICAL fix (2026-07-07 code review): do NOT null `completedAt` here.
     // A retake resets `status`/`state`/`startedAt` (a fresh deck, live
     // progress starting over), but `completedAt` is the STICKY "has this
@@ -155,31 +192,62 @@ export async function startOrResumeExam(
     // gate depends on (via lib/thai/exam-pure.ts::unitSixUnlocked) — nulling
     // it here would re-lock unit 6 the instant a retake starts, exactly the
     // regression the review caught. Omitting the field entirely leaves
-    // whatever sticky value is already there (null if never cleared, or the
-    // first-ever-clear timestamp) untouched.
+    // whatever sticky value is already there (the first-ever-clear
+    // timestamp) untouched.
+    //
+    // Known, milder, un-fixed race (2026-07-08, noted per coordinator):
+    // this UPDATE is keyed only by the row's own `id` with no version/
+    // timestamp guard, so two concurrent retake requests both update the
+    // SAME row — last-writer-wins on the fresh seed/deck, but (unlike the
+    // create path above) this can never throw a unique-constraint error,
+    // since it's an UPDATE-by-primary-id, not an INSERT. Left as-is,
+    // consistent with how submitExamAnswer's own read-then-write gap is
+    // documented rather than fixed.
     await db
       .update(thaiExamSessions)
-      .set({ state, status: "in_progress", startedAt: now, updatedAt: now })
-      .where(eq(thaiExamSessions.id, existing.id));
-  } else {
-    await db.insert(thaiExamSessions).values({
+      .set({ state: freshState, status: "in_progress", startedAt: now, updatedAt: now })
+      .where(eq(thaiExamSessions.id, existing!.id));
+    return buildStartResult(learnerId, freshState);
+  }
+
+  // True first-time create — see this function's own header for the race
+  // this closes. `onConflictDoNothing` makes a concurrent loser's insert a
+  // no-op instead of violating the unique index; the re-SELECT below then
+  // returns whichever row actually persisted (the winner's), so every
+  // concurrent caller for a never-before-seen learner converges on one
+  // consistent, authoritative state.
+  await db
+    .insert(thaiExamSessions)
+    .values({
       learnerId,
       examKey,
       status: "in_progress",
-      state,
+      state: freshState,
       startedAt: now,
       updatedAt: now,
+    })
+    .onConflictDoNothing({
+      target: [thaiExamSessions.learnerId, thaiExamSessions.examKey, thaiExamSessions.status],
     });
-  }
 
-  return {
-    firstCard: await hydrateHead(learnerId, state),
-    clearedCount: state.clearedCount,
-    total: state.total,
-    firstTry: state.firstTry,
-    slips: state.slips,
-    done: state.queue.length === 0,
-  };
+  const [persisted] = await db
+    .select()
+    .from(thaiExamSessions)
+    .where(
+      and(
+        eq(thaiExamSessions.learnerId, learnerId),
+        eq(thaiExamSessions.examKey, examKey),
+        eq(thaiExamSessions.status, "in_progress"),
+      ),
+    );
+  if (!persisted) {
+    // Structurally should not happen (either our own insert or a concurrent
+    // winner's insert must have landed for this exact (learner, examKey,
+    // "in_progress") triple) — defensive, not a case any known race path
+    // reaches.
+    throw new Error("Failed to create or find exam session");
+  }
+  return buildStartResult(learnerId, persisted.state as ExamState);
 }
 
 // HIGH fix (2026-07-07 code review): exam-scoped `drill_type` bookkeeping

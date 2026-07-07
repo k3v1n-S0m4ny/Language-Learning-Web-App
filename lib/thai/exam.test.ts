@@ -2,6 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   applyAnswer,
+  decideStartAction,
   expectedFinalAnswer,
   initialExamState,
   interleaveDeck,
@@ -262,4 +263,42 @@ test("expectedFinalAnswer: maps a null finalIpa (finalless consonant) to the NO_
 
 test("expectedFinalAnswer: passes a real final sound straight through", () => {
   assert.equal(expectedFinalAnswer("k"), "k");
+});
+
+// Blocking bug fix (2026-07-08, owner QA on localhost): startOrResumeExam's
+// create path used to be a plain SELECT-then-INSERT — a read-then-write race
+// where two concurrent invocations (Next dev renders a server component more
+// than once per request) both see "no row" and both attempt the INSERT,
+// violating thai_exam_sessions_learner_key_status_uq on the second one.
+// decideStartAction is the pure routing logic that fix depends on: it proves
+// that TWO SEPARATE calls with the exact same "no row yet" observation
+// (existingStatus === null, exactly what two racing requests for a
+// never-before-seen learner would both see) deterministically agree on the
+// SAME branch ("create") — which is exactly why that branch's actual INSERT
+// then has to be idempotent (onConflictDoNothing + re-SELECT, in
+// lib/thai/exam-actions.ts) rather than assumed to be the only writer. This
+// does not exercise the database-level unique-constraint race itself (that
+// needs a real Postgres, not a DB-free test — see this file's own header
+// comment for why DB-touching behavior isn't unit tested here), but it does
+// lock in the deterministic-routing precondition the fix relies on.
+test("decideStartAction: routes to 'resume' when an in_progress row already exists", () => {
+  assert.equal(decideStartAction("in_progress"), "resume");
+});
+
+test("decideStartAction: routes to 'retake' when a completed row already exists", () => {
+  assert.equal(decideStartAction("completed"), "retake");
+});
+
+test("decideStartAction: routes to 'create' when no row exists yet", () => {
+  assert.equal(decideStartAction(null), "create");
+});
+
+test("decideStartAction: two concurrent 'no row yet' observations deterministically agree (idempotent routing)", () => {
+  // Simulates two racing requests for a never-before-seen learner, both
+  // reading `existingStatus === null` before either one's INSERT has landed.
+  const first = decideStartAction(null);
+  const second = decideStartAction(null);
+  assert.equal(first, "create");
+  assert.equal(second, "create");
+  assert.equal(first, second);
 });
