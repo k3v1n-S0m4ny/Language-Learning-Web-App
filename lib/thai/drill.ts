@@ -442,7 +442,13 @@ async function buildSubjectPool(unit: number): Promise<Subject[]> {
   return [];
 }
 
-function consonantDistractors(
+// Exported for lib/thai/exam.ts — the Consonant Review Exam's letter-sound
+// and audio-letter MCQ cards reuse this exact distractor builder, passing the
+// full 42-consonant pool (units 2-5) rather than a single unit's pool, so
+// distractors are drawn cross-unit (genuine discrimination, not same-unit-
+// only). Single source of truth for consonant-MCQ distractors — the exam
+// must not re-derive its own version of this logic.
+export function consonantDistractors(
   pool: ItemRow[],
   correct: ItemRow,
   field: "initialIpa" | "display",

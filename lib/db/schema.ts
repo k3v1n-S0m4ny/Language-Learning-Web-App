@@ -255,3 +255,42 @@ export const thaiAttempts = pgTable(
     index("thai_attempts_learner_item_idx").on(t.learnerId, t.itemId),
   ],
 );
+
+// Consonant Review Exam (Stage 2, M11 plan): a cumulative "clear the deck"
+// checkpoint between unit 5 and unit 6, drilling every consonant learned so
+// far (units 2-5) across four modes. `state` is the whole live session
+// (seed, ordered queue, clearedCount, first-try stats, slips) — saved after
+// EVERY answer so the session survives a reload mid-deck. The unique index
+// on (learnerId, examKey, status) guarantees at most one `in_progress` row
+// per learner per exam — startOrResumeExam relies on this to find "the"
+// active session without an ORDER BY/LIMIT race. `examKey` is a plain text
+// column (not a pg enum), same rationale as thaiItems.kind, so future exams
+// (finals, vowels, tones) can reuse this same table via a different key
+// without a schema migration.
+export const thaiExamSessions = pgTable(
+  "thai_exam_sessions",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    learnerId: text("learner_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    examKey: text("exam_key").notNull(),
+    status: text("status").notNull(), // "in_progress" | "completed"
+    state: jsonb("state").notNull().default({}),
+    startedAt: timestamp("started_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    completedAt: timestamp("completed_at", { withTimezone: true }),
+  },
+  (t) => [
+    uniqueIndex("thai_exam_sessions_learner_key_status_uq").on(
+      t.learnerId,
+      t.examKey,
+      t.status,
+    ),
+    index("thai_exam_sessions_learner_idx").on(t.learnerId),
+  ],
+);

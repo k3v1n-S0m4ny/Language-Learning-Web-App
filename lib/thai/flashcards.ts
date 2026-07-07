@@ -18,6 +18,8 @@ import type { ConsonantItem } from "@/seed/thai/types";
 
 export const FLASHCARD_UNITS = new Set([2, 3, 4, 5]);
 
+type ItemRow = typeof thaiItems.$inferSelect;
+
 // A fresh shuffle seed for one flashcard session. Kept here (a plain module
 // function, not a component) so the page can mint a per-request seed without
 // calling an impure primitive during render — the session component then
@@ -96,18 +98,26 @@ export async function buildFlashcardDeck(
       .map((r) => r.itemId),
   );
 
-  return consonants.map((i) => {
-    const meta = (i.metadata ?? {}) as Record<string, unknown>;
-    return {
-      itemId: i.id,
-      glyph: i.display,
-      sound: i.initialIpa ?? "",
-      finalSound: i.finalIpa,
-      name: (meta.name as string | undefined) ?? i.display,
-      nameIpa: NAME_IPA_BY_ID.get(i.id) ?? "",
-      gloss: (meta.meaning as string | undefined) ?? "",
-      audioUrl: i.audioUrl,
-      alreadyRead: readMastered.has(i.id),
-    };
-  });
+  return consonants.map((i) => flashcardCardFromItem(i, readMastered.has(i.id)));
+}
+
+// Per-item mapper, extracted from buildFlashcardDeck's own .map() so the
+// Consonant Review Exam (lib/thai/exam.ts) can hydrate a flashcard-mode card
+// from a single ItemRow without re-deriving this shape itself (single source
+// of truth). `alreadyRead` is computed by the caller (buildFlashcardDeck reads
+// it from thai_progress across the whole unit deck; the exam has its own,
+// separate progress lookup).
+export function flashcardCardFromItem(item: ItemRow, alreadyRead: boolean): FlashcardCard {
+  const meta = (item.metadata ?? {}) as Record<string, unknown>;
+  return {
+    itemId: item.id,
+    glyph: item.display,
+    sound: item.initialIpa ?? "",
+    finalSound: item.finalIpa,
+    name: (meta.name as string | undefined) ?? item.display,
+    nameIpa: NAME_IPA_BY_ID.get(item.id) ?? "",
+    gloss: (meta.meaning as string | undefined) ?? "",
+    audioUrl: item.audioUrl,
+    alreadyRead,
+  };
 }

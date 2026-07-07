@@ -41,3 +41,14 @@ export function restrictedUnitOpen(unit: number, unitUnlocked: boolean): boolean
   if (unit === RESTRICTED_THAI_MAX_UNIT + 1) return unitUnlocked;
   return false;
 }
+
+// The Consonant Review Exam sits just past unit 5, outside the numbered-unit
+// ladder restrictedUnitOpen gates. Testers may take it once unit 5 is
+// finished (same "just past the ceiling, opens on completion" shape as
+// restrictedUnitOpen's own unit-5 case) — but unit 6 stays "In construction"
+// for testers regardless of whether they clear it, since unit 6 itself isn't
+// tester-ready yet. Clearing the exam therefore never exposes unit 6 to a
+// restricted tester; only the full course / QA account passes through.
+export function restrictedExamOpen(unit5Finished: boolean): boolean {
+  return unit5Finished;
+}

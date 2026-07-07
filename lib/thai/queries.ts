@@ -1,7 +1,7 @@
 import { and, eq, inArray } from "drizzle-orm";
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
-import { thaiItems, thaiProgress } from "@/lib/db/schema";
+import { thaiExamSessions, thaiItems, thaiProgress } from "@/lib/db/schema";
 import {
   ALL_THAI_ITEMS,
   BUILT_UNITS,
@@ -9,6 +9,7 @@ import {
   UNIT_1_LESSON_MARKER_ID,
   UNIT_TITLES,
 } from "@/seed/thai/items";
+import { unitSixUnlocked } from "./exam-pure";
 import { LESSON_READ_DRILL_TYPE, isUnitUnlocked, percentMastered } from "./mastery";
 import { isThaiQaUnlockEmail } from "./qa-access";
 import { unitMasteryStats } from "./reachability";
@@ -72,6 +73,26 @@ export async function getUnitSummaries(learnerId: string): Promise<UnitSummary[]
 
   const masteredByItem = await fetchMasteredDrillTypesByItem(learnerId);
 
+  // Consonant Review Exam gate (Stage 2): unit 6 unlocks only once the exam
+  // is cleared, in addition to unit 5's own 90%-mastery bar (which used to be
+  // the sole gate for unit 6). Read once here rather than per-unit — cheap
+  // (at most one row per learner+examKey, see lib/thai/exam-actions.ts) and
+  // only actually consulted when propagating past unit 5 below.
+  //
+  // CRITICAL fix (2026-07-07 code review): select `completedAt`, NOT
+  // `status` — `status` is live and flips back to "in_progress" the instant
+  // a retake starts (see lib/thai/exam-actions.ts::startOrResumeExam), while
+  // `completedAt` is sticky (set once on the first full clear, never nulled
+  // again). Deriving the gate from `status` re-locked unit 6 mid-retake,
+  // violating "first clear unlocks unit 6 PERMANENTLY" — see
+  // lib/thai/exam-pure.ts::unitSixUnlocked's own header for the full writeup.
+  const [examRow] = await db
+    .select({ completedAt: thaiExamSessions.completedAt })
+    .from(thaiExamSessions)
+    .where(
+      and(eq(thaiExamSessions.learnerId, learnerId), eq(thaiExamSessions.examKey, "consonants")),
+    );
+
   const unit1LessonComplete =
     masteredByItem.get(UNIT_1_LESSON_MARKER_ID)?.has(LESSON_READ_DRILL_TYPE) ?? false;
 
@@ -129,7 +150,19 @@ export async function getUnitSummaries(learnerId: string): Promise<UnitSummary[]
       lessonComplete: true, // built-unit lessons are always readable (A4)
     });
 
-    previousUnitUnlocksNext = unlocked && isUnitUnlocked(pct);
+    // Unit 6 additionally requires the Consonant Review Exam cleared — every
+    // other unit's propagation is unchanged (just `unlocked && isUnitUnlocked`).
+    // The QA bypass above only overrides the EXPOSED `unlocked` flag on each
+    // summary; this propagation math always uses the real computed `unlocked`
+    // (not `qaUnlockAll ? true : unlocked`), same contract the header comment
+    // on `unlocked` above already documents. `unitSixUnlocked` (lib/thai/
+    // exam-pure.ts) is the single, unit-tested source of truth for this gate
+    // — see its own header for why it takes `completedAt` (sticky) rather
+    // than deriving "cleared" from the exam row's live `status`.
+    previousUnitUnlocksNext =
+      unit === 5
+        ? unitSixUnlocked(unlocked, pct, examRow?.completedAt)
+        : unlocked && isUnitUnlocked(pct);
   }
 
   return summaries;

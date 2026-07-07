@@ -1,6 +1,8 @@
-import { restrictedUnitOpen } from "@/lib/access";
+import { restrictedExamOpen, restrictedUnitOpen } from "@/lib/access";
+import { getConsonantExamState } from "@/lib/thai/exam-actions";
 import { getUnitSummaries } from "@/lib/thai/queries";
 import { TopBar } from "@/components/top-bar";
+import { ExamCheckpointRow } from "@/components/thai/exam/exam-checkpoint-row";
 import { UnitRow } from "./unit-row";
 
 // Thai-mode home screen (A4): the 14-unit vertical map replaces the Mandarin
@@ -18,7 +20,12 @@ export async function ThaiHome({
   /** Restricted testers: hide the Mandarin mode toggle and lock units 3+. */
   restricted?: boolean;
 }) {
+  // MEDIUM fix (2026-07-07 code review): fetch summaries once and thread
+  // them into getConsonantExamState, instead of letting it independently
+  // re-run getUnitSummaries internally (it did, via isConsonantExamOpen) —
+  // was a redundant full recompute on every home-page render.
   const units = await getUnitSummaries(learnerId);
+  const examState = await getConsonantExamState(learnerId, units);
 
   return (
     <main className="flex min-h-dvh flex-col items-center gap-8 page-gutter pb-[calc(5rem+var(--safe-bottom))] sm:pb-8">
@@ -48,6 +55,16 @@ export async function ThaiHome({
                   : undefined
               }
             />
+            {summary.unit === 5 && (
+              <div className="mt-3">
+                <ExamCheckpointRow
+                  examState={examState}
+                  lockedReason={
+                    restricted && !restrictedExamOpen(examState.open) ? "In construction" : undefined
+                  }
+                />
+              </div>
+            )}
           </div>
         ))}
       </div>

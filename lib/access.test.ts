@@ -2,6 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   isRestrictedLearner,
+  restrictedExamOpen,
   restrictedUnitOpen,
   RESTRICTED_THAI_MAX_UNIT,
 } from "./access";
@@ -48,4 +49,12 @@ test("unit 5 opens for a tester only once it is unlocked (unit 4 finished)", () 
 test("units 6+ stay closed to a tester regardless of unlock", () => {
   assert.equal(restrictedUnitOpen(6, true), false);
   assert.equal(restrictedUnitOpen(7, true), false);
+});
+
+test("the Consonant Review Exam is closed to a tester until unit 5 is finished", () => {
+  assert.equal(restrictedExamOpen(false), false);
+});
+
+test("the Consonant Review Exam opens for a tester once unit 5 is finished", () => {
+  assert.equal(restrictedExamOpen(true), true);
 });
