@@ -8,10 +8,9 @@ import {
   unitMasteryStats,
 } from "./reachability";
 
-// Minimal synthetic content: one unit-2, one unit-3, and one unit-4 consonant
-// (all now flashcards, generalized from the unit-2-only pilot), plus one unit-5
-// consonant (unchanged MCQ) — all four with a final sound so they are also
-// reachable via the cross-unit letter-final in unit 6.
+// Minimal synthetic content: one consonant in each of units 2-5 (all now
+// flashcards, generalized from the unit-2-only pilot) — all four with a final
+// sound so they are also reachable via the cross-unit letter-final in unit 6.
 const ITEMS: ReachabilityItem[] = [
   { id: "consonant:u2", kind: "consonant", unit: 2, drillable: true, finalIpa: "k", display: "ก", metadata: {} },
   { id: "consonant:u3", kind: "consonant", unit: 3, drillable: true, finalIpa: "t", display: "ข", metadata: {} },
@@ -34,9 +33,9 @@ test("unit 4 is reachable through letter-read ONLY (generalized from the unit-2 
   assert.deepEqual(map.get("consonant:u4"), ["letter-read"]);
 });
 
-test("unit 5 keeps the original letter-sound/letter-class/audio-letter MCQ trio", () => {
+test("unit 5 is reachable through letter-read ONLY (joined the flashcard model)", () => {
   const map = reachableDrillTypesForUnit(5, ITEMS);
-  assert.deepEqual(map.get("consonant:u5"), ["letter-sound", "letter-class", "audio-letter"]);
+  assert.deepEqual(map.get("consonant:u5"), ["letter-read"]);
 });
 
 test("unit 2 counts a card mastered via the new letter-read type", () => {
@@ -60,6 +59,13 @@ test("unit 4 counts a card mastered via the new letter-read type", () => {
   assert.equal(count, 1);
 });
 
+test("unit 5 counts a card mastered via the new letter-read type", () => {
+  const mastered = new Map([["consonant:u5", new Set(["letter-read"])]]);
+  const { total, mastered: count } = unitMasteryStats(5, mastered, ITEMS);
+  assert.equal(total, 1);
+  assert.equal(count, 1);
+});
+
 test("unit 2 grandfathers legacy letter-sound mastery (no re-lock)", () => {
   const mastered = new Map([["consonant:u2", new Set(["letter-sound"])]]);
   const { mastered: count } = unitMasteryStats(2, mastered, ITEMS);
@@ -75,6 +81,12 @@ test("unit 3 grandfathers legacy letter-sound mastery (no re-lock)", () => {
 test("unit 4 grandfathers legacy letter-sound mastery (no re-lock)", () => {
   const mastered = new Map([["consonant:u4", new Set(["letter-sound"])]]);
   const { mastered: count } = unitMasteryStats(4, mastered, ITEMS);
+  assert.equal(count, 1);
+});
+
+test("unit 5 grandfathers legacy letter-sound mastery (no re-lock)", () => {
+  const mastered = new Map([["consonant:u5", new Set(["letter-sound"])]]);
+  const { mastered: count } = unitMasteryStats(5, mastered, ITEMS);
   assert.equal(count, 1);
 });
 
@@ -96,6 +108,12 @@ test("unit 4 does NOT count a cross-unit-only letter-final streak", () => {
   assert.equal(count, 0);
 });
 
+test("unit 5 does NOT count a cross-unit-only letter-final streak", () => {
+  const mastered = new Map([["consonant:u5", new Set(["letter-final"])]]);
+  const { mastered: count } = unitMasteryStats(5, mastered, ITEMS);
+  assert.equal(count, 0);
+});
+
 test("unit 2 is fully achievable (letter-read is scoreable for every card)", () => {
   assert.equal(maxAchievablePercentForUnit(2, ITEMS), 100);
 });
@@ -106,6 +124,10 @@ test("unit 3 is fully achievable (letter-read is scoreable for every card)", () 
 
 test("unit 4 is fully achievable (letter-read is scoreable for every card)", () => {
   assert.equal(maxAchievablePercentForUnit(4, ITEMS), 100);
+});
+
+test("unit 5 is fully achievable (letter-read is scoreable for every card)", () => {
+  assert.equal(maxAchievablePercentForUnit(5, ITEMS), 100);
 });
 
 // The shared grandfather definition every item-level mastery check routes

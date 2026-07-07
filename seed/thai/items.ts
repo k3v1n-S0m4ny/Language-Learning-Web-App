@@ -73,17 +73,17 @@ export const LOW_CONSONANTS_A: ConsonantItem[] = [
 // --- Unit 5: Low-class consonants B (12; ฅ shown, not drilled) -------------
 export const LOW_CONSONANTS_B: ConsonantItem[] = [
   { kind: "consonant", id: "consonant:ฅ", unit: 5, display: "ฅ", initialIpa: "kʰ", finalIpa: null, consonantClass: "low", drillable: false, metadata: { name: "ฅ คน", meaning: "person", obsolete: true } },
-  { kind: "consonant", id: "consonant:น", unit: 5, display: "น", initialIpa: "n", finalIpa: "n", consonantClass: "low", drillable: true, metadata: { name: "น หนู", meaning: "mouse" } },
-  { kind: "consonant", id: "consonant:พ", unit: 5, display: "พ", initialIpa: "pʰ", finalIpa: "p", consonantClass: "low", drillable: true, metadata: { name: "พ พาน", meaning: "tray" } },
-  { kind: "consonant", id: "consonant:ฟ", unit: 5, display: "ฟ", initialIpa: "f", finalIpa: "p", consonantClass: "low", drillable: true, metadata: { name: "ฟ ฟัน", meaning: "tooth" } },
-  { kind: "consonant", id: "consonant:ภ", unit: 5, display: "ภ", initialIpa: "pʰ", finalIpa: "p", consonantClass: "low", drillable: true, metadata: { name: "ภ สำเภา", meaning: "junk (ship)" } },
-  { kind: "consonant", id: "consonant:ม", unit: 5, display: "ม", initialIpa: "m", finalIpa: "m", consonantClass: "low", drillable: true, metadata: { name: "ม ม้า", meaning: "horse" } },
-  { kind: "consonant", id: "consonant:ย", unit: 5, display: "ย", initialIpa: "j", finalIpa: "j", consonantClass: "low", drillable: true, metadata: { name: "ย ยักษ์", meaning: "giant" } },
-  { kind: "consonant", id: "consonant:ร", unit: 5, display: "ร", initialIpa: "r", finalIpa: "n", consonantClass: "low", drillable: true, metadata: { name: "ร เรือ", meaning: "boat" } },
-  { kind: "consonant", id: "consonant:ล", unit: 5, display: "ล", initialIpa: "l", finalIpa: "n", consonantClass: "low", drillable: true, metadata: { name: "ล ลิง", meaning: "monkey" } },
-  { kind: "consonant", id: "consonant:ว", unit: 5, display: "ว", initialIpa: "w", finalIpa: "w", consonantClass: "low", drillable: true, metadata: { name: "ว แหวน", meaning: "ring" } },
-  { kind: "consonant", id: "consonant:ฬ", unit: 5, display: "ฬ", initialIpa: "l", finalIpa: "n", consonantClass: "low", drillable: true, metadata: { name: "ฬ จุฬา", meaning: "kite" } },
-  { kind: "consonant", id: "consonant:ฮ", unit: 5, display: "ฮ", initialIpa: "h", finalIpa: null, consonantClass: "low", drillable: true, metadata: { name: "ฮ นกฮูก", meaning: "owl" } },
+  { kind: "consonant", id: "consonant:น", unit: 5, display: "น", initialIpa: "n", finalIpa: "n", consonantClass: "low", drillable: true, metadata: { name: "น หนู", meaning: "mouse", spokenName: "นอ หนู", nameIpa: "nɔ̄ː nǔː" } },
+  { kind: "consonant", id: "consonant:พ", unit: 5, display: "พ", initialIpa: "pʰ", finalIpa: "p", consonantClass: "low", drillable: true, metadata: { name: "พ พาน", meaning: "tray", spokenName: "พอ พาน", nameIpa: "pʰɔ̄ː pʰāːn" } },
+  { kind: "consonant", id: "consonant:ฟ", unit: 5, display: "ฟ", initialIpa: "f", finalIpa: "p", consonantClass: "low", drillable: true, metadata: { name: "ฟ ฟัน", meaning: "tooth", spokenName: "ฟอ ฟัน", nameIpa: "fɔ̄ː fān" } },
+  { kind: "consonant", id: "consonant:ภ", unit: 5, display: "ภ", initialIpa: "pʰ", finalIpa: "p", consonantClass: "low", drillable: true, metadata: { name: "ภ สำเภา", meaning: "junk (ship)", spokenName: "ภอ สำเภา", nameIpa: "pʰɔ̄ː sǎmpʰāw" } },
+  { kind: "consonant", id: "consonant:ม", unit: 5, display: "ม", initialIpa: "m", finalIpa: "m", consonantClass: "low", drillable: true, metadata: { name: "ม ม้า", meaning: "horse", spokenName: "มอ ม้า", nameIpa: "mɔ̄ː máː" } },
+  { kind: "consonant", id: "consonant:ย", unit: 5, display: "ย", initialIpa: "j", finalIpa: "j", consonantClass: "low", drillable: true, metadata: { name: "ย ยักษ์", meaning: "giant", spokenName: "ยอ ยักษ์", nameIpa: "jɔ̄ː ják" } },
+  { kind: "consonant", id: "consonant:ร", unit: 5, display: "ร", initialIpa: "r", finalIpa: "n", consonantClass: "low", drillable: true, metadata: { name: "ร เรือ", meaning: "boat", spokenName: "รอ เรือ", nameIpa: "rɔ̄ː rɯ̄a" } },
+  { kind: "consonant", id: "consonant:ล", unit: 5, display: "ล", initialIpa: "l", finalIpa: "n", consonantClass: "low", drillable: true, metadata: { name: "ล ลิง", meaning: "monkey", spokenName: "ลอ ลิง", nameIpa: "lɔ̄ː līŋ" } },
+  { kind: "consonant", id: "consonant:ว", unit: 5, display: "ว", initialIpa: "w", finalIpa: "w", consonantClass: "low", drillable: true, metadata: { name: "ว แหวน", meaning: "ring", spokenName: "วอ แหวน", nameIpa: "wɔ̄ː wɛ̌ːn" } },
+  { kind: "consonant", id: "consonant:ฬ", unit: 5, display: "ฬ", initialIpa: "l", finalIpa: "n", consonantClass: "low", drillable: true, metadata: { name: "ฬ จุฬา", meaning: "kite", spokenName: "ฬอ จุฬา", nameIpa: "lɔ̄ː tɕùlāː" } },
+  { kind: "consonant", id: "consonant:ฮ", unit: 5, display: "ฮ", initialIpa: "h", finalIpa: null, consonantClass: "low", drillable: true, metadata: { name: "ฮ นกฮูก", meaning: "owl", spokenName: "ฮอ นกฮูก", nameIpa: "hɔ̄ː nókhûːk" } },
 ];
 
 export const ALL_CONSONANTS: ConsonantItem[] = [

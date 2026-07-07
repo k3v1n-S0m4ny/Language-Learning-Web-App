@@ -311,9 +311,12 @@ interface Subject {
 // unit-9 tone word before the paid audio batch has run) is dropped entirely
 // so it can never be picked into a round with nothing to ask about (A4).
 async function buildSubjectPool(unit: number): Promise<Subject[]> {
-  // Units 2-4 are flashcard units (self-graded, no MCQ round) — their decks
-  // are built by lib/thai/flashcards.ts::buildFlashcardDeck, not here. Only
-  // unit 5 uses this MCQ letter-sound/letter-class/audio-letter pool.
+  // Units 2-5 are flashcard units (self-graded, no MCQ round) — their decks
+  // are built by lib/thai/flashcards.ts::buildFlashcardDeck, not here. This
+  // unit-5 letter-sound/letter-class/audio-letter pool is no longer reached by
+  // the unit drill page (unit 5 now routes to flashcards); it is retained
+  // because the Consonant Review Exam (lib/thai/exam.ts) reuses the same
+  // per-consonant question builders over the full units-2-5 pool.
   if (unit === 5) {
     const items = await fetchUnitItems(unit);
     const reachable = computeReachableIds(unit, items);

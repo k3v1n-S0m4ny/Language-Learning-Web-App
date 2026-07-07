@@ -1,7 +1,7 @@
 // Restricted beta learners (owner-approved, ships to production). These
 // accounts may sign in — they're in ALLOWED_EMAILS (see auth.ts) — but are
 // scoped to the Read-Thai course ONLY (no Mandarin flow) and capped at Thai
-// unit 3 while units 4+ are still under construction. Mirrors the per-email
+// unit 4 while units 5+ are still under construction. Mirrors the per-email
 // pattern of lib/thai/qa-access.ts.
 //
 // Enforcement is server-side and does not rely on the UI: app/page.tsx forces
@@ -19,11 +19,11 @@ const RESTRICTED_LEARNER_EMAILS = new Set<string>([
 
 // Thai units 1..RESTRICTED_THAI_MAX_UNIT are always open to these accounts. The
 // single unit just past the ceiling opens the moment the tester FINISHES the
-// previous unit (its `unlocked` flag flips true at 90% mastery) — so unit 4
-// unlocks on completing unit 3. Everything higher returns not-found and renders
+// previous unit (its `unlocked` flag flips true at 90% mastery) — so unit 5
+// unlocks on completing unit 4. Everything higher returns not-found and renders
 // locked ("In construction") on the unit map. Bump this ceiling as each further
 // unit is polished for testers.
-export const RESTRICTED_THAI_MAX_UNIT = 3;
+export const RESTRICTED_THAI_MAX_UNIT = 4;
 
 export function isRestrictedLearner(email: string | null | undefined): boolean {
   if (!email) return false;

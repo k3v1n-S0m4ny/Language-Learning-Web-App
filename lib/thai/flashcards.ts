@@ -1,7 +1,7 @@
-// Flashcard pilot (now generalized to units 2-4): the deck loader for the
+// Flashcard pilot (now generalized to units 2-5): the deck loader for the
 // self-graded "read the letter" flow (front = the glyph, back = its sound +
 // acrophonic name + audio). This replaces the multiple-choice round
-// (lib/thai/drill.ts) for units 2-4 — unit 5 still builds an MCQ round.
+// (lib/thai/drill.ts) for every consonant unit (2-5).
 // See app/thai/[unit]/drill/page.tsx for the branch and
 // components/thai/drill/flashcard-session.tsx for the UI.
 //
@@ -16,7 +16,7 @@ import { thaiItems, thaiProgress } from "@/lib/db/schema";
 import { ALL_THAI_ITEMS } from "@/seed/thai/items";
 import type { ConsonantItem } from "@/seed/thai/types";
 
-export const FLASHCARD_UNITS = new Set([2, 3, 4]);
+export const FLASHCARD_UNITS = new Set([2, 3, 4, 5]);
 
 // A fresh shuffle seed for one flashcard session. Kept here (a plain module
 // function, not a component) so the page can mint a per-request seed without

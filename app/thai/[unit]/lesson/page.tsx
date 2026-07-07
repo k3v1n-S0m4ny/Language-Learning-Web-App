@@ -20,10 +20,10 @@ import {
   WORD_BANK,
 } from "@/seed/thai/items";
 import { LangSync } from "@/components/lang-sync";
-import { ConsonantTable } from "@/components/thai/lessons/consonant-table";
 import { FinalsTable } from "@/components/thai/lessons/finals-table";
 import { HighConsonantLesson } from "@/components/thai/lessons/high-consonant-lesson";
 import { LowConsonantLesson } from "@/components/thai/lessons/low-consonant-lesson";
+import { LowConsonantLessonB } from "@/components/thai/lessons/low-consonant-lesson-b";
 import { MidConsonantLesson } from "@/components/thai/lessons/mid-consonant-lesson";
 import { NumeralsLesson } from "@/components/thai/lessons/numerals-lesson";
 import { SpacelessReadingLesson } from "@/components/thai/lessons/spaceless-reading-lesson";
@@ -111,7 +111,7 @@ export default async function ThaiLessonPage({
       {unit === 2 && <MidConsonantLesson items={MID_CONSONANTS} />}
       {unit === 3 && <HighConsonantLesson items={HIGH_CONSONANTS} />}
       {unit === 4 && <LowConsonantLesson items={LOW_CONSONANTS_A} />}
-      {unit === 5 && <ConsonantTable items={LOW_CONSONANTS_B} />}
+      {unit === 5 && <LowConsonantLessonB items={LOW_CONSONANTS_B} />}
       {unit === 6 && <FinalsTable items={FINALS} />}
       {unit === 7 && <VowelTable items={VOWELS_A} />}
       {unit === 8 && <VowelTable items={VOWELS_B} />}

@@ -44,9 +44,9 @@
 export type DrillTypeId =
   | "letter-sound"
   | "letter-class"
-  // Flashcard self-graded recognition (units 2-4) — the ONLY required drill
+  // Flashcard self-graded recognition (units 2-5) — the ONLY required drill
   // type for those units, replacing the letter-sound/letter-class/audio-letter
-  // trio. See the `unit >= 2 && unit <= 4` branch of
+  // trio. See the `unit >= 2 && unit <= 5` branch of
   // reachableDrillTypesForUnit below.
   | "letter-read"
   | "letter-final"
@@ -225,27 +225,18 @@ export function reachableDrillTypesForUnit(
 ): Map<string, DrillTypeId[]> {
   const map = new Map<string, DrillTypeId[]>();
 
-  // Units 2-4 (flashcards): the mid-class, high-class, and low-class-A
-  // consonants are drilled as self-graded "read the letter" flashcards, not
-  // multiple-choice. A card is reachable through exactly one drill type —
-  // letter-read — so clearing the deck once (one "knew it" per card, see
-  // lib/thai/actions.ts::submitFlashcardGrade) takes the unit to 100% and
-  // unlocks the next unit. Unit 5 keeps the original
-  // letter-sound/letter-class/audio-letter MCQ trio.
-  if (unit >= 2 && unit <= 4) {
+  // Units 2-5 (flashcards): every consonant unit is drilled as self-graded
+  // "read the letter" flashcards, not multiple-choice. A card is reachable
+  // through exactly one drill type — letter-read — so clearing the deck once
+  // (one "knew it" per card, see lib/thai/actions.ts::submitFlashcardGrade)
+  // takes the unit to 100% and unlocks the next unit. Unit 5 was the last
+  // consonant unit on the legacy letter-sound/letter-class/audio-letter MCQ
+  // trio; it joins the flashcard model here. Those three MCQ drill types now
+  // live only inside the cross-unit Consonant Review Exam (lib/thai/exam.ts),
+  // not in any single unit's mastery denominator.
+  if (unit >= 2 && unit <= 5) {
     for (const i of allItems) {
       if (i.unit === unit && i.drillable) addTo(map, i.id, "letter-read");
-    }
-    return map;
-  }
-
-  if (unit === 5) {
-    for (const i of allItems) {
-      if (i.unit === unit && i.drillable) {
-        addTo(map, i.id, "letter-sound");
-        addTo(map, i.id, "letter-class");
-        if (canEverHaveAudio(i)) addTo(map, i.id, "audio-letter");
-      }
     }
     return map;
   }
@@ -580,4 +571,5 @@ export function assertUnitMasteryScopingGuard(allItems: ReachabilityItem[]): voi
   assertUnitMasteryScopingGuardForUnit(2, allItems);
   assertUnitMasteryScopingGuardForUnit(3, allItems);
   assertUnitMasteryScopingGuardForUnit(4, allItems);
+  assertUnitMasteryScopingGuardForUnit(5, allItems);
 }
