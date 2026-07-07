@@ -469,7 +469,11 @@ export function consonantDistractors(
   return options;
 }
 
-function finalSoundDistractors(correct: string): DrillOption[] {
+// Exported for lib/thai/exam.ts — the Consonant Review Exam's new letter-final
+// mode (owner QA round, adds a 5th mode) reuses this exact distractor builder
+// for its real-final-sound candidates, same rationale as consonantDistractors'
+// own export above.
+export function finalSoundDistractors(correct: string): DrillOption[] {
   const group = FINAL_GROUPS[correct] ?? [...FINAL_SOUNDS];
   const preferred = group.filter((s) => s !== correct);
   const rest = FINAL_SOUNDS.filter((s) => s !== correct && !preferred.includes(s));

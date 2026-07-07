@@ -8,6 +8,7 @@ import { submitFlashcardGrade } from "./actions";
 import { expectedAnswerFor } from "./drill";
 import {
   EXAM_MODES,
+  expectedFinalAnswer,
   fetchExamConsonants,
   hydrateCard,
   initialExamState,
@@ -202,8 +203,12 @@ export async function startOrResumeExam(
 // all group by item id/unit, not by drill_type, and the tone-confusion matrix
 // filters on the literal `"audio-tone"` string (never matched by these three
 // exam-scoped keys) — no fixed drill_type label map exists anywhere to break.
-const EXAM_SCOPED_DRILL_TYPE: Record<"letter-sound" | "letter-class" | "audio-letter", string> = {
+const EXAM_SCOPED_DRILL_TYPE: Record<
+  "letter-sound" | "letter-final" | "letter-class" | "audio-letter",
+  string
+> = {
   "letter-sound": "exam-letter-sound",
+  "letter-final": "exam-letter-final",
   "letter-class": "exam-letter-class",
   "audio-letter": "exam-audio-letter",
 };
@@ -329,12 +334,30 @@ export async function submitExamAnswer(
     const knewIt = answer === "known";
     correct = knewIt;
     await submitFlashcardGrade(itemId, knewIt);
+  } else if (mode === "letter-final") {
+    // CORRECTION 1 (owner QA round): letter-final is NOT routed through
+    // expectedAnswerFor — its real-DrillType case returns a bare `null` for
+    // the 6 finalless consonants (a valid, expected card here, not an error —
+    // see expectedFinalAnswer's own doc comment). Correctness is derived from
+    // the REAL finalIpa via expectedFinalAnswer; only the STORED bookkeeping
+    // key is exam-scoped.
+    const expected = expectedFinalAnswer(item.finalIpa);
+    correct = expected === answer;
+    await reinforceExamMcqAnswer(
+      learnerId,
+      itemId,
+      EXAM_SCOPED_DRILL_TYPE["letter-final"],
+      expected,
+      answer,
+      correct,
+    );
   } else {
-    // `mode` here is narrowed to the real DrillType by the `!== "flashcard"`
-    // branch — correctness is derived from the REAL DrillType (expectedAnswerFor
-    // is the single source of truth), but the row PERSISTED to thai_progress/
-    // thai_attempts uses the exam-scoped bookkeeping key (EXAM_SCOPED_DRILL_TYPE)
-    // so it can never satisfy the letter-sound->letter-read grandfather.
+    // `mode` here is narrowed to the real DrillType by the `!== "flashcard"`/
+    // `!== "letter-final"` branches — correctness is derived from the REAL
+    // DrillType (expectedAnswerFor is the single source of truth), but the
+    // row PERSISTED to thai_progress/thai_attempts uses the exam-scoped
+    // bookkeeping key (EXAM_SCOPED_DRILL_TYPE) so it can never satisfy the
+    // letter-sound->letter-read grandfather.
     const expected = expectedAnswerFor(item, mode);
     if (expected === null) throw new Error("Drill type does not apply to this item");
     correct = expected === answer;

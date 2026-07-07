@@ -2,9 +2,11 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   applyAnswer,
+  expectedFinalAnswer,
   initialExamState,
   interleaveDeck,
   isExamClearedSticky,
+  NO_FINAL,
   requeue,
   unitSixUnlocked,
   type ExamCard,
@@ -20,14 +22,27 @@ function makeConsonants(count: number, audioCount: number) {
   }));
 }
 
-test("interleaveDeck: full deck size is 168 when every consonant has audio (42 x 4 modes)", () => {
+test("interleaveDeck: full deck size is 210 when every consonant has audio (42 x 5 modes)", () => {
   const deck = interleaveDeck(makeConsonants(42, 42), 1);
-  assert.equal(deck.length, 168);
+  assert.equal(deck.length, 210);
 });
 
-test("interleaveDeck: deck size is 126 + audioCount when some consonants lack audio", () => {
+test("interleaveDeck: deck size is 42x4 + audioCount when some consonants lack audio", () => {
   const deck = interleaveDeck(makeConsonants(42, 30), 1);
-  assert.equal(deck.length, 126 + 30);
+  assert.equal(deck.length, 42 * 4 + 30);
+});
+
+// Owner QA round (CORRECTION 1): letter-final is unconditional for EVERY
+// consonant — including a "finalless" one (interleaveDeck itself has no
+// notion of finalness; that's resolved later at hydration time via
+// expectedFinalAnswer/item.finalIpa — this only proves letter-final is
+// emitted the same way flashcard/letter-sound/letter-class are, unlike
+// audio-letter which is conditional on audioUrl).
+test("interleaveDeck: emits a letter-final card for every consonant, unconditionally (like flashcard/letter-sound/letter-class)", () => {
+  const finalless = [{ id: "consonant:finalless-example", audioUrl: null }];
+  const deck = interleaveDeck(finalless, 1);
+  const modes = deck.map((c) => c.mode).sort();
+  assert.deepEqual(modes, ["flashcard", "letter-class", "letter-final", "letter-sound"]);
 });
 
 test("interleaveDeck: never places two cards for the same consonant back-to-back", () => {
@@ -62,12 +77,12 @@ test("requeue: reinserts 10 positions ahead when at least 10 cards remain", () =
   assert.equal(result[10], card);
 });
 
-test("requeue: falls back to the end when fewer than 10 cards remain", () => {
+test("requeue: falls back to the end when fewer than 10 cards remain (letter-final mode)", () => {
   const remaining: ExamCard[] = Array.from({ length: 4 }, (_, i) => ({
     itemId: `consonant:${i}`,
-    mode: "letter-sound",
+    mode: "letter-final",
   }));
-  const card: ExamCard = { itemId: "consonant:missed", mode: "letter-sound" };
+  const card: ExamCard = { itemId: "consonant:missed", mode: "letter-final" };
   const result = requeue(remaining, card);
   assert.equal(result.length, 5);
   assert.equal(result[result.length - 1], card);
@@ -144,6 +159,23 @@ test("applyAnswer: a requeued card cleared later does NOT count as first-try-cor
   assert.equal(state.firstTry.overall.correct, 2);
 });
 
+test("applyAnswer: tracks first-try stats for the letter-final mode too", () => {
+  const queue: ExamCard[] = [
+    { itemId: "consonant:a", mode: "letter-final" },
+    { itemId: "consonant:b", mode: "letter-final" },
+  ];
+  let state = initialExamState(1, queue);
+  state = applyAnswer(state, queue[0], true);
+
+  assert.equal(state.firstTry.perMode["letter-final"].seen, 1);
+  assert.equal(state.firstTry.perMode["letter-final"].correct, 1);
+  // Every other mode's bucket stays untouched.
+  assert.equal(state.firstTry.perMode.flashcard.seen, 0);
+  assert.equal(state.firstTry.perMode["letter-sound"].seen, 0);
+  assert.equal(state.firstTry.perMode["letter-class"].seen, 0);
+  assert.equal(state.firstTry.perMode["audio-letter"].seen, 0);
+});
+
 test("clear-the-deck: terminates only once every card has been answered correctly at least once", () => {
   const queue: ExamCard[] = [
     { itemId: "consonant:a", mode: "flashcard" },
@@ -217,4 +249,17 @@ test("unitSixUnlocked PERMANENCE: stays unlocked across a retake — completedAt
   // code derived "cleared" from live `status`, which WOULD have flipped this
   // false the instant a retake began.
   assert.equal(unitSixUnlocked(true, 90, firstClearedAt), true);
+});
+
+// Owner QA round (CORRECTION 1): expectedFinalAnswer is the letter-final
+// mode's own answer-derivation, deliberately NOT routed through
+// lib/thai/drill.ts's expectedAnswerFor (whose "letter-final" case would
+// return a bare `null` for a finalless consonant — a real error case there,
+// but a valid, expected card here).
+test("expectedFinalAnswer: maps a null finalIpa (finalless consonant) to the NO_FINAL sentinel", () => {
+  assert.equal(expectedFinalAnswer(null), NO_FINAL);
+});
+
+test("expectedFinalAnswer: passes a real final sound straight through", () => {
+  assert.equal(expectedFinalAnswer("k"), "k");
 });

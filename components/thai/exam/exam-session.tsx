@@ -9,14 +9,37 @@ import { Celebration } from "@/components/ui/celebration";
 
 const EXAM_KEY = "consonants";
 
+// Short labels — the live per-card header + the summary screen's per-mode
+// breakdown tiles.
 const MODE_LABELS: Record<ExamMode, string> = {
   flashcard: "Read the letter",
   "letter-sound": "Pick the sound",
+  "letter-final": "End sound",
   "letter-class": "Pick the class",
   "audio-letter": "Hear it, pick the letter",
 };
 
-const EXAM_MODE_ORDER: ExamMode[] = ["flashcard", "letter-sound", "letter-class", "audio-letter"];
+// CORRECTION 2 (owner QA round): an explicit, prominent question line above
+// the prompt glyph + options on EVERY card — previously the mode only showed
+// as tiny uppercase header text (MODE_LABELS above), so the pronunciation-MCQ
+// and class-MCQ cards looked identical at a glance (same bare glyph, same
+// option-grid chrome) with no way to tell which question was being asked
+// without reading the small print.
+const MODE_PROMPTS: Record<ExamMode, string> = {
+  flashcard: "Read this letter",
+  "letter-sound": "What sound does it make at the start?",
+  "letter-final": "What sound does it make at the end?",
+  "letter-class": "What class is this consonant?",
+  "audio-letter": "Which letter did you hear?",
+};
+
+const EXAM_MODE_ORDER: ExamMode[] = [
+  "flashcard",
+  "letter-sound",
+  "letter-final",
+  "letter-class",
+  "audio-letter",
+];
 
 interface FirstTryStats {
   overall: ExamModeStats;
@@ -60,6 +83,13 @@ export function ExamSession({
   // result, resume-aware via the initial props on a reload mid-deck).
   const [slips, setSlips] = useState(initialSlips);
   const [firstTryStats, setFirstTryStats] = useState<FirstTryStats>(initialFirstTry);
+  // Modern ⇄ classical Thai letterform (owner QA round, CORRECTION 4) — same
+  // state shape + toggle control as components/thai/drill/flashcard-session.tsx,
+  // shown on EVERY card (not just flashcard mode) since letter-sound/
+  // letter-final/letter-class/audio-letter all render real Thai glyphs too.
+  // Defaults to "looped" — the classical textbook form a beginner learns
+  // first; "loopless" is the modern signage cut.
+  const [thaiStyle, setThaiStyle] = useState<"looped" | "loopless">("looped");
   // Flashcard-mode reveal (front glyph -> flip to check sound/name/audio).
   const [flipped, setFlipped] = useState(false);
   // MCQ-mode answering/revealed phase (mirrors components/thai/drill/
@@ -72,6 +102,8 @@ export function ExamSession({
   const [pendingResult, setPendingResult] = useState<SubmitExamAnswerResult | null>(null);
   const [summary, setSummary] = useState<Summary | null>(null);
   const [pending, startTransition] = useTransition();
+
+  const thaiFont = thaiStyle === "looped" ? "font-thai-looped" : "font-thai-loopless";
 
   if (!card && !summary) {
     return (
@@ -133,7 +165,7 @@ export function ExamSession({
           <StatTile label="First-try accuracy" value={`${percent(summary.firstTry.overall)}%`} />
           <StatTile label="Slips" value={summary.slips} />
         </div>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
           {EXAM_MODE_ORDER.map((mode) => (
             <StatTile key={mode} label={MODE_LABELS[mode]} value={`${percent(summary.firstTry.perMode[mode])}%`} />
           ))}
@@ -171,14 +203,57 @@ export function ExamSession({
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="text-xs font-medium uppercase tracking-wide text-foreground-muted">
-        Cleared {clearedCount} / {total} · {MODE_LABELS[card.mode]}
-        {firstTryStats.overall.seen > 0 && ` · ${percent(firstTryStats.overall)}% first-try`}
-        {slips > 0 && ` · ${slips} slip${slips === 1 ? "" : "s"}`}
+      <div className="flex items-center justify-between gap-3">
+        <div className="text-xs font-medium uppercase tracking-wide text-foreground-muted">
+          Cleared {clearedCount} / {total} · {MODE_LABELS[card.mode]}
+          {firstTryStats.overall.seen > 0 && ` · ${percent(firstTryStats.overall)}% first-try`}
+          {slips > 0 && ` · ${slips} slip${slips === 1 ? "" : "s"}`}
+        </div>
+        {/* CORRECTION 4 (owner QA round): classic/modern Thai letterform
+            toggle, shown on every card — verbatim control styling from
+            components/thai/drill/flashcard-session.tsx. */}
+        <div
+          role="group"
+          aria-label="Thai letterform style"
+          className="inline-flex shrink-0 rounded-[var(--r-pill)] border border-border-base p-0.5"
+        >
+          {(
+            [
+              ["looped", "Classical"],
+              ["loopless", "Modern"],
+            ] as const
+          ).map(([value, label]) => (
+            <button
+              key={value}
+              type="button"
+              onClick={() => setThaiStyle(value)}
+              aria-pressed={thaiStyle === value}
+              className={`rounded-[var(--r-pill)] px-3 py-1 text-xs font-medium transition-colors ${
+                thaiStyle === value
+                  ? "bg-accent text-on-earthy"
+                  : "text-foreground-muted hover:bg-background"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
       </div>
 
+      {/* CORRECTION 2 (owner QA round): the explicit question prompt, shown
+          above the glyph/options for every card so pronunciation-MCQ and
+          class-MCQ (both bare-glyph prompts) never look interchangeable. */}
+      <div className="text-base font-medium text-foreground">{MODE_PROMPTS[card.mode]}</div>
+
       {card.mode === "flashcard" ? (
-        <FlashcardModeCard card={card} flipped={flipped} onFlip={() => setFlipped(true)} onGrade={(known) => submit(known ? "known" : "missed")} pending={pending} />
+        <FlashcardModeCard
+          card={card}
+          flipped={flipped}
+          onFlip={() => setFlipped(true)}
+          onGrade={(known) => submit(known ? "known" : "missed")}
+          pending={pending}
+          thaiFont={thaiFont}
+        />
       ) : (
         <McqModeCard
           card={card}
@@ -188,6 +263,7 @@ export function ExamSession({
           pending={pending}
           onAnswer={submit}
           onNext={next}
+          thaiFont={thaiFont}
         />
       )}
     </div>
@@ -200,24 +276,26 @@ function FlashcardModeCard({
   onFlip,
   onGrade,
   pending,
+  thaiFont,
 }: {
   card: Extract<HydratedExamCard, { mode: "flashcard" }>;
   flipped: boolean;
   onFlip: () => void;
   onGrade: (knewIt: boolean) => void;
   pending: boolean;
+  thaiFont: string;
 }) {
   return (
     <>
       <div className="flex min-h-[16rem] flex-col items-center justify-center gap-5 rounded-[var(--r-lg)] border border-border-base bg-surface p-8">
-        <div className="font-thai-looped text-[6rem] leading-none text-foreground">{card.glyph}</div>
+        <div className={`${thaiFont} text-[6rem] leading-none text-foreground`}>{card.glyph}</div>
         {flipped ? (
           <div className="flex flex-col items-center gap-3 animate-fade-in">
             <div className="flex gap-3">
               <SoundTile label="Initial" ipa={card.sound} />
               <SoundTile label="Final" ipa={card.finalSound} />
             </div>
-            <div className="font-thai-looped text-lg text-foreground">{card.name}</div>
+            <div className={`${thaiFont} text-lg text-foreground`}>{card.name}</div>
             {card.nameIpa && (
               <div className="font-mono text-sm text-foreground-muted">[{card.nameIpa}]</div>
             )}
@@ -271,22 +349,37 @@ function McqModeCard({
   pending,
   onAnswer,
   onNext,
+  thaiFont,
 }: {
-  card: Extract<HydratedExamCard, { mode: "letter-sound" | "letter-class" | "audio-letter" }>;
+  card: Extract<HydratedExamCard, { mode: "letter-sound" | "letter-final" | "letter-class" | "audio-letter" }>;
   phase: "answering" | "revealed";
   chosen: string | null;
   lastCorrect: boolean | null;
   pending: boolean;
   onAnswer: (value: string) => void;
   onNext: () => void;
+  thaiFont: string;
 }) {
+  // CORRECTION 4 (owner QA round): only audio-letter's OPTIONS are real Thai
+  // glyphs (consonantDistractors' "display" field) — everything else's
+  // options are IPA strings/class names/the "no final sound" label and stay
+  // font-mono, unchanged.
+  const optionFont = card.mode === "audio-letter" ? `${thaiFont} text-[2.4rem]` : "font-mono text-lg";
+
   return (
     <>
       <div className="flex flex-col items-center gap-4 rounded-[var(--r-lg)] border border-border-base bg-surface p-8">
         {card.promptKind === "audio" ? (
           card.audioUrl && <AudioPlayButton url={card.audioUrl} label="▶ Play clip" />
         ) : (
-          <div className="text-center font-thai text-[4.8rem] text-foreground">{card.prompt}</div>
+          // CORRECTION 3 (owner QA round): `promptDisplay` carries the
+          // positional-dash notation for letter-sound ("ก-")/letter-final
+          // ("-ก") — falls back to the bare glyph (`prompt`) for letter-class,
+          // which has no promptDisplay set. The dash is part of the same text
+          // node as the glyph, so it renders in the same Thai font.
+          <div className={`text-center ${thaiFont} text-[4.8rem] text-foreground`}>
+            {card.promptDisplay ?? card.prompt}
+          </div>
         )}
       </div>
 
@@ -305,7 +398,7 @@ function McqModeCard({
               type="button"
               disabled={phase === "revealed" || pending}
               onClick={() => onAnswer(option.value)}
-              className={`rounded-[var(--r-lg)] border-2 px-4 py-3 text-center font-mono text-lg transition-colors disabled:cursor-default ${style}`}
+              className={`rounded-[var(--r-lg)] border-2 px-4 py-3 text-center ${optionFont} transition-colors disabled:cursor-default ${style}`}
             >
               {option.label}
             </button>

@@ -24,9 +24,41 @@
 // value, never as a derivation of `status`.
 import { isUnitUnlocked } from "./mastery";
 
-export type ExamMode = "flashcard" | "letter-sound" | "letter-class" | "audio-letter";
+// Owner QA round (5th mode, "letter-final" — the letter's FINAL-position
+// sound, e.g. ก -> "k" at the end of a syllable): added alongside the
+// original four. See `expectedFinalAnswer`/`NO_FINAL` below for why this mode
+// needs its own answer-derivation, distinct from the real DrillType
+// "letter-final" that lib/thai/drill.ts already uses for unit 6's own
+// (finalIpa-guaranteed-non-null) subjects.
+export type ExamMode = "flashcard" | "letter-sound" | "letter-final" | "letter-class" | "audio-letter";
 
-export const EXAM_MODES: ExamMode[] = ["flashcard", "letter-sound", "letter-class", "audio-letter"];
+export const EXAM_MODES: ExamMode[] = [
+  "flashcard",
+  "letter-sound",
+  "letter-final",
+  "letter-class",
+  "audio-letter",
+];
+
+// Sentinel value for "this consonant has no final-position sound" (6 of the
+// 42: ฉ ผ ฝ ห อ ฮ) — the letter-final mode's own valid, correct answer for
+// those cards ("no final sound" is itself the teaching point, not a card to
+// skip). Display label kept alongside the value so lib/thai/exam.ts's option
+// builder and any future caller render the same human-readable text for it.
+export const NO_FINAL = "none";
+export const NO_FINAL_LABEL = "no final sound";
+
+// The letter-final mode's answer-derivation — deliberately NOT routed through
+// lib/thai/drill.ts's `expectedAnswerFor(item, "letter-final")`, which returns
+// `item.finalIpa` as-is (null for the 6 finalless consonants) and is used
+// elsewhere (unit 6's own letter-final drill) ONLY for subjects reachability
+// has already filtered to `finalIpa !== null` — a null there would be a bug.
+// Here, null is a valid, expected case (the card's own correct answer is
+// NO_FINAL), so this maps it explicitly rather than reusing a function whose
+// contract is "return null when the answer can't be derived."
+export function expectedFinalAnswer(finalIpa: string | null): string {
+  return finalIpa ?? NO_FINAL;
+}
 
 export interface ExamCard {
   itemId: string;
@@ -84,16 +116,19 @@ function seededShuffle<T>(arr: T[], seed: number): T[] {
   return copy;
 }
 
-// Build the full up-to-168-card deck (42 consonants x up to 4 modes each —
-// audio-letter only when the consonant's audioUrl is populated, A4-style
-// graceful degradation) and interleave it with a seeded shuffle that never
-// places two cards for the same consonant back-to-back.
+// Build the full up-to-210-card deck (42 consonants x up to 5 modes each —
+// flashcard/letter-sound/letter-final/letter-class are unconditional for
+// EVERY consonant, including the 6 with no final sound at all (their
+// letter-final card's correct answer is NO_FINAL, the teaching point itself,
+// not something to skip); audio-letter only when the consonant's audioUrl is
+// populated, A4-style graceful degradation) and interleave it with a seeded
+// shuffle that never places two cards for the same consonant back-to-back.
 //
 // Adjacency repair: after the seeded shuffle, a single forward pass swaps any
 // same-itemId-adjacent pair with a later card that doesn't itself border a
 // same-itemId conflict. This is the standard "task scheduler" rearrangement
-// and is always solvable here — no consonant contributes more than 4 of the
-// up to 168 cards, far under the ~half-the-deck ceiling the greedy swap
+// and is always solvable here — no consonant contributes more than 5 of the
+// up to 210 cards, far under the ~half-the-deck ceiling the greedy swap
 // needs to guarantee a fix exists.
 export function interleaveDeck(
   consonants: { id: string; audioUrl: string | null }[],
@@ -103,6 +138,7 @@ export function interleaveDeck(
   for (const c of consonants) {
     cards.push({ itemId: c.id, mode: "flashcard" });
     cards.push({ itemId: c.id, mode: "letter-sound" });
+    cards.push({ itemId: c.id, mode: "letter-final" });
     cards.push({ itemId: c.id, mode: "letter-class" });
     if (c.audioUrl) cards.push({ itemId: c.id, mode: "audio-letter" });
   }
@@ -147,6 +183,7 @@ export function initialExamState(seed: number, queue: ExamCard[]): ExamState {
       perMode: {
         flashcard: { seen: 0, correct: 0 },
         "letter-sound": { seen: 0, correct: 0 },
+        "letter-final": { seen: 0, correct: 0 },
         "letter-class": { seen: 0, correct: 0 },
         "audio-letter": { seen: 0, correct: 0 },
       },
