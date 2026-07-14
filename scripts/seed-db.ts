@@ -65,6 +65,7 @@ async function main() {
         wholePinyin: card.wholePinyin,
         wholeAudioUrl: card.wholeAudioUrl ?? null,
         deckOrder: index,
+        hskLevel: card.hsk ?? null,
       })
       .returning({ id: schema.cards.id });
 

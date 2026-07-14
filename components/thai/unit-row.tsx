@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { UnitSummary } from "@/lib/thai/types";
-import { ProgressRing } from "./progress-ring";
+import { ProgressRing } from "@/components/progress-ring";
 
 // Glass-native unit-map row (Phase 2): the unit map is a "floating chrome"
 // surface per the design system, so the .glass recipe is sanctioned here

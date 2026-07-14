@@ -2,12 +2,15 @@
 
 import { motion, useReducedMotion } from "motion/react";
 
-// Small SVG progress ring for a unit's mastery percentage (A4).
+// Small SVG progress ring for a mastery percentage (A4). Shared across both
+// courses — a Thai unit's mastery and a Mandarin HSK band's — which works because
+// the active stroke is the per-language --accent var, so it recolours itself from
+// the surrounding [data-lang] context.
 //
 // Client leaf (Phase 3): the active stroke animates from empty (full offset)
 // to its target offset on mount with a spring. This is a contained "use client"
-// boundary — unit-row.tsx stays a server component and simply renders this leaf.
-// Reduced-motion renders the static final offset (no animation).
+// boundary — its callers (unit-row.tsx, hsk-ladder.tsx) stay server components and
+// simply render this leaf. Reduced-motion renders the static final offset.
 const SIZE = 44;
 const STROKE = 4;
 const RADIUS = (SIZE - STROKE) / 2;

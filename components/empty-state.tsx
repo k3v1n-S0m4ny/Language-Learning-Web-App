@@ -2,6 +2,8 @@
 
 import { useEffect, useSyncExternalStore } from "react";
 import { Celebration } from "@/components/ui/celebration";
+import { hskLabel } from "@/lib/review/hsk-gate";
+import type { GateStatus } from "@/lib/review/types";
 
 // Shown when no Card is due and the daily new-card cap is exhausted. A
 // quiet glass surface per the design spec's "Empty/loading" note — EXCEPT
@@ -45,19 +47,42 @@ function getServerSnapshot(): boolean {
   return false;
 }
 
-export function EmptyState() {
+export function EmptyState({ gate }: { gate: GateStatus }) {
   const celebrate = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+
+  // The HSK gate is what is holding new Cards back — not the daily cap, and not a
+  // finished deck. Under the gate this is a routine state (every eligible Card is
+  // introduced, the band below is still short of 90%), so it must NOT read as a
+  // milestone: no confetti for being stuck, and say what would actually unlock it.
+  const blocked =
+    gate.eligibleUnseen === 0 && gate.nextBand !== null && gate.blockingBand !== null;
 
   // Marks the one-shot fired — a plain external-system write, not a
   // setState call, so react-hooks/set-state-in-effect doesn't apply here.
   useEffect(() => {
-    if (!celebrate) return;
+    if (!celebrate || blocked) return;
     try {
       sessionStorage.setItem("mandarin:cleared-fired", "1");
     } catch {
       /* private mode / storage disabled — celebration just won't repeat-guard, harmless */
     }
-  }, [celebrate]);
+  }, [celebrate, blocked]);
+
+  if (blocked) {
+    const { band, mastered, required } = gate.blockingBand!;
+    return (
+      <div className="glass flex w-full max-w-md flex-col items-center gap-3 rounded-[var(--r-xl)] px-8 py-12 text-center animate-fade-in">
+        <p className="text-lg font-semibold text-foreground">
+          {hskLabel(gate.nextBand!)} is locked
+        </p>
+        <p className="text-sm text-foreground-muted">
+          Master {required} of the {hskLabel(band)} phrases to unlock it — you&apos;re at{" "}
+          {mastered}. Keep reviewing: a phrase counts once you rate it Easy, or recall
+          it correctly after it has graduated.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <Celebration show={celebrate}>

@@ -4,11 +4,14 @@ import { auth } from "@/auth";
 import { isRestrictedLearner } from "@/lib/access";
 import { LangSync } from "@/components/lang-sync";
 import { getLearnersStats } from "@/lib/review/stats";
+import { getHskGate } from "@/lib/review/queries";
+import { HskLadder } from "@/components/stats/hsk-ladder";
 import { ReviewsChart } from "@/components/stats/reviews-chart";
 import { ForecastChart } from "@/components/stats/forecast-chart";
 import { RatingChart } from "@/components/stats/rating-chart";
 import { CountUp } from "@/components/ui/count-up";
 import { StatCard } from "@/components/ui/stat-card";
+import type { HskGate } from "@/lib/review/hsk-gate";
 import type { LearnerStats } from "@/lib/review/stats";
 
 // Stats page — read-only progress view for both learners side by side.
@@ -26,6 +29,10 @@ export default async function StatsPage() {
   }
 
   const learners = await getLearnersStats(new Date());
+  // The gate is per-learner, and this page shows both learners side by side.
+  const gates = await Promise.all(
+    learners.map((learner) => getHskGate(learner.learnerId)),
+  );
 
   return (
     // No bg-background here (Phase 3) — the global ambient mesh shows
@@ -45,8 +52,8 @@ export default async function StatsPage() {
 
       {/* Two-column layout — stacks on mobile (A3) */}
       <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 sm:grid-cols-2">
-        {learners.map((learner) => (
-          <LearnerColumn key={learner.learnerId} stats={learner} />
+        {learners.map((learner, i) => (
+          <LearnerColumn key={learner.learnerId} stats={learner} gate={gates[i]} />
         ))}
       </div>
     </main>
@@ -58,7 +65,13 @@ export default async function StatsPage() {
 // Content surface (a stats card the learner reads), so it stays the same
 // "solid elevated" recipe as the flip-card faces — border + bg-surface +
 // var(--glass-shadow) — never actual .glass blur behind the figures (Phase 3).
-function LearnerColumn({ stats }: { stats: LearnerStats }) {
+function LearnerColumn({
+  stats,
+  gate,
+}: {
+  stats: LearnerStats;
+  gate: HskGate;
+}) {
   const pct =
     stats.total > 0 ? Math.round((stats.seen / stats.total) * 100) : 0;
 
@@ -83,6 +96,12 @@ function LearnerColumn({ stats }: { stats: LearnerStats }) {
         <StatCard label="Mature" value={stats.mature} className="animate-slide-up-fade" style={{ animationDelay: "0ms" }} />
         <StatCard label="Streak" value={`${stats.streak}d`} className="animate-slide-up-fade" style={{ animationDelay: "40ms" }} />
         <StatCard label="Leeches" value={stats.leechCount} className="animate-slide-up-fade" style={{ animationDelay: "80ms" }} />
+      </div>
+
+      {/* HSK band ladder — where the gate stands, and what would open the next band */}
+      <div>
+        <SectionLabel>HSK bands</SectionLabel>
+        <HskLadder gate={gate} />
       </div>
 
       {/* Reviews over the last 30 days (A5) */}

@@ -53,7 +53,7 @@ export default async function Home() {
         {card && hints ? (
           <ReviewSession key={card.id} card={card} hints={hints} />
         ) : (
-          <EmptyState />
+          <EmptyState gate={counts.gate} />
         )}
       </div>
     </main>

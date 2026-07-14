@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ConsonantExamState } from "@/lib/thai/exam-actions";
-import { ProgressRing } from "@/components/thai/progress-ring";
+import { ProgressRing } from "@/components/progress-ring";
 
 // The Consonant Review Exam's own row on the Read-Thai home map, rendered
 // between unit 5 and unit 6 (components/thai/thai-home.tsx). Mirrors

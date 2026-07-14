@@ -1,13 +1,15 @@
-import { and, asc, count, eq, gt, lte, notExists, sql } from "drizzle-orm";
+import { and, asc, count, eq, gt, lte, sql } from "drizzle-orm";
 import { db } from "@/lib/db";
 import {
   cards,
   cardTags,
   learnerSettings,
+  reviewLogs,
   reviewStates,
   tags,
   words,
 } from "@/lib/db/schema";
+import { computeGate, type GateCardRow, type HskGate } from "./hsk-gate";
 import {
   createEmptyCard,
   getScheduler,
@@ -34,12 +36,57 @@ export async function ensureLearnerSettings(learnerId: string) {
   return created;
 }
 
-// The three session counts. Run in parallel (one round-trip wave) using plain
+// One deck-ordered scan of every Card, joined to this Learner's state, from which
+// computeGate() derives the whole HSK gate: per-band totals, the unlocked band, the
+// next new Card to serve, and how many unseen Cards are actually servable.
+//
+// This single query replaces BOTH the old `unseen` COUNT and the old Tier-2
+// "next unseen card" SELECT, so it costs no extra round-trip. It returns one row
+// per Card (204 today, ~50 bytes each), and every decision on top of it is made in
+// JS — the same deliberate trade the stats page makes (see lib/review/stats.ts:2-5).
+// Revisit if the deck ever grows past roughly 2,000 Cards.
+//
+// Mastery is a LEFT JOIN against a DISTINCT sub-select rather than a correlated
+// EXISTS: the latter plans as a SubPlan per Card row. The gate predicate itself
+// (isMasteryLog) is duplicated here in SQL only for the join; its meaning is
+// documented once, in lib/review/hsk-gate.ts.
+async function fetchGateRows(learnerId: string): Promise<GateCardRow[]> {
+  const rows = await db.execute<{
+    id: string;
+    hsk_level: number | null;
+    seen: boolean;
+    mastered: boolean;
+  }>(sql`
+    SELECT c.id,
+           c.hsk_level,
+           (rs.card_id IS NOT NULL) AS seen,
+           (m.card_id IS NOT NULL) AS mastered
+    FROM ${cards} c
+    LEFT JOIN ${reviewStates} rs
+      ON rs.card_id = c.id AND rs.learner_id = ${learnerId}
+    LEFT JOIN (
+      SELECT DISTINCT card_id
+      FROM ${reviewLogs}
+      WHERE learner_id = ${learnerId}
+        AND (rating = 4 OR ((log->>'state')::int = 2 AND rating >= 3))
+    ) m ON m.card_id = c.id
+    ORDER BY c.deck_order ASC, c.created_at ASC
+  `);
+
+  return rows.rows.map((r) => ({
+    id: r.id,
+    hskLevel: r.hsk_level,
+    seen: r.seen,
+    mastered: r.mastered,
+  }));
+}
+
+// The session counts. Run in parallel (one round-trip wave) using plain
 // query-builder calls — type-checked, no hand-written SQL.
 async function fetchRawCounts(
   learnerId: string,
   now: Date,
-): Promise<{ due: number; newToday: number; unseen: number }> {
+): Promise<{ due: number; newToday: number }> {
   const dayStart = startOfThailandDay(now);
   // "Due today" = overdue cards (due <= now) PLUS same-day learning/relearning
   // steps that fire later today (due <= end-of-Thailand-day).  We use the same
@@ -59,7 +106,7 @@ async function fetchRawCounts(
   // Therefore endOfThailandDay correctly includes {Learning, Relearning} intraday steps
   // and excludes all graduated Review-state intervals.  No state-filter fallback needed.
   const dayEnd = endOfThailandDay(now);
-  const [dueRow, newRow, unseenRow] = await Promise.all([
+  const [dueRow, newRow] = await Promise.all([
     db
       .select({ n: count() })
       .from(reviewStates)
@@ -75,37 +122,46 @@ async function fetchRawCounts(
           sql`${reviewStates.createdAt} >= ${dayStart}`,
         ),
       ),
-    db
-      .select({ n: count() })
-      .from(cards)
-      .where(
-        notExists(
-          db
-            .select({ one: sql`1` })
-            .from(reviewStates)
-            .where(
-              and(
-                eq(reviewStates.cardId, cards.id),
-                eq(reviewStates.learnerId, learnerId),
-              ),
-            ),
-        ),
-      ),
   ]);
 
   return {
     due: dueRow[0]?.n ?? 0,
     newToday: newRow[0]?.n ?? 0,
-    unseen: unseenRow[0]?.n ?? 0,
   };
 }
 
+// The supply of new Cards is now `gate.eligibleUnseenCount`, NOT the raw unseen
+// count: the header must never promise a new Card the gate would refuse to serve
+// (the A6 invariant — the count always matches what is actually served).
 function toCounts(
-  raw: { due: number; newToday: number; unseen: number },
+  raw: { due: number; newToday: number },
+  gate: HskGate,
   newCardsPerDay: number,
 ): SessionCounts {
   const capRemaining = Math.max(0, newCardsPerDay - raw.newToday);
-  return { dueCount: raw.due, newRemaining: Math.min(capRemaining, raw.unseen) };
+  return {
+    dueCount: raw.due,
+    newRemaining: Math.min(capRemaining, gate.eligibleUnseenCount),
+    gate: {
+      unlockedBand: gate.unlockedBand,
+      nextBand: gate.nextBand,
+      blockingBand: gate.blockingBand
+        ? {
+            band: gate.blockingBand.band,
+            mastered: gate.blockingBand.mastered,
+            required: gate.blockingBand.required,
+          }
+        : null,
+      eligibleUnseen: gate.eligibleUnseenCount,
+    },
+  };
+}
+
+// The Learner's HSK gate on its own, for the stats page and for submitReview's
+// server-side check. Callers that already need the study screen get it from
+// getStudyScreenData instead — do not call both.
+export async function getHskGate(learnerId: string): Promise<HskGate> {
+  return computeGate(await fetchGateRows(learnerId));
 }
 
 // Load a Card's Words (ordered) and Tag names in parallel.
@@ -142,6 +198,7 @@ async function loadStudyCard(cardId: string): Promise<StudyCard | null> {
       audioUrl: w.audioUrl,
     })),
     tags: tagRows.map((t) => t.name),
+    hskLevel: card.hskLevel,
     // Placeholder — getStudyScreenData overwrites this with the real value once
     // the fsrs_card row is available. New (unseen) cards have lapses = 0.
     lapses: 0,
@@ -174,12 +231,18 @@ export async function getStudyScreenData(
   //   Tier 1 — READY:        due <= now.  Overdue + intraday learning steps
   //                          whose wall-clock timer has already elapsed.
   //   Tier 2 — NEW:          unseen cards ordered by deck_order ASC (CSV row
-  //                          order), created_at as tiebreak. Only served when
-  //                          the daily new-card cap allows (newRemaining > 0).
+  //                          order), created_at as tiebreak, RESTRICTED TO THE
+  //                          LEARNER'S UNLOCKED HSK BANDS (see hsk-gate.ts).
+  //                          Only served when the daily new-card cap allows.
   //   Tier 3 — FUTURE-TODAY: due > now AND due <= dayEnd. The failed card's
   //                          ~1-minute learning step will land here. Serving
   //                          it prevents a dead-end when only one card remains
   //                          and no ready or new card is available.
+  //
+  // The HSK gate deliberately constrains Tier 2 ONLY. Tiers 1 and 3 draw from
+  // review_states — a Card that is already there was introduced while its band was
+  // open, and locking a band must never strand it. So a locked band can slow the
+  // intake of new Cards; it can never take away work the Learner already has.
   //
   // Priority: readyId > (cap allows ? newId : skip) > futureTodayId.
   //
@@ -190,9 +253,11 @@ export async function getStudyScreenData(
   // its timer elapses — exactly the natural learning-step delay, not instantly.
   // Tier 3 guarantees a session with a single card never goes blank.
   // ============================================================================
-  const [settings, raw, readyRow, newCardRow, futureTodayRow] = await Promise.all([
+  const [settings, raw, gateRows, readyRow, futureTodayRow] = await Promise.all([
     ensureLearnerSettings(learnerId),
     fetchRawCounts(learnerId, now),
+    // Tier 2 + the unseen count, both derived from this one deck-ordered scan.
+    fetchGateRows(learnerId),
     // Tier 1: cards whose due timestamp has already passed.
     db
       .select({ cardId: reviewStates.cardId })
@@ -201,25 +266,6 @@ export async function getStudyScreenData(
         and(eq(reviewStates.learnerId, learnerId), lte(reviewStates.due, now)),
       )
       .orderBy(asc(reviewStates.due))
-      .limit(1),
-    // Tier 2: unseen cards ordered by CSV deck position.
-    db
-      .select({ id: cards.id })
-      .from(cards)
-      .where(
-        notExists(
-          db
-            .select({ one: sql`1` })
-            .from(reviewStates)
-            .where(
-              and(
-                eq(reviewStates.cardId, cards.id),
-                eq(reviewStates.learnerId, learnerId),
-              ),
-            ),
-        ),
-      )
-      .orderBy(asc(cards.deckOrder), asc(cards.createdAt))
       .limit(1),
     // Tier 3: intraday learning-step cards not yet ready (due > now, <= dayEnd).
     db
@@ -236,10 +282,11 @@ export async function getStudyScreenData(
       .limit(1),
   ]);
 
-  const counts = toCounts(raw, settings.newCardsPerDay);
+  const gate = computeGate(gateRows);
+  const counts = toCounts(raw, gate, settings.newCardsPerDay);
 
   const readyId = readyRow[0]?.cardId;
-  const newCardId = counts.newRemaining > 0 ? newCardRow[0]?.id : undefined;
+  const newCardId = gate.firstEligibleUnseenId ?? undefined;
   const futureTodayId = futureTodayRow[0]?.cardId;
   const chosenId = readyId ?? (counts.newRemaining > 0 ? newCardId : undefined) ?? futureTodayId;
 

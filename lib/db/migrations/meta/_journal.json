@@ -36,6 +36,20 @@
       "when": 1783410537552,
       "tag": "0004_heavy_rick_jones",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1783947316998,
+      "tag": "0005_ambitious_stone_men",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1783999341321,
+      "tag": "0006_crazy_firebird",
+      "breakpoints": true
     }
   ]
 }

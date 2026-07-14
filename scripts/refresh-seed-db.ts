@@ -78,7 +78,8 @@ async function main() {
       dbCard.wholeGloss !== card.wholeGloss ||
       dbCard.wholePinyin !== card.wholePinyin ||
       dbCard.isPhrase !== card.isPhrase ||
-      (dbCard.wholeAudioUrl ?? null) !== (card.wholeAudioUrl ?? null);
+      (dbCard.wholeAudioUrl ?? null) !== (card.wholeAudioUrl ?? null) ||
+      (dbCard.hskLevel ?? null) !== (card.hsk ?? null);
 
     const normalizeWords = (ws: { position: number; hanzi: string; gloss: string; pinyin: string; audioUrl?: string | null }[]) =>
       JSON.stringify(
@@ -117,6 +118,7 @@ async function main() {
         wholeGloss: card.wholeGloss,
         wholePinyin: card.wholePinyin,
         wholeAudioUrl: card.wholeAudioUrl ?? null,
+        hskLevel: card.hsk ?? null,
       })
       .where(eq(schema.cards.id, dbCard.id));
 

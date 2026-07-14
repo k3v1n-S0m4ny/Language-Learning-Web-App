@@ -77,6 +77,12 @@ export const cards = pgTable("cards", {
   wholeAudioUrl: text("whole_audio_url"),
   // Preserves CSV row order so new cards surface in deck-file sequence (M9/A5).
   deckOrder: integer("deck_order").notNull().default(0),
+  // HSK 3.0 band (2021 standard), derived from the official wordlist in
+  // seed/mandarin/hsk30-wordlist.json: the band of the hardest Word on the Card,
+  // raised when the grammar outruns the vocabulary. 1-6 are as published; 7 means
+  // the merged "HSK 7-9" advanced band, which HSK itself does not subdivide — so
+  // 8 and 9 are never stored. Nullable: a Card may have no confident level.
+  hskLevel: integer("hsk_level"),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),
@@ -165,7 +171,14 @@ export const reviewLogs = pgTable(
       .notNull()
       .defaultNow(),
   },
-  (t) => [index("review_logs_learner_idx").on(t.learnerId)],
+  (t) => [
+    index("review_logs_learner_idx").on(t.learnerId),
+    // The HSK gate resolves mastery by scanning this Learner's logs on every study
+    // render (lib/review/queries.ts::fetchGateRows). review_logs is append-only and
+    // grows by one row per rating forever, so without this the gate would get
+    // steadily slower for the Learners who use the app most.
+    index("review_logs_learner_card_idx").on(t.learnerId, t.cardId),
+  ],
 );
 
 export const learnerSettings = pgTable("learner_settings", {

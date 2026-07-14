@@ -4,7 +4,9 @@ import { refresh } from "next/cache";
 import { and, eq } from "drizzle-orm";
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
-import { learnerSettings, reviewLogs, reviewStates } from "@/lib/db/schema";
+import { cards, learnerSettings, reviewLogs, reviewStates } from "@/lib/db/schema";
+import { isCardEligible } from "./hsk-gate";
+import { getHskGate } from "./queries";
 import {
   applyRating,
   createEmptyCard,
@@ -39,6 +41,27 @@ export async function submitReview(cardId: string, rating: RatingValue) {
         eq(reviewStates.cardId, cardId),
       ),
     );
+
+  // No review_states row means this rating would INTRODUCE the Card, so the HSK gate
+  // applies. A Server Action is reachable by direct POST, so the page having served
+  // the Card is not proof it was allowed — re-check here, exactly as the Thai course
+  // re-derives its unit gate in lib/thai/actions.ts:173-183.
+  //
+  // Already-introduced Cards skip this entirely: they were admitted while their band
+  // was open, and a locked band must never strand a Card the Learner is mid-way through.
+  if (!existing) {
+    const [gate, [card]] = await Promise.all([
+      getHskGate(learnerId),
+      db
+        .select({ hskLevel: cards.hskLevel })
+        .from(cards)
+        .where(eq(cards.id, cardId)),
+    ]);
+    if (!card) throw new Error("Card not found");
+    if (!isCardEligible(card.hskLevel, gate.unlockedBand)) {
+      throw new Error("HSK band locked");
+    }
+  }
 
   const fsrsCard = existing
     ? hydrateFsrsCard(existing.fsrsCard)
