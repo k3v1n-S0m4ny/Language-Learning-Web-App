@@ -14,7 +14,20 @@ import { SegmentedControl } from "./ui/segmented-control";
 // picks up the glass look too; that is an intentional, minimal exception to
 // "leave Thai untouched" since mode-toggle.tsx is listed as a shared Phase 1
 // file in the design spec's critical-files list.
-export function ModeToggle({ activeMode }: { activeMode: ActiveMode }) {
+export function ModeToggle({
+  activeMode,
+  showAdvancedThai = false,
+}: {
+  activeMode: ActiveMode;
+  /**
+   * Adds the third "Advanced" segment. Advanced Thai is the owner's personal
+   * course, so only accounts on the lib/advanced-thai/access.ts allowlist see
+   * it. This is UI scoping only — setActiveMode re-checks the allowlist
+   * server-side and coerces anyone else away, because a Server Action is
+   * reachable by direct POST whatever this component chooses to render.
+   */
+  showAdvancedThai?: boolean;
+}) {
   const [pending, startTransition] = useTransition();
 
   function choose(mode: ActiveMode) {
@@ -33,6 +46,9 @@ export function ModeToggle({ activeMode }: { activeMode: ActiveMode }) {
       options={[
         { value: "mandarin", label: "Mandarin" },
         { value: "thai", label: "Thai" },
+        ...(showAdvancedThai
+          ? [{ value: "advanced-thai" as const, label: "Advanced", title: "Advanced Thai" }]
+          : []),
       ]}
     />
   );

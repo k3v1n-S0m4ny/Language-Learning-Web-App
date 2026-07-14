@@ -27,7 +27,10 @@ function subscribeLang(callback: () => void) {
 }
 
 function getLang(): ActiveMode {
-  return document.documentElement.dataset.lang === "thai" ? "thai" : "mandarin";
+  const lang = document.documentElement.dataset.lang;
+  if (lang === "thai") return "thai";
+  if (lang === "advanced-thai") return "advanced-thai";
+  return "mandarin";
 }
 
 type TabKey = "study" | "progress" | "menu";
@@ -35,10 +38,13 @@ type TabKey = "study" | "progress" | "menu";
 export function BottomNav({
   signOut,
   showModeToggle = true,
+  showAdvancedThai = false,
 }: {
   signOut: ReactNode;
   /** False hides the Mandarin/Thai switch (restricted testers have no Mandarin). */
   showModeToggle?: boolean;
+  /** True adds the "Advanced" segment to the mode toggle (owner-only, M16). */
+  showAdvancedThai?: boolean;
 }) {
   const pathname = usePathname();
   const reduceMotion = useReducedMotion();
@@ -46,7 +52,11 @@ export function BottomNav({
   const mode = useSyncExternalStore<ActiveMode>(subscribeLang, getLang, () => "mandarin");
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const progressHref = mode === "thai" ? "/thai/stats" : "/stats";
+  // Advanced Thai has no stats page yet (M16/B5 ships the theme picker and the
+  // review session only), so it gets no Progress tab rather than a tab that
+  // 404s. Its theme picker carries the per-theme counts in the meantime.
+  const progressHref =
+    mode === "advanced-thai" ? null : mode === "thai" ? "/thai/stats" : "/stats";
   const isProgress = pathname === "/stats" || pathname === "/thai/stats";
   const active: TabKey = menuOpen ? "menu" : isProgress ? "progress" : "study";
 
@@ -74,15 +84,17 @@ export function BottomNav({
         <TabButton active={active === "study"} indicatorId="bottom-nav-ind" reduceMotion={reduceMotion} asLink href="/">
           <TabLabel icon="◆" label="Study" />
         </TabButton>
-        <TabButton
-          active={active === "progress"}
-          indicatorId="bottom-nav-ind"
-          reduceMotion={reduceMotion}
-          asLink
-          href={progressHref}
-        >
-          <TabLabel icon="▲" label="Progress" />
-        </TabButton>
+        {progressHref && (
+          <TabButton
+            active={active === "progress"}
+            indicatorId="bottom-nav-ind"
+            reduceMotion={reduceMotion}
+            asLink
+            href={progressHref}
+          >
+            <TabLabel icon="▲" label="Progress" />
+          </TabButton>
+        )}
         <TabButton
           active={active === "menu"}
           indicatorId="bottom-nav-ind"
@@ -104,7 +116,7 @@ export function BottomNav({
         >
           {showModeToggle && (
             <MenuRow label="Language">
-              <ModeToggle activeMode={mode} />
+              <ModeToggle activeMode={mode} showAdvancedThai={showAdvancedThai} />
             </MenuRow>
           )}
           <MenuRow label="Theme">

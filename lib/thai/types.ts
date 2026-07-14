@@ -2,7 +2,13 @@
 // Content shapes (ConsonantItem, VowelItem, …) live in seed/thai/types.ts —
 // these are the per-Learner *state* shapes layered on top.
 
-export type ActiveMode = "mandarin" | "thai";
+// "advanced-thai" is the owner's personal course (M16). It is a persistable mode
+// as of Phase B, because app/page.tsx now has an Advanced-Thai home to render —
+// in Phase A it was deliberately kept OUT of this union, since a learner who
+// persisted into a mode with no home screen would have been stranded on a blank
+// page. Only accounts in lib/advanced-thai/access.ts may hold it; setActiveMode
+// coerces anyone else back to "mandarin".
+export type ActiveMode = "mandarin" | "thai" | "advanced-thai";
 
 export interface UnitSummary {
   unit: number;

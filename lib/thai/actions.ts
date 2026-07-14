@@ -4,6 +4,7 @@ import { refresh } from "next/cache";
 import { and, eq, inArray, sql } from "drizzle-orm";
 import { auth } from "@/auth";
 import { isRestrictedLearner } from "@/lib/access";
+import { isAdvancedThaiLearner } from "@/lib/advanced-thai/access";
 import { db } from "@/lib/db";
 import { learnerSettings, thaiAttempts, thaiItems, thaiProgress } from "@/lib/db/schema";
 import { ALL_THAI_ITEMS, UNIT_1_LESSON_MARKER_ID } from "@/seed/thai/items";
@@ -49,16 +50,27 @@ export async function setActiveMode(mode: ActiveMode) {
   const learnerId = session?.user?.id;
   if (!learnerId) throw new Error("Unauthorized");
 
-  if (mode !== "mandarin" && mode !== "thai") {
+  if (mode !== "mandarin" && mode !== "thai" && mode !== "advanced-thai") {
     throw new Error("Invalid mode");
   }
 
-  // Restricted testers are scoped to Read-Thai. This Server Action is reachable
-  // by direct POST, so coerce rather than trust: their mode can never become
-  // "mandarin", regardless of what the client sends.
-  const effectiveMode: ActiveMode = isRestrictedLearner(session.user?.email)
-    ? "thai"
-    : mode;
+  const email = session.user?.email;
+
+  // Both rules below COERCE rather than throw, because this Server Action is
+  // reachable by direct POST: the client's claim about who it is carries no
+  // weight, so we simply store what the account is actually entitled to.
+  //
+  //   1. Restricted testers are scoped to Read-Thai — their mode can never
+  //      become "mandarin" (or "advanced-thai"), whatever the client sends.
+  //   2. Advanced Thai is the owner's PERSONAL course. Anyone not on the
+  //      allowlist who POSTs "advanced-thai" lands on "mandarin" instead —
+  //      never in a mode whose every route would then 404 on them.
+  let effectiveMode: ActiveMode = mode;
+  if (isRestrictedLearner(email)) {
+    effectiveMode = "thai";
+  } else if (mode === "advanced-thai" && !isAdvancedThaiLearner(email)) {
+    effectiveMode = "mandarin";
+  }
 
   await db
     .insert(learnerSettings)

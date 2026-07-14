@@ -10,6 +10,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { auth } from "@/auth";
 import { isRestrictedLearner } from "@/lib/access";
+import { isAdvancedThaiLearner } from "@/lib/advanced-thai/access";
 import { AmbientMesh } from "@/components/ambient-mesh";
 import { BottomNav } from "@/components/bottom-nav";
 import { SignOutButton } from "@/components/sign-out-button";
@@ -85,6 +86,7 @@ export default async function RootLayout({
   // global mobile nav. Server-side guards enforce the scoping regardless.
   const session = await auth();
   const restricted = isRestrictedLearner(session?.user?.email);
+  const advancedThai = isAdvancedThaiLearner(session?.user?.email);
 
   return (
     <html
@@ -102,7 +104,11 @@ export default async function RootLayout({
             on every route; self-resolves mode from <html data-lang>, so the
             server layout needs no per-route query. SignOutButton is a server
             component (sign-out server action), passed in as a prop. */}
-        <BottomNav signOut={<SignOutButton variant="ghost" />} showModeToggle={!restricted} />
+        <BottomNav
+          signOut={<SignOutButton variant="ghost" />}
+          showModeToggle={!restricted}
+          showAdvancedThai={advancedThai}
+        />
       </body>
     </html>
   );

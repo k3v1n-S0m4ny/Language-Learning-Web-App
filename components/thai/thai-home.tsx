@@ -14,11 +14,14 @@ export async function ThaiHome({
   learnerId,
   learnerName,
   restricted = false,
+  showAdvancedThai = false,
 }: {
   learnerId: string;
   learnerName: string | null | undefined;
   /** Restricted testers: hide the Mandarin mode toggle and lock units 3+. */
   restricted?: boolean;
+  /** Owner only: adds the "Advanced" segment to the mode toggle (M16). */
+  showAdvancedThai?: boolean;
 }) {
   // MEDIUM fix (2026-07-07 code review): fetch summaries once and thread
   // them into getConsonantExamState, instead of letting it independently
@@ -34,6 +37,7 @@ export async function ThaiHome({
         learnerName={learnerName}
         statsHref="/thai/stats"
         showModeToggle={!restricted}
+        showAdvancedThai={showAdvancedThai}
       />
 
       <div className="flex w-full max-w-2xl flex-col gap-3">

@@ -15,6 +15,7 @@ export function TopBar({
   statsHref,
   receded = false,
   showModeToggle = true,
+  showAdvancedThai = false,
 }: {
   activeMode: ActiveMode;
   learnerName: string | null | undefined;
@@ -23,6 +24,8 @@ export function TopBar({
   receded?: boolean;
   /** False hides the Mandarin/Thai switch (restricted testers have no Mandarin). */
   showModeToggle?: boolean;
+  /** True adds the "Advanced" segment (owner-only personal course, M16). */
+  showAdvancedThai?: boolean;
 }) {
   return (
     <header
@@ -39,7 +42,9 @@ export function TopBar({
         {learnerName ? `, ${learnerName}` : ""}
       </span>
       <span className="hidden flex-1 sm:block" />
-      {showModeToggle && <ModeToggle activeMode={activeMode} />}
+      {showModeToggle && (
+        <ModeToggle activeMode={activeMode} showAdvancedThai={showAdvancedThai} />
+      )}
       <ThemeToggle />
       <Link
         href={statsHref}

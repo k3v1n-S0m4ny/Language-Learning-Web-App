@@ -189,6 +189,67 @@
    │ block above (4.57-8.20:1 on --color-on-earthy); re-confirmed here,  │
    │ unchanged, since this is a token reuse, not a new colour.           │
    └──────────────────────────────────────────────────────────────────────┘
+
+   --- Advanced Thai (M16) — card design tokens ---
+   Computed via the same WCAG relative-luminance formula (throwaway Node
+   script, not committed — values below are the result), each pair checked
+   against the surface it ACTUALLY renders on, in both themes.
+
+   Every chip/fill below follows the established tint+pinned-ink idiom (see
+   the Phase 2 ClassBadge block): a pale tint in light mode, a saturated
+   value in dark mode, with the text colour pinned PER TOKEN so no consumer
+   ever branches on theme. Small chip text does not qualify for the WCAG
+   1.4.3 large-text exemption, so every one targets the full 4.5:1.
+
+   The bake-off is SETTLED — V1 Lexeme Slab (vocab), G1 Slot Frame (grammar),
+   PS1 Phrase Slab (phrases). The token families consumed only by the losing
+   designs have been deleted along with them, and their AA rows removed from
+   this table: --entry-rule, --gloss-literal-ink, --collocation-chip,
+   --hairline, --contrast-*, --tell-callout, --annot-*, --chunk-*, --xref-dot,
+   --bubble-*, --politeness-*, --cloze-fill. A token with no consumer is a
+   liability, not an asset. What remains below is what actually renders.
+
+   ┌──────────────────────────────────────────────────────────────────────┐
+   │ TEXT PAIRS — ink on fill, need 4.5:1. Ink is #1A1A1A (--color-on-    │
+   │ earthy) on every fill in both themes: the light values are pale      │
+   │ tints, the dark values saturated, and near-black clears 4.5:1 on all │
+   │ of them. The ink is still pinned per token rather than assumed, so   │
+   │ a future deep-panel fill can carry a light ink without any consumer  │
+   │ changing (the --heat-* ramp already does exactly that).              │
+   │                                    LIGHT          DARK               │
+   │ --pos-noun          #DBEAFE/#93C5FD  14.27:1 PASS   9.65:1 PASS      │
+   │ --pos-verb          #FFE4E6/#FDA4AF  14.50:1 PASS   9.20:1 PASS      │
+   │ --pos-adj           #DCFCE7/#86EFAC  15.85:1 PASS  12.40:1 PASS      │
+   │ --pos-adv           #F3E8FF/#D8B4FE  14.75:1 PASS   9.85:1 PASS      │
+   │ --pos-classifier    #E2E8F0/#CBD5E1  14.12:1 PASS  11.72:1 PASS      │
+   │ --register-formal      #E0E7FF/#A5B4FC  14.13:1 PASS   8.73:1 PASS   │
+   │ --register-colloquial  #FFEDD5/#FDBA74  15.19:1 PASS  10.32:1 PASS   │
+   │ --register-technical   #CFFAFE/#67E8F9  15.55:1 PASS  12.01:1 PASS   │
+   │ --morph-prefix      #E0E7FF/#A5B4FC  14.13:1 PASS   8.73:1 PASS      │
+   │ --morph-root        #FFEDD5/#FDBA74  15.19:1 PASS  10.32:1 PASS      │
+   │ --morph-suffix      #E4E4E7/#D4D4D8  13.72:1 PASS  11.78:1 PASS      │
+   │ --pattern-fn-causative    #EDE9FE/#C4B5FD  14.66:1 PASS  9.43:1 PASS │
+   │ --pattern-fn-passive      #DBEAFE/#93C5FD  14.27:1 PASS  9.65:1 PASS │
+   │ --pattern-fn-comparative  #FEF3C7/#FCD34D  15.63:1 PASS 12.07:1 PASS │
+   │ --pattern-fn-topic        #CCFBF1/#5EEAD4  15.45:1 PASS 11.77:1 PASS │
+   │ --pattern-fn-connector    #E2E8F0/#CBD5E1  14.12:1 PASS 11.72:1 PASS │
+   │ --pattern-fn-reciprocal   #FFE4E6/#FDA4AF  14.50:1 PASS  9.20:1 PASS │
+   │ --slot-empty-bg     #F5F3F0/#15191B  15.71:1 PASS  15.27:1 PASS      │
+   ├──────────────────────────────────────────────────────────────────────┤
+   │ GRAPHICAL — the dashed slot border carries meaning (it marks a gap   │
+   │ you must fill), so it needs 3:1 against the recessed fill it sits    │
+   │ on, per WCAG 1.4.11.                                                 │
+   │ --slot-empty-brd  #5A5A5A on #F5F3F0   6.23:1 PASS                   │
+   │                   #8A9490 on #15191B   5.66:1 PASS                   │
+   ├──────────────────────────────────────────────────────────────────────┤
+   │ Advanced-Thai --accent (indigo #4C5FD5) as a FOCUS RING on the page  │
+   │ background — the one place --accent must clear 3:1 (it is never used │
+   │ as text; see the Phase 3 accent-as-text note above):                 │
+   │   #4C5FD5 on #F5F3F0 (light bg)   4.86:1 PASS                        │
+   │   #4C5FD5 on #15191B (dark bg)    3.29:1 PASS                        │
+   │ Unlike jade and saffron, this triad's primary clears 3:1 in BOTH     │
+   │ themes, so the ring needs no per-theme branch.                       │
+   └──────────────────────────────────────────────────────────────────────┘
    ========================================================================== */
 
 :root {
@@ -323,6 +384,66 @@
   --heat-3-ink: #1a1a1a;
   --heat-4: #b30000;
   --heat-4-ink: #ffffff;
+
+  /* ------------------------------------------------------------------------
+     Advanced Thai (M16) — CANDIDATE token families for the card-design
+     bake-off. Nine designs compete; the losers' families get deleted once the
+     winners are picked, so do not build new consumers on these yet.
+
+     Same tint+pinned-ink idiom as --thai-class-* / --heat-*: pale tint here,
+     saturated-or-deep in the [data-theme="dark"] block below, ink pinned per
+     token. Every pair is AA-verified in the table at the top of this file.
+     ---------------------------------------------------------------------- */
+
+  /* Part of speech (vocab V1, V2) */
+  --pos-noun: #dbeafe;
+  --pos-noun-ink: #1a1a1a;
+  --pos-verb: #ffe4e6;
+  --pos-verb-ink: #1a1a1a;
+  --pos-adj: #dcfce7;
+  --pos-adj-ink: #1a1a1a;
+  --pos-adv: #f3e8ff;
+  --pos-adv-ink: #1a1a1a;
+  --pos-classifier: #e2e8f0;
+  --pos-classifier-ink: #1a1a1a;
+
+  /* Register (vocab V1, V2) */
+  --register-formal: #e0e7ff;
+  --register-formal-ink: #1a1a1a;
+  --register-colloquial: #ffedd5;
+  --register-colloquial-ink: #1a1a1a;
+  --register-technical: #cffafe;
+  --register-technical-ink: #1a1a1a;
+
+  /* Morphology — the compound-splitting strip on the vocab card's back. */
+  --morph-prefix: #e0e7ff;
+  --morph-prefix-ink: #1a1a1a;
+  --morph-root: #ffedd5;
+  --morph-root-ink: #1a1a1a;
+  --morph-suffix: #e4e4e7;
+  --morph-suffix-ink: #1a1a1a;
+
+  /* Pattern function. This same tint is ALSO the span highlight painted over the
+     matching words in each example sentence — the frame's slot and its
+     real-world realization are the same colour by construction, which is the
+     whole point of the Slot Frame design. Hence no separate --slot-filled. */
+  --pattern-fn-causative: #ede9fe;
+  --pattern-fn-causative-ink: #1a1a1a;
+  --pattern-fn-passive: #dbeafe;
+  --pattern-fn-passive-ink: #1a1a1a;
+  --pattern-fn-comparative: #fef3c7;
+  --pattern-fn-comparative-ink: #1a1a1a;
+  --pattern-fn-topic: #ccfbf1;
+  --pattern-fn-topic-ink: #1a1a1a;
+  --pattern-fn-connector: #e2e8f0;
+  --pattern-fn-connector-ink: #1a1a1a;
+  --pattern-fn-reciprocal: #ffe4e6;
+  --pattern-fn-reciprocal-ink: #1a1a1a;
+
+  /* The pattern frame's unfilled slot — a gap you are meant to fill. */
+  --slot-empty-bg: #f5f3f0;
+  --slot-empty-brd: #5a5a5a;
+  --slot-empty-ink: #1a1a1a;
 }
 
 /* Dark overrides for the glass + palette tokens (semantic core handled above). */
@@ -363,6 +484,43 @@
   --heat-3-ink: #ecefec;
   --heat-4: #e67237;
   --heat-4-ink: #1a1a1a;
+
+  /* ------------------------------------------------------------------------
+     Advanced Thai (M16) — dark values for the bake-off candidates.
+
+     Note the deliberate SPLIT in ink, which is exactly why the ink is pinned
+     per token rather than assumed: small saturated CHIPS (pos, register,
+     morph, pattern-fn, politeness) stay near-black-on-bright, mirroring the
+     Read-Thai ClassBadge. But the large PANEL fills (contrast columns, speech
+     bubbles, callouts, cloze highlight) go deep-with-light-ink instead — a
+     saturated fill spanning half a card would be garish, and the heat ramp
+     already set the precedent that a fill may carry its own ink.
+     ---------------------------------------------------------------------- */
+
+  --pos-noun: #93c5fd;
+  --pos-verb: #fda4af;
+  --pos-adj: #86efac;
+  --pos-adv: #d8b4fe;
+  --pos-classifier: #cbd5e1;
+
+  --register-formal: #a5b4fc;
+  --register-colloquial: #fdba74;
+  --register-technical: #67e8f9;
+
+  --morph-prefix: #a5b4fc;
+  --morph-root: #fdba74;
+  --morph-suffix: #d4d4d8;
+
+  --pattern-fn-causative: #c4b5fd;
+  --pattern-fn-passive: #93c5fd;
+  --pattern-fn-comparative: #fcd34d;
+  --pattern-fn-topic: #5eead4;
+  --pattern-fn-connector: #cbd5e1;
+  --pattern-fn-reciprocal: #fda4af;
+
+  --slot-empty-bg: #15191b;
+  --slot-empty-brd: #8a9490;
+  --slot-empty-ink: #ecefec;
 }
 
 /* Per-language accent + ambient-mesh tints. [data-lang] is set on <html> by
@@ -377,6 +535,18 @@
   --accent: #f59e0b; /* saffron */
   --accent-2: #0ea5a4; /* teal */
   --accent-3: #e11d74; /* ruby */
+}
+
+/* Advanced Thai (M16) — the third product. A cooler, more editorial triad,
+   deliberately unlike Read-Thai's warm saffron/teal/ruby so the two Thai
+   products never read as the same surface. Setting [data-lang] is all it takes
+   to recolour AmbientMesh, ProgressRing, focus rings, confetti and every
+   bg-accent CTA. Unlike jade and saffron, this primary clears 3:1 as a focus
+   ring in BOTH themes (see the AA table) — but it is still never used as text. */
+:root[data-lang="advanced-thai"] {
+  --accent: #4c5fd5; /* indigo */
+  --accent-2: #c2703f; /* copper */
+  --accent-3: #7fb8a4; /* celadon */
 }
 
 @theme inline {

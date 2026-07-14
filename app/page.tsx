@@ -1,6 +1,8 @@
 import { auth } from "@/auth";
 import { isRestrictedLearner } from "@/lib/access";
+import { isAdvancedThaiLearner } from "@/lib/advanced-thai/access";
 import { ensureLearnerSettings, getStudyScreenData } from "@/lib/review/queries";
+import { AdvancedThaiHome } from "@/components/advanced-thai/advanced-thai-home";
 import { EmptyState } from "@/components/empty-state";
 import { LangSync } from "@/components/lang-sync";
 import { ReviewSession } from "@/components/review-session";
@@ -25,12 +27,33 @@ export default async function Home() {
   // Restricted testers are scoped to Read-Thai — always show the Thai home,
   // whatever their stored active_mode is, so they never reach the Mandarin flow.
   const restricted = isRestrictedLearner(learner?.email);
+  const advanced = isAdvancedThaiLearner(learner?.email);
 
   if (restricted || settings.activeMode === "thai") {
     return (
       <>
         <LangSync activeMode="thai" />
-        <ThaiHome learnerId={learnerId} learnerName={learner?.name} restricted={restricted} />
+        <ThaiHome
+          learnerId={learnerId}
+          learnerName={learner?.name}
+          restricted={restricted}
+          showAdvancedThai={advanced}
+        />
+      </>
+    );
+  }
+
+  // Advanced Thai (M16) — the owner's personal course. The allowlist is re-checked
+  // here rather than trusted from the stored mode: setActiveMode already coerces a
+  // non-allowlisted account away from "advanced-thai", but a row could still hold
+  // that value from before an account was removed from the list, and the failure
+  // mode of trusting it is a learner stranded on a course that 404s everywhere
+  // else. Falling through to Mandarin is the safe direction.
+  if (settings.activeMode === "advanced-thai" && isAdvancedThaiLearner(learner?.email)) {
+    return (
+      <>
+        <LangSync activeMode="advanced-thai" />
+        <AdvancedThaiHome learnerId={learnerId} learnerName={learner?.name} />
       </>
     );
   }
@@ -46,6 +69,7 @@ export default async function Home() {
         learnerName={learner?.name}
         statsHref="/stats"
         receded={inSession}
+        showAdvancedThai={advanced}
       />
       <SessionHeader counts={counts} />
 

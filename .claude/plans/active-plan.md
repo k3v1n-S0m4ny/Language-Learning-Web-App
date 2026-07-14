@@ -1,127 +1,86 @@
-# Plan: Unit 3 exercises should match Unit 2's flashcard style
+# Advanced Thai (M16) — Phase B: the module
+
+Status: **NOT STARTED.** Phase A (card-design bake-off) is complete — see `implementation-summary.md`.
 
 ## Context
 
-Read-Thai unit 2 (mid-class consonants) has a self-graded, "clear-the-deck"
-flashcard drill built as a pilot (`thai-unit2-flashcards` branch/worktree,
-commits `7c47397` + `cea4da7`, owner-approved 2026-07-05). That pilot was
-never merged into `main` or the current `glass-redesign` branch — on this
-branch, units 2 and 3 both still render the old generic multiple-choice
-`DrillSession` and look identical.
+Advanced Thai is the owner's personal third course: vocabulary, grammar and every phrase, extracted from themed Thai occupational texts (`C:\Users\User\Downloads\นักโฆษณา-advertiser.md`; more will follow in the same shape). It is deliberately separate from Read-Thai, which is shared with two beta testers and teaches *script* rather than *language*.
 
-The owner has confirmed: **the flashcard mechanic is the correct, intended
-style ("the truth"); the multiple-choice drill is stale.** Unit 3 (high-class
-consonants) should get the same flip-card, self-graded, clear-the-deck
-exercise unit 2 has, not the MCQ round.
+Phase A settled the three card designs and the content contract, with nothing committed and nothing spent. Phase B builds the actual module: schema, extractor, audio, study flow.
 
-Unit 3's *lesson* content (`ConsonantClassLesson`) is unrelated and already
-correct — this plan only touches the *drill/exercise* page.
+### What Phase A established — do NOT re-open
 
-Separately, the owner also wants a **Name-IPA column added to the lesson
-consonant tables** for both units 2 and 3 (`ConsonantTable`, used by both
-`MidConsonantLesson` and `HighConsonantLesson` via the shared
-`ConsonantClassLesson` shell). The table currently shows Letter / Name /
-Meaning / Class / Initial IPA / Final IPA, but never renders
-`metadata.nameIpa` (the IPA reading of the acrophonic name itself, e.g.
-"kɔ̄ː kàj" for ก ไก่) even though the type field exists. Unit 2's seed data
-already has `nameIpa` authored for all 9 mid-class consonants; unit 3's
-`HIGH_CONSONANTS` has none authored yet.
+| | Picked design | Contract type |
+|---|---|---|
+| Vocabulary | **V1 · Lexeme Slab** — Mandarin flip + a morphology strip | `VocabEntry` |
+| Grammar | **G1 · Slot Frame** — the slot's hue paints its realization in every example | `GrammarPattern` |
+| Phrases | **PS1 · Phrase Slab** — the Mandarin card, in Thai | `PhraseEntry` |
 
-## Approach
+- **A "phrase" is one space-delimited clause of the source document.** Thai spaces separate *clauses*, not words, so the text already marks its own phrase boundaries. This yields **122 phrase cards** for `นักโฆษณา` (median 24 / max 71 Thai characters). Not splitting leaves paragraphs of up to **439** characters, which no card can hold at a readable size. Measured, not assumed.
+- Contract: `seed/advanced-thai/types.ts`. Reference output: `seed/advanced-thai/themes/nak-kosana.ts` (10 vocab / 5 patterns / 14 phrases, hand-extracted, real — this is what the extractor must imitate).
+- Components: `components/advanced-thai/bakeoff/{kit,vocab-lexeme-slab,grammar-slot-frame,phrase-slab,bakeoff-board}.tsx`.
+- Tokens: `[data-lang="advanced-thai"]` = indigo `#4C5FD5` / copper `#C2703F` / celadon `#7FB8A4`; plus `--pos-*`, `--register-*`, `--morph-*`, `--pattern-fn-*`, `--slot-empty-*`. All AA-verified; table at the top of `globals.css`.
+- Access: `lib/advanced-thai/access.ts` — an **allow-list** (owner only), so unknown accounts are refused by default rather than admitted.
 
-1. **Bring the flashcard pilot onto `glass-redesign`.** Cherry-pick
-   `7c47397` and `cea4da7` from `thai-unit2-flashcards` rather than merging
-   the whole branch (that branch's lesson-content and beta-tester-gating
-   commits, `a4e08d2`/`2ea297a`, appear to already be present on this branch
-   through separate history — a full merge would duplicate/conflict them).
-   Resolve conflicts by hand; re-run `tsc`/`eslint`/tests after.
+## Decisions to take BEFORE writing code
 
-   Files this touches: `app/thai/[unit]/drill/page.tsx`,
-   `components/thai/drill/flashcard-session.tsx`, `lib/thai/actions.ts`,
-   `lib/thai/drill.ts`, `lib/thai/flashcards.ts`, `lib/thai/reachability.ts`,
-   `lib/thai/types.ts`, `lib/thai/flashcard-mastery.test.ts`,
-   `seed/thai/items.ts`, `seed/thai/types.ts`, `scripts/generate-thai-audio.ts`,
-   `app/globals.css`, `app/layout.tsx`.
+1. **Per-word audio, or whole-phrase only?** This is most of the TTS spend. 122 phrases × ~8 words ≈ **1,000+ clips for one theme**, versus ~130 if only whole phrases and vocab get audio. The word chips currently render a per-word audio button; dropping it is a small edit. Decide first, because it changes the cost by an order of magnitude.
+2. **New-card gating.** Mandarin has the HSK band gate. Advanced Thai could simply release theme-by-theme with no gate. Deliberately deferred from Phase A — decide now, or ship ungated and revisit after a week of real use.
 
-2. **Generalize the pilot from "unit 2 only" to "units 2 and 3."** The pilot
-   hard-codes a single `FLASHCARD_UNIT = 2` constant in several places. Widen
-   each to a set/membership check instead of adding a second one-off branch:
+## Steps
 
-   - `lib/thai/flashcards.ts`: replace `FLASHCARD_UNIT` (single number) with
-     `FLASHCARD_UNITS = new Set([2, 3])`. `buildFlashcardDeck(learnerId, unit)`
-     currently queries `eq(thaiItems.unit, FLASHCARD_UNIT)` — change to
-     `eq(thaiItems.unit, unit)` and validate `FLASHCARD_UNITS.has(unit)`
-     instead of `unit !== FLASHCARD_UNIT`. `NAME_IPA_BY_ID` is built from
-     `MID_CONSONANTS` only — rebuild it from `ALL_THAI_ITEMS` (or
-     `MID_CONSONANTS` + `HIGH_CONSONANTS`) so unit-3 cards resolve name IPA
-     too (note: `HIGH_CONSONANTS` in `seed/thai/items.ts` currently has no
-     `nameIpa` authored for any entry — the UI already renders gracefully
-     without it, so this is not a blocker, just an expected gap until/unless
-     that content gets authored later).
-   - `app/thai/[unit]/drill/page.tsx`: `isFlashcardUnit = FLASHCARD_UNITS.has(unit)`.
-   - `lib/thai/actions.ts::submitFlashcardGrade`: the structural guard
-     `item.unit !== FLASHCARD_UNIT` → `!FLASHCARD_UNITS.has(item.unit)`; the
-     unlock check currently looks up `summaries.find(s => s.unit === FLASHCARD_UNIT)`
-     hard-coded to unit 2 — change to look up `item.unit` so a unit-3 grade
-     checks unit 3's own unlock state.
-   - `lib/thai/reachability.ts::reachableDrillTypesForUnit`: the
-     `if (unit === 2) { ... "letter-read" ... }` branch becomes
-     `if (unit === 2 || unit === 3)`; the MCQ branch
-     `if (unit >= 3 && unit <= 5)` narrows to `if (unit >= 4 && unit <= 5)`
-     (units 4-5 keep the existing MCQ trio unless/until told otherwise).
-     Update the adjacent comments referencing "unit 2 flashcard" /
-     "Units 3-5 keep the MCQ trio" to reflect units 2-3 vs 4-5.
-   - Leave `lib/thai/types.ts`'s `"letter-read"` drill type and the
-     grandfather clause in `isRequiredTypeMastered`
-     (`requiredType === "letter-read" && masteredSet.has("letter-sound")`)
-     as-is — both are already unit-agnostic and will correctly grandfather
-     any prior unit-3 MCQ progress into flashcard mastery.
+### B0. Branch the database FIRST
+`.env.local`'s `DATABASE_URL` **is production** — the same DB holding real FSRS history for both learners. Create a Neon branch and point local work at it. No migration touches prod until it is proven on the branch.
 
-3. **Audio gap is expected, not a blocker.** Unit 3 consonants mostly have no
-   `audioUrl` yet (only unit 2's ป has been batch-generated per memory) —
-   `FlashcardSession` already omits the "▶ Hear it" button when `audioUrl` is
-   null, so unit 3 flashcards will simply show fewer audio buttons until a
-   future audio batch run covers unit 3. Not in scope for this change.
+### B1. Schema — `lib/db/schema.ts`
+New `at_*` tables, namespaced like the Thai ones so Mandarin and Read-Thai stay completely untouched:
+- `at_themes` — slug, titles, summary.
+- `at_cards` — `themeId`, `kind` (`vocab` | `grammar` | `phrase`), `payload jsonb` shaped per kind (mirroring the three contract types), `deckOrder`. Plain-text `kind`, no pg enum — same rationale as `thai_items.kind`.
+- `at_review_states`, `at_review_logs` — mirror `review_states` / `review_logs` exactly.
 
-4. **Tests.** Extend/duplicate `lib/thai/flashcard-mastery.test.ts` coverage
-   (and the module-load-time regression-guard fixtures in
-   `reachability.ts` that currently assert against `unitMasteryStats(2, ...)`
-   as a representative case) to also exercise unit 3, so a future regression
-   in the unit-3 unlock math is caught the same way unit 2's is.
+**Reuse `lib/review/scheduler.ts`; do not fork it.** The existing `cards`/`words` tables are NOT reused: their columns are Mandarin-shaped (`whole_pinyin`, `hanzi`), and `scripts/refresh-seed-db.ts` already warns in writing that the shared library is not split per language.
 
-5. **Add a Name-IPA column to the lesson tables (both units).** In
-   `components/thai/lessons/consonant-table.tsx`, add a column rendering
-   `item.metadata.nameIpa` (fall back to an em dash or omit the cell when
-   absent, consistent with the existing Final-IPA null handling). This is
-   one shared component, so both `MidConsonantLesson` (unit 2) and
-   `HighConsonantLesson` (unit 3) pick it up automatically — no per-unit
-   component changes needed.
+Then add `"advanced-thai"` to `ActiveMode` (`lib/thai/types.ts`), to `setActiveMode`'s validation (coerce — only the owner may set it; the action is reachable by direct POST), to the `app/page.tsx` branch, and to `ModeToggle` / `BottomNav`. `learner_settings.active_mode` is plain `text` with no enum or check constraint, so **the mode itself needs no migration.**
 
-   Unit 2's `MID_CONSONANTS` already has `nameIpa` authored for all 9
-   entries. Unit 3's `HIGH_CONSONANTS` (`seed/thai/items.ts`) does not —
-   author `metadata.nameIpa` for its 10 drillable high-class consonants
-   (ข ฉ ฐ ถ ผ ฝ ศ ษ ส ห; the obsolete ฃ is not drilled but can get one too
-   for table consistency), following the same transcription convention
-   already used for `MID_CONSONANTS` (tone-marked IPA of the full acrophonic
-   name, e.g. `"kɔ̄ː kàj"`). This is a small content-authoring task the
-   implementer should do carefully and the owner should spot-check, since
-   transcription accuracy isn't mechanically verifiable.
+### B2. Extractor — `scripts/generate-advanced-thai-deck.ts`
+Modelled on `scripts/generate-deck.ts`. Reads a theme `.md`, sends it to Claude with a JSON schema matching `seed/advanced-thai/types.ts`, writes `seed/advanced-thai/themes/<slug>.generated.json`. Resumable.
+
+**Clause-splitting is deterministic, not LLM** — split on the document's own spaces (keeping `ๆ` bound to the word before it), then ask the model only for the word segmentation, the glosses, the vocab and the patterns.
+
+**The owner reviews and edits the JSON before anything is seeded.**
+
+### B3. Seed-time assertions — `scripts/seed-advanced-thai-db.ts`
+Thai word segmentation is the genuinely hard part and an LLM *will* get some of it wrong. Assert BEFORE touching the DB (the `assertPhraseBoundariesValid` precedent in `scripts/seed-thai-db.ts`):
+- every phrase's `words.join("")` reproduces `thai` minus punctuation;
+- every grammar `slot` name appears in its `frame`;
+- every `pos` / `register` / `fn` value is in its union.
+
+This exact check already exists — it was run in Phase A verification and should be lifted straight into the seed script.
+
+### B4. Audio — extend `scripts/generate-thai-audio.ts`
+New blob prefix `audio/advanced-thai/`. Google Cloud TTS, voice `th-TH-Neural2-C`.
+
+**Keep its hash-the-`(provider, model, voice, language, text)`-tuple behaviour** — NOT Mandarin's hash-text-alone, which is the latent voice-hash bug already recorded in memory. A voice change must never silently reuse a stale clip.
+
+Ships with the same `--dry` gate: print clip count, character total and cost estimate, and **spend nothing without an explicit go.**
+
+### B5. Study flow
+- `app/advanced-thai/page.tsx` — theme picker + review session.
+- The session dispatches on `card.kind` to the three picked components (move them out of `bakeoff/` into `components/advanced-thai/`).
+- Reuse `RatingButtons`, `AudioButton`, `SessionHeader`, `EmptyState`.
+
+## Trap carried forward from Phase A
+
+`components/card-back.tsx` (Mandarin) uses `justify-center` + `overflow-y-auto` on a single column, which **clips overflowing content above the scroll origin** where it can never be scrolled back to. It is only safe today because Mandarin phrases are short. The Advanced-Thai cards already carry the fix (fixed header + a scroll container whose child is `min-h-full justify-center`). If any Mandarin component is reused for a long Thai clause, it must be fixed too.
 
 ## Verification
 
-- `tsc` and `eslint` clean; full test suite passes (pilot commit shows
-  37/37 prior to this change — confirm still green after generalizing).
-- Manually walk `/thai/3/drill` as a test learner: cards render for all
-  drillable high-class consonants, flip/reveal shows initial+final IPA and
-  name, "Missed it" rotates the card to the back, clearing the whole deck
-  once shows the completion summary and (on first clearance) the unit-4
-  unlock celebration.
-- Confirm `/thai/2/drill` still behaves identically to before (no
-  regression from the `FLASHCARD_UNIT` → `FLASHCARD_UNITS` generalization).
-- Confirm a learner who already has unit-3 MCQ (`letter-sound`) progress
-  from before this change is grandfathered into flashcard mastery (existing
-  `isRequiredTypeMastered` logic), not forced to redo the deck.
-- Visually check `/thai/2/lesson` and `/thai/3/lesson`: both tables now show
-  a Name-IPA column; unit 2's is populated for all rows, unit 3's is
-  populated for its 10 drillable rows (owner to spot-check transcription
-  accuracy).
+1. Confirm `DATABASE_URL` points at the **Neon branch**, not prod, before any migrate or seed.
+2. `npx drizzle-kit generate` → read the SQL by eye → apply to the branch.
+3. Run the extractor on `นักโฆษณา` → expect **122 phrases** → read the JSON.
+4. Seed assertions pass (they must abort *before* the DB is touched).
+5. `--dry` audio run → cost estimate → **owner go** → generate.
+6. Drive `/advanced-thai` signed in as the owner: study one card of each kind, rate it, confirm FSRS scheduling advances.
+7. Restricted tester → 404. Mandarin and Read-Thai flows unchanged.
+8. `npx tsc --noEmit`, `npm run lint`.
+9. Only then: migrate production.

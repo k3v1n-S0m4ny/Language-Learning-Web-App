@@ -1,0 +1,4350 @@
+{
+  "slug": "nak-kosana",
+  "titleThai": "นักโฆษณา",
+  "titleEnglish": "Advertiser",
+  "summary": "Plan and manage every stage of advertisement production to meet the client’s needs, then distribute it through suitable media channels to convey information to consumers.",
+  "vocab": [
+    {
+      "thai": "นักโฆษณา",
+      "gloss": "advertiser; advertising professional",
+      "pos": "noun",
+      "register": "technical",
+      "morphemes": [
+        {
+          "form": "นัก",
+          "gloss": "person who practices; specialist in",
+          "role": "prefix"
+        },
+        {
+          "form": "โฆษณา",
+          "gloss": "advertising; advertisement",
+          "role": "root"
+        }
+      ],
+      "literal": "one whose practice is advertising"
+    },
+    {
+      "thai": "บริหาร",
+      "gloss": "manage; administer",
+      "pos": "verb",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "บริหาร",
+          "gloss": "manage; administer",
+          "role": "root"
+        }
+      ]
+    },
+    {
+      "thai": "การผลิต",
+      "gloss": "production",
+      "pos": "noun",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "การ",
+          "gloss": "action; act of",
+          "role": "prefix"
+        },
+        {
+          "form": "ผลิต",
+          "gloss": "produce",
+          "role": "root"
+        }
+      ],
+      "literal": "the act of producing"
+    },
+    {
+      "thai": "ความต้องการ",
+      "gloss": "need; requirement",
+      "pos": "noun",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "ความ",
+          "gloss": "state; quality; abstract noun",
+          "role": "prefix"
+        },
+        {
+          "form": "ต้องการ",
+          "gloss": "want; need; require",
+          "role": "root"
+        }
+      ],
+      "literal": "the state of wanting"
+    },
+    {
+      "thai": "ผู้ว่าจ้าง",
+      "gloss": "client; employer; party commissioning work",
+      "pos": "noun",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "ผู้",
+          "gloss": "person who",
+          "role": "prefix"
+        },
+        {
+          "form": "ว่าจ้าง",
+          "gloss": "hire; employ; commission",
+          "role": "root"
+        }
+      ],
+      "literal": "the person who hires"
+    },
+    {
+      "thai": "เผยแพร่",
+      "gloss": "disseminate; publish; distribute",
+      "pos": "verb",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "เผยแพร่",
+          "gloss": "disseminate; publish",
+          "role": "root"
+        }
+      ]
+    },
+    {
+      "thai": "สื่อ",
+      "gloss": "media; medium",
+      "pos": "noun",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "สื่อ",
+          "gloss": "media; medium; communicate",
+          "role": "root"
+        }
+      ]
+    },
+    {
+      "thai": "ผู้บริโภค",
+      "gloss": "consumer",
+      "pos": "noun",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "ผู้",
+          "gloss": "person who",
+          "role": "prefix"
+        },
+        {
+          "form": "บริโภค",
+          "gloss": "consume",
+          "role": "root"
+        }
+      ],
+      "literal": "the person who consumes"
+    },
+    {
+      "thai": "อิทธิพล",
+      "gloss": "influence",
+      "pos": "noun",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "อิทธิพล",
+          "gloss": "influence",
+          "role": "root"
+        }
+      ]
+    },
+    {
+      "thai": "ตัวแทน",
+      "gloss": "representative; agent",
+      "pos": "noun",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "ตัว",
+          "gloss": "body; self",
+          "role": "root"
+        },
+        {
+          "form": "แทน",
+          "gloss": "instead of; in place of",
+          "role": "suffix"
+        }
+      ],
+      "literal": "substitute/self standing in place"
+    },
+    {
+      "thai": "ควบคุมดูแล",
+      "gloss": "supervise; oversee",
+      "pos": "verb",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "ควบคุม",
+          "gloss": "control",
+          "role": "root"
+        },
+        {
+          "form": "ดูแล",
+          "gloss": "look after; supervise",
+          "role": "suffix"
+        }
+      ],
+      "literal": "control and take care of"
+    },
+    {
+      "thai": "ขั้นตอน",
+      "gloss": "step; procedure; stage",
+      "pos": "noun",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "ขั้น",
+          "gloss": "step; level",
+          "role": "root"
+        },
+        {
+          "form": "ตอน",
+          "gloss": "part; section",
+          "role": "suffix"
+        }
+      ],
+      "literal": "step + section"
+    },
+    {
+      "thai": "ผู้เชี่ยวชาญ",
+      "gloss": "specialist; expert",
+      "pos": "noun",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "ผู้",
+          "gloss": "person who",
+          "role": "prefix"
+        },
+        {
+          "form": "เชี่ยวชาญ",
+          "gloss": "expert; skilled",
+          "role": "root"
+        }
+      ],
+      "literal": "person who is expert"
+    },
+    {
+      "thai": "การนำเสนอ",
+      "gloss": "presentation; proposing",
+      "pos": "noun",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "การ",
+          "gloss": "action; act of",
+          "role": "prefix"
+        },
+        {
+          "form": "นำเสนอ",
+          "gloss": "present; propose",
+          "role": "root"
+        }
+      ],
+      "literal": "the act of bringing and presenting"
+    },
+    {
+      "thai": "ละเอียด",
+      "gloss": "detailed; meticulous",
+      "pos": "adj",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "ละเอียด",
+          "gloss": "detailed; meticulous",
+          "role": "root"
+        }
+      ]
+    },
+    {
+      "thai": "ชักจูง",
+      "gloss": "persuade; induce",
+      "pos": "verb",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "ชัก",
+          "gloss": "pull; draw",
+          "role": "root"
+        },
+        {
+          "form": "จูง",
+          "gloss": "lead; guide by pulling",
+          "role": "suffix"
+        }
+      ],
+      "literal": "pull along"
+    },
+    {
+      "thai": "ความสามารถ",
+      "gloss": "ability; capability",
+      "pos": "noun",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "ความ",
+          "gloss": "state; quality; abstract noun",
+          "role": "prefix"
+        },
+        {
+          "form": "สามารถ",
+          "gloss": "be able to; capable",
+          "role": "root"
+        }
+      ],
+      "literal": "the quality of being able"
+    },
+    {
+      "thai": "การสื่อสาร",
+      "gloss": "communication",
+      "pos": "noun",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "การ",
+          "gloss": "action; act of",
+          "role": "prefix"
+        },
+        {
+          "form": "สื่อสาร",
+          "gloss": "communicate",
+          "role": "root"
+        }
+      ],
+      "literal": "the act of communicating"
+    },
+    {
+      "thai": "การเจรจา",
+      "gloss": "negotiation",
+      "pos": "noun",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "การ",
+          "gloss": "action; act of",
+          "role": "prefix"
+        },
+        {
+          "form": "เจรจา",
+          "gloss": "negotiate; discuss",
+          "role": "root"
+        }
+      ],
+      "literal": "the act of negotiating"
+    },
+    {
+      "thai": "การโน้มน้าวใจ",
+      "gloss": "persuasion",
+      "pos": "noun",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "การ",
+          "gloss": "action; act of",
+          "role": "prefix"
+        },
+        {
+          "form": "โน้มน้าวใจ",
+          "gloss": "persuade",
+          "role": "root"
+        }
+      ],
+      "literal": "the act of bending/leading the heart"
+    },
+    {
+      "thai": "อธิบาย",
+      "gloss": "explain",
+      "pos": "verb",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "อธิบาย",
+          "gloss": "explain",
+          "role": "root"
+        }
+      ]
+    },
+    {
+      "thai": "ประโยชน์",
+      "gloss": "benefit; usefulness",
+      "pos": "noun",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "ประโยชน์",
+          "gloss": "benefit; usefulness",
+          "role": "root"
+        }
+      ]
+    },
+    {
+      "thai": "ทักษะ",
+      "gloss": "skill",
+      "pos": "noun",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "ทักษะ",
+          "gloss": "skill",
+          "role": "root"
+        }
+      ]
+    },
+    {
+      "thai": "เหตุผล",
+      "gloss": "reason; rationale",
+      "pos": "noun",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "เหตุ",
+          "gloss": "cause; incident",
+          "role": "root"
+        },
+        {
+          "form": "ผล",
+          "gloss": "result; effect",
+          "role": "suffix"
+        }
+      ],
+      "literal": "cause + result"
+    },
+    {
+      "thai": "สำรวจตลาด",
+      "gloss": "survey the market; market research",
+      "pos": "verb",
+      "register": "technical",
+      "morphemes": [
+        {
+          "form": "สำรวจ",
+          "gloss": "survey; inspect",
+          "role": "root"
+        },
+        {
+          "form": "ตลาด",
+          "gloss": "market",
+          "role": "suffix"
+        }
+      ],
+      "literal": "survey + market"
+    },
+    {
+      "thai": "งบประมาณ",
+      "gloss": "budget",
+      "pos": "noun",
+      "register": "technical",
+      "morphemes": [
+        {
+          "form": "งบประมาณ",
+          "gloss": "budget",
+          "role": "root"
+        }
+      ]
+    },
+    {
+      "thai": "พรีเซนเตอร์",
+      "gloss": "presenter; brand spokesperson",
+      "pos": "noun",
+      "register": "technical",
+      "morphemes": [
+        {
+          "form": "พรีเซนเตอร์",
+          "gloss": "presenter; spokesperson",
+          "role": "root"
+        }
+      ]
+    },
+    {
+      "thai": "ประเมินผล",
+      "gloss": "evaluate; assess results",
+      "pos": "verb",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "ประเมิน",
+          "gloss": "evaluate; assess",
+          "role": "root"
+        },
+        {
+          "form": "ผล",
+          "gloss": "result",
+          "role": "suffix"
+        }
+      ],
+      "literal": "estimate/evaluate the result"
+    },
+    {
+      "thai": "สร้างสรรค์",
+      "gloss": "creative; create",
+      "pos": "adj",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "สร้าง",
+          "gloss": "create; build",
+          "role": "root"
+        },
+        {
+          "form": "สรรค์",
+          "gloss": "fashion; compose",
+          "role": "suffix"
+        }
+      ],
+      "literal": "create + shape"
+    },
+    {
+      "thai": "นักการตลาด",
+      "gloss": "marketer",
+      "pos": "noun",
+      "register": "technical",
+      "morphemes": [
+        {
+          "form": "นัก",
+          "gloss": "person who practices; specialist in",
+          "role": "prefix"
+        },
+        {
+          "form": "การตลาด",
+          "gloss": "marketing",
+          "role": "root"
+        }
+      ],
+      "literal": "one whose practice is market/trade affairs"
+    },
+    {
+      "thai": "แบบสอบถาม",
+      "gloss": "questionnaire",
+      "pos": "noun",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "แบบ",
+          "gloss": "form; template",
+          "role": "root"
+        },
+        {
+          "form": "สอบถาม",
+          "gloss": "inquire; ask questions",
+          "role": "suffix"
+        }
+      ],
+      "literal": "form for asking questions"
+    },
+    {
+      "thai": "นักวิจัยโฆษณา",
+      "gloss": "advertising researcher",
+      "pos": "noun",
+      "register": "technical",
+      "morphemes": [
+        {
+          "form": "นัก",
+          "gloss": "person who practices; specialist in",
+          "role": "prefix"
+        },
+        {
+          "form": "วิจัยโฆษณา",
+          "gloss": "advertising research",
+          "role": "root"
+        }
+      ],
+      "literal": "one whose practice is advertisement research"
+    },
+    {
+      "thai": "วิเคราะห์",
+      "gloss": "analyze",
+      "pos": "verb",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "วิเคราะห์",
+          "gloss": "analyze",
+          "role": "root"
+        }
+      ]
+    },
+    {
+      "thai": "ช่องทาง",
+      "gloss": "channel; route",
+      "pos": "noun",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "ช่อง",
+          "gloss": "channel; opening",
+          "role": "root"
+        },
+        {
+          "form": "ทาง",
+          "gloss": "way; route",
+          "role": "suffix"
+        }
+      ],
+      "literal": "passage way"
+    },
+    {
+      "thai": "โปรดิวเซอร์",
+      "gloss": "producer",
+      "pos": "noun",
+      "register": "technical",
+      "morphemes": [
+        {
+          "form": "โปรดิวเซอร์",
+          "gloss": "producer",
+          "role": "root"
+        }
+      ]
+    },
+    {
+      "thai": "ผู้กำกับศิลป์",
+      "gloss": "art director",
+      "pos": "noun",
+      "register": "technical",
+      "morphemes": [
+        {
+          "form": "ผู้",
+          "gloss": "person who",
+          "role": "prefix"
+        },
+        {
+          "form": "กำกับศิลป์",
+          "gloss": "direct art; art direction",
+          "role": "root"
+        }
+      ],
+      "literal": "person who directs art"
+    },
+    {
+      "thai": "องค์ประกอบศิลป์",
+      "gloss": "artistic composition; visual elements",
+      "pos": "noun",
+      "register": "technical",
+      "morphemes": [
+        {
+          "form": "องค์ประกอบ",
+          "gloss": "component; composition",
+          "role": "root"
+        },
+        {
+          "form": "ศิลป์",
+          "gloss": "art",
+          "role": "suffix"
+        }
+      ],
+      "literal": "components of art"
+    },
+    {
+      "thai": "นักเขียนบทโฆษณา",
+      "gloss": "copywriter; advertising script writer",
+      "pos": "noun",
+      "register": "technical",
+      "morphemes": [
+        {
+          "form": "นัก",
+          "gloss": "person who practices; specialist in",
+          "role": "prefix"
+        },
+        {
+          "form": "เขียนบทโฆษณา",
+          "gloss": "write advertising scripts/copy",
+          "role": "root"
+        }
+      ],
+      "literal": "one whose practice is writing advertising scripts"
+    },
+    {
+      "thai": "นิเทศศาสตร์",
+      "gloss": "communication arts",
+      "pos": "noun",
+      "register": "technical",
+      "morphemes": [
+        {
+          "form": "นิเทศศาสตร์",
+          "gloss": "communication arts",
+          "role": "root"
+        }
+      ]
+    },
+    {
+      "thai": "จรรยาบรรณ",
+      "gloss": "professional ethics; code of conduct",
+      "pos": "noun",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "จรรยาบรรณ",
+          "gloss": "professional ethics; code of conduct",
+          "role": "root"
+        }
+      ]
+    },
+    {
+      "thai": "หลากหลาย",
+      "gloss": "diverse; varied",
+      "pos": "adj",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "หลาก",
+          "gloss": "many; various",
+          "role": "root"
+        },
+        {
+          "form": "หลาย",
+          "gloss": "many",
+          "role": "suffix"
+        }
+      ],
+      "literal": "many + kinds"
+    }
+  ],
+  "grammar": [
+    {
+      "frame": "ให้ + Agent + V",
+      "fn": "causative",
+      "plainEnglish": "have someone do something for you or as instructed.",
+      "examples": [
+        {
+          "gloss": "When a client hires an ad to be produced, the advertiser plans and carries out the production according to the instructions.",
+          "segments": [
+            {
+              "text": "เมื่อมีผู้ว่าจ้าง"
+            },
+            {
+              "text": "ให้",
+              "slot": "marker"
+            },
+            {
+              "text": "ผลิตโฆษณา",
+              "slot": "V"
+            },
+            {
+              "text": " นักโฆษณาจะวางแผนและทำการผลิตให้ตรงตามคำสั่ง"
+            }
+          ]
+        },
+        {
+          "gloss": "Ad companies compete to present an advertising plan to the client.",
+          "segments": [
+            {
+              "text": "ก่อนการผลิตโฆษณา บริษัทโฆษณาจะแข่งกันเสนอแผนโฆษณา"
+            },
+            {
+              "text": "ให้",
+              "slot": "marker"
+            },
+            {
+              "text": "แก่ลูกค้า",
+              "slot": "Agent"
+            }
+          ]
+        },
+        {
+          "gloss": "They try to persuade the client to choose their plan.",
+          "segments": [
+            {
+              "text": "โดยจะนำเสนอแผนโฆษณาอย่างละเอียด และพยายามชักจูง"
+            },
+            {
+              "text": "ให้",
+              "slot": "marker"
+            },
+            {
+              "text": "ลูกค้า",
+              "slot": "Agent"
+            },
+            {
+              "text": "เลือกแผนโฆษณาของตน",
+              "slot": "V"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame": "ทำให้ + N + V",
+      "fn": "causative",
+      "plainEnglish": "cause something to happen to someone or something.",
+      "examples": [
+        {
+          "gloss": "They investigate what kind of advertising will make the product sell better.",
+          "segments": [
+            {
+              "text": "สำรวจข้อมูลว่าโฆษณาแบบไหนจะ"
+            },
+            {
+              "text": "ทำให้",
+              "slot": "marker"
+            },
+            {
+              "text": "สินค้า",
+              "slot": "N"
+            },
+            {
+              "text": "ขายดีขึ้น",
+              "slot": "V"
+            }
+          ]
+        },
+        {
+          "gloss": "They analyze which media channel will make people know the produced advertisement best.",
+          "segments": [
+            {
+              "text": "วิเคราะห์ว่าสื่อช่องทางใดจะ"
+            },
+            {
+              "text": "ทำให้",
+              "slot": "marker"
+            },
+            {
+              "text": "คน",
+              "slot": "N"
+            },
+            {
+              "text": "รู้จักโฆษณาที่ผลิตออกมาได้ดีที่สุด",
+              "slot": "V"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame": "เพื่อ + V",
+      "fn": "connector",
+      "plainEnglish": "do something for a purpose.",
+      "examples": [
+        {
+          "gloss": "It is published through suitable media in order to serve as a medium for bringing information to consumers.",
+          "segments": [
+            {
+              "text": "วางแผนและบริหารการผลิตโฆษณาทุกขั้นตอนให้ตรงตามความต้องการของผู้ว่าจ้าง และนำไปเผยแพร่ทางสื่อต่าง ๆ ที่เหมาะสม "
+            },
+            {
+              "text": "เพื่อ",
+              "slot": "marker"
+            },
+            {
+              "text": "ใช้เป็นสื่อที่จะนำข้อมูลข่าวสารไปยังผู้บริโภค",
+              "slot": "V"
+            }
+          ]
+        },
+        {
+          "gloss": "They try to persuade the client to choose their advertising plan in order to produce it as a real advertisement.",
+          "segments": [
+            {
+              "text": "โดยจะนำเสนอแผนโฆษณาอย่างละเอียด และพยายามชักจูงให้ลูกค้าเลือกแผนโฆษณาของตน "
+            },
+            {
+              "text": "เพื่อ",
+              "slot": "marker"
+            },
+            {
+              "text": "ผลิตเป็นโฆษณาจริงต่อไป",
+              "slot": "V"
+            }
+          ]
+        },
+        {
+          "gloss": "Sometimes an ad company may send an advertiser to meet the client directly in order to explain the importance and benefits of producing the ad for that product.",
+          "segments": [
+            {
+              "text": "บางครั้งบริษัทโฆษณาอาจจะส่งนักโฆษณาไปพบกับลูกค้าโดยตรง "
+            },
+            {
+              "text": "เพื่อ",
+              "slot": "marker"
+            },
+            {
+              "text": "อธิบายถึงความสำคัญและประโยชน์ของการผลิตโฆษณาสำหรับสินค้านั้น",
+              "slot": "V"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame": "โดย + V",
+      "fn": "connector",
+      "plainEnglish": "show the method or manner used to do something.",
+      "examples": [
+        {
+          "gloss": "Advertising is creative work created by many parties.",
+          "segments": [
+            {
+              "text": "โฆษณาเป็นงานที่สร้างสรรค์"
+            },
+            {
+              "text": "โดย",
+              "slot": "marker"
+            },
+            {
+              "text": "บุคคลหลายฝ่าย",
+              "slot": "V"
+            }
+          ]
+        },
+        {
+          "gloss": "They investigate what kind of ad will make the product sell better by looking at questionnaires, discussion sessions, and market and consumer surveys.",
+          "segments": [
+            {
+              "text": "สำรวจข้อมูลว่าโฆษณาแบบไหนจะทำให้สินค้าขายดีขึ้น "
+            },
+            {
+              "text": "โดย",
+              "slot": "marker"
+            },
+            {
+              "text": "ดูจากแบบสอบถาม การจัดเสวนา รวมถึงการสำรวจตลาดและผู้บริโภค",
+              "slot": "V"
+            }
+          ]
+        },
+        {
+          "gloss": "This is called an advertising plan presentation, with the plan being presented in detail.",
+          "segments": [
+            {
+              "text": "เรียกว่า การนำเสนอแผนโฆษณา "
+            },
+            {
+              "text": "โดย",
+              "slot": "marker"
+            },
+            {
+              "text": "จะนำเสนอแผนโฆษณาอย่างละเอียด และพยายามชักจูงให้ลูกค้าเลือกแผนโฆษณาของตน",
+              "slot": "V"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame": "จากนั้น(จึง/ก็) + Clause",
+      "fn": "connector",
+      "plainEnglish": "then, after that, the next step happens.",
+      "examples": [
+        {
+          "gloss": "The advertiser plans and carries out production according to the instructions; after that, it is published through suitable media.",
+          "segments": [
+            {
+              "text": "เมื่่อมีผู้ว่าจ้างให้ผลิตโฆษณา นักโฆษณาจะวางแผนและทำการผลิตให้ตรงตามคำสั่ง "
+            },
+            {
+              "text": "จากนั้นก็",
+              "slot": "marker"
+            },
+            {
+              "text": "นำไปเผยแพร่ทางสื่อต่าง ๆ ที่เหมาะสม",
+              "slot": "Clause"
+            }
+          ]
+        },
+        {
+          "gloss": "The advertiser analyzes the marketer’s questionnaire and consults with those responsible for ad media; after that, they plan the advertising work so consumers will know the product.",
+          "segments": [
+            {
+              "text": "วิเคราะห์แบบสอบถามของนักการตลาด หารือกับผู้รับผิดชอบสื่อโฆษณา "
+            },
+            {
+              "text": "จากนั้นจึง",
+              "slot": "marker"
+            },
+            {
+              "text": "วางแผนงานโฆษณาเพื่อให้ผู้บริโภครู้จักสินค้า",
+              "slot": "Clause"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame": "รวมถึง + N",
+      "fn": "connector",
+      "plainEnglish": "add another important item to the list.",
+      "examples": [
+        {
+          "gloss": "Sometimes an ad company may send an advertiser to meet the client directly to explain the importance and benefits of producing the ad for that product, including persuading them to hire the company to make it.",
+          "segments": [
+            {
+              "text": "บางครั้งบริษัทโฆษณาอาจจะส่งนักโฆษณาไปพบกับลูกค้าโดยตรง เพื่ออธิบายถึงความสำคัญและประโยชน์ของการผลิตโฆษณาสำหรับสินค้านั้น "
+            },
+            {
+              "text": "รวมถึง",
+              "slot": "marker"
+            },
+            {
+              "text": "โน้มน้าวให้จ้างทำโฆษณาด้วย",
+              "slot": "N"
+            }
+          ]
+        },
+        {
+          "gloss": "They investigate by looking at questionnaires and discussion sessions, including market and consumer surveys.",
+          "segments": [
+            {
+              "text": "โดยดูจากแบบสอบถาม การจัดเสวนา "
+            },
+            {
+              "text": "รวมถึง",
+              "slot": "marker"
+            },
+            {
+              "text": "การสำรวจตลาดและผู้บริโภค",
+              "slot": "N"
+            }
+          ]
+        },
+        {
+          "gloss": "The art director looks after artistic composition and graphic design, including special-effects work.",
+          "segments": [
+            {
+              "text": "ดูแลด้านองค์ประกอบศิลป์ การออกแบบกราฟิก "
+            },
+            {
+              "text": "รวมถึง",
+              "slot": "marker"
+            },
+            {
+              "text": "การทำเทคนิคพิเศษ",
+              "slot": "N"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame": "และ + N",
+      "fn": "connector",
+      "plainEnglish": "join things of the same kind together.",
+      "examples": [
+        {
+          "gloss": "Advertising media currently have a great influence on society and people’s daily lives.",
+          "segments": [
+            {
+              "text": "ปัจจุบันสื่อโฆษณามีอิทธิพลต่อสังคม ",
+              "slot": "N"
+            },
+            {
+              "text": "และ",
+              "slot": "marker"
+            },
+            {
+              "text": "ชีวิตประจำวันของผู้คนเป็นอย่างมาก",
+              "slot": "N"
+            }
+          ]
+        },
+        {
+          "gloss": "Negotiation and persuasion are necessary.",
+          "segments": [
+            {
+              "text": "การเจรจา ",
+              "slot": "N"
+            },
+            {
+              "text": "และ",
+              "slot": "marker"
+            },
+            {
+              "text": "การโน้มน้าวใจเป็นสิ่งจำเป็น",
+              "slot": "N"
+            }
+          ]
+        },
+        {
+          "gloss": "One must have skills in negotiation, persuasion, and speaking reasonably.",
+          "segments": [
+            {
+              "text": "คือต้องมีทักษะในการเจรจา การโน้มน้าวใจ ",
+              "slot": "N"
+            },
+            {
+              "text": "และ",
+              "slot": "marker"
+            },
+            {
+              "text": "พูดอย่างมีเหตุผล",
+              "slot": "N"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame": "หรือ + N",
+      "fn": "connector",
+      "plainEnglish": "present an alternative choice.",
+      "examples": [
+        {
+          "gloss": "Examples include ads on buses, on the internet, radio, or television.",
+          "segments": [
+            {
+              "text": "เช่น โฆษณาบนรถประจำทาง โฆษณาทางอินเทอร์เน็ต วิทยุ ",
+              "slot": "N"
+            },
+            {
+              "text": "หรือ",
+              "slot": "marker"
+            },
+            {
+              "text": "โทรทัศน์",
+              "slot": "N"
+            }
+          ]
+        },
+        {
+          "gloss": "If you have work experience in advertising in an organization or an ad company, and have learned the basics, you can go into the advertiser profession.",
+          "segments": [
+            {
+              "text": "หลังจากมีประสบการณ์การทำงานด้านโฆษณาในองค์กร",
+              "slot": "N"
+            },
+            {
+              "text": "หรือ",
+              "slot": "marker"
+            },
+            {
+              "text": "บริษัทโฆษณา และได้เรียนรู้งานพื้นฐานเกี่ยวกับโฆษณาแล้ว ก็จะนำไปสู่อาชีพนักโฆษณาได้",
+              "slot": "N"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame": "แข่งกัน + V",
+      "fn": "reciprocal",
+      "plainEnglish": "different people or groups do the same thing in competition with one another.",
+      "examples": [
+        {
+          "gloss": "Before producing an advertisement, ad companies compete to present ad plans to the client.",
+          "segments": [
+            {
+              "text": "ก่อนการผลิตโฆษณา บริษัทโฆษณาจะ"
+            },
+            {
+              "text": "แข่งกัน",
+              "slot": "marker"
+            },
+            {
+              "text": "เสนอแผนโฆษณาให้แก่ลูกค้า",
+              "slot": "V"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame": "A กว่า B",
+      "fn": "comparative",
+      "plainEnglish": "A is more than B in the stated way.",
+      "examples": [
+        {
+          "gloss": "The advertisement must emphasize the performance of this shoe model, which is different from competitors.",
+          "segments": [
+            {
+              "text": "โฆษณาจะต้องเน้นประสิทธิภาพของรองเท้ารุ่นนี้ที่ต่าง",
+              "slot": "A"
+            },
+            {
+              "text": "กว่า",
+              "slot": "marker"
+            },
+            {
+              "text": "คู่แข่ง",
+              "slot": "B"
+            }
+          ]
+        },
+        {
+          "gloss": "The ad can then be made better.",
+          "segments": [
+            {
+              "text": "เพื่อให้ผลิตโฆษณาได้ดี",
+              "slot": "A"
+            },
+            {
+              "text": "ยิ่ง"
+            },
+            {
+              "text": "ขึ้น",
+              "slot": "marker"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame": "A ยิ่งขึ้น",
+      "fn": "comparative",
+      "plainEnglish": "make something become even more so.",
+      "examples": [
+        {
+          "gloss": "They investigate what kind of advertising will make the product sell better.",
+          "segments": [
+            {
+              "text": "สำรวจข้อมูลว่าโฆษณาแบบไหนจะทำให้สินค้าขายดี",
+              "slot": "A"
+            },
+            {
+              "text": "ขึ้น",
+              "slot": "marker"
+            }
+          ]
+        },
+        {
+          "gloss": "Advertisers must have a wide range of abilities so that they can produce advertisements even better.",
+          "segments": [
+            {
+              "text": "นักโฆษณาจะต้องมีความสามารถหลากหลาย เพื่อให้ผลิตโฆษณาได้ดี",
+              "slot": "A"
+            },
+            {
+              "text": "ยิ่งขึ้น",
+              "slot": "marker"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame": "คือ + Clause",
+      "fn": "topic",
+      "plainEnglish": "state clearly what the key point is.",
+      "examples": [
+        {
+          "gloss": "The key thing is that one must have skills in negotiation, persuasion, and speaking reasonably.",
+          "segments": [
+            {
+              "text": "ดังนั้น ความสามารถในการสื่อสารของนักโฆษณาจึงเป็นสิ่งสำคัญ "
+            },
+            {
+              "text": "คือ",
+              "slot": "marker"
+            },
+            {
+              "text": "ต้องมีทักษะในการเจรจา การโน้มน้าวใจ และพูดอย่างมีเหตุผล",
+              "slot": "Clause"
+            }
+          ]
+        },
+        {
+          "gloss": "This is our new shoe model; its strong point is...",
+          "segments": [
+            {
+              "text": "นี่เป็นรองเท้ารุ่นใหม่ของเรา จุดเด่น"
+            },
+            {
+              "text": "คือ",
+              "slot": "marker"
+            },
+            {
+              "text": "…",
+              "slot": "Clause"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "phrases": [
+    {
+      "thai": "วางแผนและบริหารการผลิตโฆษณาทุกขั้นตอนให้ตรงตามความต้องการของผู้ว่าจ้าง",
+      "gloss": "Plan and manage every stage of advertising production to meet the client's requirements.",
+      "words": [
+        {
+          "thai": "วางแผน",
+          "gloss": "plan"
+        },
+        {
+          "thai": "และ",
+          "gloss": "and"
+        },
+        {
+          "thai": "บริหาร",
+          "gloss": "manage"
+        },
+        {
+          "thai": "การผลิต",
+          "gloss": "production"
+        },
+        {
+          "thai": "โฆษณา",
+          "gloss": "advertising"
+        },
+        {
+          "thai": "ทุกขั้นตอน",
+          "gloss": "every step"
+        },
+        {
+          "thai": "ให้",
+          "gloss": "so that"
+        },
+        {
+          "thai": "ตรงตาม",
+          "gloss": "in accordance with"
+        },
+        {
+          "thai": "ความต้องการ",
+          "gloss": "requirements"
+        },
+        {
+          "thai": "ของ",
+          "gloss": "of"
+        },
+        {
+          "thai": "ผู้ว่าจ้าง",
+          "gloss": "client"
+        }
+      ],
+      "source": "prose",
+      "context": "Role · Advertising work"
+    },
+    {
+      "thai": "และนำไปเผยแพร่ทางสื่อต่าง ๆ",
+      "gloss": "and distribute it through various media",
+      "words": [
+        {
+          "thai": "และ",
+          "gloss": "and"
+        },
+        {
+          "thai": "นำ",
+          "gloss": "take; bring"
+        },
+        {
+          "thai": "ไป",
+          "gloss": "away; onward"
+        },
+        {
+          "thai": "เผยแพร่",
+          "gloss": "to disseminate; publish"
+        },
+        {
+          "thai": "ทาง",
+          "gloss": "via; through"
+        },
+        {
+          "thai": "สื่อ",
+          "gloss": "media"
+        },
+        {
+          "thai": "ต่าง ๆ",
+          "gloss": "various"
+        }
+      ],
+      "source": "prose",
+      "context": "Role · Advertising work"
+    },
+    {
+      "thai": "ที่เหมาะสม",
+      "gloss": "that are suitable",
+      "words": [
+        {
+          "thai": "ที่",
+          "gloss": "that; which"
+        },
+        {
+          "thai": "เหมาะสม",
+          "gloss": "suitable; appropriate"
+        }
+      ],
+      "source": "prose",
+      "context": "Section · Ad management"
+    },
+    {
+      "thai": "เพื่อใช้เป็นสื่อที่จะนำข้อมูลข่าวสารไปยังผู้บริโภค",
+      "gloss": "for use as a medium to bring information and news to consumers",
+      "words": [
+        {
+          "thai": "เพื่อ",
+          "gloss": "for; in order to"
+        },
+        {
+          "thai": "ใช้",
+          "gloss": "use"
+        },
+        {
+          "thai": "เป็น",
+          "gloss": "as; be"
+        },
+        {
+          "thai": "สื่อ",
+          "gloss": "medium"
+        },
+        {
+          "thai": "ที่",
+          "gloss": "that; which"
+        },
+        {
+          "thai": "จะ",
+          "gloss": "will"
+        },
+        {
+          "thai": "นำ",
+          "gloss": "bring"
+        },
+        {
+          "thai": "ข้อมูลข่าวสาร",
+          "gloss": "information and news"
+        },
+        {
+          "thai": "ไป",
+          "gloss": "to; onward"
+        },
+        {
+          "thai": "ยัง",
+          "gloss": "to; toward"
+        },
+        {
+          "thai": "ผู้บริโภค",
+          "gloss": "consumers"
+        }
+      ],
+      "source": "prose",
+      "context": "Role · Advertising work"
+    },
+    {
+      "thai": "วางแผนและบริหารงานโฆษณาทั้งหมด",
+      "gloss": "Plan and manage all advertising work.",
+      "words": [
+        {
+          "thai": "วางแผน",
+          "gloss": "to plan"
+        },
+        {
+          "thai": "และ",
+          "gloss": "and"
+        },
+        {
+          "thai": "บริหารงาน",
+          "gloss": "to manage work"
+        },
+        {
+          "thai": "โฆษณา",
+          "gloss": "advertising"
+        },
+        {
+          "thai": "ทั้งหมด",
+          "gloss": "all; entirely"
+        }
+      ],
+      "source": "heading",
+      "context": "Section heading"
+    },
+    {
+      "thai": "ปัจจุบันสื่อโฆษณามีอิทธิพลต่อสังคมและชีวิตประจำวันของผู้คนเป็นอย่างมาก",
+      "gloss": "At present, advertising media have a great influence on society and people's daily lives.",
+      "words": [
+        {
+          "thai": "ปัจจุบัน",
+          "gloss": "at present"
+        },
+        {
+          "thai": "สื่อโฆษณา",
+          "gloss": "advertising media"
+        },
+        {
+          "thai": "มีอิทธิพล",
+          "gloss": "have influence"
+        },
+        {
+          "thai": "ต่อ",
+          "gloss": "on; toward"
+        },
+        {
+          "thai": "สังคม",
+          "gloss": "society"
+        },
+        {
+          "thai": "และ",
+          "gloss": "and"
+        },
+        {
+          "thai": "ชีวิตประจำวัน",
+          "gloss": "daily life"
+        },
+        {
+          "thai": "ของ",
+          "gloss": "of"
+        },
+        {
+          "thai": "ผู้คน",
+          "gloss": "people"
+        },
+        {
+          "thai": "เป็นอย่างมาก",
+          "gloss": "greatly; very much"
+        }
+      ],
+      "source": "prose",
+      "context": "Section · Ad management"
+    },
+    {
+      "thai": "เมื่อมีผู้ว่าจ้างให้ผลิตโฆษณา",
+      "gloss": "When a client hires someone to produce an advertisement,",
+      "words": [
+        {
+          "thai": "เมื่อ",
+          "gloss": "when"
+        },
+        {
+          "thai": "มี",
+          "gloss": "there is; someone has"
+        },
+        {
+          "thai": "ผู้ว่าจ้าง",
+          "gloss": "employer; client"
+        },
+        {
+          "thai": "ให้",
+          "gloss": "to have; order"
+        },
+        {
+          "thai": "ผลิต",
+          "gloss": "produce"
+        },
+        {
+          "thai": "โฆษณา",
+          "gloss": "advertisement"
+        }
+      ],
+      "source": "prose",
+      "context": "Section · Ad management"
+    },
+    {
+      "thai": "นักโฆษณาจะวางแผนและทำการผลิตให้ตรงตามคำสั่ง",
+      "gloss": "the advertiser will plan and carry out production according to the instructions",
+      "words": [
+        {
+          "thai": "นักโฆษณา",
+          "gloss": "advertiser; advertising professional"
+        },
+        {
+          "thai": "จะ",
+          "gloss": "will"
+        },
+        {
+          "thai": "วางแผน",
+          "gloss": "plan"
+        },
+        {
+          "thai": "และ",
+          "gloss": "and"
+        },
+        {
+          "thai": "ทำการผลิต",
+          "gloss": "carry out production"
+        },
+        {
+          "thai": "ให้",
+          "gloss": "so that; to"
+        },
+        {
+          "thai": "ตรง",
+          "gloss": "match; be in line"
+        },
+        {
+          "thai": "ตาม",
+          "gloss": "according to"
+        },
+        {
+          "thai": "คำสั่ง",
+          "gloss": "orders; instructions"
+        }
+      ],
+      "source": "prose",
+      "context": "Section · Ad management"
+    },
+    {
+      "thai": "จากนั้นก็นำไปเผยแพร่ทางสื่อต่าง ๆ",
+      "gloss": "after that, it is then distributed through various media",
+      "words": [
+        {
+          "thai": "จากนั้น",
+          "gloss": "after that"
+        },
+        {
+          "thai": "ก็",
+          "gloss": "then"
+        },
+        {
+          "thai": "นำ",
+          "gloss": "take; bring"
+        },
+        {
+          "thai": "ไป",
+          "gloss": "away; onward"
+        },
+        {
+          "thai": "เผยแพร่",
+          "gloss": "to disseminate; publish"
+        },
+        {
+          "thai": "ทาง",
+          "gloss": "via; through"
+        },
+        {
+          "thai": "สื่อต่าง ๆ",
+          "gloss": "various media"
+        }
+      ],
+      "source": "prose",
+      "context": "Section · Ad management"
+    },
+    {
+      "thai": "นอกจากนี้ยังเป็นตัวแทนของบริษัทโฆษณาที่จะแลกเปลี่ยนความคิดเห็นกับลูกค้า",
+      "gloss": "In addition, they also act as representatives of the advertising company to exchange opinions with clients,",
+      "words": [
+        {
+          "thai": "นอกจากนี้",
+          "gloss": "in addition"
+        },
+        {
+          "thai": "ยัง",
+          "gloss": "still; also"
+        },
+        {
+          "thai": "เป็น",
+          "gloss": "be; act as"
+        },
+        {
+          "thai": "ตัวแทน",
+          "gloss": "representative"
+        },
+        {
+          "thai": "ของ",
+          "gloss": "of"
+        },
+        {
+          "thai": "บริษัทโฆษณา",
+          "gloss": "advertising company"
+        },
+        {
+          "thai": "ที่",
+          "gloss": "who; that"
+        },
+        {
+          "thai": "จะ",
+          "gloss": "will; to"
+        },
+        {
+          "thai": "แลกเปลี่ยน",
+          "gloss": "exchange"
+        },
+        {
+          "thai": "ความคิดเห็น",
+          "gloss": "opinions; views"
+        },
+        {
+          "thai": "กับ",
+          "gloss": "with"
+        },
+        {
+          "thai": "ลูกค้า",
+          "gloss": "client; customer"
+        }
+      ],
+      "source": "prose",
+      "context": "Section · Ad management"
+    },
+    {
+      "thai": "และควบคุมดูแลขั้นตอนการผลิตโฆษณาทั้งหมด",
+      "gloss": "and supervise all stages of advertisement production",
+      "words": [
+        {
+          "thai": "และ",
+          "gloss": "and"
+        },
+        {
+          "thai": "ควบคุมดูแล",
+          "gloss": "to supervise; oversee"
+        },
+        {
+          "thai": "ขั้นตอน",
+          "gloss": "stage; step"
+        },
+        {
+          "thai": "การผลิต",
+          "gloss": "production"
+        },
+        {
+          "thai": "โฆษณา",
+          "gloss": "advertising"
+        },
+        {
+          "thai": "ทั้งหมด",
+          "gloss": "all"
+        }
+      ],
+      "source": "prose",
+      "context": "Section · Ad management"
+    },
+    {
+      "thai": "ผู้เชี่ยวชาญด้านการนำเสนอ",
+      "gloss": "presentation specialist",
+      "words": [
+        {
+          "thai": "ผู้เชี่ยวชาญ",
+          "gloss": "specialist"
+        },
+        {
+          "thai": "ด้าน",
+          "gloss": "in / in the area of"
+        },
+        {
+          "thai": "การนำเสนอ",
+          "gloss": "presentation"
+        }
+      ],
+      "source": "heading",
+      "context": "Section heading"
+    },
+    {
+      "thai": "ก่อนการผลิตโฆษณา",
+      "gloss": "before producing the advertisement",
+      "words": [
+        {
+          "thai": "ก่อน",
+          "gloss": "before"
+        },
+        {
+          "thai": "การผลิต",
+          "gloss": "production"
+        },
+        {
+          "thai": "โฆษณา",
+          "gloss": "advertisement"
+        }
+      ],
+      "source": "prose",
+      "context": "Roles · Presentation"
+    },
+    {
+      "thai": "บริษัทโฆษณาจะแข่งกันเสนอแผนโฆษณาให้แก่ลูกค้า",
+      "gloss": "Advertising companies will compete to present advertising plans to the client.",
+      "words": [
+        {
+          "thai": "บริษัทโฆษณา",
+          "gloss": "advertising company"
+        },
+        {
+          "thai": "จะ",
+          "gloss": "will"
+        },
+        {
+          "thai": "แข่งกัน",
+          "gloss": "compete with one another"
+        },
+        {
+          "thai": "เสนอ",
+          "gloss": "present / propose"
+        },
+        {
+          "thai": "แผนโฆษณา",
+          "gloss": "advertising plan"
+        },
+        {
+          "thai": "ให้แก่",
+          "gloss": "to"
+        },
+        {
+          "thai": "ลูกค้า",
+          "gloss": "client"
+        }
+      ],
+      "source": "prose",
+      "context": "Roles · Presentation"
+    },
+    {
+      "thai": "เรียกว่า",
+      "gloss": "called",
+      "words": [
+        {
+          "thai": "เรียกว่า",
+          "gloss": "is called"
+        }
+      ],
+      "source": "prose",
+      "context": "Roles · Presentation"
+    },
+    {
+      "thai": "การนำเสนอแผนโฆษณา",
+      "gloss": "the presentation of an advertising plan",
+      "words": [
+        {
+          "thai": "การนำเสนอ",
+          "gloss": "presentation"
+        },
+        {
+          "thai": "แผนโฆษณา",
+          "gloss": "advertising plan"
+        }
+      ],
+      "source": "prose",
+      "context": "Roles · Presentation"
+    },
+    {
+      "thai": "โดยจะนำเสนอแผนโฆษณาอย่างละเอียด",
+      "gloss": "by presenting the advertising plan in detail",
+      "words": [
+        {
+          "thai": "โดย",
+          "gloss": "by"
+        },
+        {
+          "thai": "จะ",
+          "gloss": "will"
+        },
+        {
+          "thai": "นำเสนอ",
+          "gloss": "present"
+        },
+        {
+          "thai": "แผนโฆษณา",
+          "gloss": "advertising plan"
+        },
+        {
+          "thai": "อย่างละเอียด",
+          "gloss": "in detail"
+        }
+      ],
+      "source": "prose",
+      "context": "Roles · Presentation"
+    },
+    {
+      "thai": "และพยายามชักจูงให้ลูกค้าเลือกแผนโฆษณาของตน",
+      "gloss": "and trying to persuade the client to choose its advertising plan",
+      "words": [
+        {
+          "thai": "และ",
+          "gloss": "and"
+        },
+        {
+          "thai": "พยายาม",
+          "gloss": "try"
+        },
+        {
+          "thai": "ชักจูง",
+          "gloss": "persuade"
+        },
+        {
+          "thai": "ให้",
+          "gloss": "to / make"
+        },
+        {
+          "thai": "ลูกค้า",
+          "gloss": "client"
+        },
+        {
+          "thai": "เลือก",
+          "gloss": "choose"
+        },
+        {
+          "thai": "แผนโฆษณา",
+          "gloss": "advertising plan"
+        },
+        {
+          "thai": "ของตน",
+          "gloss": "its own"
+        }
+      ],
+      "source": "prose",
+      "context": "Roles · Presentation"
+    },
+    {
+      "thai": "เพื่อผลิตเป็นโฆษณาจริงต่อไป",
+      "gloss": "in order to produce it as an actual advertisement afterward",
+      "words": [
+        {
+          "thai": "เพื่อ",
+          "gloss": "in order to"
+        },
+        {
+          "thai": "ผลิต",
+          "gloss": "produce"
+        },
+        {
+          "thai": "เป็น",
+          "gloss": "as / into"
+        },
+        {
+          "thai": "โฆษณา",
+          "gloss": "advertisement"
+        },
+        {
+          "thai": "จริง",
+          "gloss": "actual / real"
+        },
+        {
+          "thai": "ต่อไป",
+          "gloss": "afterward / next"
+        }
+      ],
+      "source": "prose",
+      "context": "Roles · Presentation"
+    },
+    {
+      "thai": "ความสามารถในการสื่อสาร",
+      "gloss": "communication ability",
+      "words": [
+        {
+          "thai": "ความสามารถ",
+          "gloss": "ability"
+        },
+        {
+          "thai": "ใน",
+          "gloss": "in"
+        },
+        {
+          "thai": "การสื่อสาร",
+          "gloss": "communication"
+        }
+      ],
+      "source": "heading",
+      "context": "Section heading"
+    },
+    {
+      "thai": "การเจรจาและการโน้มน้าวใจเป็นสิ่งจำเป็น",
+      "gloss": "Negotiation and persuasion are necessary.",
+      "words": [
+        {
+          "thai": "การเจรจา",
+          "gloss": "negotiation"
+        },
+        {
+          "thai": "และ",
+          "gloss": "and"
+        },
+        {
+          "thai": "การโน้มน้าวใจ",
+          "gloss": "persuasion"
+        },
+        {
+          "thai": "เป็น",
+          "gloss": "are / is"
+        },
+        {
+          "thai": "สิ่งจำเป็น",
+          "gloss": "something necessary / necessary"
+        }
+      ],
+      "source": "heading",
+      "context": "Section heading"
+    },
+    {
+      "thai": "บางครั้งบริษัทโฆษณาอาจจะส่งนักโฆษณาไปพบกับลูกค้าโดยตรง",
+      "gloss": "Sometimes the advertising company may send an advertising worker to meet the client directly.",
+      "words": [
+        {
+          "thai": "บางครั้ง",
+          "gloss": "sometimes"
+        },
+        {
+          "thai": "บริษัทโฆษณา",
+          "gloss": "advertising company"
+        },
+        {
+          "thai": "อาจจะ",
+          "gloss": "may"
+        },
+        {
+          "thai": "ส่ง",
+          "gloss": "send"
+        },
+        {
+          "thai": "นักโฆษณา",
+          "gloss": "advertising worker"
+        },
+        {
+          "thai": "ไป",
+          "gloss": "go / to"
+        },
+        {
+          "thai": "พบ",
+          "gloss": "meet"
+        },
+        {
+          "thai": "กับ",
+          "gloss": "with"
+        },
+        {
+          "thai": "ลูกค้า",
+          "gloss": "client"
+        },
+        {
+          "thai": "โดยตรง",
+          "gloss": "directly"
+        }
+      ],
+      "source": "prose",
+      "context": "On negotiation"
+    },
+    {
+      "thai": "เพื่ออธิบายถึงความสำคัญและประโยชน์ของการผลิตโฆษณาสำหรับสินค้านั้น",
+      "gloss": "to explain the importance and benefits of producing an advertisement for that product",
+      "words": [
+        {
+          "thai": "เพื่อ",
+          "gloss": "in order to"
+        },
+        {
+          "thai": "อธิบาย",
+          "gloss": "explain"
+        },
+        {
+          "thai": "ถึง",
+          "gloss": "about / concerning"
+        },
+        {
+          "thai": "ความสำคัญ",
+          "gloss": "importance"
+        },
+        {
+          "thai": "และ",
+          "gloss": "and"
+        },
+        {
+          "thai": "ประโยชน์",
+          "gloss": "benefit"
+        },
+        {
+          "thai": "ของ",
+          "gloss": "of"
+        },
+        {
+          "thai": "การผลิต",
+          "gloss": "production / producing"
+        },
+        {
+          "thai": "โฆษณา",
+          "gloss": "advertisement"
+        },
+        {
+          "thai": "สำหรับ",
+          "gloss": "for"
+        },
+        {
+          "thai": "สินค้า",
+          "gloss": "product / goods"
+        },
+        {
+          "thai": "นั้น",
+          "gloss": "that"
+        }
+      ],
+      "source": "prose",
+      "context": "On negotiation"
+    },
+    {
+      "thai": "รวมถึงโน้มน้าวให้จ้างทำโฆษณาด้วย",
+      "gloss": "including persuading them to hire someone to make the advertisement too",
+      "words": [
+        {
+          "thai": "รวมถึง",
+          "gloss": "including"
+        },
+        {
+          "thai": "โน้มน้าว",
+          "gloss": "persuade"
+        },
+        {
+          "thai": "ให้",
+          "gloss": "to; so that"
+        },
+        {
+          "thai": "จ้าง",
+          "gloss": "hire"
+        },
+        {
+          "thai": "ทำ",
+          "gloss": "make; do"
+        },
+        {
+          "thai": "โฆษณา",
+          "gloss": "advertisement"
+        },
+        {
+          "thai": "ด้วย",
+          "gloss": "too; as well"
+        }
+      ],
+      "source": "prose",
+      "context": "On persuasion"
+    },
+    {
+      "thai": "ดังนั้น",
+      "gloss": "therefore",
+      "words": [
+        {
+          "thai": "ดังนั้น",
+          "gloss": "therefore"
+        }
+      ],
+      "source": "prose",
+      "context": "On persuasion"
+    },
+    {
+      "thai": "ความสามารถในการสื่อสารของนักโฆษณาจึงเป็นสิ่งสำคัญ",
+      "gloss": "an advertiser's ability to communicate is therefore important",
+      "words": [
+        {
+          "thai": "ความสามารถ",
+          "gloss": "ability"
+        },
+        {
+          "thai": "ใน",
+          "gloss": "in"
+        },
+        {
+          "thai": "การสื่อสาร",
+          "gloss": "communication"
+        },
+        {
+          "thai": "ของ",
+          "gloss": "of"
+        },
+        {
+          "thai": "นักโฆษณา",
+          "gloss": "advertiser"
+        },
+        {
+          "thai": "จึง",
+          "gloss": "therefore"
+        },
+        {
+          "thai": "เป็น",
+          "gloss": "is"
+        },
+        {
+          "thai": "สิ่งสำคัญ",
+          "gloss": "important thing; important"
+        }
+      ],
+      "source": "prose",
+      "context": "On persuasion"
+    },
+    {
+      "thai": "คือต้องมีทักษะในการเจรจา",
+      "gloss": "that is, they must have negotiation skills",
+      "words": [
+        {
+          "thai": "คือ",
+          "gloss": "that is"
+        },
+        {
+          "thai": "ต้องมี",
+          "gloss": "must have"
+        },
+        {
+          "thai": "ทักษะ",
+          "gloss": "skill"
+        },
+        {
+          "thai": "ใน",
+          "gloss": "in"
+        },
+        {
+          "thai": "การเจรจา",
+          "gloss": "negotiation"
+        }
+      ],
+      "source": "prose",
+      "context": "On persuasion"
+    },
+    {
+      "thai": "การโน้มน้าวใจ",
+      "gloss": "persuasion",
+      "words": [
+        {
+          "thai": "การโน้มน้าวใจ",
+          "gloss": "persuasion"
+        }
+      ],
+      "source": "prose",
+      "context": "On persuasion"
+    },
+    {
+      "thai": "และพูดอย่างมีเหตุผล",
+      "gloss": "and speak reasonably",
+      "words": [
+        {
+          "thai": "และ",
+          "gloss": "and"
+        },
+        {
+          "thai": "พูด",
+          "gloss": "speak"
+        },
+        {
+          "thai": "อย่างมีเหตุผล",
+          "gloss": "reasonably; with reason"
+        }
+      ],
+      "source": "prose",
+      "context": "On persuasion"
+    },
+    {
+      "thai": "ถ้าทำโฆษณาแบบนี้",
+      "gloss": "if you make an advertisement like this",
+      "words": [
+        {
+          "thai": "ถ้า",
+          "gloss": "if"
+        },
+        {
+          "thai": "ทำ",
+          "gloss": "make"
+        },
+        {
+          "thai": "โฆษณา",
+          "gloss": "advertisement"
+        },
+        {
+          "thai": "แบบนี้",
+          "gloss": "like this; this way"
+        }
+      ],
+      "source": "quote",
+      "context": "On persuasion"
+    },
+    {
+      "thai": "ผมรับรองว่ายอดขายถล่มทลายแน่ครับ!",
+      "gloss": "I guarantee sales will be explosive!",
+      "words": [
+        {
+          "thai": "ผม",
+          "gloss": "I"
+        },
+        {
+          "thai": "รับรอง",
+          "gloss": "guarantee"
+        },
+        {
+          "thai": "ว่า",
+          "gloss": "that"
+        },
+        {
+          "thai": "ยอดขาย",
+          "gloss": "sales"
+        },
+        {
+          "thai": "ถล่มทลาย",
+          "gloss": "collapse in torrents; be overwhelming"
+        },
+        {
+          "thai": "แน่",
+          "gloss": "for sure"
+        },
+        {
+          "thai": "ครับ",
+          "gloss": "polite particle"
+        }
+      ],
+      "source": "quote",
+      "context": "On persuasion"
+    },
+    {
+      "thai": "ขั้นตอนการผลิตโฆษณา",
+      "gloss": "steps in producing an advertisement",
+      "words": [
+        {
+          "thai": "ขั้นตอน",
+          "gloss": "steps; procedure"
+        },
+        {
+          "thai": "การผลิต",
+          "gloss": "production"
+        },
+        {
+          "thai": "โฆษณา",
+          "gloss": "advertisement"
+        }
+      ],
+      "source": "heading",
+      "context": "Section heading"
+    },
+    {
+      "thai": "รับบรีฟจากผู้ว่าจ้าง",
+      "gloss": "receive the brief from the client",
+      "words": [
+        {
+          "thai": "รับ",
+          "gloss": "receive"
+        },
+        {
+          "thai": "บรีฟ",
+          "gloss": "brief"
+        },
+        {
+          "thai": "จาก",
+          "gloss": "from"
+        },
+        {
+          "thai": "ผู้ว่าจ้าง",
+          "gloss": "client; employer"
+        }
+      ],
+      "source": "table",
+      "context": "Step 1 · Ad production"
+    },
+    {
+      "thai": "นี่เป็นรองเท้ารุ่นใหม่ของเรา",
+      "gloss": "This is our new shoe model.",
+      "words": [
+        {
+          "thai": "นี่",
+          "gloss": "this"
+        },
+        {
+          "thai": "เป็น",
+          "gloss": "is"
+        },
+        {
+          "thai": "รองเท้า",
+          "gloss": "shoes"
+        },
+        {
+          "thai": "รุ่นใหม่",
+          "gloss": "new model"
+        },
+        {
+          "thai": "ของ",
+          "gloss": "of"
+        },
+        {
+          "thai": "เรา",
+          "gloss": "us; our"
+        }
+      ],
+      "source": "table",
+      "context": "Step 1 · Ad production"
+    },
+    {
+      "thai": "จุดเด่นคือ…",
+      "gloss": "The selling point is…",
+      "words": [
+        {
+          "thai": "จุดเด่น",
+          "gloss": "strong point; selling point"
+        },
+        {
+          "thai": "คือ",
+          "gloss": "is"
+        }
+      ],
+      "source": "table",
+      "context": "Step 1 · Ad production"
+    },
+    {
+      "thai": "โฆษณาจะต้องเน้นประสิทธิภาพของรองเท้ารุ่นนี้ที่ต่างจากคู่แข่ง",
+      "gloss": "The advertisement must emphasize this shoe model's performance, which differs from the competitors'.",
+      "words": [
+        {
+          "thai": "โฆษณา",
+          "gloss": "advertisement"
+        },
+        {
+          "thai": "จะต้อง",
+          "gloss": "must"
+        },
+        {
+          "thai": "เน้น",
+          "gloss": "emphasize"
+        },
+        {
+          "thai": "ประสิทธิภาพ",
+          "gloss": "performance; efficiency"
+        },
+        {
+          "thai": "ของ",
+          "gloss": "of"
+        },
+        {
+          "thai": "รองเท้า",
+          "gloss": "shoes"
+        },
+        {
+          "thai": "รุ่น",
+          "gloss": "model"
+        },
+        {
+          "thai": "นี้",
+          "gloss": "this"
+        },
+        {
+          "thai": "ที่",
+          "gloss": "that; which"
+        },
+        {
+          "thai": "ต่าง",
+          "gloss": "differ"
+        },
+        {
+          "thai": "จาก",
+          "gloss": "from"
+        },
+        {
+          "thai": "คู่แข่ง",
+          "gloss": "competitors"
+        }
+      ],
+      "source": "table",
+      "context": "Step 1 · Ad production"
+    },
+    {
+      "thai": "สำรวจตลาด",
+      "gloss": "Survey the market.",
+      "words": [
+        {
+          "thai": "สำรวจ",
+          "gloss": "survey; investigate"
+        },
+        {
+          "thai": "ตลาด",
+          "gloss": "market"
+        }
+      ],
+      "source": "table",
+      "context": "Step 2 · Ad production"
+    },
+    {
+      "thai": "สำรวจสินค้าคู่แข่งที่มีในตลาด",
+      "gloss": "Survey competing products in the market.",
+      "words": [
+        {
+          "thai": "สำรวจ",
+          "gloss": "survey; investigate"
+        },
+        {
+          "thai": "สินค้า",
+          "gloss": "products; goods"
+        },
+        {
+          "thai": "คู่แข่ง",
+          "gloss": "competitors; rival"
+        },
+        {
+          "thai": "ที่",
+          "gloss": "that; which"
+        },
+        {
+          "thai": "มี",
+          "gloss": "exist; are"
+        },
+        {
+          "thai": "ใน",
+          "gloss": "in"
+        },
+        {
+          "thai": "ตลาด",
+          "gloss": "market"
+        }
+      ],
+      "source": "table",
+      "context": "Step 2 · Ad production"
+    },
+    {
+      "thai": "แล้วนำข้อมูลมาออกแบบโฆษณา",
+      "gloss": "Then use the information to design the advertisement.",
+      "words": [
+        {
+          "thai": "แล้ว",
+          "gloss": "then"
+        },
+        {
+          "thai": "นำ",
+          "gloss": "take; bring"
+        },
+        {
+          "thai": "ข้อมูล",
+          "gloss": "information; data"
+        },
+        {
+          "thai": "มา",
+          "gloss": "come; for"
+        },
+        {
+          "thai": "ออกแบบ",
+          "gloss": "design"
+        },
+        {
+          "thai": "โฆษณา",
+          "gloss": "advertisement"
+        }
+      ],
+      "source": "table",
+      "context": "Step 2 · Ad production"
+    },
+    {
+      "thai": "วางคอนเซ็ปต์",
+      "gloss": "Set the concept.",
+      "words": [
+        {
+          "thai": "วาง",
+          "gloss": "set; lay out"
+        },
+        {
+          "thai": "คอนเซ็ปต์",
+          "gloss": "concept"
+        }
+      ],
+      "source": "table",
+      "context": "Step 3 · Ad production"
+    },
+    {
+      "thai": "งบประมาณ",
+      "gloss": "Budget.",
+      "words": [
+        {
+          "thai": "งบประมาณ",
+          "gloss": "budget"
+        }
+      ],
+      "source": "table",
+      "context": "Step 3 · Ad production"
+    },
+    {
+      "thai": "ภาพรองเท้าที่พรีเซนเตอร์สวมต้องเด่น",
+      "gloss": "The image of the shoes the presenter is wearing must stand out.",
+      "words": [
+        {
+          "thai": "ภาพ",
+          "gloss": "image"
+        },
+        {
+          "thai": "รองเท้า",
+          "gloss": "shoes"
+        },
+        {
+          "thai": "ที่",
+          "gloss": "that; which"
+        },
+        {
+          "thai": "พรีเซนเตอร์",
+          "gloss": "presenter; spokesperson"
+        },
+        {
+          "thai": "สวม",
+          "gloss": "wear"
+        },
+        {
+          "thai": "ต้อง",
+          "gloss": "must"
+        },
+        {
+          "thai": "เด่น",
+          "gloss": "stand out; be prominent"
+        }
+      ],
+      "source": "table",
+      "context": "Step 3 · Ad production"
+    },
+    {
+      "thai": "พรีเซนเตอร์ต้องเป็นนักกีฬาดัง",
+      "gloss": "The presenter must be a famous athlete.",
+      "words": [
+        {
+          "thai": "พรีเซนเตอร์",
+          "gloss": "presenter; spokesperson"
+        },
+        {
+          "thai": "ต้อง",
+          "gloss": "must"
+        },
+        {
+          "thai": "เป็น",
+          "gloss": "be"
+        },
+        {
+          "thai": "นักกีฬา",
+          "gloss": "athlete"
+        },
+        {
+          "thai": "ดัง",
+          "gloss": "famous"
+        }
+      ],
+      "source": "table",
+      "context": "Step 3 · Ad production"
+    },
+    {
+      "thai": "ต้องมีฉากสวมรองเท้าแล้วกระโดดเท่ ๆ…",
+      "gloss": "There must be a scene of putting on the shoes and then jumping coolly...",
+      "words": [
+        {
+          "thai": "ต้อง",
+          "gloss": "must"
+        },
+        {
+          "thai": "มี",
+          "gloss": "have; there be"
+        },
+        {
+          "thai": "ฉาก",
+          "gloss": "scene"
+        },
+        {
+          "thai": "สวม",
+          "gloss": "put on; wear"
+        },
+        {
+          "thai": "รองเท้า",
+          "gloss": "shoes"
+        },
+        {
+          "thai": "แล้ว",
+          "gloss": "then; after that"
+        },
+        {
+          "thai": "กระโดด",
+          "gloss": "jump"
+        },
+        {
+          "thai": "เท่ ๆ",
+          "gloss": "coolly; in a cool way"
+        }
+      ],
+      "source": "table",
+      "context": "Step 3 · Ad production"
+    },
+    {
+      "thai": "ลองคำนวณงบประมาณดูซิ…",
+      "gloss": "Try calculating the budget...",
+      "words": [
+        {
+          "thai": "ลอง",
+          "gloss": "try"
+        },
+        {
+          "thai": "คำนวณ",
+          "gloss": "calculate"
+        },
+        {
+          "thai": "งบประมาณ",
+          "gloss": "budget"
+        },
+        {
+          "thai": "ดู",
+          "gloss": "try; see"
+        },
+        {
+          "thai": "ซิ",
+          "gloss": "particle urging action"
+        }
+      ],
+      "source": "table",
+      "context": "Step 3 · Ad production"
+    },
+    {
+      "thai": "เสนอลูกค้า",
+      "gloss": "Present it to the client.",
+      "words": [
+        {
+          "thai": "เสนอ",
+          "gloss": "present; propose"
+        },
+        {
+          "thai": "ลูกค้า",
+          "gloss": "client; customer"
+        }
+      ],
+      "source": "table",
+      "context": "Step 4 · Ad production"
+    },
+    {
+      "thai": "เราจะใช้นักกีฬาชื่อดังเป็นพรีเซนเตอร์ค่ะ",
+      "gloss": "We will use a famous athlete as the presenter.",
+      "words": [
+        {
+          "thai": "เรา",
+          "gloss": "we"
+        },
+        {
+          "thai": "จะ",
+          "gloss": "will"
+        },
+        {
+          "thai": "ใช้",
+          "gloss": "use"
+        },
+        {
+          "thai": "นักกีฬา",
+          "gloss": "athlete"
+        },
+        {
+          "thai": "ชื่อดัง",
+          "gloss": "famous"
+        },
+        {
+          "thai": "เป็น",
+          "gloss": "as; be"
+        },
+        {
+          "thai": "พรีเซนเตอร์",
+          "gloss": "presenter; spokesperson"
+        },
+        {
+          "thai": "ค่ะ",
+          "gloss": "polite particle"
+        }
+      ],
+      "source": "table",
+      "context": "Step 4 · Ad production"
+    },
+    {
+      "thai": "โอเค",
+      "gloss": "Okay.",
+      "words": [
+        {
+          "thai": "โอเค",
+          "gloss": "okay"
+        }
+      ],
+      "source": "table",
+      "context": "Step 4 · Ad production"
+    },
+    {
+      "thai": "ผมชอบไอเดียคุณ",
+      "gloss": "I like your idea.",
+      "words": [
+        {
+          "thai": "ผม",
+          "gloss": "I (male speaker)"
+        },
+        {
+          "thai": "ชอบ",
+          "gloss": "like"
+        },
+        {
+          "thai": "ไอเดีย",
+          "gloss": "idea"
+        },
+        {
+          "thai": "คุณ",
+          "gloss": "you; your"
+        }
+      ],
+      "source": "table",
+      "context": "Step 4 · Ad production"
+    },
+    {
+      "thai": "ถ่ายทำ",
+      "gloss": "Filming.",
+      "words": [
+        {
+          "thai": "ถ่ายทำ",
+          "gloss": "to film; filming"
+        }
+      ],
+      "source": "table",
+      "context": "Step 5 · Ad production"
+    },
+    {
+      "thai": "คัต!",
+      "gloss": "Cut!",
+      "words": [
+        {
+          "thai": "คัต",
+          "gloss": "cut"
+        }
+      ],
+      "source": "table",
+      "context": "Step 5 · Ad production"
+    },
+    {
+      "thai": "แอ็กชัน!",
+      "gloss": "Action!",
+      "words": [
+        {
+          "thai": "แอ็กชัน",
+          "gloss": "action"
+        }
+      ],
+      "source": "table",
+      "context": "Step 5 · Ad production"
+    },
+    {
+      "thai": "เผยแพร่สื่อ",
+      "gloss": "Release the media.",
+      "words": [
+        {
+          "thai": "เผยแพร่",
+          "gloss": "to publish; release"
+        },
+        {
+          "thai": "สื่อ",
+          "gloss": "media"
+        }
+      ],
+      "source": "table",
+      "context": "Step 6 · Ad production"
+    },
+    {
+      "thai": "โฆษณาทางหนังสือพิมพ์ลงหรือยัง",
+      "gloss": "Has the newspaper advertisement been placed yet?",
+      "words": [
+        {
+          "thai": "โฆษณา",
+          "gloss": "advertisement"
+        },
+        {
+          "thai": "ทาง",
+          "gloss": "via; in"
+        },
+        {
+          "thai": "หนังสือพิมพ์",
+          "gloss": "newspaper"
+        },
+        {
+          "thai": "ลง",
+          "gloss": "to be placed; run"
+        },
+        {
+          "thai": "หรือ",
+          "gloss": "or"
+        },
+        {
+          "thai": "ยัง",
+          "gloss": "yet; already"
+        }
+      ],
+      "source": "table",
+      "context": "Step 6 · Ad production"
+    },
+    {
+      "thai": "โฆษณาทางโทรทัศน์ออกตรงเวลาหรือเปล่าคะ",
+      "gloss": "Did the television advertisement go out on time?",
+      "words": [
+        {
+          "thai": "โฆษณา",
+          "gloss": "advertisement"
+        },
+        {
+          "thai": "ทาง",
+          "gloss": "via; on"
+        },
+        {
+          "thai": "โทรทัศน์",
+          "gloss": "television"
+        },
+        {
+          "thai": "ออก",
+          "gloss": "to go out; be broadcast"
+        },
+        {
+          "thai": "ตรงเวลา",
+          "gloss": "on time"
+        },
+        {
+          "thai": "หรือเปล่า",
+          "gloss": "or not?"
+        },
+        {
+          "thai": "คะ",
+          "gloss": "polite particle (female)"
+        }
+      ],
+      "source": "table",
+      "context": "Step 6 · Ad production"
+    },
+    {
+      "thai": "ประเมินผล",
+      "gloss": "Evaluation.",
+      "words": [
+        {
+          "thai": "ประเมินผล",
+          "gloss": "to evaluate; evaluation"
+        }
+      ],
+      "source": "table",
+      "context": "Step 7 · Ad production"
+    },
+    {
+      "thai": "โฆษณาดังเปรี้ยงปร้างเลยค่ะ",
+      "gloss": "The advertisement was a huge hit.",
+      "words": [
+        {
+          "thai": "โฆษณา",
+          "gloss": "advertisement"
+        },
+        {
+          "thai": "ดัง",
+          "gloss": "famous; popular"
+        },
+        {
+          "thai": "เปรี้ยงปร้าง",
+          "gloss": "with a big splash; explosively successful"
+        },
+        {
+          "thai": "เลย",
+          "gloss": "completely; really"
+        },
+        {
+          "thai": "ค่ะ",
+          "gloss": "polite particle (female)"
+        }
+      ],
+      "source": "table",
+      "context": "Step 7 · Ad production"
+    },
+    {
+      "thai": "ใคร ๆ",
+      "gloss": "everyone",
+      "words": [
+        {
+          "thai": "ใคร ๆ",
+          "gloss": "everyone; anybody"
+        }
+      ],
+      "source": "table",
+      "context": "Step 7 · Ad production"
+    },
+    {
+      "thai": "ก็จำได้",
+      "gloss": "can remember it",
+      "words": [
+        {
+          "thai": "ก็",
+          "gloss": "then; just; emphasizes subject"
+        },
+        {
+          "thai": "จำ",
+          "gloss": "remember"
+        },
+        {
+          "thai": "ได้",
+          "gloss": "can; able to"
+        }
+      ],
+      "source": "table",
+      "context": "Step 7 · Ad production"
+    },
+    {
+      "thai": "เยี่ยม!",
+      "gloss": "Excellent!",
+      "words": [
+        {
+          "thai": "เยี่ยม",
+          "gloss": "excellent"
+        }
+      ],
+      "source": "table",
+      "context": "Step 7 · Production process"
+    },
+    {
+      "thai": "โฆษณาเป็นงานที่สร้างสรรค์โดยบุคคลหลายฝ่าย",
+      "gloss": "Advertising is work created by people from many parties.",
+      "words": [
+        {
+          "thai": "โฆษณา",
+          "gloss": "advertising"
+        },
+        {
+          "thai": "เป็น",
+          "gloss": "is"
+        },
+        {
+          "thai": "งาน",
+          "gloss": "work"
+        },
+        {
+          "thai": "ที่",
+          "gloss": "that"
+        },
+        {
+          "thai": "สร้างสรรค์",
+          "gloss": "created"
+        },
+        {
+          "thai": "โดย",
+          "gloss": "by"
+        },
+        {
+          "thai": "บุคคล",
+          "gloss": "people"
+        },
+        {
+          "thai": "หลายฝ่าย",
+          "gloss": "many parties"
+        }
+      ],
+      "source": "heading",
+      "context": "Opening definition"
+    },
+    {
+      "thai": "อาชีพที่เกี่ยวข้องในขั้นตอนการวางแผน",
+      "gloss": "Occupations involved in the planning stage",
+      "words": [
+        {
+          "thai": "อาชีพ",
+          "gloss": "occupation"
+        },
+        {
+          "thai": "ที่",
+          "gloss": "that"
+        },
+        {
+          "thai": "เกี่ยวข้อง",
+          "gloss": "involved"
+        },
+        {
+          "thai": "ใน",
+          "gloss": "in"
+        },
+        {
+          "thai": "ขั้นตอน",
+          "gloss": "stage"
+        },
+        {
+          "thai": "การวางแผน",
+          "gloss": "planning"
+        }
+      ],
+      "source": "heading",
+      "context": "Roles · Planning stage"
+    },
+    {
+      "thai": "นักการตลาด",
+      "gloss": "marketer",
+      "words": [
+        {
+          "thai": "นักการตลาด",
+          "gloss": "marketer"
+        }
+      ],
+      "source": "label",
+      "context": "Roles · Planning stage"
+    },
+    {
+      "thai": "สำรวจข้อมูลว่าโฆษณาแบบไหนจะทำให้สินค้าขายดีขึ้น",
+      "gloss": "Survey data on what kind of advertisement will make the product sell better",
+      "words": [
+        {
+          "thai": "สำรวจ",
+          "gloss": "survey"
+        },
+        {
+          "thai": "ข้อมูล",
+          "gloss": "data"
+        },
+        {
+          "thai": "ว่า",
+          "gloss": "on whether"
+        },
+        {
+          "thai": "โฆษณา",
+          "gloss": "advertisement"
+        },
+        {
+          "thai": "แบบไหน",
+          "gloss": "what kind"
+        },
+        {
+          "thai": "จะ",
+          "gloss": "will"
+        },
+        {
+          "thai": "ทำให้",
+          "gloss": "cause"
+        },
+        {
+          "thai": "สินค้า",
+          "gloss": "product"
+        },
+        {
+          "thai": "ขายดีขึ้น",
+          "gloss": "sell better"
+        }
+      ],
+      "source": "prose",
+      "context": "Roles · Planning stage"
+    },
+    {
+      "thai": "โดยดูจากแบบสอบถาม",
+      "gloss": "by looking at questionnaires",
+      "words": [
+        {
+          "thai": "โดย",
+          "gloss": "by"
+        },
+        {
+          "thai": "ดู",
+          "gloss": "looking at"
+        },
+        {
+          "thai": "จาก",
+          "gloss": "from"
+        },
+        {
+          "thai": "แบบสอบถาม",
+          "gloss": "questionnaire"
+        }
+      ],
+      "source": "prose",
+      "context": "Roles · Planning stage"
+    },
+    {
+      "thai": "การจัดเสวนา",
+      "gloss": "the holding of discussion sessions",
+      "words": [
+        {
+          "thai": "การจัดเสวนา",
+          "gloss": "holding a discussion forum"
+        }
+      ],
+      "source": "prose",
+      "context": "Roles · Planning stage"
+    },
+    {
+      "thai": "รวมถึงการสำรวจตลาดและผู้บริโภค",
+      "gloss": "including market and consumer research",
+      "words": [
+        {
+          "thai": "รวมถึง",
+          "gloss": "including"
+        },
+        {
+          "thai": "การสำรวจตลาด",
+          "gloss": "market research"
+        },
+        {
+          "thai": "และ",
+          "gloss": "and"
+        },
+        {
+          "thai": "ผู้บริโภค",
+          "gloss": "consumers"
+        }
+      ],
+      "source": "prose",
+      "context": "Roles · Planning stage"
+    },
+    {
+      "thai": "นักวิจัยโฆษณา",
+      "gloss": "advertising researcher",
+      "words": [
+        {
+          "thai": "นักวิจัยโฆษณา",
+          "gloss": "advertising researcher"
+        }
+      ],
+      "source": "label",
+      "context": "Roles · Planning stage"
+    },
+    {
+      "thai": "วิเคราะห์ว่าสื่อช่องทางใดจะทำให้คนรู้จักโฆษณาที่ผลิตออกมาได้ดีที่สุด",
+      "gloss": "Analyze which media channel will make people know the produced advertisement best",
+      "words": [
+        {
+          "thai": "วิเคราะห์",
+          "gloss": "analyze"
+        },
+        {
+          "thai": "ว่า",
+          "gloss": "which"
+        },
+        {
+          "thai": "สื่อ",
+          "gloss": "media"
+        },
+        {
+          "thai": "ช่องทาง",
+          "gloss": "channel"
+        },
+        {
+          "thai": "ใด",
+          "gloss": "which"
+        },
+        {
+          "thai": "จะ",
+          "gloss": "will"
+        },
+        {
+          "thai": "ทำให้",
+          "gloss": "cause"
+        },
+        {
+          "thai": "คน",
+          "gloss": "people"
+        },
+        {
+          "thai": "รู้จัก",
+          "gloss": "get to know"
+        },
+        {
+          "thai": "โฆษณา",
+          "gloss": "advertisement"
+        },
+        {
+          "thai": "ที่",
+          "gloss": "that"
+        },
+        {
+          "thai": "ผลิต",
+          "gloss": "produced"
+        },
+        {
+          "thai": "ออกมา",
+          "gloss": "out"
+        },
+        {
+          "thai": "ได้",
+          "gloss": "can"
+        },
+        {
+          "thai": "ดีที่สุด",
+          "gloss": "best"
+        }
+      ],
+      "source": "prose",
+      "context": "Roles · Planning stage"
+    },
+    {
+      "thai": "เช่น",
+      "gloss": "for example",
+      "words": [
+        {
+          "thai": "เช่น",
+          "gloss": "for example"
+        }
+      ],
+      "source": "prose",
+      "context": "Path to career"
+    },
+    {
+      "thai": "โฆษณาบนรถประจำทาง",
+      "gloss": "advertising on buses",
+      "words": [
+        {
+          "thai": "โฆษณา",
+          "gloss": "advertising"
+        },
+        {
+          "thai": "บน",
+          "gloss": "on"
+        },
+        {
+          "thai": "รถประจำทาง",
+          "gloss": "bus"
+        }
+      ],
+      "source": "prose",
+      "context": "Roles · Planning stage"
+    },
+    {
+      "thai": "โฆษณาทางอินเทอร์เน็ต",
+      "gloss": "advertising on the internet",
+      "words": [
+        {
+          "thai": "โฆษณา",
+          "gloss": "advertising"
+        },
+        {
+          "thai": "ทาง",
+          "gloss": "via"
+        },
+        {
+          "thai": "อินเทอร์เน็ต",
+          "gloss": "internet"
+        }
+      ],
+      "source": "prose",
+      "context": "Roles · Planning stage"
+    },
+    {
+      "thai": "วิทยุ",
+      "gloss": "radio",
+      "words": [
+        {
+          "thai": "วิทยุ",
+          "gloss": "radio"
+        }
+      ],
+      "source": "prose",
+      "context": "Roles · Planning stage"
+    },
+    {
+      "thai": "หรือโทรทัศน์",
+      "gloss": "or television",
+      "words": [
+        {
+          "thai": "หรือ",
+          "gloss": "or"
+        },
+        {
+          "thai": "โทรทัศน์",
+          "gloss": "television"
+        }
+      ],
+      "source": "prose",
+      "context": "Roles · Planning stage"
+    },
+    {
+      "thai": "นักโฆษณา",
+      "gloss": "advertiser; advertising professional",
+      "words": [
+        {
+          "thai": "นักโฆษณา",
+          "gloss": "advertiser; ad professional"
+        }
+      ],
+      "source": "label",
+      "context": "Roles · Production stage"
+    },
+    {
+      "thai": "วิเคราะห์แบบสอบถามของนักการตลาด",
+      "gloss": "analyzes the marketer's questionnaire",
+      "words": [
+        {
+          "thai": "วิเคราะห์",
+          "gloss": "analyze"
+        },
+        {
+          "thai": "แบบสอบถาม",
+          "gloss": "questionnaire"
+        },
+        {
+          "thai": "ของ",
+          "gloss": "of"
+        },
+        {
+          "thai": "นักการตลาด",
+          "gloss": "marketer"
+        }
+      ],
+      "source": "prose",
+      "context": "Roles · Planning stage"
+    },
+    {
+      "thai": "หารือกับผู้รับผิดชอบสื่อโฆษณา",
+      "gloss": "discusses with the person responsible for the advertising media",
+      "words": [
+        {
+          "thai": "หารือ",
+          "gloss": "discuss"
+        },
+        {
+          "thai": "กับ",
+          "gloss": "with"
+        },
+        {
+          "thai": "ผู้รับผิดชอบ",
+          "gloss": "person responsible"
+        },
+        {
+          "thai": "สื่อโฆษณา",
+          "gloss": "advertising media"
+        }
+      ],
+      "source": "prose",
+      "context": "Roles · Planning stage"
+    },
+    {
+      "thai": "จากนั้นจึงวางแผนงานโฆษณาเพื่อให้ผู้บริโภครู้จักสินค้า",
+      "gloss": "then plans the advertising work so that consumers will get to know the product",
+      "words": [
+        {
+          "thai": "จากนั้น",
+          "gloss": "then"
+        },
+        {
+          "thai": "จึง",
+          "gloss": "thereupon"
+        },
+        {
+          "thai": "วางแผนงาน",
+          "gloss": "plan the work"
+        },
+        {
+          "thai": "โฆษณา",
+          "gloss": "advertising"
+        },
+        {
+          "thai": "เพื่อให้",
+          "gloss": "so that"
+        },
+        {
+          "thai": "ผู้บริโภค",
+          "gloss": "consumers"
+        },
+        {
+          "thai": "รู้จัก",
+          "gloss": "get to know"
+        },
+        {
+          "thai": "สินค้า",
+          "gloss": "product"
+        }
+      ],
+      "source": "prose",
+      "context": "Roles · Planning stage"
+    },
+    {
+      "thai": "อาชีพที่เกี่ยวข้องในขั้นตอนการผลิต",
+      "gloss": "occupations related to the production stage",
+      "words": [
+        {
+          "thai": "อาชีพ",
+          "gloss": "occupation"
+        },
+        {
+          "thai": "ที่",
+          "gloss": "that"
+        },
+        {
+          "thai": "เกี่ยวข้อง",
+          "gloss": "related"
+        },
+        {
+          "thai": "ใน",
+          "gloss": "in"
+        },
+        {
+          "thai": "ขั้นตอน",
+          "gloss": "stage"
+        },
+        {
+          "thai": "การผลิต",
+          "gloss": "production"
+        }
+      ],
+      "source": "heading",
+      "context": "Section heading"
+    },
+    {
+      "thai": "โปรดิวเซอร์",
+      "gloss": "producer",
+      "words": [
+        {
+          "thai": "โปรดิวเซอร์",
+          "gloss": "producer"
+        }
+      ],
+      "source": "label",
+      "context": "Roles · Production stage"
+    },
+    {
+      "thai": "ควบคุมการผลิตโฆษณาทั้งหมด",
+      "gloss": "controls the entire advertisement production",
+      "words": [
+        {
+          "thai": "ควบคุม",
+          "gloss": "control"
+        },
+        {
+          "thai": "การผลิต",
+          "gloss": "production"
+        },
+        {
+          "thai": "โฆษณา",
+          "gloss": "advertising"
+        },
+        {
+          "thai": "ทั้งหมด",
+          "gloss": "all"
+        }
+      ],
+      "source": "prose",
+      "context": "Roles · Production stage"
+    },
+    {
+      "thai": "ผู้กำกับศิลป์",
+      "gloss": "art director",
+      "words": [
+        {
+          "thai": "ผู้กำกับศิลป์",
+          "gloss": "art director"
+        }
+      ],
+      "source": "label",
+      "context": "Roles · Production stage"
+    },
+    {
+      "thai": "ดูแลด้านองค์ประกอบศิลป์",
+      "gloss": "looks after the artistic composition aspect",
+      "words": [
+        {
+          "thai": "ดูแล",
+          "gloss": "look after"
+        },
+        {
+          "thai": "ด้าน",
+          "gloss": "aspect"
+        },
+        {
+          "thai": "องค์ประกอบศิลป์",
+          "gloss": "artistic composition"
+        }
+      ],
+      "source": "prose",
+      "context": "Roles · Production stage"
+    },
+    {
+      "thai": "การออกแบบกราฟิก",
+      "gloss": "graphic design",
+      "words": [
+        {
+          "thai": "การออกแบบ",
+          "gloss": "design"
+        },
+        {
+          "thai": "กราฟิก",
+          "gloss": "graphic"
+        }
+      ],
+      "source": "prose",
+      "context": "Roles · Production stage"
+    },
+    {
+      "thai": "รวมถึงการทำเทคนิคพิเศษ",
+      "gloss": "including doing special effects",
+      "words": [
+        {
+          "thai": "รวมถึง",
+          "gloss": "including"
+        },
+        {
+          "thai": "การทำ",
+          "gloss": "doing"
+        },
+        {
+          "thai": "เทคนิคพิเศษ",
+          "gloss": "special effects"
+        }
+      ],
+      "source": "prose",
+      "context": "Roles · Production stage"
+    },
+    {
+      "thai": "นักเขียนบทโฆษณา",
+      "gloss": "copywriter",
+      "words": [
+        {
+          "thai": "นักเขียนบทโฆษณา",
+          "gloss": "copywriter"
+        }
+      ],
+      "source": "label",
+      "context": "Roles · Production stage"
+    },
+    {
+      "thai": "เขียนคำโฆษณาให้ตรงตามแนวคิดที่ต้องการสื่อกับผู้บริโภค",
+      "gloss": "write advertising copy to match the concept intended to communicate with consumers",
+      "words": [
+        {
+          "thai": "เขียน",
+          "gloss": "write"
+        },
+        {
+          "thai": "คำโฆษณา",
+          "gloss": "advertising copy"
+        },
+        {
+          "thai": "ให้",
+          "gloss": "to"
+        },
+        {
+          "thai": "ตรงตาม",
+          "gloss": "in line with"
+        },
+        {
+          "thai": "แนวคิด",
+          "gloss": "concept"
+        },
+        {
+          "thai": "ที่",
+          "gloss": "that"
+        },
+        {
+          "thai": "ต้องการ",
+          "gloss": "want to"
+        },
+        {
+          "thai": "สื่อ",
+          "gloss": "communicate"
+        },
+        {
+          "thai": "กับ",
+          "gloss": "with"
+        },
+        {
+          "thai": "ผู้บริโภค",
+          "gloss": "consumers"
+        }
+      ],
+      "source": "prose",
+      "context": "Roles · Production stage"
+    },
+    {
+      "thai": "ควบคุมการผลิตโฆษณาให้เสร็จสมบูรณ์",
+      "gloss": "oversee the production of the advertisement until it is fully completed",
+      "words": [
+        {
+          "thai": "ควบคุม",
+          "gloss": "control; oversee"
+        },
+        {
+          "thai": "การผลิต",
+          "gloss": "production"
+        },
+        {
+          "thai": "โฆษณา",
+          "gloss": "advertisement"
+        },
+        {
+          "thai": "ให้",
+          "gloss": "so that"
+        },
+        {
+          "thai": "เสร็จสมบูรณ์",
+          "gloss": "fully completed"
+        }
+      ],
+      "source": "prose",
+      "context": "Roles · Production stage"
+    },
+    {
+      "thai": "แล้วประเมินผลโฆษณาหลังเผยแพร่ทางสื่อต่าง ๆ",
+      "gloss": "then evaluate the advertisement after it is released through various media",
+      "words": [
+        {
+          "thai": "แล้ว",
+          "gloss": "then"
+        },
+        {
+          "thai": "ประเมินผล",
+          "gloss": "evaluate"
+        },
+        {
+          "thai": "โฆษณา",
+          "gloss": "advertisement"
+        },
+        {
+          "thai": "หลัง",
+          "gloss": "after"
+        },
+        {
+          "thai": "เผยแพร่",
+          "gloss": "release; publish"
+        },
+        {
+          "thai": "ทาง",
+          "gloss": "through"
+        },
+        {
+          "thai": "สื่อต่าง ๆ",
+          "gloss": "various media"
+        }
+      ],
+      "source": "prose",
+      "context": "Roles · Production stage"
+    },
+    {
+      "thai": "อยากเป็นนักโฆษณา",
+      "gloss": "want to be an advertising professional",
+      "words": [
+        {
+          "thai": "อยาก",
+          "gloss": "want to"
+        },
+        {
+          "thai": "เป็น",
+          "gloss": "be"
+        },
+        {
+          "thai": "นักโฆษณา",
+          "gloss": "advertising professional"
+        }
+      ],
+      "source": "heading",
+      "context": "Study path · Advertising"
+    },
+    {
+      "thai": "ต้องเรียนอะไร",
+      "gloss": "what do you have to study?",
+      "words": [
+        {
+          "thai": "ต้อง",
+          "gloss": "must; have to"
+        },
+        {
+          "thai": "เรียน",
+          "gloss": "study"
+        },
+        {
+          "thai": "อะไร",
+          "gloss": "what"
+        }
+      ],
+      "source": "heading",
+      "context": "Study path · Advertising"
+    },
+    {
+      "thai": "ต้องเรียนคณะนิเทศศาสตร์",
+      "gloss": "you need to study in the Faculty of Communication Arts",
+      "words": [
+        {
+          "thai": "ต้อง",
+          "gloss": "must; have to"
+        },
+        {
+          "thai": "เรียน",
+          "gloss": "study"
+        },
+        {
+          "thai": "คณะนิเทศศาสตร์",
+          "gloss": "Faculty of Communication Arts"
+        }
+      ],
+      "source": "prose",
+      "context": "Study path · Advertising"
+    },
+    {
+      "thai": "สาขาวิชาการโฆษณาและสื่อสารการตลาด",
+      "gloss": "major in advertising and marketing communication",
+      "words": [
+        {
+          "thai": "สาขาวิชา",
+          "gloss": "field of study; major"
+        },
+        {
+          "thai": "การโฆษณา",
+          "gloss": "advertising"
+        },
+        {
+          "thai": "และ",
+          "gloss": "and"
+        },
+        {
+          "thai": "สื่อสารการตลาด",
+          "gloss": "marketing communication"
+        }
+      ],
+      "source": "prose",
+      "context": "Study path · Advertising"
+    },
+    {
+      "thai": "ยิ่งถ้าได้สะสมประสบการณ์ในชมรมโฆษณา",
+      "gloss": "especially if you have accumulated experience in an advertising club",
+      "words": [
+        {
+          "thai": "ยิ่ง",
+          "gloss": "all the more; especially"
+        },
+        {
+          "thai": "ถ้า",
+          "gloss": "if"
+        },
+        {
+          "thai": "ได้",
+          "gloss": "get to; have"
+        },
+        {
+          "thai": "สะสม",
+          "gloss": "accumulate"
+        },
+        {
+          "thai": "ประสบการณ์",
+          "gloss": "experience"
+        },
+        {
+          "thai": "ใน",
+          "gloss": "in"
+        },
+        {
+          "thai": "ชมรมโฆษณา",
+          "gloss": "advertising club"
+        }
+      ],
+      "source": "prose",
+      "context": "Study path · Advertising"
+    },
+    {
+      "thai": "หรือผ่านประสบการณ์อื่น ๆ",
+      "gloss": "or through other experience",
+      "words": [
+        {
+          "thai": "หรือ",
+          "gloss": "or"
+        },
+        {
+          "thai": "ผ่าน",
+          "gloss": "through"
+        },
+        {
+          "thai": "ประสบการณ์",
+          "gloss": "experience"
+        },
+        {
+          "thai": "อื่น ๆ",
+          "gloss": "other; various"
+        }
+      ],
+      "source": "prose",
+      "context": "What to study"
+    },
+    {
+      "thai": "เคยได้รับรางวัลในการประกวดงานโฆษณาก็ยิ่งดี",
+      "gloss": "having received an award in an advertising contest is even better",
+      "words": [
+        {
+          "thai": "เคย",
+          "gloss": "ever; have"
+        },
+        {
+          "thai": "ได้รับ",
+          "gloss": "receive"
+        },
+        {
+          "thai": "รางวัล",
+          "gloss": "award"
+        },
+        {
+          "thai": "ใน",
+          "gloss": "in"
+        },
+        {
+          "thai": "การประกวด",
+          "gloss": "contest"
+        },
+        {
+          "thai": "งานโฆษณา",
+          "gloss": "advertising work"
+        },
+        {
+          "thai": "ก็",
+          "gloss": "then; indeed"
+        },
+        {
+          "thai": "ยิ่ง",
+          "gloss": "even more"
+        },
+        {
+          "thai": "ดี",
+          "gloss": "good"
+        }
+      ],
+      "source": "prose",
+      "context": "What to study"
+    },
+    {
+      "thai": "หลังจากมีประสบการณ์การทำงานด้านโฆษณาในองค์กรหรือบริษัทโฆษณา",
+      "gloss": "after gaining work experience in advertising in an organization or advertising company",
+      "words": [
+        {
+          "thai": "หลังจาก",
+          "gloss": "after"
+        },
+        {
+          "thai": "มี",
+          "gloss": "have; gain"
+        },
+        {
+          "thai": "ประสบการณ์",
+          "gloss": "experience"
+        },
+        {
+          "thai": "การทำงาน",
+          "gloss": "working; work"
+        },
+        {
+          "thai": "ด้าน",
+          "gloss": "in the field of"
+        },
+        {
+          "thai": "โฆษณา",
+          "gloss": "advertising"
+        },
+        {
+          "thai": "ใน",
+          "gloss": "in"
+        },
+        {
+          "thai": "องค์กร",
+          "gloss": "organization"
+        },
+        {
+          "thai": "หรือ",
+          "gloss": "or"
+        },
+        {
+          "thai": "บริษัทโฆษณา",
+          "gloss": "advertising company"
+        }
+      ],
+      "source": "prose",
+      "context": "What to study"
+    },
+    {
+      "thai": "และได้เรียนรู้งานพื้นฐานเกี่ยวกับโฆษณาแล้ว",
+      "gloss": "and having learned the basic work related to advertising already",
+      "words": [
+        {
+          "thai": "และ",
+          "gloss": "and"
+        },
+        {
+          "thai": "ได้",
+          "gloss": "have; already"
+        },
+        {
+          "thai": "เรียนรู้",
+          "gloss": "learn"
+        },
+        {
+          "thai": "งานพื้นฐาน",
+          "gloss": "basic work"
+        },
+        {
+          "thai": "เกี่ยวกับ",
+          "gloss": "about; related to"
+        },
+        {
+          "thai": "โฆษณา",
+          "gloss": "advertising"
+        },
+        {
+          "thai": "แล้ว",
+          "gloss": "already"
+        }
+      ],
+      "source": "prose",
+      "context": "What to study"
+    },
+    {
+      "thai": "ก็จะนำไปสู่อาชีพนักโฆษณาได้",
+      "gloss": "then it can lead to a career in advertising",
+      "words": [
+        {
+          "thai": "ก็",
+          "gloss": "then"
+        },
+        {
+          "thai": "จะ",
+          "gloss": "will"
+        },
+        {
+          "thai": "นำไปสู่",
+          "gloss": "lead to"
+        },
+        {
+          "thai": "อาชีพ",
+          "gloss": "career"
+        },
+        {
+          "thai": "นักโฆษณา",
+          "gloss": "advertising professional"
+        },
+        {
+          "thai": "ได้",
+          "gloss": "can"
+        }
+      ],
+      "source": "prose",
+      "context": "Study path · Advertising"
+    },
+    {
+      "thai": "เส้นทางสู่อาชีพ:",
+      "gloss": "Path to the career:",
+      "words": [
+        {
+          "thai": "เส้นทาง",
+          "gloss": "path"
+        },
+        {
+          "thai": "สู่",
+          "gloss": "to"
+        },
+        {
+          "thai": "อาชีพ",
+          "gloss": "career"
+        }
+      ],
+      "source": "heading",
+      "context": "Section heading"
+    },
+    {
+      "thai": "ต้องมีความรู้รอบด้าน",
+      "gloss": "you must have broad knowledge",
+      "words": [
+        {
+          "thai": "ต้อง",
+          "gloss": "must"
+        },
+        {
+          "thai": "มี",
+          "gloss": "have"
+        },
+        {
+          "thai": "ความรู้รอบด้าน",
+          "gloss": "broad knowledge"
+        }
+      ],
+      "source": "heading",
+      "context": "Path to career"
+    },
+    {
+      "thai": "นักโฆษณาต้องมีความรู้รอบด้านเกี่ยวกับการผลิตโฆษณา",
+      "gloss": "advertising professionals must have all-round knowledge about producing advertisements",
+      "words": [
+        {
+          "thai": "นักโฆษณา",
+          "gloss": "advertising professionals"
+        },
+        {
+          "thai": "ต้อง",
+          "gloss": "must"
+        },
+        {
+          "thai": "มี",
+          "gloss": "have"
+        },
+        {
+          "thai": "ความรู้รอบด้าน",
+          "gloss": "all-round knowledge"
+        },
+        {
+          "thai": "เกี่ยวกับ",
+          "gloss": "about"
+        },
+        {
+          "thai": "การผลิต",
+          "gloss": "production"
+        },
+        {
+          "thai": "โฆษณา",
+          "gloss": "advertisements"
+        }
+      ],
+      "source": "prose",
+      "context": "Path to career"
+    },
+    {
+      "thai": "เข้าใจความต้องการของผู้บริโภค",
+      "gloss": "understanding consumers' needs",
+      "words": [
+        {
+          "thai": "เข้าใจ",
+          "gloss": "understand"
+        },
+        {
+          "thai": "ความต้องการ",
+          "gloss": "needs"
+        },
+        {
+          "thai": "ของ",
+          "gloss": "of"
+        },
+        {
+          "thai": "ผู้บริโภค",
+          "gloss": "consumers"
+        }
+      ],
+      "source": "prose",
+      "context": "Path to career"
+    },
+    {
+      "thai": "ความนิยมของตลาด",
+      "gloss": "market trends",
+      "words": [
+        {
+          "thai": "ความนิยม",
+          "gloss": "popularity; trend"
+        },
+        {
+          "thai": "ของ",
+          "gloss": "of"
+        },
+        {
+          "thai": "ตลาด",
+          "gloss": "market"
+        }
+      ],
+      "source": "prose",
+      "context": "Path to career"
+    },
+    {
+      "thai": "รวมถึงทันกระแสวงการโฆษณาที่เปลี่ยนแปลงอย่างรวดเร็ว",
+      "gloss": "including keeping up with the rapidly changing advertising industry",
+      "words": [
+        {
+          "thai": "รวมถึง",
+          "gloss": "including"
+        },
+        {
+          "thai": "ทันกระแส",
+          "gloss": "keep up with trends"
+        },
+        {
+          "thai": "วงการโฆษณา",
+          "gloss": "the advertising industry"
+        },
+        {
+          "thai": "ที่",
+          "gloss": "that"
+        },
+        {
+          "thai": "เปลี่ยนแปลง",
+          "gloss": "changes"
+        },
+        {
+          "thai": "อย่างรวดเร็ว",
+          "gloss": "rapidly"
+        }
+      ],
+      "source": "prose",
+      "context": "Career path · Broad knowledge"
+    },
+    {
+      "thai": "ต้องเป็นสื่อกลางทางความคิดของทุกฝ่ายที่เกี่ยวข้อง",
+      "gloss": "must be the medium for the ideas of all involved parties",
+      "words": [
+        {
+          "thai": "ต้อง",
+          "gloss": "must"
+        },
+        {
+          "thai": "เป็น",
+          "gloss": "be"
+        },
+        {
+          "thai": "สื่อกลาง",
+          "gloss": "medium / intermediary"
+        },
+        {
+          "thai": "ทางความคิด",
+          "gloss": "in thought / for ideas"
+        },
+        {
+          "thai": "ของ",
+          "gloss": "of"
+        },
+        {
+          "thai": "ทุกฝ่าย",
+          "gloss": "all sides"
+        },
+        {
+          "thai": "ที่",
+          "gloss": "that / who"
+        },
+        {
+          "thai": "เกี่ยวข้อง",
+          "gloss": "are involved"
+        }
+      ],
+      "source": "prose",
+      "context": "Career path · Broad knowledge"
+    },
+    {
+      "thai": "และมีความคิดเชิงสร้างสรรค์",
+      "gloss": "and have creative thinking",
+      "words": [
+        {
+          "thai": "และ",
+          "gloss": "and"
+        },
+        {
+          "thai": "มี",
+          "gloss": "have"
+        },
+        {
+          "thai": "ความคิดเชิงสร้างสรรค์",
+          "gloss": "creative thinking"
+        }
+      ],
+      "source": "prose",
+      "context": "Career path · Broad knowledge"
+    },
+    {
+      "thai": "ต้องมีความเป็นผู้นำ",
+      "gloss": "must have leadership",
+      "words": [
+        {
+          "thai": "ต้อง",
+          "gloss": "must"
+        },
+        {
+          "thai": "มี",
+          "gloss": "have"
+        },
+        {
+          "thai": "ความเป็นผู้นำ",
+          "gloss": "leadership"
+        }
+      ],
+      "source": "prose",
+      "context": "Career path · Broad knowledge"
+    },
+    {
+      "thai": "ที่สำคัญคือจะต้องมีคุณธรรม",
+      "gloss": "most importantly, one must have morality",
+      "words": [
+        {
+          "thai": "ที่สำคัญ",
+          "gloss": "importantly"
+        },
+        {
+          "thai": "คือ",
+          "gloss": "is / namely"
+        },
+        {
+          "thai": "จะต้อง",
+          "gloss": "must"
+        },
+        {
+          "thai": "มี",
+          "gloss": "have"
+        },
+        {
+          "thai": "คุณธรรม",
+          "gloss": "morality"
+        }
+      ],
+      "source": "prose",
+      "context": "Career path · Broad knowledge"
+    },
+    {
+      "thai": "จริยธรรม",
+      "gloss": "ethics",
+      "words": [
+        {
+          "thai": "จริยธรรม",
+          "gloss": "ethics"
+        }
+      ],
+      "source": "prose",
+      "context": "Career path · Broad knowledge"
+    },
+    {
+      "thai": "และจรรยาบรรณในอาชีพ",
+      "gloss": "and professional ethics",
+      "words": [
+        {
+          "thai": "และ",
+          "gloss": "and"
+        },
+        {
+          "thai": "จรรยาบรรณ",
+          "gloss": "code of ethics"
+        },
+        {
+          "thai": "ใน",
+          "gloss": "in"
+        },
+        {
+          "thai": "อาชีพ",
+          "gloss": "the profession"
+        }
+      ],
+      "source": "prose",
+      "context": "Career path · Broad knowledge"
+    },
+    {
+      "thai": "นอกจากนี้ยังควรรู้ภาษาต่างประเทศเพื่อจะได้รับทราบข้อมูลข่าวสารใหม่ ๆ",
+      "gloss": "in addition, one should also know foreign languages in order to receive new information and news",
+      "words": [
+        {
+          "thai": "นอกจากนี้",
+          "gloss": "in addition"
+        },
+        {
+          "thai": "ยัง",
+          "gloss": "still / also"
+        },
+        {
+          "thai": "ควร",
+          "gloss": "should"
+        },
+        {
+          "thai": "รู้",
+          "gloss": "know"
+        },
+        {
+          "thai": "ภาษาต่างประเทศ",
+          "gloss": "foreign languages"
+        },
+        {
+          "thai": "เพื่อ",
+          "gloss": "in order to"
+        },
+        {
+          "thai": "จะ",
+          "gloss": "will / to"
+        },
+        {
+          "thai": "ได้รับทราบ",
+          "gloss": "receive and learn of"
+        },
+        {
+          "thai": "ข้อมูลข่าวสาร",
+          "gloss": "information and news"
+        },
+        {
+          "thai": "ใหม่ ๆ",
+          "gloss": "new ones / various new"
+        }
+      ],
+      "source": "prose",
+      "context": "Career path · Broad knowledge"
+    },
+    {
+      "thai": "นักโฆษณาจะต้องมีความสามารถหลากหลาย",
+      "gloss": "an advertiser must have a variety of abilities",
+      "words": [
+        {
+          "thai": "นักโฆษณา",
+          "gloss": "advertiser / advertising professional"
+        },
+        {
+          "thai": "จะต้อง",
+          "gloss": "must"
+        },
+        {
+          "thai": "มี",
+          "gloss": "have"
+        },
+        {
+          "thai": "ความสามารถ",
+          "gloss": "ability"
+        },
+        {
+          "thai": "หลากหลาย",
+          "gloss": "varied / diverse"
+        }
+      ],
+      "source": "prose",
+      "context": "Career path · Broad knowledge"
+    },
+    {
+      "thai": "เพื่อให้ผลิตโฆษณาได้ดียิ่งขึ้น",
+      "gloss": "so as to produce advertisements even better",
+      "words": [
+        {
+          "thai": "เพื่อให้",
+          "gloss": "so that"
+        },
+        {
+          "thai": "ผลิต",
+          "gloss": "produce"
+        },
+        {
+          "thai": "โฆษณา",
+          "gloss": "advertising / advertisements"
+        },
+        {
+          "thai": "ได้",
+          "gloss": "can / be able to"
+        },
+        {
+          "thai": "ดียิ่งขึ้น",
+          "gloss": "better / even better"
+        }
+      ],
+      "source": "prose",
+      "context": "Career path · Broad knowledge"
+    }
+  ]
+}

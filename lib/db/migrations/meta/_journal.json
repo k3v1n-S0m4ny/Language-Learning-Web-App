@@ -50,6 +50,13 @@
       "when": 1783999341321,
       "tag": "0006_crazy_firebird",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1784023087367,
+      "tag": "0007_quick_rumiko_fujikawa",
+      "breakpoints": true
     }
   ]
 }
