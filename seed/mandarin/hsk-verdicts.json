@@ -93,12 +93,6 @@
       "rationale": "Maxband 3 from 下来 (xiàlái, resultative complement); grammar is standard HSK-3 polite-request structure without advanced constructions."
     },
     {
-      "headword": "数字与数量",
-      "hsk": 6,
-      "confidence": "high",
-      "rationale": "The conjunction 与 is HSK-6 vocabulary; though the phrase is conceptually simple, the vocabulary load determines the band."
-    },
-    {
       "headword": "基数",
       "hsk": 4,
       "confidence": "medium",
@@ -583,12 +577,6 @@
       "rationale": "All vocabulary is HSK 1 with simple imperative grammar."
     },
     {
-      "headword": "时间与日期",
-      "hsk": 6,
-      "confidence": "high",
-      "rationale": "The word 与 (Band 6, formal conjunction) is the hardest component, and the simple noun-conjunction-noun structure introduces no grammatical complexity beyond vocabulary."
-    },
-    {
       "headword": "说时间",
       "hsk": 1,
       "confidence": "high",
@@ -1031,12 +1019,6 @@
       "hsk": 2,
       "confidence": "high",
       "rationale": "Compositional compound of HSK-1 (日) and HSK-2 (落) with straightforward meaning; common but not absolutely basic traveller vocabulary."
-    },
-    {
-      "headword": "金钱",
-      "hsk": 6,
-      "confidence": "high",
-      "rationale": "金钱 is authoritatively band 6 in the HSK wordlist; no grammar or compositional considerations override this."
     },
     {
       "headword": "多少钱？",

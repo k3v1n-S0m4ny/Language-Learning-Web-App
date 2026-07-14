@@ -643,40 +643,6 @@
     "hsk": 3
   },
   {
-    "headword": "数字与数量",
-    "isPhrase": true,
-    "wholeGloss": "numbers & amounts",
-    "wholePinyin": "shùzì yǔ shùliàng",
-    "tags": [
-      "numbers & amounts"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "数字",
-        "gloss": "numbers",
-        "pinyin": "shùzì",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c16ec9274e9d13d1557c6399a977ebd6.mp3"
-      },
-      {
-        "position": 1,
-        "hanzi": "与",
-        "gloss": "and",
-        "pinyin": "yǔ",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/de1d5dd076fb7a704745fca1d49d2059.mp3"
-      },
-      {
-        "position": 2,
-        "hanzi": "数量",
-        "gloss": "amounts",
-        "pinyin": "shùliàng",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5e29d121dda011c50d1a2d539dde9596.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8c082854f0f8a9464ed5bca5f3924d7f.mp3",
-    "hsk": 6
-  },
-  {
     "headword": "基数",
     "isPhrase": false,
     "wholeGloss": "cardinal numbers",
@@ -2837,40 +2803,6 @@
     "hsk": 1
   },
   {
-    "headword": "时间与日期",
-    "isPhrase": true,
-    "wholeGloss": "time & dates",
-    "wholePinyin": "shíjiān yǔ rìqī",
-    "tags": [
-      "time & dates"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "时间",
-        "gloss": "time",
-        "pinyin": "shíjiān",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8b6ff498515bcc2ffdefa4f7b2efbe5e.mp3"
-      },
-      {
-        "position": 1,
-        "hanzi": "与",
-        "gloss": "and",
-        "pinyin": "yǔ",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/de1d5dd076fb7a704745fca1d49d2059.mp3"
-      },
-      {
-        "position": 2,
-        "hanzi": "日期",
-        "gloss": "dates",
-        "pinyin": "rìqī",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/70d0c1b33626ba4be4e1d36dd7caaff6.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b63a7cf7fe92acb0db225ad1a50a6ce6.mp3",
-    "hsk": 6
-  },
-  {
     "headword": "说时间",
     "isPhrase": true,
     "wholeGloss": "telling the time",
@@ -4909,26 +4841,6 @@
     ],
     "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/67995f590a93c2112702a0859e32cc1f.mp3",
     "hsk": 2
-  },
-  {
-    "headword": "金钱",
-    "isPhrase": false,
-    "wholeGloss": "money",
-    "wholePinyin": "jīnqián",
-    "tags": [
-      "money"
-    ],
-    "words": [
-      {
-        "position": 0,
-        "hanzi": "金钱",
-        "gloss": "money",
-        "pinyin": "jīnqián",
-        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5ca4682d5d1faa082c04d2dcfc336e3f.mp3"
-      }
-    ],
-    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5ca4682d5d1faa082c04d2dcfc336e3f.mp3",
-    "hsk": 6
   },
   {
     "headword": "多少钱？",
