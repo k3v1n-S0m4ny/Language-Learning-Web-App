@@ -1,12 +1,18 @@
 // The HSK band gate: new Cards are only served from a band the Learner has
-// unlocked, and a band unlocks once the band below it is 90% mastered.
+// unlocked, and a band unlocks once the band below it is 80% mastered.
 //
 // Pure — no database access, no `@/lib/db` import (importing it constructs a
 // neon() client at module load, which throws under `tsx --test`). Same rationale
 // as lib/thai/exam-pure.ts. Every gate decision in the app is made here, so the
 // queue and the Server Action cannot drift apart.
 
-export const HSK_UNLOCK_THRESHOLD_PERCENT = 90;
+// 80, not 90. The bar is a fraction of a band's cards, so every Card added to a band
+// raises the absolute number needed to clear it. Seeding the travel/transport set put
+// 29 new Cards into band 1 (130 -> 159), which at 90% moved the bar from 117 to 144
+// mastered — the band grew faster than the Learner could climb it. 80% keeps the gate's
+// purpose (do not serve HSK 4 to someone who has not met HSK 1) while leaving the
+// ladder reachable as the deck grows.
+export const HSK_UNLOCK_THRESHOLD_PERCENT = 80;
 
 // Bands 1-6 are as published; 7 is the merged "HSK 7-9" advanced band, which HSK
 // itself does not subdivide. See the cards.hsk_level comment in lib/db/schema.ts.

@@ -1,1236 +1,2418 @@
 {
- "_about": "HSK 3.0 band per Card, the audit trail behind cards.hsk_level. Each band was adjudicated by one Haiku agent anchored to a deterministic per-word lookup against seed/mandarin/hsk30-wordlist.json; a final consistency sweep flagged 3 outliers, all reviewed and approved by the owner (see correctedFrom/correction). Band 7 = the merged HSK 7-9 advanced band; 8 and 9 are never used. Applied to the deck by scripts/level-hsk.ts.",
- "_generated": "2026-07-13",
- "cards": [
-  {
-   "headword": "你会说英文吗？",
-   "hsk": 2,
-   "confidence": "high",
-   "rationale": "All words are official list matches with maxBand 2 (英文); grammar is simple interrogative requiring no elevation."
-  },
-  {
-   "headword": "有谁会说英文吗？",
-   "hsk": 2,
-   "confidence": "high",
-   "rationale": "All words are HSK 1-2 (maxBand 2 for 英文); grammar is simple yes/no interrogation with no advanced patterns."
-  },
-  {
-   "headword": "你明白吗？",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "All three words (你, 明白, 吗) are HSK 1 with no advanced grammar; simple yes-no question is HSK 1 level."
-  },
-  {
-   "headword": "明白。",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "maxBand is 1 from the official HSK wordlist; simple statement with no advanced grammar."
-  },
-  {
-   "headword": "我不明白。",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "All constituent words are HSK 1 (我, 不, 明白), and the simple subject-negation-verb structure contains no grammar complexity."
-  },
-  {
-   "headword": "我会说一点。",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "All words are HSK 1; '一点' is a compositional measure compound (一+点) explicitly listed in the rules as HSK 1 despite null lookup, and the grammar is simple S-V-O."
-  },
-  {
-   "headword": "请用拼音写。",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "All matched words are HSK 1; unmatched 拼音 is compositional and practical, not advanced; grammar is simple imperative with no complex structures."
-  },
-  {
-   "headword": "请用中文写下来。",
-   "hsk": 3,
-   "confidence": "high",
-   "rationale": "All words are HSK 1-3; 下来 (directional complement) determines maxBand 3; grammar is simple imperative with no complex structures."
-  },
-  {
-   "headword": "请指出书上的范句。",
-   "hsk": 3,
-   "confidence": "high",
-   "rationale": "maxBand is 3 from 指出; the unmatched word 范句 is compositional (example-phrase), and grammar is simple imperative with no complex structures."
-  },
-  {
-   "headword": "(这个)是什么意思？",
-   "hsk": 2,
-   "confidence": "high",
-   "rationale": "Maxband 2 is justified by 意思; unmatched 这个 is compositional HSK-1 demonstrative and does not elevate the band."
-  },
-  {
-   "headword": "怎么念这个？",
-   "hsk": 3,
-   "confidence": "high",
-   "rationale": "Vocabulary maxBand is 3 from 念 (pronounce); 这个 is compositional; grammar is simple question syntax."
-  },
-  {
-   "headword": "怎么写\"熊猫\"？",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "All matched vocabulary is HSK 1; 熊猫 (panda) is basic animal vocabulary, not advanced; grammar is a simple HSK-1 question."
-  },
-  {
-   "headword": "请你再说一遍？",
-   "hsk": 2,
-   "confidence": "high",
-   "rationale": "All words present in official wordlist with maxBand 2 (遍); simple imperative grammar requires no elevation."
-  },
-  {
-   "headword": "请你慢一点说？",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "All matched words are HSK 1, the null word 一点 is a compositional elementary phrase, and the polite imperative grammar is straightforward with no complex constructions."
-  },
-  {
-   "headword": "可以请你写下来吗？",
-   "hsk": 3,
-   "confidence": "high",
-   "rationale": "Maxband 3 from 下来 (xiàlái, resultative complement); grammar is standard HSK-3 polite-request structure without advanced constructions."
-  },
-  {
-   "headword": "数字与数量",
-   "hsk": 6,
-   "confidence": "high",
-   "rationale": "The conjunction 与 is HSK-6 vocabulary; though the phrase is conceptually simple, the vocabulary load determines the band."
-  },
-  {
-   "headword": "基数",
-   "hsk": 4,
-   "confidence": "medium",
-   "rationale": "The compound is absent from the wordlist; 基 (base) is HSK 5 and forms the hardest component; the specialized but compositional term is therefore HSK 5.",
-   "correctedFrom": 5,
-   "correction": "Sweep: aligned with its twin 序数 (ordinal numbers, HSK 4) — both metalinguistic header terms absent from the wordlist."
-  },
-  {
-   "headword": "零",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "零 is a fundamental numeral unattested in HSK 3.0 but functionally equivalent to basic HSK-1 numerals and essential for beginner communication."
-  },
-  {
-   "headword": "一",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Fundamental HSK-1 numeral; the lookup is authoritative and matches maxBand directly."
-  },
-  {
-   "headword": "二",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "二 is a basic HSK-1 number with no grammar complexity; maxBand lookup confirms band 1."
-  },
-  {
-   "headword": "三",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Basic numeral directly matched to HSK 1 in the official wordlist with no grammatical complexity."
-  },
-  {
-   "headword": "四",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "四 is a basic HSK 1 number with no grammar complexity."
-  },
-  {
-   "headword": "五",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "This is a basic numeral from HSK 1; the lookup is authoritative with no grammatical complexity."
-  },
-  {
-   "headword": "六",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Official HSK 1 lookup with maxBand 1; basic single-digit number with no complex grammar."
-  },
-  {
-   "headword": "七",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "The character 七 (seven) is a basic number word appearing in HSK 1 vocabulary with no grammatical complexity; the lookup confirms band 1."
-  },
-  {
-   "headword": "八",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "八 is HSK 1 basic vocabulary (the number 8), with no grammatical elevation needed."
-  },
-  {
-   "headword": "九",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "The numeral 九 (9) is assigned band 1 in the official HSK 3.0 wordlist as a foundational basic numeral."
-  },
-  {
-   "headword": "十",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "十 is listed as HSK 1 in the official wordlist; fundamental number/counting word with no grammar complexity."
-  },
-  {
-   "headword": "十一",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Compositional number built from HSK-1 parts (十 + 一); rule explicitly assigns such compounds to HSK 1."
-  },
-  {
-   "headword": "十二",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "十二 is a compositional number built from HSK-1 parts (十+二); absent from wordlist but clearly beginner-level vocabulary."
-  },
-  {
-   "headword": "十三",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Compositional number built from HSK-1 parts (十 + 三), not advanced vocabulary."
-  },
-  {
-   "headword": "十四",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "十四 is a compositional number built from HSK-1 parts (十 + 四), which per Rule 3 are HSK 1 regardless of wordlist absence."
-  },
-  {
-   "headword": "十五",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "十五 is a compositional number built from HSK-1 words (十 + 五) and does not require inflating to a higher band despite wordlist absence."
-  },
-  {
-   "headword": "十六",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Compositional number built from HSK-1 parts (十 + 六)."
-  },
-  {
-   "headword": "十七",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Compositional number built from HSK-1 parts (十 + 七); follows the explicit rule that numbers composed from HSK-1 elements are HSK 1."
-  },
-  {
-   "headword": "十八",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Compositional number built from HSK-1 components (十 + 八); nulled entries for composite numbers are EASY, not hard."
-  },
-  {
-   "headword": "十九",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Compositional number built from HSK-1 parts (十+九), following the established pattern for basic numerals; null lookup should not inflate the band."
-  },
-  {
-   "headword": "二十",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Compositional number from HSK-1 words 二 (two) + 十 (ten); applies Rule 3 exception for numbers built from basic parts."
-  },
-  {
-   "headword": "二十一",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Compositional number built from HSK-1 parts (二+十+一); such basic numerals are HSK 1."
-  },
-  {
-   "headword": "二十二",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "The number 二十二 is compositionally built from HSK-1 words (二, 十), making it HSK 1 despite the wordlist entry being null."
-  },
-  {
-   "headword": "三十",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Compositional number formed from HSK-1 words 三 and 十; explicitly listed as HSK 1 in the guidelines."
-  },
-  {
-   "headword": "四十",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "This is a compositional number built from two HSK-1 words (四 four + 十 ten), making it HSK 1 despite missing from the official wordlist."
-  },
-  {
-   "headword": "五十",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Compositional number built from HSK-1 parts (五 + 十); standard pattern like 三十."
-  },
-  {
-   "headword": "六十",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Compositional number built from HSK-1 parts (六 + 十); numbers formed this way are HSK 1."
-  },
-  {
-   "headword": "七十",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "七十 is a compositional number made from HSK-1 words 七 and 十, hence HSK 1."
-  },
-  {
-   "headword": "八十",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Compositional number from HSK-1 parts (八 + 十); numbers built from basic components are beginner-level regardless of wordlist coverage."
-  },
-  {
-   "headword": "九十",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "A compositional number (nine + ten) built entirely from HSK-1 parts, following the same pattern as 三十 and 二十二."
-  },
-  {
-   "headword": "一百",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Compositional number built from HSK-1 parts (一 + 百); follows the standard pattern for HSK-1 numerals."
-  },
-  {
-   "headword": "一百零一",
-   "hsk": 1,
-   "confidence": "medium",
-   "rationale": "Compositional number using basic HSK-1 parts (一, 百) and the fundamental zero (零); straightforward for any learner with basic counting vocabulary."
-  },
-  {
-   "headword": "一百零三",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Compositional number built entirely from HSK-1 parts (一+百+零+三); rule 3 explicitly classifies such numbers as HSK 1."
-  },
-  {
-   "headword": "一百一十三",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Compositional number built from HSK-1 numerals; basic number-formation is level 1 vocabulary."
-  },
-  {
-   "headword": "一百二十二",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Compositional number built entirely from HSK-1 parts (一, 百, 二, 十); per Rule 3, such numbers are HSK 1 despite wordlist absence."
-  },
-  {
-   "headword": "两百",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Compositional number built from HSK-1 parts (两 two + 百 hundred), matching the pattern of 十一, 三十, etc. standard in beginner phrasebooks."
-  },
-  {
-   "headword": "一千",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Compositional number (一 + 千) built entirely from basic HSK-1 number parts; both components are fundamental to the Chinese counting system."
-  },
-  {
-   "headword": "一万",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Compositional number (one × ten-thousand unit) built from HSK-1 parts; treat as HSK 1 per guidance."
-  },
-  {
-   "headword": "一百万",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Number built from HSK-1 parts (一+百+万); compositional, beginner-level vocabulary."
-  },
-  {
-   "headword": "一亿",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Compositional number (one + hundred-million unit); both components are basic number vocabulary, not advanced."
-  },
-  {
-   "headword": "序数",
-   "hsk": 4,
-   "confidence": "medium",
-   "rationale": "序 is not HSK 1-3 vocabulary; the formal term 序数 for ordinal numbers is pedagogically introduced after basic ordinals (第一, 第二, etc.) and belongs to HSK 4+."
-  },
-  {
-   "headword": "第一",
-   "hsk": 1,
-   "confidence": "medium",
-   "rationale": "Compositional ordinal from 第 (HSK 2 ordinal prefix) and 一 (HSK 1), making this common word HSK 2.",
-   "correctedFrom": 2,
-   "correction": "Sweep: aligned with its four siblings 第二/第三/第四/第五, all HSK 1 with the identical 第+numeral structure."
-  },
-  {
-   "headword": "第二",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Both component words are HSK 1, and the phrase is a simple compositional ordinal with no complex grammar."
-  },
-  {
-   "headword": "第三",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Both component words (第 and 三) are HSK 1 vocabulary; the compound is a simple compositional ordinal with no advanced grammar."
-  },
-  {
-   "headword": "第四",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "第四 is a compositional ordinal (第 + 四); ordinal numbers are fundamental beginner vocabulary even though 第 is not explicitly listed in HSK wordlist, and are essential for traveller phrasebook contexts."
-  },
-  {
-   "headword": "第五",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Both words are HSK 1, and the ordinal construction (第 + number) is elementary grammar."
-  },
-  {
-   "headword": "百分比",
-   "hsk": 7,
-   "confidence": "high",
-   "rationale": "The word \"百分比\" is looked up at HSK band 7 in the official wordlist; vocabulary load determines the band."
-  },
-  {
-   "headword": "四分之一",
-   "hsk": 7,
-   "confidence": "high",
-   "rationale": "Straightforward compositional phrase; vocabulary load determined by 之 (of), which is HSK 7-9."
-  },
-  {
-   "headword": "三分之一",
-   "hsk": 7,
-   "confidence": "high",
-   "rationale": "The phrase contains 之 (of), an advanced HSK 7 genitive particle; though fractions feel elementary, the vocabulary lookup is authoritative and must not be softened for simple context."
-  },
-  {
-   "headword": "一半",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "一半 is in the official HSK 3.0 wordlist at band 1, an elementary fraction word with no grammar complexity."
-  },
-  {
-   "headword": "四分之三",
-   "hsk": 7,
-   "confidence": "high",
-   "rationale": "The classical particle 之 is HSK 7; no grammatical complexity elevates the phrase above maxBand."
-  },
-  {
-   "headword": "所有",
-   "hsk": 2,
-   "confidence": "high",
-   "rationale": "The word 所有 is found in the official HSK 3.0 wordlist at band 2, with no grammatical complexity to warrant elevation."
-  },
-  {
-   "headword": "没有",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Both component words are HSK 1, and the negation phrase is a fundamental beginner construction with no advanced grammar."
-  },
-  {
-   "headword": "量词",
-   "hsk": 4,
-   "confidence": "high",
-   "rationale": "The card contains 量 (HSK 4, the hardest component) and 词 (HSK 2); maxBand = 4 with no complicating grammar or null words."
-  },
-  {
-   "headword": "个",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "个 is the foundational generic measure word, officially HSK 1, with no grammatical complexity beyond its basic classifier function."
-  },
-  {
-   "headword": "张",
-   "hsk": 3,
-   "confidence": "high",
-   "rationale": "Measure word for flat objects, looked up at HSK 3 in the official wordlist with no grammatical complexity."
-  },
-  {
-   "headword": "条",
-   "hsk": 2,
-   "confidence": "high",
-   "rationale": "条 is HSK 2 per the official wordlist, a straightforward measure word for long objects with no grammatical complexity."
-  },
-  {
-   "headword": "位",
-   "hsk": 2,
-   "confidence": "high",
-   "rationale": "Single HSK-2 word with no complex grammar; the authoritative looked-up band is maxBand."
-  },
-  {
-   "headword": "座",
-   "hsk": 2,
-   "confidence": "high",
-   "rationale": "Single HSK-2 measure word with no grammatical complexity."
-  },
-  {
-   "headword": "常用数量",
-   "hsk": 3,
-   "confidence": "high",
-   "rationale": "Simple noun phrase; maxBand is 3 from 数量 with no grammatical complexity above vocabulary."
-  },
-  {
-   "headword": "多少？",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Both component words are HSK 1, and the phrase is an elementary question requiring no advanced grammar."
-  },
-  {
-   "headword": "几个？",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Both words (几 and 个) are HSK 1 with no complex grammar; maxBand of 1 is correct for this basic interrogative phrase."
-  },
-  {
-   "headword": "请给我……",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "All component words are HSK 1 with simple imperative grammar; no complexity beyond vocabulary."
-  },
-  {
-   "headword": "请给我 (50) 克",
-   "hsk": 2,
-   "confidence": "high",
-   "rationale": "All words are HSK 1–2 with simple imperative structure; maxBand of 2 (克, grams) is the appropriate level."
-  },
-  {
-   "headword": "请给我 1 两",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "All component words are HSK 1 fundamentals; simple imperative request with no advanced grammar."
-  },
-  {
-   "headword": "请给我 1 斤",
-   "hsk": 2,
-   "confidence": "high",
-   "rationale": "The phrase's hardest word is 斤 (measure word for weight) at HSK 2, with elementary grammar and no elevating factors."
-  },
-  {
-   "headword": "请给我一瓶",
-   "hsk": 2,
-   "confidence": "high",
-   "rationale": "maxBand is 2 from 瓶 (bottle); grammar is basic S-V-O with simple measure word construction, no elevation needed."
-  },
-  {
-   "headword": "请给我一打",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "All words are HSK 1; simple polite-imperative structure with no advanced grammar."
-  },
-  {
-   "headword": "请给我一些",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "All four component words (请, 给, 我, 一些) are HSK 1; the sentence structure is simple S-V-O with no complex grammar, resultatives, or embedding."
-  },
-  {
-   "headword": "请给我一罐",
-   "hsk": 7,
-   "confidence": "high",
-   "rationale": "Vocabulary load determined by 罐 (HSK 7); straightforward imperative grammar does not elevate above vocabulary level."
-  },
-  {
-   "headword": "请给我 1 公斤",
-   "hsk": 2,
-   "confidence": "high",
-   "rationale": "Maximal vocabulary difficulty is 公斤 (kilogram, HSK 2); grammar is simple imperative; unmatched numeral is compositional."
-  },
-  {
-   "headword": "请给我少一点",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "All matched words are HSK 1; \"一点\" is a compositional quantifier (一+点, both HSK 1); grammar is a simple imperative with no complex structures."
-  },
-  {
-   "headword": "请给我一小块",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "All component words are HSK 1, and the sentence is a simple imperative with no complex grammar."
-  },
-  {
-   "headword": "请给我好多",
-   "hsk": 2,
-   "confidence": "high",
-   "rationale": "Maxband is 2 (好多 is HSK 2); grammar is straightforward imperative with no complex structures, so no upward adjustment needed."
-  },
-  {
-   "headword": "请给我许多",
-   "hsk": 2,
-   "confidence": "high",
-   "rationale": "All words matched (许多 at band 2 is the hardest); simple imperative grammar with no complex structures."
-  },
-  {
-   "headword": "请给我多一些",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "All vocabulary is HSK 1 with no advanced grammar; a simple, fundamental traveller phrase."
-  },
-  {
-   "headword": "请给我一盒",
-   "hsk": 5,
-   "confidence": "high",
-   "rationale": "Vocabulary is HSK 1–5 with 盒 at Band 5 as the hardest word; simple imperative grammar with no complexity."
-  },
-  {
-   "headword": "请给我一块",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "All five words are HSK 1 with no compositional nulls; simple imperative structure (S-V-O) with no grammatical complexity."
-  },
-  {
-   "headword": "请给我一听",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "All vocabulary is HSK 1 with simple imperative grammar."
-  },
-  {
-   "headword": "时间与日期",
-   "hsk": 6,
-   "confidence": "high",
-   "rationale": "The word 与 (Band 6, formal conjunction) is the hardest component, and the simple noun-conjunction-noun structure introduces no grammatical complexity beyond vocabulary."
-  },
-  {
-   "headword": "说时间",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Both constituent words (说 and 时间) are HSK 1 with straightforward verb-object grammar, no elevating structures."
-  },
-  {
-   "headword": "现在几点钟？",
-   "hsk": 3,
-   "confidence": "high",
-   "rationale": "钟 is HSK 3; grammar is simple interrogative with no complex constructions; 几点 (unmatched) is a basic compositional word."
-  },
-  {
-   "headword": "(一)点钟。",
-   "hsk": 3,
-   "confidence": "high",
-   "rationale": "The maxBand is 3 from 钟 (clock), and simple time-telling grammar contains no construction more advanced than the vocabulary."
-  },
-  {
-   "headword": "(十)点五分。",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "All four words are HSK 1 basic vocabulary (numbers and time markers); grammar is simple composition with no advanced structures."
-  },
-  {
-   "headword": "(十)点十五分。",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "All words are HSK 1 or compositional numbers (十五 = 十+五); simple time-telling structure with no complex grammar."
-  },
-  {
-   "headword": "(十)点三十分。",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Simple time expression; the null 三十 is compositional (三+十, both HSK 1), so the card remains at maxBand 1 with no grammar elevation."
-  },
-  {
-   "headword": "(十)点四十分。",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "All vocabulary is HSK 1 or compositional numbers built from HSK-1 parts; simple time-telling structure with no advanced grammar."
-  },
-  {
-   "headword": "(十)点四十五分。",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "All matched words are HSK 1 (十, 点, 分); unmatched 四十五 is a compositional number built entirely from HSK-1 numerals (four, ten, five) with no grammar complexity."
-  },
-  {
-   "headword": "早上",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "早上 is a straightforward HSK 1 noun with no complex grammar or advanced vocabulary."
-  },
-  {
-   "headword": "晚上",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "晚上 is an HSK 1 word listed with band 1; no grammar or vocabulary complexity warrants elevation above maxBand."
-  },
-  {
-   "headword": "什么时候(开始)？",
-   "hsk": 3,
-   "confidence": "high",
-   "rationale": "The maxBand of 3 from 开始 (start) is authoritative; the grammar is simple interrogative formation with no complex structures that would elevate the band."
-  },
-  {
-   "headword": "十点钟(开始)。",
-   "hsk": 3,
-   "confidence": "high",
-   "rationale": "Vocabulary is led by 开始 at HSK 3; 点钟 (not in list) is a basic time-telling compound, not advanced."
-  },
-  {
-   "headword": "(晚上9点57分)开始。",
-   "hsk": 3,
-   "confidence": "high",
-   "rationale": "Card contains HSK 1 time words (晚上, 点, 分) and two compositional numbers (9 = 九, 57 = 五十七) plus 开始 (start, HSK 3); simple S-V structure with no grammar above vocabulary level."
-  },
-  {
-   "headword": "日历",
-   "hsk": 4,
-   "confidence": "high",
-   "rationale": "The headword 日历 is matched in the official HSK 3.0 wordlist at band 4; no grammar complexity overrides this."
-  },
-  {
-   "headword": "星期一",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Both component words (星期, 一) are HSK 1, and the compound exhibits no grammatical complexity beyond simple juxtaposition."
-  },
-  {
-   "headword": "星期二",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Both component words (星期 and 二) are HSK 1 with no complex grammar, making this a basic beginner day-of-week phrase."
-  },
-  {
-   "headword": "星期三",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Simple day-of-week phrase composed of 星期 (HSK 1) + 三 (HSK 1); no complex grammar, matches compositional date/time pattern in Rule 3."
-  },
-  {
-   "headword": "星期四",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Simple compositional day-of-week compound formed from HSK-1 parts (星期 + 四), matching the maxBand lookup."
-  },
-  {
-   "headword": "星期五",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Both component words (星期 week, 五 five) are HSK 1; the phrase is a simple compositional day-of-week name with no elevated grammar."
-  },
-  {
-   "headword": "星期六",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Both component words (星期 and 六) are HSK 1; this is a simple compositional day-of-week phrase with no grammar complexity."
-  },
-  {
-   "headword": "星期天",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Both component words (星期 and 天) are HSK Band 1, and this compositional day-of-week phrase matches the vocabulary level of beginner learners."
-  },
-  {
-   "headword": "一月",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "一月 (January) is compositional from HSK 1 words: 一 (one) + 月 (month), matching the rule example for dates/months."
-  },
-  {
-   "headword": "二月",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Compositional date phrase built from two HSK-1 words (二 \"two\" + 月 \"month\"); no complex grammar."
-  },
-  {
-   "headword": "三月",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Compositional month name (three + month) built from HSK 1 words with no grammatical complexity."
-  },
-  {
-   "headword": "四月",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Month compound built from HSK-1 parts (四 + 月), analogous to the 五月/六月 examples in rule 3."
-  },
-  {
-   "headword": "五月",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Compositional date compound (五 five + 月 month) built from HSK-1 parts, matching the explicit example in Rule 3."
-  },
-  {
-   "headword": "六月",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "六月 is compositional: built from HSK-1 words 六 (six) and 月 (month); dates/months from HSK-1 parts are HSK 1."
-  },
-  {
-   "headword": "七月",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Compositional date formed from HSK-1 parts (七 + 月); dates/months built from HSK-1 parts are HSK 1."
-  },
-  {
-   "headword": "八月",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Compositional month word (eight + month) built entirely from HSK-1 components; no grammar complexity raises the band."
-  },
-  {
-   "headword": "九月",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Compositional month name (九 + 月, both official HSK 1), no grammatical complexity, matches the explicitly covered case in rule 3."
-  },
-  {
-   "headword": "十月",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Compositional month name built entirely from HSK-1 parts (十 + 月); no grammar complexity."
-  },
-  {
-   "headword": "十一月",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Compositional date word (ten + one + month) with all three HSK-1 components and no grammatical complexity."
-  },
-  {
-   "headword": "十二月",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Compositional month/date built from three HSK-1 words (十, 二, 月); no complex grammar elevates it beyond maxBand of 1."
-  },
-  {
-   "headword": "今天几号？",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "All three component words (今天, 几, 号) are HSK 1, and the sentence is a simple interrogative with no advanced grammar."
-  },
-  {
-   "headword": "(十月十八号)。",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Date phrase composed entirely of HSK 1 vocabulary; 十月 and 十八 are compositional numbers/months built from HSK-1 parts (十, 八, 月) and treated as HSK 1 per rule 3."
-  },
-  {
-   "headword": "春天",
-   "hsk": 2,
-   "confidence": "high",
-   "rationale": "春天 is a foundational seasonal term looked up as HSK 2 in the official wordlist with no grammatical complexity warranting a higher band."
-  },
-  {
-   "headword": "夏天",
-   "hsk": 2,
-   "confidence": "high",
-   "rationale": "\"夏天\" (summer) is in the official HSK 3.0 wordlist at band 2; no grammar complexity warrants elevation."
-  },
-  {
-   "headword": "秋天",
-   "hsk": 2,
-   "confidence": "high",
-   "rationale": "秋天 is listed in the HSK 3.0 wordlist as band 2; it is a straightforward noun with no grammatical complexity or higher-band vocabulary."
-  },
-  {
-   "headword": "冬天",
-   "hsk": 2,
-   "confidence": "high",
-   "rationale": "冬天 is officially HSK 2 vocabulary with no grammatical complexity."
-  },
-  {
-   "headword": "目前时态",
-   "hsk": 3,
-   "confidence": "high",
-   "rationale": "目前 is authoritatively HSK 3; 时态 (tense) is a compositional term absent from the wordlist but not genuinely advanced enough to exceed the maxBand."
-  },
-  {
-   "headword": "现在",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "The word is looked up as HSK 1 in the official list with no unmatched words or grammar that would elevate it."
-  },
-  {
-   "headword": "这个……",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Both 这 and 个 are HSK 1 words; this is a simple demonstrative+measure construction with no advanced grammar."
-  },
-  {
-   "headword": "这个下午",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "All three component words are HSK 1 with no advanced grammar; this is an elementary compositional time expression."
-  },
-  {
-   "headword": "这个月",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Compositional demonstrative + measure word + month noun (这 + 个 + 月), all HSK-1 components with no grammatical complexity beyond basic noun phrase formation."
-  },
-  {
-   "headword": "这个早上",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "A simple demonstrative phrase composed entirely of HSK 1 vocabulary (这 + 个 + 早上) with no complex grammar."
-  },
-  {
-   "headword": "这个上午",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "All three component words (这, 个, 上午) are HSK 1; the demonstrative+measure+noun structure is basic beginner grammar with no complexity."
-  },
-  {
-   "headword": "这个星期",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "All three component words are HSK-1 vocabulary, and the phrase uses only basic demonstrative-noun syntax with no complex grammar."
-  },
-  {
-   "headword": "今年",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Official HSK 3.0 wordlist confirms 今年 as band 1, a basic temporal expression with no grammar complexity."
-  },
-  {
-   "headword": "今天",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "The word 今天 is listed as HSK 1 in the official wordlist; a simple time noun with no complex grammar warrants no elevation."
-  },
-  {
-   "headword": "今天晚上",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Both component words (今天, 晚上) are HSK 1 with straightforward noun composition requiring no advanced grammar."
-  },
-  {
-   "headword": "过去时间",
-   "hsk": 2,
-   "confidence": "high",
-   "rationale": "Straightforward compound noun with no grammatical complexity; maxBand 2 from 过去 is the determining factor."
-  },
-  {
-   "headword": "(三天)以前",
-   "hsk": 2,
-   "confidence": "high",
-   "rationale": "Vocabulary load determined by 以前 (HSK 2); simple temporal phrase with no complex grammar."
-  },
-  {
-   "headword": "前天",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "The phrase \"前天\" is officially listed as HSK 1 in the wordlist; it is a basic temporal reference with no advanced grammar."
-  },
-  {
-   "headword": "昨天晚上",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Both component words (昨天, 晚上) are HSK 1 with simple noun-stacking grammar requiring no elevation above maxBand."
-  },
-  {
-   "headword": "上星期",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Both component words (上, 星期) are HSK 1; simple modifier-noun construction with no advanced grammar."
-  },
-  {
-   "headword": "上个月",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "All three component words are HSK 1 vocabulary (上, 个, 月); the structure is a simple noun phrase with no complex grammar."
-  },
-  {
-   "headword": "去年",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "The word 去年 is in the official HSK 3.0 wordlist at band 1; it is a simple temporal noun with no grammatical complexity."
-  },
-  {
-   "headword": "从(五月)以来",
-   "hsk": 3,
-   "confidence": "high",
-   "rationale": "以来 (HSK 3) is the hardest component; 五月 is compositional (五+月, both HSK 1); grammar is standard temporal phrasing requiring no grammatical complexity beyond the vocabulary."
-  },
-  {
-   "headword": "昨天……",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "昨天 is an HSK 1 time adverbial with no advanced grammar; maxBand is authoritative."
-  },
-  {
-   "headword": "将来时",
-   "hsk": 3,
-   "confidence": "high",
-   "rationale": "Both component words are HSK 3; the phrase is a simple nominal compound with no advanced grammar."
-  },
-  {
-   "headword": "后天",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "后天 is officially HSK 1 vocabulary (basic time expression for travelers), with no grammatical complexity warranting elevation above maxBand."
-  },
-  {
-   "headword": "(六天)以后",
-   "hsk": 2,
-   "confidence": "high",
-   "rationale": "Simple compositional time phrase: HSK-1 number+day (六天) + HSK-2 after-marker (以后) with no advanced grammar, matching maxBand of 2."
-  },
-  {
-   "headword": "下星期",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Both component words (下 and 星期) are HSK 1; the composition uses simple temporal modification with no advanced grammar."
-  },
-  {
-   "headword": "下个月",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "All three component words (下, 个, 月) are HSK 1 vocabulary with simple measure-word grammar."
-  },
-  {
-   "headword": "明年",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "明年 is looked up and confirmed as HSK 1 in the official wordlist; straightforward temporal noun with no complex grammar."
-  },
-  {
-   "headword": "明天……",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "明天 is HSK 1 vocabulary from the official wordlist with no complex grammar or null words to escalate difficulty."
-  },
-  {
-   "headword": "到(六月)为止",
-   "hsk": 5,
-   "confidence": "high",
-   "rationale": "The maxBand is 5 from \"为止\" (wéizhǐ); the unmatched word \"六月\" is compositional (six + month, both HSK 1); the temporal phrase construction is straightforward."
-  },
-  {
-   "headword": "从早到晚",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "All component words are HSK 1 and the structure (从...到...) is beginner-level temporal marking with no complex grammar."
-  },
-  {
-   "headword": "白天",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Official HSK wordlist lookup returns band 1 for 白天 (day/daytime); no grammar complications or advanced vocabulary."
-  },
-  {
-   "headword": "黎明",
-   "hsk": 7,
-   "confidence": "high",
-   "rationale": "The official HSK 3.0 wordlist authoritative lookup returned band 7 for this genuine advanced vocabulary word, with no complex grammar to elevate it further."
-  },
-  {
-   "headword": "中午",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "The lookup is authoritative: 中午 is HSK band 1 vocabulary, a simple noun denoting midday with no grammatical complexity."
-  },
-  {
-   "headword": "深夜",
-   "hsk": 7,
-   "confidence": "high",
-   "rationale": "The phrase 深夜 is marked band 7 in the official HSK 3.0 wordlist; no advanced grammar complexity applies beyond the vocabulary itself."
-  },
-  {
-   "headword": "日出",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Compositional from two HSK 1 words (日 sun, 出 exit); basic concrete vocabulary for a natural phenomenon, not advanced."
-  },
-  {
-   "headword": "日落",
-   "hsk": 2,
-   "confidence": "high",
-   "rationale": "Compositional compound of HSK-1 (日) and HSK-2 (落) with straightforward meaning; common but not absolutely basic traveller vocabulary."
-  },
-  {
-   "headword": "金钱",
-   "hsk": 6,
-   "confidence": "high",
-   "rationale": "金钱 is authoritatively band 6 in the HSK wordlist; no grammar or compositional considerations override this."
-  },
-  {
-   "headword": "多少钱？",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "All words are HSK 1 vocabulary with simple, direct grammar requiring no advanced constructions."
-  },
-  {
-   "headword": "请把价钱写下来。",
-   "hsk": 3,
-   "confidence": "high",
-   "rationale": "All vocabulary is HSK 3 or below; the 把 construction is a canonical HSK-3 grammar pattern already accounted for in its band-3 lookup, requiring no escalation above maxBand."
-  },
-  {
-   "headword": "你们收……吗？",
-   "hsk": 2,
-   "confidence": "high",
-   "rationale": "Vocabulary maxBand is 2 (收); grammar is basic interrogative form with no advanced constructions."
-  },
-  {
-   "headword": "你们收信用卡吗？",
-   "hsk": 2,
-   "confidence": "high",
-   "rationale": "All words are matched; maximal band is HSK 2 (信用卡, 收); sentence is simple S-V-O interrogative with 吗 particle, no complex grammar."
-  },
-  {
-   "headword": "你们收借记卡吗？",
-   "hsk": 2,
-   "confidence": "medium",
-   "rationale": "maxBand is 2 from 收 (accept); 借记卡 is specialized but compositional with simple S-V-O grammar, so band is 2."
-  },
-  {
-   "headword": "旅行支票你们收吗？",
-   "hsk": 7,
-   "confidence": "high",
-   "rationale": "The card's vocabulary is anchored by 支票 (cheque), an HSK 7 word; grammar is simple S-V-O with question particle, so band equals maxBand of 7."
-  },
-  {
-   "headword": "可以……吗？",
-   "hsk": 2,
-   "confidence": "high",
-   "rationale": "maxBand is 2 (可以 \"can\"); the grammar is a simple yes/no question with 吗 particle, requiring no elevation above vocabulary difficulty."
-  },
-  {
-   "headword": "可以找零吗？",
-   "hsk": 2,
-   "confidence": "high",
-   "rationale": "The card's maxBand is 2 from 可以; the unmatched word 零 (zero/change) is basic vocabulary, not advanced, so no upward adjustment is needed."
-  },
-  {
-   "headword": "可以退款吗？",
-   "hsk": 2,
-   "confidence": "high",
-   "rationale": "The phrase is anchored by 可以 (HSK 2), with 吗 (HSK 1) and unmatched 退款 composed of HSK 2 components; simple question-particle grammar confirms Band 2."
-  },
-  {
-   "headword": "可以退换这个吗？",
-   "hsk": 2,
-   "confidence": "high",
-   "rationale": "maxBand 2 from 可以; unmatched words are compositional (退换 = basic compound; 这个 = demonstrative+measure per rules); simple S-V-O grammar with question particle."
-  },
-  {
-   "headword": "我要……",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Both constituent words (我, 要) are HSK 1, and the phrase structure is elementary S-V with no complex grammar."
-  },
-  {
-   "headword": "我要兑现一张支票",
-   "hsk": 7,
-   "confidence": "high",
-   "rationale": "Two authoritative HSK 7-9 vocabulary items (兑现, 支票) dominate; simple S-V-O grammar does not elevate further."
-  },
-  {
-   "headword": "我要换旅行支票",
-   "hsk": 7,
-   "confidence": "high",
-   "rationale": "The phrase contains 支票 (cheque), an HSK 7-9 advanced vocabulary word; the simple S-V-O grammar does not exceed the vocabulary difficulty."
-  },
-  {
-   "headword": "我要换钱",
-   "hsk": 2,
-   "confidence": "high",
-   "rationale": "The hardest word is 换 (change) at HSK 2; the sentence structure is simple S-V-O with a basic modal auxiliary, so the band equals maxBand."
-  },
-  {
-   "headword": "我要现金透支",
-   "hsk": 7,
-   "confidence": "high",
-   "rationale": "The maxBand is 7 (透支 is HSK 7-9 banking vocabulary); simple S-V-O grammar does not exceed the vocabulary difficulty."
-  },
-  {
-   "headword": "我要取现金",
-   "hsk": 3,
-   "confidence": "high",
-   "rationale": "The phrase contains HSK 3 vocabulary (现金) with simple S-V-O grammar that requires no advanced structures."
-  },
-  {
-   "headword": "……在哪儿？",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Both component words are HSK 1 with simple interrogative + prepositional grammar typical of beginner survival phrases."
-  },
-  {
-   "headword": "自动取款机在哪儿？",
-   "hsk": 6,
-   "confidence": "high",
-   "rationale": "maxBand is 6 from 取款机 (ATM); the sentence structure (locative question with 在) is simple HSK 1 grammar, so the vocabulary load determines the band."
-  },
-  {
-   "headword": "换外币的地方在哪儿？",
-   "hsk": 6,
-   "confidence": "high",
-   "rationale": "外币 (foreign money) is HSK 6 vocabulary; grammar is a straightforward interrogative with no complex structures."
-  },
-  {
-   "headword": "……是多少？",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Both words (是, 多少) are HSK 1 with simple SVO interrogative grammar requiring no complexity above level 1."
-  },
-  {
-   "headword": "手续费是多少？",
-   "hsk": 6,
-   "confidence": "high",
-   "rationale": "The card is HSK 6 per the authoritative lookup of 手续费 (service charge), a financial term; the sentence structure is simple S-V-O with no grammar elevation."
-  },
-  {
-   "headword": "兑换率是多少？",
-   "hsk": 6,
-   "confidence": "medium",
-   "rationale": "The matched vocabulary is HSK 1, but 兑换率 (exchange rate) is a travel-specific intermediate-level term containing formal financial components (兑, 率) beyond beginner range.",
-   "correctedFrom": 3,
-   "correction": "Sweep: its peers 手续费是多少？and 换外币的地方在哪儿？are both HSK 6 (same financial register, same frame), and 兑 is treated as HSK 7-9 elsewhere in this deck."
-  },
-  {
-   "headword": "是……",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "The only word is 是 (HSK 1); no advanced grammar justifies elevation above maxBand."
-  },
-  {
-   "headword": "是(1200)元",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "Simple beginner price statement with only HSK-1 vocabulary (是, 元) and compositional number; no complex grammar."
-  },
-  {
-   "headword": "是免费的",
-   "hsk": 4,
-   "confidence": "high",
-   "rationale": "Simple copular construction (是 + adjective 免费 + 的) with no complex grammar; vocabulary maxBand of 4 determines the level."
-  },
-  {
-   "headword": "人民币",
-   "hsk": 3,
-   "confidence": "high",
-   "rationale": "人民币 is directly attested in the HSK 3.0 wordlist at band 3 with no grammatical complexity."
-  },
-  {
-   "headword": "元",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "元 is HSK 1 vocabulary (official RMB currency unit); maxBand is 1 with no grammatical complexity to elevate it."
-  },
-  {
-   "headword": "块",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "The official wordlist places 块 at HSK 1; no grammar raises the level above its single vocabulary component."
-  },
-  {
-   "headword": "角",
-   "hsk": 2,
-   "confidence": "high",
-   "rationale": "Single-character vocabulary matching the official HSK 2 lookup with no grammatical complexity."
-  },
-  {
-   "headword": "毛",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "毛 is an HSK-1 vocabulary word (a colloquial term for the currency unit jiao) with no grammatical complexity."
-  },
-  {
-   "headword": "分",
-   "hsk": 1,
-   "confidence": "high",
-   "rationale": "The character 分 (fen, 1/100 of a yuan) is HSK band 1 vocabulary with simple currency-definition grammar, so the card remains at maxBand 1."
-  },
-  {
-   "headword": "只",
-   "hsk": 2,
-   "confidence": "high",
-   "rationale": "Single measure word for animals with authoritative HSK 2 lookup; no grammar or compositional considerations elevate it."
-  }
- ]
+  "_about": "HSK 3.0 band per Card, the audit trail behind cards.hsk_level. Each band was adjudicated by one Haiku agent anchored to a deterministic per-word lookup against seed/mandarin/hsk30-wordlist.json; a final consistency sweep flagged 3 outliers, all reviewed and approved by the owner (see correctedFrom/correction). Band 7 = the merged HSK 7-9 advanced band; 8 and 9 are never used. Applied to the deck by scripts/level-hsk.ts.",
+  "_generated": "2026-07-13",
+  "cards": [
+    {
+      "headword": "你会说英文吗？",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "All words are official list matches with maxBand 2 (英文); grammar is simple interrogative requiring no elevation."
+    },
+    {
+      "headword": "有谁会说英文吗？",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "All words are HSK 1-2 (maxBand 2 for 英文); grammar is simple yes/no interrogation with no advanced patterns."
+    },
+    {
+      "headword": "你明白吗？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All three words (你, 明白, 吗) are HSK 1 with no advanced grammar; simple yes-no question is HSK 1 level."
+    },
+    {
+      "headword": "明白。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "maxBand is 1 from the official HSK wordlist; simple statement with no advanced grammar."
+    },
+    {
+      "headword": "我不明白。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All constituent words are HSK 1 (我, 不, 明白), and the simple subject-negation-verb structure contains no grammar complexity."
+    },
+    {
+      "headword": "我会说一点。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words are HSK 1; '一点' is a compositional measure compound (一+点) explicitly listed in the rules as HSK 1 despite null lookup, and the grammar is simple S-V-O."
+    },
+    {
+      "headword": "请用拼音写。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All matched words are HSK 1; unmatched 拼音 is compositional and practical, not advanced; grammar is simple imperative with no complex structures."
+    },
+    {
+      "headword": "请用中文写下来。",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "All words are HSK 1-3; 下来 (directional complement) determines maxBand 3; grammar is simple imperative with no complex structures."
+    },
+    {
+      "headword": "请指出书上的范句。",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "maxBand is 3 from 指出; the unmatched word 范句 is compositional (example-phrase), and grammar is simple imperative with no complex structures."
+    },
+    {
+      "headword": "(这个)是什么意思？",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "Maxband 2 is justified by 意思; unmatched 这个 is compositional HSK-1 demonstrative and does not elevate the band."
+    },
+    {
+      "headword": "怎么念这个？",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "Vocabulary maxBand is 3 from 念 (pronounce); 这个 is compositional; grammar is simple question syntax."
+    },
+    {
+      "headword": "怎么写\"熊猫\"？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All matched vocabulary is HSK 1; 熊猫 (panda) is basic animal vocabulary, not advanced; grammar is a simple HSK-1 question."
+    },
+    {
+      "headword": "请你再说一遍？",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "All words present in official wordlist with maxBand 2 (遍); simple imperative grammar requires no elevation."
+    },
+    {
+      "headword": "请你慢一点说？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All matched words are HSK 1, the null word 一点 is a compositional elementary phrase, and the polite imperative grammar is straightforward with no complex constructions."
+    },
+    {
+      "headword": "可以请你写下来吗？",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "Maxband 3 from 下来 (xiàlái, resultative complement); grammar is standard HSK-3 polite-request structure without advanced constructions."
+    },
+    {
+      "headword": "数字与数量",
+      "hsk": 6,
+      "confidence": "high",
+      "rationale": "The conjunction 与 is HSK-6 vocabulary; though the phrase is conceptually simple, the vocabulary load determines the band."
+    },
+    {
+      "headword": "基数",
+      "hsk": 4,
+      "confidence": "medium",
+      "rationale": "The compound is absent from the wordlist; 基 (base) is HSK 5 and forms the hardest component; the specialized but compositional term is therefore HSK 5.",
+      "correctedFrom": 5,
+      "correction": "Sweep: aligned with its twin 序数 (ordinal numbers, HSK 4) — both metalinguistic header terms absent from the wordlist."
+    },
+    {
+      "headword": "零",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "零 is a fundamental numeral unattested in HSK 3.0 but functionally equivalent to basic HSK-1 numerals and essential for beginner communication."
+    },
+    {
+      "headword": "一",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Fundamental HSK-1 numeral; the lookup is authoritative and matches maxBand directly."
+    },
+    {
+      "headword": "二",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "二 is a basic HSK-1 number with no grammar complexity; maxBand lookup confirms band 1."
+    },
+    {
+      "headword": "三",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Basic numeral directly matched to HSK 1 in the official wordlist with no grammatical complexity."
+    },
+    {
+      "headword": "四",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "四 is a basic HSK 1 number with no grammar complexity."
+    },
+    {
+      "headword": "五",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "This is a basic numeral from HSK 1; the lookup is authoritative with no grammatical complexity."
+    },
+    {
+      "headword": "六",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Official HSK 1 lookup with maxBand 1; basic single-digit number with no complex grammar."
+    },
+    {
+      "headword": "七",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "The character 七 (seven) is a basic number word appearing in HSK 1 vocabulary with no grammatical complexity; the lookup confirms band 1."
+    },
+    {
+      "headword": "八",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "八 is HSK 1 basic vocabulary (the number 8), with no grammatical elevation needed."
+    },
+    {
+      "headword": "九",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "The numeral 九 (9) is assigned band 1 in the official HSK 3.0 wordlist as a foundational basic numeral."
+    },
+    {
+      "headword": "十",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "十 is listed as HSK 1 in the official wordlist; fundamental number/counting word with no grammar complexity."
+    },
+    {
+      "headword": "十一",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Compositional number built from HSK-1 parts (十 + 一); rule explicitly assigns such compounds to HSK 1."
+    },
+    {
+      "headword": "十二",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "十二 is a compositional number built from HSK-1 parts (十+二); absent from wordlist but clearly beginner-level vocabulary."
+    },
+    {
+      "headword": "十三",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Compositional number built from HSK-1 parts (十 + 三), not advanced vocabulary."
+    },
+    {
+      "headword": "十四",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "十四 is a compositional number built from HSK-1 parts (十 + 四), which per Rule 3 are HSK 1 regardless of wordlist absence."
+    },
+    {
+      "headword": "十五",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "十五 is a compositional number built from HSK-1 words (十 + 五) and does not require inflating to a higher band despite wordlist absence."
+    },
+    {
+      "headword": "十六",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Compositional number built from HSK-1 parts (十 + 六)."
+    },
+    {
+      "headword": "十七",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Compositional number built from HSK-1 parts (十 + 七); follows the explicit rule that numbers composed from HSK-1 elements are HSK 1."
+    },
+    {
+      "headword": "十八",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Compositional number built from HSK-1 components (十 + 八); nulled entries for composite numbers are EASY, not hard."
+    },
+    {
+      "headword": "十九",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Compositional number built from HSK-1 parts (十+九), following the established pattern for basic numerals; null lookup should not inflate the band."
+    },
+    {
+      "headword": "二十",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Compositional number from HSK-1 words 二 (two) + 十 (ten); applies Rule 3 exception for numbers built from basic parts."
+    },
+    {
+      "headword": "二十一",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Compositional number built from HSK-1 parts (二+十+一); such basic numerals are HSK 1."
+    },
+    {
+      "headword": "二十二",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "The number 二十二 is compositionally built from HSK-1 words (二, 十), making it HSK 1 despite the wordlist entry being null."
+    },
+    {
+      "headword": "三十",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Compositional number formed from HSK-1 words 三 and 十; explicitly listed as HSK 1 in the guidelines."
+    },
+    {
+      "headword": "四十",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "This is a compositional number built from two HSK-1 words (四 four + 十 ten), making it HSK 1 despite missing from the official wordlist."
+    },
+    {
+      "headword": "五十",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Compositional number built from HSK-1 parts (五 + 十); standard pattern like 三十."
+    },
+    {
+      "headword": "六十",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Compositional number built from HSK-1 parts (六 + 十); numbers formed this way are HSK 1."
+    },
+    {
+      "headword": "七十",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "七十 is a compositional number made from HSK-1 words 七 and 十, hence HSK 1."
+    },
+    {
+      "headword": "八十",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Compositional number from HSK-1 parts (八 + 十); numbers built from basic components are beginner-level regardless of wordlist coverage."
+    },
+    {
+      "headword": "九十",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "A compositional number (nine + ten) built entirely from HSK-1 parts, following the same pattern as 三十 and 二十二."
+    },
+    {
+      "headword": "一百",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Compositional number built from HSK-1 parts (一 + 百); follows the standard pattern for HSK-1 numerals."
+    },
+    {
+      "headword": "一百零一",
+      "hsk": 1,
+      "confidence": "medium",
+      "rationale": "Compositional number using basic HSK-1 parts (一, 百) and the fundamental zero (零); straightforward for any learner with basic counting vocabulary."
+    },
+    {
+      "headword": "一百零三",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Compositional number built entirely from HSK-1 parts (一+百+零+三); rule 3 explicitly classifies such numbers as HSK 1."
+    },
+    {
+      "headword": "一百一十三",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Compositional number built from HSK-1 numerals; basic number-formation is level 1 vocabulary."
+    },
+    {
+      "headword": "一百二十二",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Compositional number built entirely from HSK-1 parts (一, 百, 二, 十); per Rule 3, such numbers are HSK 1 despite wordlist absence."
+    },
+    {
+      "headword": "两百",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Compositional number built from HSK-1 parts (两 two + 百 hundred), matching the pattern of 十一, 三十, etc. standard in beginner phrasebooks."
+    },
+    {
+      "headword": "一千",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Compositional number (一 + 千) built entirely from basic HSK-1 number parts; both components are fundamental to the Chinese counting system."
+    },
+    {
+      "headword": "一万",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Compositional number (one × ten-thousand unit) built from HSK-1 parts; treat as HSK 1 per guidance."
+    },
+    {
+      "headword": "一百万",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Number built from HSK-1 parts (一+百+万); compositional, beginner-level vocabulary."
+    },
+    {
+      "headword": "一亿",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Compositional number (one + hundred-million unit); both components are basic number vocabulary, not advanced."
+    },
+    {
+      "headword": "序数",
+      "hsk": 4,
+      "confidence": "medium",
+      "rationale": "序 is not HSK 1-3 vocabulary; the formal term 序数 for ordinal numbers is pedagogically introduced after basic ordinals (第一, 第二, etc.) and belongs to HSK 4+."
+    },
+    {
+      "headword": "第一",
+      "hsk": 1,
+      "confidence": "medium",
+      "rationale": "Compositional ordinal from 第 (HSK 2 ordinal prefix) and 一 (HSK 1), making this common word HSK 2.",
+      "correctedFrom": 2,
+      "correction": "Sweep: aligned with its four siblings 第二/第三/第四/第五, all HSK 1 with the identical 第+numeral structure."
+    },
+    {
+      "headword": "第二",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Both component words are HSK 1, and the phrase is a simple compositional ordinal with no complex grammar."
+    },
+    {
+      "headword": "第三",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Both component words (第 and 三) are HSK 1 vocabulary; the compound is a simple compositional ordinal with no advanced grammar."
+    },
+    {
+      "headword": "第四",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "第四 is a compositional ordinal (第 + 四); ordinal numbers are fundamental beginner vocabulary even though 第 is not explicitly listed in HSK wordlist, and are essential for traveller phrasebook contexts."
+    },
+    {
+      "headword": "第五",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Both words are HSK 1, and the ordinal construction (第 + number) is elementary grammar."
+    },
+    {
+      "headword": "百分比",
+      "hsk": 7,
+      "confidence": "high",
+      "rationale": "The word \"百分比\" is looked up at HSK band 7 in the official wordlist; vocabulary load determines the band."
+    },
+    {
+      "headword": "四分之一",
+      "hsk": 7,
+      "confidence": "high",
+      "rationale": "Straightforward compositional phrase; vocabulary load determined by 之 (of), which is HSK 7-9."
+    },
+    {
+      "headword": "三分之一",
+      "hsk": 7,
+      "confidence": "high",
+      "rationale": "The phrase contains 之 (of), an advanced HSK 7 genitive particle; though fractions feel elementary, the vocabulary lookup is authoritative and must not be softened for simple context."
+    },
+    {
+      "headword": "一半",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "一半 is in the official HSK 3.0 wordlist at band 1, an elementary fraction word with no grammar complexity."
+    },
+    {
+      "headword": "四分之三",
+      "hsk": 7,
+      "confidence": "high",
+      "rationale": "The classical particle 之 is HSK 7; no grammatical complexity elevates the phrase above maxBand."
+    },
+    {
+      "headword": "所有",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "The word 所有 is found in the official HSK 3.0 wordlist at band 2, with no grammatical complexity to warrant elevation."
+    },
+    {
+      "headword": "没有",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Both component words are HSK 1, and the negation phrase is a fundamental beginner construction with no advanced grammar."
+    },
+    {
+      "headword": "量词",
+      "hsk": 4,
+      "confidence": "high",
+      "rationale": "The card contains 量 (HSK 4, the hardest component) and 词 (HSK 2); maxBand = 4 with no complicating grammar or null words."
+    },
+    {
+      "headword": "个",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "个 is the foundational generic measure word, officially HSK 1, with no grammatical complexity beyond its basic classifier function."
+    },
+    {
+      "headword": "张",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "Measure word for flat objects, looked up at HSK 3 in the official wordlist with no grammatical complexity."
+    },
+    {
+      "headword": "条",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "条 is HSK 2 per the official wordlist, a straightforward measure word for long objects with no grammatical complexity."
+    },
+    {
+      "headword": "位",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "Single HSK-2 word with no complex grammar; the authoritative looked-up band is maxBand."
+    },
+    {
+      "headword": "座",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "Single HSK-2 measure word with no grammatical complexity."
+    },
+    {
+      "headword": "常用数量",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "Simple noun phrase; maxBand is 3 from 数量 with no grammatical complexity above vocabulary."
+    },
+    {
+      "headword": "多少？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Both component words are HSK 1, and the phrase is an elementary question requiring no advanced grammar."
+    },
+    {
+      "headword": "几个？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Both words (几 and 个) are HSK 1 with no complex grammar; maxBand of 1 is correct for this basic interrogative phrase."
+    },
+    {
+      "headword": "请给我……",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All component words are HSK 1 with simple imperative grammar; no complexity beyond vocabulary."
+    },
+    {
+      "headword": "请给我 (50) 克",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "All words are HSK 1–2 with simple imperative structure; maxBand of 2 (克, grams) is the appropriate level."
+    },
+    {
+      "headword": "请给我 1 两",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All component words are HSK 1 fundamentals; simple imperative request with no advanced grammar."
+    },
+    {
+      "headword": "请给我 1 斤",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "The phrase's hardest word is 斤 (measure word for weight) at HSK 2, with elementary grammar and no elevating factors."
+    },
+    {
+      "headword": "请给我一瓶",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "maxBand is 2 from 瓶 (bottle); grammar is basic S-V-O with simple measure word construction, no elevation needed."
+    },
+    {
+      "headword": "请给我一打",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words are HSK 1; simple polite-imperative structure with no advanced grammar."
+    },
+    {
+      "headword": "请给我一些",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All four component words (请, 给, 我, 一些) are HSK 1; the sentence structure is simple S-V-O with no complex grammar, resultatives, or embedding."
+    },
+    {
+      "headword": "请给我一罐",
+      "hsk": 7,
+      "confidence": "high",
+      "rationale": "Vocabulary load determined by 罐 (HSK 7); straightforward imperative grammar does not elevate above vocabulary level."
+    },
+    {
+      "headword": "请给我 1 公斤",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "Maximal vocabulary difficulty is 公斤 (kilogram, HSK 2); grammar is simple imperative; unmatched numeral is compositional."
+    },
+    {
+      "headword": "请给我少一点",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All matched words are HSK 1; \"一点\" is a compositional quantifier (一+点, both HSK 1); grammar is a simple imperative with no complex structures."
+    },
+    {
+      "headword": "请给我一小块",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All component words are HSK 1, and the sentence is a simple imperative with no complex grammar."
+    },
+    {
+      "headword": "请给我好多",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "Maxband is 2 (好多 is HSK 2); grammar is straightforward imperative with no complex structures, so no upward adjustment needed."
+    },
+    {
+      "headword": "请给我许多",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "All words matched (许多 at band 2 is the hardest); simple imperative grammar with no complex structures."
+    },
+    {
+      "headword": "请给我多一些",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All vocabulary is HSK 1 with no advanced grammar; a simple, fundamental traveller phrase."
+    },
+    {
+      "headword": "请给我一盒",
+      "hsk": 5,
+      "confidence": "high",
+      "rationale": "Vocabulary is HSK 1–5 with 盒 at Band 5 as the hardest word; simple imperative grammar with no complexity."
+    },
+    {
+      "headword": "请给我一块",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All five words are HSK 1 with no compositional nulls; simple imperative structure (S-V-O) with no grammatical complexity."
+    },
+    {
+      "headword": "请给我一听",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All vocabulary is HSK 1 with simple imperative grammar."
+    },
+    {
+      "headword": "时间与日期",
+      "hsk": 6,
+      "confidence": "high",
+      "rationale": "The word 与 (Band 6, formal conjunction) is the hardest component, and the simple noun-conjunction-noun structure introduces no grammatical complexity beyond vocabulary."
+    },
+    {
+      "headword": "说时间",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Both constituent words (说 and 时间) are HSK 1 with straightforward verb-object grammar, no elevating structures."
+    },
+    {
+      "headword": "现在几点钟？",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "钟 is HSK 3; grammar is simple interrogative with no complex constructions; 几点 (unmatched) is a basic compositional word."
+    },
+    {
+      "headword": "(一)点钟。",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "The maxBand is 3 from 钟 (clock), and simple time-telling grammar contains no construction more advanced than the vocabulary."
+    },
+    {
+      "headword": "(十)点五分。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All four words are HSK 1 basic vocabulary (numbers and time markers); grammar is simple composition with no advanced structures."
+    },
+    {
+      "headword": "(十)点十五分。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words are HSK 1 or compositional numbers (十五 = 十+五); simple time-telling structure with no complex grammar."
+    },
+    {
+      "headword": "(十)点三十分。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Simple time expression; the null 三十 is compositional (三+十, both HSK 1), so the card remains at maxBand 1 with no grammar elevation."
+    },
+    {
+      "headword": "(十)点四十分。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All vocabulary is HSK 1 or compositional numbers built from HSK-1 parts; simple time-telling structure with no advanced grammar."
+    },
+    {
+      "headword": "(十)点四十五分。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All matched words are HSK 1 (十, 点, 分); unmatched 四十五 is a compositional number built entirely from HSK-1 numerals (four, ten, five) with no grammar complexity."
+    },
+    {
+      "headword": "早上",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "早上 is a straightforward HSK 1 noun with no complex grammar or advanced vocabulary."
+    },
+    {
+      "headword": "晚上",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "晚上 is an HSK 1 word listed with band 1; no grammar or vocabulary complexity warrants elevation above maxBand."
+    },
+    {
+      "headword": "什么时候(开始)？",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "The maxBand of 3 from 开始 (start) is authoritative; the grammar is simple interrogative formation with no complex structures that would elevate the band."
+    },
+    {
+      "headword": "十点钟(开始)。",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "Vocabulary is led by 开始 at HSK 3; 点钟 (not in list) is a basic time-telling compound, not advanced."
+    },
+    {
+      "headword": "(晚上9点57分)开始。",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "Card contains HSK 1 time words (晚上, 点, 分) and two compositional numbers (9 = 九, 57 = 五十七) plus 开始 (start, HSK 3); simple S-V structure with no grammar above vocabulary level."
+    },
+    {
+      "headword": "日历",
+      "hsk": 4,
+      "confidence": "high",
+      "rationale": "The headword 日历 is matched in the official HSK 3.0 wordlist at band 4; no grammar complexity overrides this."
+    },
+    {
+      "headword": "星期一",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Both component words (星期, 一) are HSK 1, and the compound exhibits no grammatical complexity beyond simple juxtaposition."
+    },
+    {
+      "headword": "星期二",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Both component words (星期 and 二) are HSK 1 with no complex grammar, making this a basic beginner day-of-week phrase."
+    },
+    {
+      "headword": "星期三",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Simple day-of-week phrase composed of 星期 (HSK 1) + 三 (HSK 1); no complex grammar, matches compositional date/time pattern in Rule 3."
+    },
+    {
+      "headword": "星期四",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Simple compositional day-of-week compound formed from HSK-1 parts (星期 + 四), matching the maxBand lookup."
+    },
+    {
+      "headword": "星期五",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Both component words (星期 week, 五 five) are HSK 1; the phrase is a simple compositional day-of-week name with no elevated grammar."
+    },
+    {
+      "headword": "星期六",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Both component words (星期 and 六) are HSK 1; this is a simple compositional day-of-week phrase with no grammar complexity."
+    },
+    {
+      "headword": "星期天",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Both component words (星期 and 天) are HSK Band 1, and this compositional day-of-week phrase matches the vocabulary level of beginner learners."
+    },
+    {
+      "headword": "一月",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "一月 (January) is compositional from HSK 1 words: 一 (one) + 月 (month), matching the rule example for dates/months."
+    },
+    {
+      "headword": "二月",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Compositional date phrase built from two HSK-1 words (二 \"two\" + 月 \"month\"); no complex grammar."
+    },
+    {
+      "headword": "三月",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Compositional month name (three + month) built from HSK 1 words with no grammatical complexity."
+    },
+    {
+      "headword": "四月",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Month compound built from HSK-1 parts (四 + 月), analogous to the 五月/六月 examples in rule 3."
+    },
+    {
+      "headword": "五月",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Compositional date compound (五 five + 月 month) built from HSK-1 parts, matching the explicit example in Rule 3."
+    },
+    {
+      "headword": "六月",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "六月 is compositional: built from HSK-1 words 六 (six) and 月 (month); dates/months from HSK-1 parts are HSK 1."
+    },
+    {
+      "headword": "七月",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Compositional date formed from HSK-1 parts (七 + 月); dates/months built from HSK-1 parts are HSK 1."
+    },
+    {
+      "headword": "八月",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Compositional month word (eight + month) built entirely from HSK-1 components; no grammar complexity raises the band."
+    },
+    {
+      "headword": "九月",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Compositional month name (九 + 月, both official HSK 1), no grammatical complexity, matches the explicitly covered case in rule 3."
+    },
+    {
+      "headword": "十月",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Compositional month name built entirely from HSK-1 parts (十 + 月); no grammar complexity."
+    },
+    {
+      "headword": "十一月",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Compositional date word (ten + one + month) with all three HSK-1 components and no grammatical complexity."
+    },
+    {
+      "headword": "十二月",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Compositional month/date built from three HSK-1 words (十, 二, 月); no complex grammar elevates it beyond maxBand of 1."
+    },
+    {
+      "headword": "今天几号？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All three component words (今天, 几, 号) are HSK 1, and the sentence is a simple interrogative with no advanced grammar."
+    },
+    {
+      "headword": "(十月十八号)。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Date phrase composed entirely of HSK 1 vocabulary; 十月 and 十八 are compositional numbers/months built from HSK-1 parts (十, 八, 月) and treated as HSK 1 per rule 3."
+    },
+    {
+      "headword": "春天",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "春天 is a foundational seasonal term looked up as HSK 2 in the official wordlist with no grammatical complexity warranting a higher band."
+    },
+    {
+      "headword": "夏天",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "\"夏天\" (summer) is in the official HSK 3.0 wordlist at band 2; no grammar complexity warrants elevation."
+    },
+    {
+      "headword": "秋天",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "秋天 is listed in the HSK 3.0 wordlist as band 2; it is a straightforward noun with no grammatical complexity or higher-band vocabulary."
+    },
+    {
+      "headword": "冬天",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "冬天 is officially HSK 2 vocabulary with no grammatical complexity."
+    },
+    {
+      "headword": "目前时态",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "目前 is authoritatively HSK 3; 时态 (tense) is a compositional term absent from the wordlist but not genuinely advanced enough to exceed the maxBand."
+    },
+    {
+      "headword": "现在",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "The word is looked up as HSK 1 in the official list with no unmatched words or grammar that would elevate it."
+    },
+    {
+      "headword": "这个……",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Both 这 and 个 are HSK 1 words; this is a simple demonstrative+measure construction with no advanced grammar."
+    },
+    {
+      "headword": "这个下午",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All three component words are HSK 1 with no advanced grammar; this is an elementary compositional time expression."
+    },
+    {
+      "headword": "这个月",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Compositional demonstrative + measure word + month noun (这 + 个 + 月), all HSK-1 components with no grammatical complexity beyond basic noun phrase formation."
+    },
+    {
+      "headword": "这个早上",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "A simple demonstrative phrase composed entirely of HSK 1 vocabulary (这 + 个 + 早上) with no complex grammar."
+    },
+    {
+      "headword": "这个上午",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All three component words (这, 个, 上午) are HSK 1; the demonstrative+measure+noun structure is basic beginner grammar with no complexity."
+    },
+    {
+      "headword": "这个星期",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All three component words are HSK-1 vocabulary, and the phrase uses only basic demonstrative-noun syntax with no complex grammar."
+    },
+    {
+      "headword": "今年",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Official HSK 3.0 wordlist confirms 今年 as band 1, a basic temporal expression with no grammar complexity."
+    },
+    {
+      "headword": "今天",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "The word 今天 is listed as HSK 1 in the official wordlist; a simple time noun with no complex grammar warrants no elevation."
+    },
+    {
+      "headword": "今天晚上",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Both component words (今天, 晚上) are HSK 1 with straightforward noun composition requiring no advanced grammar."
+    },
+    {
+      "headword": "过去时间",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "Straightforward compound noun with no grammatical complexity; maxBand 2 from 过去 is the determining factor."
+    },
+    {
+      "headword": "(三天)以前",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "Vocabulary load determined by 以前 (HSK 2); simple temporal phrase with no complex grammar."
+    },
+    {
+      "headword": "前天",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "The phrase \"前天\" is officially listed as HSK 1 in the wordlist; it is a basic temporal reference with no advanced grammar."
+    },
+    {
+      "headword": "昨天晚上",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Both component words (昨天, 晚上) are HSK 1 with simple noun-stacking grammar requiring no elevation above maxBand."
+    },
+    {
+      "headword": "上星期",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Both component words (上, 星期) are HSK 1; simple modifier-noun construction with no advanced grammar."
+    },
+    {
+      "headword": "上个月",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All three component words are HSK 1 vocabulary (上, 个, 月); the structure is a simple noun phrase with no complex grammar."
+    },
+    {
+      "headword": "去年",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "The word 去年 is in the official HSK 3.0 wordlist at band 1; it is a simple temporal noun with no grammatical complexity."
+    },
+    {
+      "headword": "从(五月)以来",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "以来 (HSK 3) is the hardest component; 五月 is compositional (五+月, both HSK 1); grammar is standard temporal phrasing requiring no grammatical complexity beyond the vocabulary."
+    },
+    {
+      "headword": "昨天……",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "昨天 is an HSK 1 time adverbial with no advanced grammar; maxBand is authoritative."
+    },
+    {
+      "headword": "将来时",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "Both component words are HSK 3; the phrase is a simple nominal compound with no advanced grammar."
+    },
+    {
+      "headword": "后天",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "后天 is officially HSK 1 vocabulary (basic time expression for travelers), with no grammatical complexity warranting elevation above maxBand."
+    },
+    {
+      "headword": "(六天)以后",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "Simple compositional time phrase: HSK-1 number+day (六天) + HSK-2 after-marker (以后) with no advanced grammar, matching maxBand of 2."
+    },
+    {
+      "headword": "下星期",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Both component words (下 and 星期) are HSK 1; the composition uses simple temporal modification with no advanced grammar."
+    },
+    {
+      "headword": "下个月",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All three component words (下, 个, 月) are HSK 1 vocabulary with simple measure-word grammar."
+    },
+    {
+      "headword": "明年",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "明年 is looked up and confirmed as HSK 1 in the official wordlist; straightforward temporal noun with no complex grammar."
+    },
+    {
+      "headword": "明天……",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "明天 is HSK 1 vocabulary from the official wordlist with no complex grammar or null words to escalate difficulty."
+    },
+    {
+      "headword": "到(六月)为止",
+      "hsk": 5,
+      "confidence": "high",
+      "rationale": "The maxBand is 5 from \"为止\" (wéizhǐ); the unmatched word \"六月\" is compositional (six + month, both HSK 1); the temporal phrase construction is straightforward."
+    },
+    {
+      "headword": "从早到晚",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All component words are HSK 1 and the structure (从...到...) is beginner-level temporal marking with no complex grammar."
+    },
+    {
+      "headword": "白天",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Official HSK wordlist lookup returns band 1 for 白天 (day/daytime); no grammar complications or advanced vocabulary."
+    },
+    {
+      "headword": "黎明",
+      "hsk": 7,
+      "confidence": "high",
+      "rationale": "The official HSK 3.0 wordlist authoritative lookup returned band 7 for this genuine advanced vocabulary word, with no complex grammar to elevate it further."
+    },
+    {
+      "headword": "中午",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "The lookup is authoritative: 中午 is HSK band 1 vocabulary, a simple noun denoting midday with no grammatical complexity."
+    },
+    {
+      "headword": "深夜",
+      "hsk": 7,
+      "confidence": "high",
+      "rationale": "The phrase 深夜 is marked band 7 in the official HSK 3.0 wordlist; no advanced grammar complexity applies beyond the vocabulary itself."
+    },
+    {
+      "headword": "日出",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Compositional from two HSK 1 words (日 sun, 出 exit); basic concrete vocabulary for a natural phenomenon, not advanced."
+    },
+    {
+      "headword": "日落",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "Compositional compound of HSK-1 (日) and HSK-2 (落) with straightforward meaning; common but not absolutely basic traveller vocabulary."
+    },
+    {
+      "headword": "金钱",
+      "hsk": 6,
+      "confidence": "high",
+      "rationale": "金钱 is authoritatively band 6 in the HSK wordlist; no grammar or compositional considerations override this."
+    },
+    {
+      "headword": "多少钱？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words are HSK 1 vocabulary with simple, direct grammar requiring no advanced constructions."
+    },
+    {
+      "headword": "请把价钱写下来。",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "All vocabulary is HSK 3 or below; the 把 construction is a canonical HSK-3 grammar pattern already accounted for in its band-3 lookup, requiring no escalation above maxBand."
+    },
+    {
+      "headword": "你们收……吗？",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "Vocabulary maxBand is 2 (收); grammar is basic interrogative form with no advanced constructions."
+    },
+    {
+      "headword": "你们收信用卡吗？",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "All words are matched; maximal band is HSK 2 (信用卡, 收); sentence is simple S-V-O interrogative with 吗 particle, no complex grammar."
+    },
+    {
+      "headword": "你们收借记卡吗？",
+      "hsk": 2,
+      "confidence": "medium",
+      "rationale": "maxBand is 2 from 收 (accept); 借记卡 is specialized but compositional with simple S-V-O grammar, so band is 2."
+    },
+    {
+      "headword": "旅行支票你们收吗？",
+      "hsk": 7,
+      "confidence": "high",
+      "rationale": "The card's vocabulary is anchored by 支票 (cheque), an HSK 7 word; grammar is simple S-V-O with question particle, so band equals maxBand of 7."
+    },
+    {
+      "headword": "可以……吗？",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "maxBand is 2 (可以 \"can\"); the grammar is a simple yes/no question with 吗 particle, requiring no elevation above vocabulary difficulty."
+    },
+    {
+      "headword": "可以找零吗？",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "The card's maxBand is 2 from 可以; the unmatched word 零 (zero/change) is basic vocabulary, not advanced, so no upward adjustment is needed."
+    },
+    {
+      "headword": "可以退款吗？",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "The phrase is anchored by 可以 (HSK 2), with 吗 (HSK 1) and unmatched 退款 composed of HSK 2 components; simple question-particle grammar confirms Band 2."
+    },
+    {
+      "headword": "可以退换这个吗？",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "maxBand 2 from 可以; unmatched words are compositional (退换 = basic compound; 这个 = demonstrative+measure per rules); simple S-V-O grammar with question particle."
+    },
+    {
+      "headword": "我要……",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Both constituent words (我, 要) are HSK 1, and the phrase structure is elementary S-V with no complex grammar."
+    },
+    {
+      "headword": "我要兑现一张支票",
+      "hsk": 7,
+      "confidence": "high",
+      "rationale": "Two authoritative HSK 7-9 vocabulary items (兑现, 支票) dominate; simple S-V-O grammar does not elevate further."
+    },
+    {
+      "headword": "我要换旅行支票",
+      "hsk": 7,
+      "confidence": "high",
+      "rationale": "The phrase contains 支票 (cheque), an HSK 7-9 advanced vocabulary word; the simple S-V-O grammar does not exceed the vocabulary difficulty."
+    },
+    {
+      "headword": "我要换钱",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "The hardest word is 换 (change) at HSK 2; the sentence structure is simple S-V-O with a basic modal auxiliary, so the band equals maxBand."
+    },
+    {
+      "headword": "我要现金透支",
+      "hsk": 7,
+      "confidence": "high",
+      "rationale": "The maxBand is 7 (透支 is HSK 7-9 banking vocabulary); simple S-V-O grammar does not exceed the vocabulary difficulty."
+    },
+    {
+      "headword": "我要取现金",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "The phrase contains HSK 3 vocabulary (现金) with simple S-V-O grammar that requires no advanced structures."
+    },
+    {
+      "headword": "……在哪儿？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Both component words are HSK 1 with simple interrogative + prepositional grammar typical of beginner survival phrases."
+    },
+    {
+      "headword": "自动取款机在哪儿？",
+      "hsk": 6,
+      "confidence": "high",
+      "rationale": "maxBand is 6 from 取款机 (ATM); the sentence structure (locative question with 在) is simple HSK 1 grammar, so the vocabulary load determines the band."
+    },
+    {
+      "headword": "换外币的地方在哪儿？",
+      "hsk": 6,
+      "confidence": "high",
+      "rationale": "外币 (foreign money) is HSK 6 vocabulary; grammar is a straightforward interrogative with no complex structures."
+    },
+    {
+      "headword": "……是多少？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Both words (是, 多少) are HSK 1 with simple SVO interrogative grammar requiring no complexity above level 1."
+    },
+    {
+      "headword": "手续费是多少？",
+      "hsk": 6,
+      "confidence": "high",
+      "rationale": "The card is HSK 6 per the authoritative lookup of 手续费 (service charge), a financial term; the sentence structure is simple S-V-O with no grammar elevation."
+    },
+    {
+      "headword": "兑换率是多少？",
+      "hsk": 6,
+      "confidence": "medium",
+      "rationale": "The matched vocabulary is HSK 1, but 兑换率 (exchange rate) is a travel-specific intermediate-level term containing formal financial components (兑, 率) beyond beginner range.",
+      "correctedFrom": 3,
+      "correction": "Sweep: its peers 手续费是多少？and 换外币的地方在哪儿？are both HSK 6 (same financial register, same frame), and 兑 is treated as HSK 7-9 elsewhere in this deck."
+    },
+    {
+      "headword": "是……",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "The only word is 是 (HSK 1); no advanced grammar justifies elevation above maxBand."
+    },
+    {
+      "headword": "是(1200)元",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Simple beginner price statement with only HSK-1 vocabulary (是, 元) and compositional number; no complex grammar."
+    },
+    {
+      "headword": "是免费的",
+      "hsk": 4,
+      "confidence": "high",
+      "rationale": "Simple copular construction (是 + adjective 免费 + 的) with no complex grammar; vocabulary maxBand of 4 determines the level."
+    },
+    {
+      "headword": "人民币",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "人民币 is directly attested in the HSK 3.0 wordlist at band 3 with no grammatical complexity."
+    },
+    {
+      "headword": "元",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "元 is HSK 1 vocabulary (official RMB currency unit); maxBand is 1 with no grammatical complexity to elevate it."
+    },
+    {
+      "headword": "块",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "The official wordlist places 块 at HSK 1; no grammar raises the level above its single vocabulary component."
+    },
+    {
+      "headword": "角",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "Single-character vocabulary matching the official HSK 2 lookup with no grammatical complexity."
+    },
+    {
+      "headword": "毛",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "毛 is an HSK-1 vocabulary word (a colloquial term for the currency unit jiao) with no grammatical complexity."
+    },
+    {
+      "headword": "分",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "The character 分 (fen, 1/100 of a yuan) is HSK band 1 vocabulary with simple currency-definition grammar, so the card remains at maxBand 1."
+    },
+    {
+      "headword": "只",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "Single measure word for animals with authoritative HSK 2 lookup; no grammar or compositional considerations elevate it."
+    },
+    {
+      "headword": "到杭州坐什么船？",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "船 is HSK 2; the 到…坐什么 frame is HSK 1 grammar."
+    },
+    {
+      "headword": "到杭州坐什么车？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words are HSK 1 (到, 坐, 什么, 车) in a simple question frame."
+    },
+    {
+      "headword": "到杭州坐什么飞机？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words are HSK 1 (飞机 included); simple 到…坐什么 question."
+    },
+    {
+      "headword": "到杭州坐什么火车？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words are HSK 1 (火车 included); simple 到…坐什么 question."
+    },
+    {
+      "headword": "这个船到杭州去吗？",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "船 is HSK 2; 这个 is a transparent 这+个 compound and does not raise the band."
+    },
+    {
+      "headword": "这个车到杭州去吗？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words are HSK 1; 这个 is a transparent compound."
+    },
+    {
+      "headword": "这个飞机到杭州去吗？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words are HSK 1; 这个 is a transparent compound."
+    },
+    {
+      "headword": "这个火车到杭州去吗？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words are HSK 1; 这个 is a transparent compound."
+    },
+    {
+      "headword": "首班车几点走？",
+      "hsk": 4,
+      "confidence": "high",
+      "rationale": "首 is HSK 4 and 班车 is off-list mid-frequency transport vocabulary; 几点 is transparent."
+    },
+    {
+      "headword": "末班车几点走？",
+      "hsk": 4,
+      "confidence": "medium",
+      "rationale": "末班车 is off-list transport vocabulary banded with its pair 首班车 at 4."
+    },
+    {
+      "headword": "下一趟车几点走？",
+      "hsk": 6,
+      "confidence": "high",
+      "rationale": "The measure word 趟 is HSK 6 and sets the band."
+    },
+    {
+      "headword": "几点钟出发？",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "出发 is HSK 2; 点钟 is a transparent 点+钟 compound."
+    },
+    {
+      "headword": "几点钟到杭州？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words are HSK 1; 点钟 is a transparent compound."
+    },
+    {
+      "headword": "推迟多久？",
+      "hsk": 4,
+      "confidence": "high",
+      "rationale": "推迟 is HSK 4 and sets the band."
+    },
+    {
+      "headword": "这儿有人吗？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All four words are HSK 1 in a simple existential question."
+    },
+    {
+      "headword": "有人？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Both words are HSK 1; elliptical two-word question."
+    },
+    {
+      "headword": "那是我的座位。",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "座位 is HSK 2; the 那是我的… frame is HSK 1 grammar."
+    },
+    {
+      "headword": "到了杭州请叫我，好吗？",
+      "hsk": 2,
+      "confidence": "medium",
+      "rationale": "All words are HSK 1, but the 到了…请… conditional-sequence frame with a 好吗 tag pushes it to 2."
+    },
+    {
+      "headword": "我想这儿下车。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words are HSK 1 in a simple 想 + verb phrase."
+    },
+    {
+      "headword": "在这里停多久？",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "停 and 多久 are HSK 2 and set the band."
+    },
+    {
+      "headword": "还要等人吗？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words are HSK 1; 还要 is a transparent 还+要 compound."
+    },
+    {
+      "headword": "请带我到城里转一圈。",
+      "hsk": 5,
+      "confidence": "high",
+      "rationale": "城里 is HSK 5; 一圈 is a transparent measure phrase."
+    },
+    {
+      "headword": "车上能坐多少人？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words are HSK 1 in a simple 能 + quantity question."
+    },
+    {
+      "headword": "哪里买票？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All three words are HSK 1."
+    },
+    {
+      "headword": "要先订票吗？",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "订 is HSK 3 and sets the band."
+    },
+    {
+      "headword": "一张到大连的头等票。",
+      "hsk": 4,
+      "confidence": "medium",
+      "rationale": "头等票 is off-list ticket-class vocabulary; the ticket-class family is banded coherently at 4."
+    },
+    {
+      "headword": "一张到大连的二等票。",
+      "hsk": 4,
+      "confidence": "medium",
+      "rationale": "二等 is off-list ticket-class vocabulary; banded with the rest of the ticket-class family at 4."
+    },
+    {
+      "headword": "一张到大连的三等票。",
+      "hsk": 4,
+      "confidence": "medium",
+      "rationale": "三等 is off-list ticket-class vocabulary; banded with the rest of the ticket-class family at 4."
+    },
+    {
+      "headword": "一张到大连的儿童票。",
+      "hsk": 4,
+      "confidence": "high",
+      "rationale": "儿童 is HSK 4; 一张 is a transparent measure phrase."
+    },
+    {
+      "headword": "一张到大连的单程票。",
+      "hsk": 4,
+      "confidence": "medium",
+      "rationale": "单程票 is off-list mid-frequency travel vocabulary; banded with the ticket-class family at 4."
+    },
+    {
+      "headword": "一张到大连的来回票。",
+      "hsk": 4,
+      "confidence": "medium",
+      "rationale": "来回票 is off-list ticket-class vocabulary; banded with the ticket-class family at 4."
+    },
+    {
+      "headword": "一张到大连的学生票。",
+      "hsk": 4,
+      "confidence": "medium",
+      "rationale": "学生票 is off-list ticket-class vocabulary; banded with the ticket-class family at 4."
+    },
+    {
+      "headword": "我想坐直达车。",
+      "hsk": 7,
+      "confidence": "high",
+      "rationale": "直达 is HSK 7-9, so the off-list compound 直达车 carries the advanced band."
+    },
+    {
+      "headword": "我想坐特快车。",
+      "hsk": 6,
+      "confidence": "high",
+      "rationale": "特快 is HSK 6 and sets the band."
+    },
+    {
+      "headword": "我想坐快车。",
+      "hsk": 6,
+      "confidence": "high",
+      "rationale": "快车 is HSK 6 and sets the band."
+    },
+    {
+      "headword": "我想坐普通车。",
+      "hsk": 2,
+      "confidence": "medium",
+      "rationale": "All words are on-list with 普通 at HSK 2; nothing off-list raises it."
+    },
+    {
+      "headword": "我想坐慢车。",
+      "hsk": 6,
+      "confidence": "high",
+      "rationale": "慢车 is HSK 6 and sets the band."
+    },
+    {
+      "headword": "我想买硬座票。",
+      "hsk": 5,
+      "confidence": "medium",
+      "rationale": "硬座 is off-list seat-class vocabulary, banded with its pair 软座 at 5."
+    },
+    {
+      "headword": "我想买软座票。",
+      "hsk": 5,
+      "confidence": "high",
+      "rationale": "软 is HSK 5 and sets the band for the seat-class family."
+    },
+    {
+      "headword": "这列火车从几号站台出发？",
+      "hsk": 6,
+      "confidence": "high",
+      "rationale": "站台 is HSK 6 and sets the band; 几号 is transparent."
+    },
+    {
+      "headword": "请帮我用中文写车票的详细情况。",
+      "hsk": 5,
+      "confidence": "high",
+      "rationale": "详细 is HSK 5 and sets the band."
+    },
+    {
+      "headword": "请帮我用中文写下大连。",
+      "hsk": 3,
+      "confidence": "medium",
+      "rationale": "All words are HSK 1, but the 写下 resultative-directional complement puts it at 3, matching 写下来."
+    },
+    {
+      "headword": "我想坐硬卧。",
+      "hsk": 6,
+      "confidence": "medium",
+      "rationale": "硬卧 is off-list berth-class vocabulary; the berth family is banded coherently at 6 (cf. 铺 at HSK 6)."
+    },
+    {
+      "headword": "我想坐软卧。",
+      "hsk": 6,
+      "confidence": "medium",
+      "rationale": "软卧 is off-list berth-class vocabulary; banded with the berth family at 6."
+    },
+    {
+      "headword": "我想睡下铺。",
+      "hsk": 6,
+      "confidence": "medium",
+      "rationale": "下铺 is off-list; 铺 is HSK 6, so the berth family sits at 6."
+    },
+    {
+      "headword": "我想睡中铺。",
+      "hsk": 6,
+      "confidence": "high",
+      "rationale": "铺 is HSK 6 and sets the band for the berth family."
+    },
+    {
+      "headword": "我想睡上铺。",
+      "hsk": 6,
+      "confidence": "medium",
+      "rationale": "上铺 is off-list; 铺 is HSK 6, so the berth family sits at 6."
+    },
+    {
+      "headword": "我想要靠走廊的座位。",
+      "hsk": 7,
+      "confidence": "high",
+      "rationale": "走廊 is HSK 7-9 and sets the band; 想要 is transparent."
+    },
+    {
+      "headword": "我想要靠窗户的座位。",
+      "hsk": 4,
+      "confidence": "high",
+      "rationale": "窗户 is HSK 4 and sets the band; 想要 is transparent."
+    },
+    {
+      "headword": "我想要吸烟的座位。",
+      "hsk": 4,
+      "confidence": "high",
+      "rationale": "吸烟 is HSK 4 and sets the band."
+    },
+    {
+      "headword": "我想要不吸烟的座位。",
+      "hsk": 4,
+      "confidence": "high",
+      "rationale": "不吸烟 is transparent negation of 吸烟 (HSK 4), which sets the band."
+    },
+    {
+      "headword": "到哪里？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Both words are HSK 1."
+    },
+    {
+      "headword": "旅行社在哪里？",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "旅行社 is HSK 3 and sets the band."
+    },
+    {
+      "headword": "满了吗？",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "满 is HSK 2 and sets the band."
+    },
+    {
+      "headword": "取消了吗？",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "取消 is HSK 3 and sets the band."
+    },
+    {
+      "headword": "时刻表在哪里？",
+      "hsk": 5,
+      "confidence": "medium",
+      "rationale": "时刻表 is off-list mid-frequency travel vocabulary, well beyond the HSK 1 frame."
+    },
+    {
+      "headword": "售票窗在哪里？",
+      "hsk": 4,
+      "confidence": "medium",
+      "rationale": "售票窗 is off-list station vocabulary (售 is not beginner) in an otherwise HSK 1 frame."
+    },
+    {
+      "headword": "晚点了吗？",
+      "hsk": 4,
+      "confidence": "high",
+      "rationale": "晚点 is HSK 4 and sets the band."
+    },
+    {
+      "headword": "站台在哪里？",
+      "hsk": 6,
+      "confidence": "high",
+      "rationale": "站台 is HSK 6 and sets the band."
+    },
+    {
+      "headword": "我要这个。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words are HSK 1; 这个 is a transparent compound."
+    },
+    {
+      "headword": "我要那个。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All three words are HSK 1."
+    },
+    {
+      "headword": "有空调吗？",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "空调 is HSK 3 and sets the band."
+    },
+    {
+      "headword": "有毛毯吗？",
+      "hsk": 6,
+      "confidence": "medium",
+      "rationale": "毛毯 is off-list and genuinely uncommon vocabulary in an HSK 1 frame."
+    },
+    {
+      "headword": "有呕吐袋吗？",
+      "hsk": 7,
+      "confidence": "high",
+      "rationale": "呕吐 is HSK 7-9 and sets the band."
+    },
+    {
+      "headword": "有厕所吗？",
+      "hsk": 6,
+      "confidence": "high",
+      "rationale": "厕所 is HSK 6 and sets the band."
+    },
+    {
+      "headword": "我想退票。",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "退 is HSK 3 and sets the band."
+    },
+    {
+      "headword": "我想改票。",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "改 is HSK 2 and sets the band."
+    },
+    {
+      "headword": "我想确认票。",
+      "hsk": 4,
+      "confidence": "high",
+      "rationale": "确认 is HSK 4 and sets the band."
+    },
+    {
+      "headword": "能买站台票吗？",
+      "hsk": 6,
+      "confidence": "high",
+      "rationale": "站台 is HSK 6 and sets the band."
+    },
+    {
+      "headword": "到大连的软座票多少钱？",
+      "hsk": 5,
+      "confidence": "medium",
+      "rationale": "软座 is off-list seat-class vocabulary banded at 5 (软 is HSK 5); 多少钱 is transparent."
+    },
+    {
+      "headword": "几个小时到站？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words are HSK 1 in a simple duration question."
+    },
+    {
+      "headword": "是直达的吗？",
+      "hsk": 7,
+      "confidence": "high",
+      "rationale": "直达 is HSK 7-9 and sets the band."
+    },
+    {
+      "headword": "什么时候检票？",
+      "hsk": 5,
+      "confidence": "medium",
+      "rationale": "检票 is off-list mid-frequency travel vocabulary in an otherwise HSK 1 frame."
+    },
+    {
+      "headword": "我想换一些硬币。",
+      "hsk": 7,
+      "confidence": "high",
+      "rationale": "硬币 is HSK 7-9 and sets the band."
+    },
+    {
+      "headword": "这是超重行李吗？",
+      "hsk": 5,
+      "confidence": "medium",
+      "rationale": "超重 is off-list mid-frequency travel vocabulary, above 行李 (HSK 3)."
+    },
+    {
+      "headword": "这是手提行李吗？",
+      "hsk": 5,
+      "confidence": "medium",
+      "rationale": "手提 is off-list mid-frequency travel vocabulary, above 行李 (HSK 3)."
+    },
+    {
+      "headword": "我的行李票在哪里？",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "行李 is HSK 3 and sets the band."
+    },
+    {
+      "headword": "取行李在哪里？",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "行李 is HSK 3; 在哪里 is a transparent 在+哪里 compound."
+    },
+    {
+      "headword": "行李寄存处在哪里？",
+      "hsk": 6,
+      "confidence": "high",
+      "rationale": "寄存处 is off-list and genuinely rare station vocabulary, well above 行李 (HSK 3)."
+    },
+    {
+      "headword": "行李暂存箱在哪里？",
+      "hsk": 6,
+      "confidence": "high",
+      "rationale": "暂存箱 is off-list and genuinely rare station vocabulary, well above 行李 (HSK 3)."
+    },
+    {
+      "headword": "小推车在哪里？",
+      "hsk": 4,
+      "confidence": "medium",
+      "rationale": "推车 is off-list station vocabulary in an otherwise HSK 1 frame."
+    },
+    {
+      "headword": "我的行李被摔坏了。",
+      "hsk": 5,
+      "confidence": "medium",
+      "rationale": "摔坏 is an off-list resultative built on the non-beginner 摔, in a 被 passive."
+    },
+    {
+      "headword": "我的行李被弄丢了。",
+      "hsk": 5,
+      "confidence": "medium",
+      "rationale": "弄丢 is an off-list resultative compound in a 被 passive, above 行李 (HSK 3)."
+    },
+    {
+      "headword": "我的行李被偷走了。",
+      "hsk": 5,
+      "confidence": "high",
+      "rationale": "偷 is HSK 5 and sets the band; 被 passive is HSK 3 grammar."
+    },
+    {
+      "headword": "BJ8飞机在哪里起飞？",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "起飞 is HSK 2 and sets the band."
+    },
+    {
+      "headword": "BJ8飞机在哪里抵达？",
+      "hsk": 6,
+      "confidence": "high",
+      "rationale": "抵达 is HSK 6 and sets the band."
+    },
+    {
+      "headword": "机场巴士在哪里？",
+      "hsk": 4,
+      "confidence": "high",
+      "rationale": "巴士 is HSK 4 and sets the band."
+    },
+    {
+      "headword": "入境口在哪里？",
+      "hsk": 5,
+      "confidence": "medium",
+      "rationale": "入境口 is off-list mid-frequency airport vocabulary in an HSK 1 frame."
+    },
+    {
+      "headword": "出境口在哪里？",
+      "hsk": 5,
+      "confidence": "medium",
+      "rationale": "出境口 is off-list mid-frequency airport vocabulary, banded with its pair 入境口."
+    },
+    {
+      "headword": "免税店在哪里？",
+      "hsk": 5,
+      "confidence": "medium",
+      "rationale": "免税店 is off-list mid-frequency travel vocabulary in an HSK 1 frame."
+    },
+    {
+      "headword": "8号登机口在哪里？",
+      "hsk": 5,
+      "confidence": "medium",
+      "rationale": "登机口 is off-list mid-frequency airport vocabulary, banded with 登机牌."
+    },
+    {
+      "headword": "我的登机牌在哪里？",
+      "hsk": 5,
+      "confidence": "medium",
+      "rationale": "登机牌 is off-list mid-frequency airport vocabulary in an HSK 1 frame."
+    },
+    {
+      "headword": "这是我的护照。",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "护照 is HSK 2 and sets the band."
+    },
+    {
+      "headword": "在哪里转机？",
+      "hsk": 7,
+      "confidence": "high",
+      "rationale": "转机 is HSK 7-9 and sets the band."
+    },
+    {
+      "headword": "过境在哪里？",
+      "hsk": 7,
+      "confidence": "high",
+      "rationale": "过境 is HSK 7-9 and sets the band."
+    },
+    {
+      "headword": "多久来一班车？",
+      "hsk": 4,
+      "confidence": "medium",
+      "rationale": "班车 is off-list transport vocabulary, banded with 首班车 at 4."
+    },
+    {
+      "headword": "到哈尔滨坐几号车？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words are HSK 1; 几号 is a transparent compound."
+    },
+    {
+      "headword": "在哈尔滨能下车吗？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words are HSK 1 in a simple 能 question."
+    },
+    {
+      "headword": "下一站是哪里？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words are HSK 1."
+    },
+    {
+      "headword": "我在哈尔滨下车。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words are HSK 1 in a simple 在 + place statement."
+    },
+    {
+      "headword": "不要挤！",
+      "hsk": 5,
+      "confidence": "high",
+      "rationale": "挤 is HSK 5 and sets the band."
+    },
+    {
+      "headword": "这是市内大巴吗？",
+      "hsk": 4,
+      "confidence": "high",
+      "rationale": "大巴 is HSK 4 and sets the band; 市内 is a transparent 市+内 compound."
+    },
+    {
+      "headword": "这是长途车吗？",
+      "hsk": 4,
+      "confidence": "medium",
+      "rationale": "长途车 is off-list but built on 长途 (HSK 4), which sets the band."
+    },
+    {
+      "headword": "这是小巴吗？",
+      "hsk": 4,
+      "confidence": "medium",
+      "rationale": "小巴 is off-list but is a 小+巴士 compound, and 巴士 is HSK 4."
+    },
+    {
+      "headword": "这是卧铺长途车吗？",
+      "hsk": 6,
+      "confidence": "high",
+      "rationale": "卧铺 is HSK 6 and sets the band."
+    },
+    {
+      "headword": "是市内吗？",
+      "hsk": 3,
+      "confidence": "medium",
+      "rationale": "市内 is a transparent 市+内 compound; nothing here exceeds low-intermediate vocabulary."
+    },
+    {
+      "headword": "是长途吗？",
+      "hsk": 4,
+      "confidence": "high",
+      "rationale": "长途 is HSK 4 and sets the band."
+    },
+    {
+      "headword": "是本地吗？",
+      "hsk": 6,
+      "confidence": "high",
+      "rationale": "本地 is HSK 6 and sets the band."
+    },
+    {
+      "headword": "特快列车到几号站台？",
+      "hsk": 6,
+      "confidence": "high",
+      "rationale": "特快 and 站台 are both HSK 6 and set the band."
+    },
+    {
+      "headword": "这是哪个站？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words are HSK 1."
+    },
+    {
+      "headword": "在天津能下车吗？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words are HSK 1 in a simple 能 question."
+    },
+    {
+      "headword": "需要换车吗？",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "需要 is HSK 3 and sets the band."
+    },
+    {
+      "headword": "到天津坐哪条线？",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "线 is HSK 3 and sets the band."
+    },
+    {
+      "headword": "到天津坐几站？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words are HSK 1."
+    },
+    {
+      "headword": "是直达车吗？",
+      "hsk": 7,
+      "confidence": "high",
+      "rationale": "直达车 is off-list but built on 直达 (HSK 7-9), which carries the band."
+    },
+    {
+      "headword": "是特快车吗？",
+      "hsk": 6,
+      "confidence": "high",
+      "rationale": "特快 is HSK 6 and sets the band."
+    },
+    {
+      "headword": "餐车在几号车厢？",
+      "hsk": 7,
+      "confidence": "high",
+      "rationale": "车厢 is HSK 7-9 and sets the band; 餐车 is off-list rail vocabulary."
+    },
+    {
+      "headword": "软卧在几号车厢？",
+      "hsk": 7,
+      "confidence": "high",
+      "rationale": "车厢 is HSK 7-9 and sets the band, above off-list 软卧."
+    },
+    {
+      "headword": "几个小时到大连？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words are HSK 1 in a simple duration question."
+    },
+    {
+      "headword": "有快艇吗？",
+      "hsk": 6,
+      "confidence": "medium",
+      "rationale": "快艇 is off-list and genuinely uncommon boat vocabulary in an HSK 1 frame."
+    },
+    {
+      "headword": "这里停留多久？",
+      "hsk": 5,
+      "confidence": "high",
+      "rationale": "停留 is HSK 5 and sets the band."
+    },
+    {
+      "headword": "几点钟再上船？",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "船 is HSK 2; 点钟 and 上船 are transparent compounds."
+    },
+    {
+      "headword": "船上有卡拉OK吗？",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "船 is HSK 2 and sets the band."
+    },
+    {
+      "headword": "船上有救生衣吗？",
+      "hsk": 6,
+      "confidence": "medium",
+      "rationale": "救生衣 is off-list and genuinely uncommon safety vocabulary, well above 船 (HSK 2)."
+    },
+    {
+      "headword": "船上有救生艇吗？",
+      "hsk": 7,
+      "confidence": "high",
+      "rationale": "救生艇 is off-list and genuinely rare nautical vocabulary, above the 救生衣 pair."
+    },
+    {
+      "headword": "船上有厕所吗？",
+      "hsk": 6,
+      "confidence": "high",
+      "rationale": "厕所 is HSK 6 and sets the band."
+    },
+    {
+      "headword": "今天海浪大不大？",
+      "hsk": 6,
+      "confidence": "high",
+      "rationale": "海浪 is HSK 6 and sets the band."
+    },
+    {
+      "headword": "我有点恶心。",
+      "hsk": 4,
+      "confidence": "high",
+      "rationale": "恶心 is HSK 4 and sets the band; 有点 is transparent."
+    },
+    {
+      "headword": "我的船舱在哪里？",
+      "hsk": 6,
+      "confidence": "high",
+      "rationale": "船舱 is off-list and genuinely rare nautical vocabulary in an HSK 1 frame."
+    },
+    {
+      "headword": "船长在哪里？",
+      "hsk": 6,
+      "confidence": "high",
+      "rationale": "船长 is HSK 6 and sets the band."
+    },
+    {
+      "headword": "甲板在哪里？",
+      "hsk": 7,
+      "confidence": "high",
+      "rationale": "甲板 is off-list and genuinely rare nautical vocabulary despite the HSK 1 frame."
+    },
+    {
+      "headword": "这是渡船吗？",
+      "hsk": 6,
+      "confidence": "high",
+      "rationale": "渡船 is off-list and genuinely uncommon nautical vocabulary in an HSK 1 frame."
+    },
+    {
+      "headword": "这是帆船吗？",
+      "hsk": 7,
+      "confidence": "high",
+      "rationale": "帆船 is HSK 7-9 and sets the band."
+    },
+    {
+      "headword": "我要订一辆出租车，早上9点钟出发。",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "订 is HSK 3 and sets the band; 一辆 and 点钟 are transparent."
+    },
+    {
+      "headword": "我要订一辆出租车，现在。",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "订 is HSK 3 and sets the band; 一辆 is transparent."
+    },
+    {
+      "headword": "我要订一辆出租车，明天。",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "订 is HSK 3 and sets the band; 一辆 is transparent."
+    },
+    {
+      "headword": "在哪里打出租车？",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "出租车 is HSK 2 and sets the band."
+    },
+    {
+      "headword": "这出租车有人吗？",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "出租车 is HSK 2 and sets the band."
+    },
+    {
+      "headword": "请打表。",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "表 is HSK 2; the taxi-meter sense of 打表 is idiomatic but the vocabulary is elementary."
+    },
+    {
+      "headword": "到长城，好吗？",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "长城 is HSK 3; 好吗 is a transparent tag question."
+    },
+    {
+      "headword": "到长城多少钱？",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "长城 is HSK 3; 多少钱 is transparent."
+    },
+    {
+      "headword": "我想租一辆轿车。",
+      "hsk": 7,
+      "confidence": "high",
+      "rationale": "轿车 is HSK 7-9 and sets the band."
+    },
+    {
+      "headword": "我想包一辆车。",
+      "hsk": 4,
+      "confidence": "medium",
+      "rationale": "All words are HSK 1-2, but the charter sense of 包 (包车) is an advanced usage well beyond the literal entries."
+    },
+    {
+      "headword": "包一辆车到长城多少钱？",
+      "hsk": 4,
+      "confidence": "medium",
+      "rationale": "长城 is HSK 3, and the charter sense of 包 raises it to 4, matching 我想包一辆车."
+    },
+    {
+      "headword": "包括汽油吗？",
+      "hsk": 4,
+      "confidence": "high",
+      "rationale": "包括 and 汽油 are both HSK 4 and set the band."
+    },
+    {
+      "headword": "包括路费吗？",
+      "hsk": 4,
+      "confidence": "high",
+      "rationale": "包括 is HSK 4; 路费 is a transparent 路+费 compound."
+    },
+    {
+      "headword": "请给我发票。",
+      "hsk": 4,
+      "confidence": "high",
+      "rationale": "发票 is HSK 4 and sets the band."
+    },
+    {
+      "headword": "到这个地址多少钱？",
+      "hsk": 4,
+      "confidence": "high",
+      "rationale": "地址 is HSK 4 and sets the band; 这个 and 多少钱 are transparent."
+    },
+    {
+      "headword": "请带我到这个地址。",
+      "hsk": 4,
+      "confidence": "high",
+      "rationale": "地址 is HSK 4 and sets the band; 这个 is transparent."
+    },
+    {
+      "headword": "请带我去长城。",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "长城 is HSK 3 and sets the band."
+    },
+    {
+      "headword": "你的表有问题。",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "表 and 问题 are HSK 2 and set the band."
+    },
+    {
+      "headword": "我会记下你的车号，打110。",
+      "hsk": 6,
+      "confidence": "high",
+      "rationale": "车号 is HSK 6 and sets the band; 记下 is a transparent complement."
+    },
+    {
+      "headword": "我们到哪儿去？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words are HSK 1."
+    },
+    {
+      "headword": "请慢点开。",
+      "hsk": 2,
+      "confidence": "medium",
+      "rationale": "All words are HSK 1-2 and 慢点 is transparent; the driving sense of 开 keeps it at 2."
+    },
+    {
+      "headword": "请在这儿停。",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "停 is HSK 2 and sets the band."
+    },
+    {
+      "headword": "请在这儿等。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All four words are HSK 1."
+    },
+    {
+      "headword": "我想修这辆自行车。",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "修 is HSK 3 and sets the band."
+    },
+    {
+      "headword": "我想买一辆自行车。",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "自行车 and the measure word 辆 are HSK 2."
+    },
+    {
+      "headword": "我想租一辆自行车。",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "租, 辆 and 自行车 are all HSK 2."
+    },
+    {
+      "headword": "我要辆山地车。",
+      "hsk": 5,
+      "confidence": "medium",
+      "rationale": "山地车 is off-list mid-frequency vocabulary, well above the HSK 2 frame."
+    },
+    {
+      "headword": "我要辆赛车。",
+      "hsk": 7,
+      "confidence": "high",
+      "rationale": "赛车 is HSK 7-9 and sets the band."
+    },
+    {
+      "headword": "我要辆二手车。",
+      "hsk": 4,
+      "confidence": "high",
+      "rationale": "二手 is HSK 4 and sets the band."
+    },
+    {
+      "headword": "一天多少钱？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words are HSK 1; 一天 is a transparent compound."
+    },
+    {
+      "headword": "一小时多少钱？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All four words are HSK 1."
+    },
+    {
+      "headword": "要给押金吗？",
+      "hsk": 5,
+      "confidence": "high",
+      "rationale": "押金 is HSK 5 and sets the band."
+    },
+    {
+      "headword": "押金多少？",
+      "hsk": 5,
+      "confidence": "high",
+      "rationale": "押金 is HSK 5 and sets the band."
+    },
+    {
+      "headword": "车胎被戳破了。",
+      "hsk": 7,
+      "confidence": "high",
+      "rationale": "戳 is HSK 7-9 and 车胎 is off-list bicycle vocabulary."
+    },
+    {
+      "headword": "能帮我打气吗？",
+      "hsk": 5,
+      "confidence": "medium",
+      "rationale": "打气 is off-list bicycle vocabulary in an otherwise HSK 1 frame."
+    },
+    {
+      "headword": "修这些多少钱？",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "修 is HSK 3 and sets the band; 多少钱 is transparent."
+    },
+    {
+      "headword": "存车处在哪儿？",
+      "hsk": 4,
+      "confidence": "high",
+      "rationale": "处 is HSK 4 and sets the band."
+    },
+    {
+      "headword": "我的自行车被偷走了。",
+      "hsk": 5,
+      "confidence": "high",
+      "rationale": "偷 is HSK 5 and sets the band; 被 passive is HSK 3 grammar."
+    },
+    {
+      "headword": "后架有问题。",
+      "hsk": 6,
+      "confidence": "medium",
+      "rationale": "后架 is off-list bicycle-part vocabulary; the bicycle-parts family sits at 6-7 despite the HSK 2 frame."
+    },
+    {
+      "headword": "车座有问题。",
+      "hsk": 6,
+      "confidence": "medium",
+      "rationale": "车座 is off-list bicycle-part vocabulary; banded with the bicycle-parts family at 6."
+    },
+    {
+      "headword": "车架有问题。",
+      "hsk": 6,
+      "confidence": "medium",
+      "rationale": "车架 is off-list bicycle-part vocabulary; banded with the bicycle-parts family at 6."
+    },
+    {
+      "headword": "车铃有问题。",
+      "hsk": 6,
+      "confidence": "medium",
+      "rationale": "车铃 is off-list bicycle-part vocabulary; banded with the bicycle-parts family at 6."
+    },
+    {
+      "headword": "车闸有问题。",
+      "hsk": 7,
+      "confidence": "high",
+      "rationale": "车闸 is off-list and genuinely technical bicycle-part vocabulary."
+    },
+    {
+      "headword": "车把有问题。",
+      "hsk": 6,
+      "confidence": "medium",
+      "rationale": "车把 is off-list bicycle-part vocabulary; banded with the bicycle-parts family at 6."
+    },
+    {
+      "headword": "撑脚有问题。",
+      "hsk": 6,
+      "confidence": "high",
+      "rationale": "撑 is HSK 6 and sets the band for this bicycle-part card."
+    },
+    {
+      "headword": "车轮有问题。",
+      "hsk": 7,
+      "confidence": "high",
+      "rationale": "车轮 is HSK 7-9 and sets the band."
+    },
+    {
+      "headword": "链条有问题。",
+      "hsk": 6,
+      "confidence": "medium",
+      "rationale": "链条 is off-list bicycle-part vocabulary; banded with the bicycle-parts family at 6."
+    },
+    {
+      "headword": "脚蹬有问题。",
+      "hsk": 7,
+      "confidence": "high",
+      "rationale": "脚蹬 is off-list and genuinely technical bicycle-part vocabulary."
+    },
+    {
+      "headword": "辐条有问题。",
+      "hsk": 7,
+      "confidence": "high",
+      "rationale": "辐条 is off-list and genuinely technical bicycle-part vocabulary."
+    },
+    {
+      "headword": "轮胎有问题。",
+      "hsk": 7,
+      "confidence": "high",
+      "rationale": "轮胎 is HSK 7-9 and sets the band."
+    },
+    {
+      "headword": "这是夏朝的。",
+      "hsk": 6,
+      "confidence": "medium",
+      "rationale": "夏朝 is an off-list dynasty name; the dynasty family is banded coherently at 6."
+    },
+    {
+      "headword": "这是商朝的。",
+      "hsk": 6,
+      "confidence": "medium",
+      "rationale": "商朝 is an off-list dynasty name; banded with the dynasty family at 6."
+    },
+    {
+      "headword": "这是周朝的。",
+      "hsk": 6,
+      "confidence": "medium",
+      "rationale": "周朝 is historical-period vocabulary (朝 is HSK 3); banded with the dynasty family at 6."
+    },
+    {
+      "headword": "这是春秋时期的。",
+      "hsk": 6,
+      "confidence": "high",
+      "rationale": "时期 is HSK 6 and 春秋 is an off-list historical-period name."
+    },
+    {
+      "headword": "这是战国时期的。",
+      "hsk": 6,
+      "confidence": "high",
+      "rationale": "时期 is HSK 6 and 战国 is an off-list historical-period name."
+    },
+    {
+      "headword": "这是秦朝的。",
+      "hsk": 6,
+      "confidence": "medium",
+      "rationale": "秦朝 is an off-list dynasty name; banded with the dynasty family at 6."
+    },
+    {
+      "headword": "这是汉朝的。",
+      "hsk": 6,
+      "confidence": "medium",
+      "rationale": "汉朝 is an off-list dynasty name; banded with the dynasty family at 6."
+    },
+    {
+      "headword": "这是唐朝的。",
+      "hsk": 6,
+      "confidence": "medium",
+      "rationale": "唐朝 is an off-list dynasty name; banded with the dynasty family at 6."
+    },
+    {
+      "headword": "这是宋朝的。",
+      "hsk": 6,
+      "confidence": "medium",
+      "rationale": "宋朝 is an off-list dynasty name; banded with the dynasty family at 6."
+    },
+    {
+      "headword": "这是元朝的。",
+      "hsk": 6,
+      "confidence": "medium",
+      "rationale": "元朝 is an off-list dynasty name; banded with the dynasty family at 6."
+    },
+    {
+      "headword": "这是明朝的。",
+      "hsk": 6,
+      "confidence": "medium",
+      "rationale": "明朝 is an off-list dynasty name; banded with the dynasty family at 6."
+    },
+    {
+      "headword": "这是清朝的。",
+      "hsk": 6,
+      "confidence": "medium",
+      "rationale": "清朝 is an off-list dynasty name; banded with the dynasty family at 6."
+    },
+    {
+      "headword": "这是民国时期的。",
+      "hsk": 6,
+      "confidence": "high",
+      "rationale": "时期 is HSK 6 and 民国 is an off-list historical-period name."
+    },
+    {
+      "headword": "这是解放后的。",
+      "hsk": 6,
+      "confidence": "medium",
+      "rationale": "解放 is HSK 5, raised to 6 as a historical-period term banded with the dynasty family."
+    }
+  ]
 }

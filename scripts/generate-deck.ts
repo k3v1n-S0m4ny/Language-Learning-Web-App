@@ -120,8 +120,13 @@ async function main() {
     if (!hanzi) continue;
 
     // Update the running tag whenever a top-level section header is encountered.
+    // A header is structure, not vocabulary: it names the section, so it must not
+    // itself become a Card. (Before this `continue`, the three original headers fell
+    // through and were generated as cards — 数字与数量, 时间与日期 and 金钱 are still
+    // in the deck and the DB because generate-deck skips headwords it has cached.)
     if (Object.prototype.hasOwnProperty.call(lang.sectionTags, hanzi)) {
       currentTag = lang.sectionTags[hanzi];
+      continue;
     }
     const tag = currentTag;
 

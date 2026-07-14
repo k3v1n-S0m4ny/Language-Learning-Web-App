@@ -29,8 +29,8 @@ function band(
   }));
 }
 
-test("threshold is 90% and band 7 is the merged advanced band", () => {
-  assert.equal(HSK_UNLOCK_THRESHOLD_PERCENT, 90);
+test("threshold is 80% and band 7 is the merged advanced band", () => {
+  assert.equal(HSK_UNLOCK_THRESHOLD_PERCENT, 80);
   assert.equal(MAX_HSK_BAND, 7);
   assert.equal(hskLabel(1), "HSK 1");
   assert.equal(hskLabel(6), "HSK 6");
@@ -73,9 +73,9 @@ test("a lapsed (relearning) card is not mastered by Good — it must graduate ag
 
 // === bandPasses =============================================================
 
-test("bandPasses at, above and below the 90% line", () => {
-  assert.equal(bandPasses(117, 130), true); // exactly 90%
-  assert.equal(bandPasses(116, 130), false);
+test("bandPasses at, above and below the 80% line", () => {
+  assert.equal(bandPasses(104, 130), true); // exactly 80%
+  assert.equal(bandPasses(103, 130), false);
   assert.equal(bandPasses(130, 130), true);
   assert.equal(bandPasses(0, 130), false);
 });
@@ -87,9 +87,10 @@ test("an EMPTY band passes — otherwise it is an infinite wall", () => {
 });
 
 test("requiredToPass rounds up", () => {
-  assert.equal(requiredToPass(130), 117);
-  assert.equal(requiredToPass(32), 29);
-  assert.equal(requiredToPass(17), 16);
+  assert.equal(requiredToPass(159), 128); // band 1 after the transport seed
+  assert.equal(requiredToPass(130), 104);
+  assert.equal(requiredToPass(32), 26);
+  assert.equal(requiredToPass(17), 14);
   assert.equal(requiredToPass(0), 0);
 });
 
@@ -117,7 +118,7 @@ test("a fresh learner is unlocked to band 1 only, and is served a band-1 card", 
   assert.equal(gate.eligibleUnseenCount, 10); // band 1 only, not all 30
 });
 
-test("clearing 90% of band 1 unlocks band 2 — and only band 2", () => {
+test("clearing 80% of band 1 unlocks band 2 — and only band 2", () => {
   const gate = computeGate([
     ...band(1, 10, { mastered: 9 }),
     ...band(2, 10),
@@ -212,7 +213,7 @@ test("seeding new band-1 cards can re-lock band 2 for new intake — but strands
   assert.equal(before.unlockedBand, 2);
 
   // 20 fresh band-1 cards are seeded. Band 1 drops to 9/30 = 30%, so band 2 closes to
-  // NEW cards again. That is correct: the learner has genuinely not mastered 90% of
+  // NEW cards again. That is correct: the learner has genuinely not mastered 80% of
   // band 1 any more. Their 3 in-progress band-2 cards are untouched — the gate never
   // filters seen cards — and the fresh band-1 cards are servable, so there is a way back.
   const after = computeGate([

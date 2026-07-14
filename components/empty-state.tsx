@@ -52,7 +52,7 @@ export function EmptyState({ gate }: { gate: GateStatus }) {
 
   // The HSK gate is what is holding new Cards back — not the daily cap, and not a
   // finished deck. Under the gate this is a routine state (every eligible Card is
-  // introduced, the band below is still short of 90%), so it must NOT read as a
+  // introduced, the band below is still short of the unlock threshold), so it must NOT read as a
   // milestone: no confetti for being stuck, and say what would actually unlock it.
   const blocked =
     gate.eligibleUnseen === 0 && gate.nextBand !== null && gate.blockingBand !== null;
