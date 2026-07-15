@@ -186,6 +186,14 @@ export const learnerSettings = pgTable("learner_settings", {
     .primaryKey()
     .references(() => users.id, { onDelete: "cascade" }),
   newCardsPerDay: integer("new_cards_per_day").notNull().default(10),
+  // A today-only top-up on top of newCardsPerDay, requested from the Advanced
+  // Thai "all caught up" screen. `bonusNewCardsDate` stamps the Thailand day the
+  // bonus belongs to (thaiDateKey, "YYYY-MM-DD"); the read layer honors the bonus
+  // only when that stamp equals today, so it expires overnight with no cleanup.
+  // Deliberately read only by the Advanced Thai queries — a top-up taken there
+  // must not inflate the Mandarin/Read-Thai new-card intake.
+  bonusNewCards: integer("bonus_new_cards").notNull().default(0),
+  bonusNewCardsDate: text("bonus_new_cards_date"),
   // Vestigial — the scheduler now uses the global REQUEST_RETENTION constant
   // (lib/review/config.ts). This column is kept to avoid a destructive DROP.
   requestRetention: real("request_retention").notNull().default(0.85),

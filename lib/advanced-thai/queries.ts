@@ -8,7 +8,7 @@ import {
   hydrateFsrsCard,
   previewIntervals,
 } from "@/lib/review/scheduler";
-import { endOfThailandDay, startOfThailandDay } from "@/lib/review/time";
+import { endOfThailandDay, startOfThailandDay, thaiDateKey } from "@/lib/review/time";
 import type { IntervalHints } from "@/lib/review/types";
 import type {
   GrammarPattern,
@@ -118,9 +118,11 @@ export async function getThemeSummaries(
       ),
   ]);
 
+  const bonusToday =
+    settings.bonusNewCardsDate === thaiDateKey(now) ? settings.bonusNewCards : 0;
   const capRemaining = Math.max(
     0,
-    settings.newCardsPerDay - (newTodayRow[0]?.n ?? 0),
+    settings.newCardsPerDay + bonusToday - (newTodayRow[0]?.n ?? 0),
   );
 
   return rows.rows.map((r) => ({
@@ -251,13 +253,17 @@ export async function getAdvancedStudyData(
         .where(and(eq(atCards.themeId, themeSlug), isNull(atReviewStates.cardId))),
     ]);
 
+  const bonusToday =
+    settings.bonusNewCardsDate === thaiDateKey(now) ? settings.bonusNewCards : 0;
   const capRemaining = Math.max(
     0,
-    settings.newCardsPerDay - (newTodayRow[0]?.n ?? 0),
+    settings.newCardsPerDay + bonusToday - (newTodayRow[0]?.n ?? 0),
   );
+  const unseenRemaining = unseenRow[0]?.n ?? 0;
   const counts: AtSessionCounts = {
     dueCount: dueRow[0]?.n ?? 0,
-    newRemaining: Math.min(capRemaining, unseenRow[0]?.n ?? 0),
+    newRemaining: Math.min(capRemaining, unseenRemaining),
+    unseenRemaining,
   };
 
   const chosenId =

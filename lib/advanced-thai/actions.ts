@@ -4,13 +4,20 @@ import { refresh } from "next/cache";
 import { and, eq } from "drizzle-orm";
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
-import { atCards, atReviewLogs, atReviewStates } from "@/lib/db/schema";
+import {
+  atCards,
+  atReviewLogs,
+  atReviewStates,
+  learnerSettings,
+} from "@/lib/db/schema";
+import { ensureLearnerSettings } from "@/lib/review/queries";
 import {
   applyRating,
   createEmptyCard,
   getScheduler,
   hydrateFsrsCard,
 } from "@/lib/review/scheduler";
+import { thaiDateKey } from "@/lib/review/time";
 import type { RatingValue } from "@/lib/review/types";
 import { isAdvancedThaiLearner } from "./access";
 
@@ -89,6 +96,44 @@ export async function submitAdvancedReview(cardId: string, rating: RatingValue) 
       }),
     db.insert(atReviewLogs).values({ learnerId, cardId, rating, log }),
   ]);
+
+  refresh();
+}
+
+/**
+ * Grant a today-only new-card top-up, requested from the "all caught up" screen.
+ *
+ * This does NOT touch the standing newCardsPerDay preference. It records a bonus
+ * stamped with today's Thailand date; the Advanced Thai read layer honors it only
+ * while that stamp is today, so it expires overnight on its own. The bonus lives
+ * on the shared learner_settings row but is read only by the Advanced Thai
+ * queries, so it does not inflate the Mandarin/Read-Thai intake.
+ *
+ * Like submitAdvancedReview, this is a public POST endpoint — the allowlist
+ * re-check on the session's own email is the real enforcement.
+ */
+export async function addNewCardsToday(amount: number) {
+  const session = await auth();
+  const learnerId = session?.user?.id;
+  if (!learnerId) throw new Error("Unauthorized");
+  if (!isAdvancedThaiLearner(session.user?.email)) throw new Error("Unauthorized");
+
+  // Typed as number, but erased at the network boundary — a direct POST can send
+  // anything. Bound a single top-up to a sane batch.
+  if (!Number.isInteger(amount) || amount < 1 || amount > 100) {
+    throw new Error("Invalid amount");
+  }
+
+  const today = thaiDateKey(new Date());
+  const settings = await ensureLearnerSettings(learnerId);
+  const priorBonus = settings.bonusNewCardsDate === today ? settings.bonusNewCards : 0;
+  // Clamp to the same ceiling setNewCardsPerDay uses for the standing limit.
+  const nextBonus = Math.min(1000, priorBonus + amount);
+
+  await db
+    .update(learnerSettings)
+    .set({ bonusNewCards: nextBonus, bonusNewCardsDate: today })
+    .where(eq(learnerSettings.learnerId, learnerId));
 
   refresh();
 }

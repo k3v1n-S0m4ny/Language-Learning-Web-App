@@ -31,6 +31,10 @@ export type AtStudyCard =
 export interface AtSessionCounts {
   dueCount: number;
   newRemaining: number;
+  // Never-seen cards left in this theme, BEFORE the daily cap. The "all caught
+  // up" screen uses this to decide whether a today-only top-up could actually
+  // produce a card: if every card is seen, raising the allowance does nothing.
+  unseenRemaining: number;
 }
 
 /** One theme on the picker, with this Learner's progress through it. */
