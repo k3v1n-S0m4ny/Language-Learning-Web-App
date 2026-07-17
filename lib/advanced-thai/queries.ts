@@ -1,4 +1,4 @@
-import { and, asc, count, eq, gt, isNull, lte, sql } from "drizzle-orm";
+import { and, asc, count, eq, gt, gte, isNull, lt, lte, or, sql } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { atCards, atReviewStates, atThemes } from "@/lib/db/schema";
 import { ensureLearnerSettings } from "@/lib/review/queries";
@@ -15,7 +15,15 @@ import type {
   PhraseEntry,
   VocabEntry,
 } from "@/seed/advanced-thai/types";
-import type { AtSessionCounts, AtStudyCard, AtThemeSummary } from "./types";
+import {
+  AT_CARD_KINDS,
+  type AtCardKind,
+  type AtKindSummary,
+  type AtPracticeCounts,
+  type AtSessionCounts,
+  type AtStudyCard,
+  type AtThemeSummary,
+} from "./types";
 
 // The Advanced Thai read layer. It mirrors lib/review/queries.ts closely, and the
 // duplication is deliberate rather than lazy: the two differ in their tables
@@ -300,6 +308,189 @@ export async function getAdvancedStudyData(
   const fsrsCard = stateRow[0]
     ? hydrateFsrsCard(stateRow[0].fsrsCard)
     : createEmptyCard(now);
+
+  const card = toStudyCard(cardRow[0], fsrsCard.lapses);
+  if (!card) return { counts, card: null, hints: null };
+
+  return { counts, card, hints: previewIntervals(scheduler, fsrsCard, now) };
+}
+
+/** Every card kind with this Learner's progress through it — the practice picker's data. */
+export async function getKindSummaries(learnerId: string): Promise<AtKindSummary[]> {
+  const rows = await db.execute<{
+    kind: string;
+    total_cards: number;
+    seen_cards: number;
+  }>(sql`
+    SELECT c.kind,
+           count(c.id)::int       AS total_cards,
+           count(rs.card_id)::int AS seen_cards
+    FROM ${atCards} c
+    LEFT JOIN ${atReviewStates} rs
+      ON rs.card_id = c.id AND rs.learner_id = ${learnerId}
+    GROUP BY c.kind
+  `);
+
+  const byKind = new Map(rows.rows.map((r) => [r.kind, r]));
+
+  // Fixed AT_CARD_KINDS order, zero-filled: a kind with no seeded cards yet must
+  // not vanish from the picker, and an unknown `kind` value in the data (content
+  // shipped ahead of the UI — same rationale as toStudyCard's default branch) is
+  // simply skipped rather than surfaced as a fourth, unhandled row.
+  return AT_CARD_KINDS.map((kind) => {
+    const row = byKind.get(kind);
+    return {
+      kind,
+      totalCards: row?.total_cards ?? 0,
+      seenCards: row?.seen_cards ?? 0,
+    };
+  });
+}
+
+/**
+ * Everything one cross-theme practice-by-kind session needs.
+ *
+ * Unlike getAdvancedStudyData, the pool here is fixed by construction: every
+ * query inner-joins at_review_states, so a card the Learner has never seen
+ * cannot appear. There is no daily new-card cap to honor and no
+ * ensureLearnerSettings call, because nothing here ever introduces a new card
+ * — it only re-serves ones already in play. The `since` timestamp is what lets
+ * the server tell "already practiced this session" apart from "practiced on an
+ * earlier day, then left untouched" without any session storage:
+ *
+ *   Tier 1 — REPEAT-READY:    lastReview >= since AND due <= now. A card rated
+ *                             in this session whose learning step has elapsed.
+ *   Tier 2 — UNPRACTICED:     lastReview IS NULL OR lastReview < since, picked
+ *                             at random. The bulk of the session — every pool
+ *                             card not yet touched this time around.
+ *   Tier 3 — FUTURE-TODAY:    lastReview >= since AND due > now AND
+ *                             due <= end of Thailand day. Mirrors
+ *                             getAdvancedStudyData's tier 3: a card just rated
+ *                             Again sits here for ~1 minute so it can resurface
+ *                             instead of ending the session early.
+ *
+ * Priority: repeat-ready > unpracticed > future-today — the same reasoning as
+ * the per-theme flow, just without a cap to gate tier 2.
+ */
+export async function getAdvancedPracticeData(
+  learnerId: string,
+  kind: AtCardKind,
+  since: Date,
+  now: Date = new Date(),
+): Promise<{
+  counts: AtPracticeCounts;
+  card: AtStudyCard | null;
+  hints: IntervalHints | null;
+}> {
+  const dayEnd = endOfThailandDay(now);
+
+  // Shared across every query below: this session's pool is this Learner's
+  // already-introduced cards of this one kind, across every theme.
+  const poolFilter = and(eq(atReviewStates.learnerId, learnerId), eq(atCards.kind, kind));
+  const unpracticed = or(
+    isNull(atReviewStates.lastReview),
+    lt(atReviewStates.lastReview, since),
+  );
+
+  const [remainingRow, repeatRow, poolRow, readyRow, unpracticedRow, futureRow] =
+    await Promise.all([
+      // Header `remaining` — pool cards not yet rated this session.
+      db
+        .select({ n: count() })
+        .from(atReviewStates)
+        .innerJoin(atCards, eq(atCards.id, atReviewStates.cardId))
+        .where(and(poolFilter, unpracticed)),
+      // Header `repeatCount` — practiced-this-session cards due again before
+      // end of Thai day. Tiers 1 and 3 combined: due <= now is a subset of
+      // due <= dayEnd, so one count covers both.
+      db
+        .select({ n: count() })
+        .from(atReviewStates)
+        .innerJoin(atCards, eq(atCards.id, atReviewStates.cardId))
+        .where(
+          and(
+            poolFilter,
+            gte(atReviewStates.lastReview, since),
+            lte(atReviewStates.due, dayEnd),
+          ),
+        ),
+      // Header `poolSize` — every card of this kind ever seen, across all themes.
+      db
+        .select({ n: count() })
+        .from(atReviewStates)
+        .innerJoin(atCards, eq(atCards.id, atReviewStates.cardId))
+        .where(poolFilter),
+      // Tier 1.
+      db
+        .select({ cardId: atReviewStates.cardId })
+        .from(atReviewStates)
+        .innerJoin(atCards, eq(atCards.id, atReviewStates.cardId))
+        .where(
+          and(poolFilter, gte(atReviewStates.lastReview, since), lte(atReviewStates.due, now)),
+        )
+        .orderBy(asc(atReviewStates.due))
+        .limit(1),
+      // Tier 2 — random pick; see plan's "per-request ORDER BY random()" note.
+      db
+        .select({ cardId: atReviewStates.cardId })
+        .from(atReviewStates)
+        .innerJoin(atCards, eq(atCards.id, atReviewStates.cardId))
+        .where(and(poolFilter, unpracticed))
+        .orderBy(sql`random()`)
+        .limit(1),
+      // Tier 3.
+      db
+        .select({ cardId: atReviewStates.cardId })
+        .from(atReviewStates)
+        .innerJoin(atCards, eq(atCards.id, atReviewStates.cardId))
+        .where(
+          and(
+            poolFilter,
+            gte(atReviewStates.lastReview, since),
+            gt(atReviewStates.due, now),
+            lte(atReviewStates.due, dayEnd),
+          ),
+        )
+        .orderBy(asc(atReviewStates.due))
+        .limit(1),
+    ]);
+
+  const counts: AtPracticeCounts = {
+    remaining: remainingRow[0]?.n ?? 0,
+    repeatCount: repeatRow[0]?.n ?? 0,
+    poolSize: poolRow[0]?.n ?? 0,
+  };
+
+  const chosenId = readyRow[0]?.cardId ?? unpracticedRow[0]?.cardId ?? futureRow[0]?.cardId;
+
+  if (!chosenId) return { counts, card: null, hints: null };
+
+  const [cardRow, stateRow] = await Promise.all([
+    db
+      .select({
+        id: atCards.id,
+        kind: atCards.kind,
+        payload: atCards.payload,
+        audioUrl: atCards.audioUrl,
+      })
+      .from(atCards)
+      .where(eq(atCards.id, chosenId)),
+    db
+      .select({ fsrsCard: atReviewStates.fsrsCard })
+      .from(atReviewStates)
+      .where(
+        and(eq(atReviewStates.learnerId, learnerId), eq(atReviewStates.cardId, chosenId)),
+      ),
+  ]);
+
+  if (!cardRow[0]) return { counts, card: null, hints: null };
+
+  const scheduler = getScheduler();
+  // Every card in this pool has an at_review_states row by construction (all
+  // three tiers inner-join it), so stateRow[0] is never actually absent — the
+  // createEmptyCard fallback exists only to keep this hydration identical to
+  // getAdvancedStudyData's, not because it is reachable here.
+  const fsrsCard = stateRow[0] ? hydrateFsrsCard(stateRow[0].fsrsCard) : createEmptyCard(now);
 
   const card = toStudyCard(cardRow[0], fsrsCard.lapses);
   if (!card) return { counts, card: null, hints: null };

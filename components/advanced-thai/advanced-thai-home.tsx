@@ -1,7 +1,14 @@
 import Link from "next/link";
 import { TopBar } from "@/components/top-bar";
-import { getThemeSummaries } from "@/lib/advanced-thai/queries";
+import { getKindSummaries, getThemeSummaries } from "@/lib/advanced-thai/queries";
+import type { AtCardKind } from "@/lib/advanced-thai/types";
 import { ProgressRing } from "@/components/progress-ring";
+
+const KIND_LABEL: Record<AtCardKind, string> = {
+  vocab: "Vocabulary",
+  grammar: "Grammar",
+  phrase: "Phrases",
+};
 
 // The Advanced Thai home: the theme picker.
 //
@@ -21,7 +28,10 @@ export async function AdvancedThaiHome({
   learnerId: string;
   learnerName: string | null | undefined;
 }) {
-  const themes = await getThemeSummaries(learnerId);
+  const [themes, kinds] = await Promise.all([
+    getThemeSummaries(learnerId),
+    getKindSummaries(learnerId),
+  ]);
 
   return (
     <main className="flex min-h-dvh flex-col items-center gap-6 page-gutter pb-[calc(5rem+var(--safe-bottom))] sm:pb-8">
@@ -96,6 +106,60 @@ export async function AdvancedThaiHome({
           })
         )}
       </div>
+
+      {/* Practice by type: cross-theme, random order — see
+          lib/advanced-thai/queries.ts's getAdvancedPracticeData for the
+          three-tier reasoning. Only shown once at least one theme exists;
+          before that every kind reads 0/0 and there is nothing to practice. */}
+      {themes.length > 0 && (
+        <div className="flex w-full max-w-2xl flex-col gap-2">
+          <h2 className="px-1 text-xs font-semibold uppercase tracking-wide text-foreground-muted">
+            Practice by type
+          </h2>
+          <div className="flex flex-col gap-3">
+            {kinds.map((k) => {
+              const interactive = k.seenCards > 0;
+              const row = (
+                <div className="flex min-w-0 flex-1 items-baseline justify-between gap-2">
+                  <span className="text-sm font-medium text-foreground">
+                    {KIND_LABEL[k.kind]}
+                  </span>
+                  <span className="text-[11px] font-semibold text-foreground-muted">
+                    {interactive ? (
+                      <span className="tabular-nums text-foreground">{k.seenCards}</span>
+                    ) : (
+                      "no cards yet"
+                    )}{" "}
+                    {interactive && "cards"}
+                  </span>
+                </div>
+              );
+              return interactive ? (
+                <Link
+                  key={k.kind}
+                  href={`/advanced-thai/practice/${k.kind}`}
+                  className="group flex items-center gap-4 rounded-[var(--r-lg)] border border-border-base bg-surface p-4 shadow-[var(--glass-shadow)] transition-transform hover:-translate-y-0.5"
+                >
+                  {row}
+                  <span
+                    aria-hidden
+                    className="text-foreground-muted transition-transform group-hover:translate-x-0.5"
+                  >
+                    →
+                  </span>
+                </Link>
+              ) : (
+                <div
+                  key={k.kind}
+                  className="flex items-center gap-4 rounded-[var(--r-lg)] border border-border-base bg-surface p-4 opacity-60"
+                >
+                  {row}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </main>
   );
 }

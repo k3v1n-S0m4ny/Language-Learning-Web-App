@@ -9,7 +9,11 @@ import type {
   VocabEntry,
 } from "@/seed/advanced-thai/types";
 
-export type AtCardKind = "vocab" | "grammar" | "phrase";
+// Single source of truth for the three card kinds, so route validation (the
+// [kind] segment) and the "Practice by type" home section iterate the same
+// list rather than each hand-rolling their own union.
+export const AT_CARD_KINDS = ["vocab", "grammar", "phrase"] as const;
+export type AtCardKind = (typeof AT_CARD_KINDS)[number];
 
 /**
  * A card prepared for study. `payload` is discriminated by `kind` — this is the
@@ -47,4 +51,31 @@ export interface AtThemeSummary {
   seenCards: number;
   dueCount: number;
   newRemaining: number;
+}
+
+/**
+ * Header counts for cross-theme practice-by-kind. Shaped nothing like
+ * AtSessionCounts on purpose — there is no `new`/`unseen` split here (the pool
+ * is only cards already introduced, by design; see queries.ts) and instead a
+ * `repeatCount` that a per-theme session doesn't need to surface, because this
+ * flow's whole pool can legitimately drain to zero `remaining` while repeats
+ * are still being served.
+ */
+export interface AtPracticeCounts {
+  // Pool cards not yet rated in THIS session (lastReview is null or predates
+  // `since`).
+  remaining: number;
+  // Practiced-this-session cards due again before the end of the Thai day —
+  // the tier-1/tier-3 repeat queue.
+  repeatCount: number;
+  // Every card of this kind the Learner has ever seen, across all themes —
+  // the session's total pool size, used for the "practiced all N" summary.
+  poolSize: number;
+}
+
+/** One card kind on the picker, with this Learner's progress through it. */
+export interface AtKindSummary {
+  kind: AtCardKind;
+  seenCards: number;
+  totalCards: number;
 }
