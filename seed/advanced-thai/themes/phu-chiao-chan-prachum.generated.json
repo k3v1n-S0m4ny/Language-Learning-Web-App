@@ -1,0 +1,4145 @@
+{
+  "slug": "phu-chiao-chan-prachum",
+  "titleThai": "ผู้เชี่ยวชาญด้านการจัดประชุมนานาชาติ",
+  "titleEnglish": "International Convention Specialist",
+  "summary": "Plans and supervises international-level events such as exhibitions, trade fairs, academic conferences, discussion forums, and seminars attended by participants from multiple countries.",
+  "vocab": [
+    {
+      "thai": "ผู้เชี่ยวชาญ",
+      "gloss": "specialist; expert",
+      "pos": "noun",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "ผู้",
+          "gloss": "person; one who",
+          "role": "prefix"
+        },
+        {
+          "form": "เชี่ยวชาญ",
+          "gloss": "expert; skilled",
+          "role": "root"
+        }
+      ],
+      "literal": "person + expert"
+    },
+    {
+      "thai": "การจัดประชุม",
+      "gloss": "conference organization",
+      "pos": "noun",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "การ",
+          "gloss": "nominalizer; act of",
+          "role": "prefix"
+        },
+        {
+          "form": "จัด",
+          "gloss": "arrange; organize",
+          "role": "root"
+        },
+        {
+          "form": "ประชุม",
+          "gloss": "meeting; conference",
+          "role": "root"
+        }
+      ],
+      "literal": "the act of arranging + meeting"
+    },
+    {
+      "thai": "นานาชาติ",
+      "gloss": "international",
+      "pos": "adj",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "นานา",
+          "gloss": "various; many",
+          "role": "root"
+        },
+        {
+          "form": "ชาติ",
+          "gloss": "nation",
+          "role": "root"
+        }
+      ],
+      "literal": "many nations"
+    },
+    {
+      "thai": "นิทรรศการ",
+      "gloss": "exhibition",
+      "pos": "noun",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "นิทรรศการ",
+          "gloss": "exhibition",
+          "role": "root"
+        }
+      ]
+    },
+    {
+      "thai": "งานแสดงสินค้า",
+      "gloss": "trade fair",
+      "pos": "noun",
+      "register": "technical",
+      "morphemes": [
+        {
+          "form": "งาน",
+          "gloss": "event; fair",
+          "role": "root"
+        },
+        {
+          "form": "แสดง",
+          "gloss": "display; show",
+          "role": "root"
+        },
+        {
+          "form": "สินค้า",
+          "gloss": "goods; products",
+          "role": "root"
+        }
+      ],
+      "literal": "goods-display event"
+    },
+    {
+      "thai": "งานประชุมวิชาการ",
+      "gloss": "academic conference",
+      "pos": "noun",
+      "register": "technical",
+      "morphemes": [
+        {
+          "form": "งาน",
+          "gloss": "event",
+          "role": "root"
+        },
+        {
+          "form": "ประชุม",
+          "gloss": "meeting; conference",
+          "role": "root"
+        },
+        {
+          "form": "วิชาการ",
+          "gloss": "academic",
+          "role": "root"
+        }
+      ],
+      "literal": "academic meeting event"
+    },
+    {
+      "thai": "งานเสวนา",
+      "gloss": "discussion forum",
+      "pos": "noun",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "งาน",
+          "gloss": "event",
+          "role": "root"
+        },
+        {
+          "form": "เสวนา",
+          "gloss": "discussion; forum",
+          "role": "root"
+        }
+      ]
+    },
+    {
+      "thai": "งานสัมมนา",
+      "gloss": "seminar",
+      "pos": "noun",
+      "register": "technical",
+      "morphemes": [
+        {
+          "form": "งาน",
+          "gloss": "event",
+          "role": "root"
+        },
+        {
+          "form": "สัมมนา",
+          "gloss": "seminar",
+          "role": "root"
+        }
+      ]
+    },
+    {
+      "thai": "เข้าร่วมงาน",
+      "gloss": "to participate in an event",
+      "pos": "verb",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "เข้า",
+          "gloss": "enter",
+          "role": "root"
+        },
+        {
+          "form": "ร่วม",
+          "gloss": "join; participate",
+          "role": "root"
+        },
+        {
+          "form": "งาน",
+          "gloss": "event",
+          "role": "root"
+        }
+      ],
+      "literal": "enter + join + event"
+    },
+    {
+      "thai": "รูปแบบ",
+      "gloss": "format; form",
+      "pos": "noun",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "รูป",
+          "gloss": "form; shape",
+          "role": "root"
+        },
+        {
+          "form": "แบบ",
+          "gloss": "model; pattern",
+          "role": "root"
+        }
+      ],
+      "literal": "shape + pattern"
+    },
+    {
+      "thai": "หลากหลาย",
+      "gloss": "diverse; varied",
+      "pos": "adj",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "หลากหลาย",
+          "gloss": "diverse; varied",
+          "role": "root"
+        }
+      ]
+    },
+    {
+      "thai": "แลกเปลี่ยนความคิดเห็น",
+      "gloss": "exchange opinions",
+      "pos": "verb",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "แลกเปลี่ยน",
+          "gloss": "exchange",
+          "role": "root"
+        },
+        {
+          "form": "ความคิดเห็น",
+          "gloss": "opinion; viewpoint",
+          "role": "root"
+        }
+      ],
+      "literal": "exchange + opinions/ideas seen"
+    },
+    {
+      "thai": "ภาพลักษณ์",
+      "gloss": "image; public image",
+      "pos": "noun",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "ภาพ",
+          "gloss": "image",
+          "role": "root"
+        },
+        {
+          "form": "ลักษณ์",
+          "gloss": "mark; characteristic",
+          "role": "root"
+        }
+      ],
+      "literal": "image + characteristic"
+    },
+    {
+      "thai": "ชื่อเสียง",
+      "gloss": "reputation; renown",
+      "pos": "noun",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "ชื่อ",
+          "gloss": "name",
+          "role": "root"
+        },
+        {
+          "form": "เสียง",
+          "gloss": "sound; voice",
+          "role": "root"
+        }
+      ],
+      "literal": "name + sound"
+    },
+    {
+      "thai": "ดำเนินการ",
+      "gloss": "to carry out; proceed with",
+      "pos": "verb",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "ดำเนิน",
+          "gloss": "proceed; carry on",
+          "role": "root"
+        },
+        {
+          "form": "การ",
+          "gloss": "action; affair",
+          "role": "root"
+        }
+      ],
+      "literal": "walk/advance + action"
+    },
+    {
+      "thai": "นักวางแผนงานประชุม",
+      "gloss": "meeting planner",
+      "pos": "noun",
+      "register": "technical",
+      "morphemes": [
+        {
+          "form": "นัก",
+          "gloss": "one whose practice is",
+          "role": "prefix"
+        },
+        {
+          "form": "วางแผน",
+          "gloss": "plan",
+          "role": "root"
+        },
+        {
+          "form": "งานประชุม",
+          "gloss": "conference work; conference event",
+          "role": "root"
+        }
+      ],
+      "literal": "one whose practice is planning conference work"
+    },
+    {
+      "thai": "แผนงาน",
+      "gloss": "work plan",
+      "pos": "noun",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "แผน",
+          "gloss": "plan",
+          "role": "root"
+        },
+        {
+          "form": "งาน",
+          "gloss": "work; project",
+          "role": "root"
+        }
+      ],
+      "literal": "plan + work"
+    },
+    {
+      "thai": "กำหนดการ",
+      "gloss": "schedule; program",
+      "pos": "noun",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "กำหนด",
+          "gloss": "set; specify",
+          "role": "root"
+        },
+        {
+          "form": "การ",
+          "gloss": "nominalizer",
+          "role": "suffix"
+        }
+      ],
+      "literal": "that-which-is-set"
+    },
+    {
+      "thai": "คัดเลือก",
+      "gloss": "to select",
+      "pos": "verb",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "คัด",
+          "gloss": "screen; sift",
+          "role": "root"
+        },
+        {
+          "form": "เลือก",
+          "gloss": "choose",
+          "role": "root"
+        }
+      ],
+      "literal": "screen + choose"
+    },
+    {
+      "thai": "วิทยากรรับเชิญ",
+      "gloss": "guest speaker",
+      "pos": "noun",
+      "register": "technical",
+      "morphemes": [
+        {
+          "form": "วิทยากร",
+          "gloss": "speaker; lecturer",
+          "role": "root"
+        },
+        {
+          "form": "รับเชิญ",
+          "gloss": "invited",
+          "role": "root"
+        }
+      ],
+      "literal": "speaker + invited"
+    },
+    {
+      "thai": "คณะกรรมการ",
+      "gloss": "committee",
+      "pos": "noun",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "คณะ",
+          "gloss": "group; committee",
+          "role": "root"
+        },
+        {
+          "form": "กรรมการ",
+          "gloss": "committee member; board",
+          "role": "root"
+        }
+      ],
+      "literal": "group + board/member"
+    },
+    {
+      "thai": "จัดเตรียม",
+      "gloss": "to prepare; make arrangements",
+      "pos": "verb",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "จัด",
+          "gloss": "arrange",
+          "role": "root"
+        },
+        {
+          "form": "เตรียม",
+          "gloss": "prepare",
+          "role": "root"
+        }
+      ],
+      "literal": "arrange + ready"
+    },
+    {
+      "thai": "ผู้ร่วมประชุม",
+      "gloss": "conference participant",
+      "pos": "noun",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "ผู้",
+          "gloss": "person who",
+          "role": "prefix"
+        },
+        {
+          "form": "ร่วม",
+          "gloss": "join; participate",
+          "role": "root"
+        },
+        {
+          "form": "ประชุม",
+          "gloss": "meeting; conference",
+          "role": "root"
+        }
+      ],
+      "literal": "person who joins the meeting"
+    },
+    {
+      "thai": "ทูตเฉพาะกิจ",
+      "gloss": "special envoy",
+      "pos": "noun",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "ทูต",
+          "gloss": "envoy; ambassador",
+          "role": "root"
+        },
+        {
+          "form": "เฉพาะกิจ",
+          "gloss": "for a specific mission; ad hoc",
+          "role": "root"
+        }
+      ],
+      "literal": "envoy + specific mission"
+    },
+    {
+      "thai": "เศรษฐกิจ",
+      "gloss": "economy",
+      "pos": "noun",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "เศรษฐกิจ",
+          "gloss": "economy",
+          "role": "root"
+        }
+      ]
+    },
+    {
+      "thai": "ประชาสัมพันธ์",
+      "gloss": "public relations; to publicize",
+      "pos": "verb",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "ประชา",
+          "gloss": "people; public",
+          "role": "root"
+        },
+        {
+          "form": "สัมพันธ์",
+          "gloss": "relations",
+          "role": "root"
+        }
+      ],
+      "literal": "people/public + relations"
+    },
+    {
+      "thai": "ศักยภาพ",
+      "gloss": "potential; capability",
+      "pos": "noun",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "ศักยภาพ",
+          "gloss": "potential; capability",
+          "role": "root"
+        }
+      ]
+    },
+    {
+      "thai": "วัฒนธรรม",
+      "gloss": "culture",
+      "pos": "noun",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "วัฒนธรรม",
+          "gloss": "culture",
+          "role": "root"
+        }
+      ]
+    },
+    {
+      "thai": "ขนบธรรมเนียมประเพณี",
+      "gloss": "customs and traditions",
+      "pos": "noun",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "ขนบธรรมเนียมประเพณี",
+          "gloss": "customs and traditions",
+          "role": "root"
+        }
+      ]
+    },
+    {
+      "thai": "ความประทับใจ",
+      "gloss": "impression",
+      "pos": "noun",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "ความ",
+          "gloss": "nominalizer; state of",
+          "role": "prefix"
+        },
+        {
+          "form": "ประทับใจ",
+          "gloss": "impressed; touched",
+          "role": "root"
+        }
+      ],
+      "literal": "state of being impressed"
+    },
+    {
+      "thai": "ไมตรี",
+      "gloss": "friendship; goodwill",
+      "pos": "noun",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "ไมตรี",
+          "gloss": "friendship; goodwill",
+          "role": "root"
+        }
+      ]
+    },
+    {
+      "thai": "มนุษยสัมพันธ์",
+      "gloss": "human relations; interpersonal skills",
+      "pos": "noun",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "มนุษย",
+          "gloss": "human",
+          "role": "root"
+        },
+        {
+          "form": "สัมพันธ์",
+          "gloss": "relations",
+          "role": "root"
+        }
+      ],
+      "literal": "human + relations"
+    },
+    {
+      "thai": "เผชิญสถานการณ์",
+      "gloss": "to face a situation",
+      "pos": "verb",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "เผชิญ",
+          "gloss": "face; confront",
+          "role": "root"
+        },
+        {
+          "form": "สถานการณ์",
+          "gloss": "situation",
+          "role": "root"
+        }
+      ],
+      "literal": "confront + situation"
+    },
+    {
+      "thai": "เฉพาะหน้า",
+      "gloss": "on the spot; immediate",
+      "pos": "adj",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "เฉพาะ",
+          "gloss": "specific",
+          "role": "root"
+        },
+        {
+          "form": "หน้า",
+          "gloss": "front; immediate point",
+          "role": "root"
+        }
+      ],
+      "literal": "specific + face/front"
+    },
+    {
+      "thai": "เจรจาต่อรอง",
+      "gloss": "to negotiate; bargain",
+      "pos": "verb",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "เจรจา",
+          "gloss": "negotiate; discuss",
+          "role": "root"
+        },
+        {
+          "form": "ต่อรอง",
+          "gloss": "bargain; negotiate terms",
+          "role": "root"
+        }
+      ],
+      "literal": "negotiate + bargain"
+    },
+    {
+      "thai": "อภิปราย",
+      "gloss": "to discuss; debate",
+      "pos": "verb",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "อภิปราย",
+          "gloss": "discuss; debate",
+          "role": "root"
+        }
+      ]
+    },
+    {
+      "thai": "อบรมเชิงปฏิบัติการ",
+      "gloss": "workshop",
+      "pos": "noun",
+      "register": "technical",
+      "morphemes": [
+        {
+          "form": "อบรม",
+          "gloss": "training",
+          "role": "root"
+        },
+        {
+          "form": "เชิง",
+          "gloss": "in the mode/aspect of",
+          "role": "root"
+        },
+        {
+          "form": "ปฏิบัติการ",
+          "gloss": "operation; practical work",
+          "role": "root"
+        }
+      ],
+      "literal": "training in practical mode"
+    },
+    {
+      "thai": "อุตสาหกรรม",
+      "gloss": "industry",
+      "pos": "noun",
+      "register": "technical",
+      "morphemes": [
+        {
+          "form": "อุตสาหกรรม",
+          "gloss": "industry",
+          "role": "root"
+        }
+      ]
+    },
+    {
+      "thai": "สั่งสมประสบการณ์",
+      "gloss": "to accumulate experience",
+      "pos": "verb",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "สั่งสม",
+          "gloss": "accumulate",
+          "role": "root"
+        },
+        {
+          "form": "ประสบการณ์",
+          "gloss": "experience",
+          "role": "root"
+        }
+      ],
+      "literal": "accumulate + experience"
+    },
+    {
+      "thai": "ละเอียดถี่ถ้วน",
+      "gloss": "meticulous; thorough",
+      "pos": "adj",
+      "register": "formal",
+      "morphemes": [
+        {
+          "form": "ละเอียด",
+          "gloss": "detailed",
+          "role": "root"
+        },
+        {
+          "form": "ถี่ถ้วน",
+          "gloss": "thorough; complete",
+          "role": "root"
+        }
+      ],
+      "literal": "detailed + thoroughly complete"
+    }
+  ],
+  "grammar": [
+    {
+      "frame": "เนื่องจาก + Clause",
+      "fn": "connector",
+      "plainEnglish": "because of that reason",
+      "examples": [
+        {
+          "gloss": "International conferences are events that every country wants to host, because once they are held they greatly benefit the country's economy.",
+          "segments": [
+            {
+              "text": "งานประชุมนานาชาติเป็นงานที่ทุกประเทศต้องการจัด "
+            },
+            {
+              "text": "เนื่องจาก",
+              "slot": "marker"
+            },
+            {
+              "text": "เมื่อจัดแล้วจะส่งผลดีต่อเศรษฐกิจของประเทศเป็นอย่างมาก",
+              "slot": "Clause"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame": "ด้วยเหตุนี้ + Clause",
+      "fn": "connector",
+      "plainEnglish": "for this reason, so the next thing happens",
+      "examples": [
+        {
+          "gloss": "For this reason, many countries compete to become the host.",
+          "segments": [
+            {
+              "text": "ด้วยเหตุนี้",
+              "slot": "marker"
+            },
+            {
+              "text": " หลายประเทศจึงแข่งขันกันเพื่อให้ได้เป็นผู้จัดงาน",
+              "slot": "Clause"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame": "ขณะเดียวกัน(ก็) + Clause",
+      "fn": "connector",
+      "plainEnglish": "at the same time, another thing is also true",
+      "examples": [
+        {
+          "gloss": "At the same time, they must also have a good knowledge of different countries, such as language, social manners, greeting methods, ways of life, or cultural background, so that they can build goodwill with one another.",
+          "segments": [
+            {
+              "text": "ขณะเดียวกันก็",
+              "slot": "marker"
+            },
+            {
+              "text": "ต้องมีความรู้เกี่ยวกับประเทศต่าง ๆ เป็นอย่างดี เช่น ภาษา มารยาทในสังคม วิธีการทักทาย วิถีชีวิต หรือพื้นฐานทางวัฒนธรรมเพื่อจะได้สร้างไมตรีต่อกัน",
+              "slot": "Clause"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame": "นอกจากนี้(ยัง) + Clause",
+      "fn": "connector",
+      "plainEnglish": "besides that, there is something more",
+      "examples": [
+        {
+          "gloss": "In addition, they must also prepare extra social activities.",
+          "segments": [
+            {
+              "text": "นอกจากนี้ยัง",
+              "slot": "marker"
+            },
+            {
+              "text": "ต้องจัดเตรียมกิจกรรมทางสังคมเพิ่มเติมด้วย",
+              "slot": "Clause"
+            }
+          ]
+        },
+        {
+          "gloss": "Besides that, they must also have a wide range of knowledge, such as markets, tourism, event plans, and conference planning and preparation.",
+          "segments": [
+            {
+              "text": "นอกจากนี้ยัง",
+              "slot": "marker"
+            },
+            {
+              "text": "ต้องมีความรู้ที่หลากหลาย เช่น ตลาด การท่องเที่ยว แผนจัดงานอีเวนต์ การวางแผนและจัดเตรียมการประชุม",
+              "slot": "Clause"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame": "นอกจาก + N + แล้ว + Clause",
+      "fn": "connector",
+      "plainEnglish": "apart from that thing, there is also this",
+      "examples": [
+        {
+          "gloss": "Apart from work ability and leadership, managing a team and having excellent people skills are also essential.",
+          "segments": [
+            {
+              "text": "นอกจาก",
+              "slot": "marker"
+            },
+            {
+              "text": "ความสามารถในการทำงานและความเป็นผู้นำ",
+              "slot": "N"
+            },
+            {
+              "text": "แล้ว ",
+              "slot": "marker"
+            },
+            {
+              "text": "การคุมทีมงานและการมีมนุษยสัมพันธ์ที่ดีเยี่ยมก็เป็นสิ่งจำเป็น",
+              "slot": "Clause"
+            }
+          ]
+        },
+        {
+          "gloss": "If you want to become an international convention specialist, apart from being good at English, you must also seriously study history and culture.",
+          "segments": [
+            {
+              "text": "หากอยากเป็นผู้เชี่ยวชาญด้านการจัดประชุมนานาชาติ "
+            },
+            {
+              "text": "นอกจาก",
+              "slot": "marker"
+            },
+            {
+              "text": "ต้องเก่งภาษาอังกฤษ",
+              "slot": "N"
+            },
+            {
+              "text": "แล้ว ยัง",
+              "slot": "marker"
+            },
+            {
+              "text": "ต้องตั้งใจเรียนรู้ประวัติศาสตร์และวัฒนธรรม เพื่อทำให้ประเทศของเราเป็นที่รู้จักในต่างประเทศ",
+              "slot": "Clause"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame": "ตั้งแต่ + A + ไปจนถึง + B",
+      "fn": "connector",
+      "plainEnglish": "covering the whole range from one point to another",
+      "examples": [
+        {
+          "gloss": "A convention planner is someone who handles everything from the planning stage all the way to accounting.",
+          "segments": [
+            {
+              "text": "ผู้เชี่ยวชาญด้านการจัดประชุมนานาชาติ หรือ นักวางแผนงานประชุม เป็นผู้ที่ดูแล"
+            },
+            {
+              "text": "ตั้งแต่",
+              "slot": "marker"
+            },
+            {
+              "text": "แผนงาน",
+              "slot": "A"
+            },
+            {
+              "text": "ไปจนถึง",
+              "slot": "marker"
+            },
+            {
+              "text": "งานบัญชี",
+              "slot": "B"
+            }
+          ]
+        },
+        {
+          "gloss": "One international event takes about one year to as long as five or six years to prepare.",
+          "segments": [
+            {
+              "text": "การจัดงานประชุมนานาชาติ 1 งาน จะใช้เวลาเตรียมการประมาณ 1 ปี "
+            },
+            {
+              "text": "ไปจนถึง",
+              "slot": "marker"
+            },
+            {
+              "text": "5–6 ปี",
+              "slot": "B"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame": "เกินกว่า + N",
+      "fn": "comparative",
+      "plainEnglish": "more than that amount",
+      "examples": [
+        {
+          "gloss": "Large conferences with more than 1,000 participants generally take 2–3 years to prepare.",
+          "segments": [
+            {
+              "text": "โดยทั่วไปแล้ว งานประชุมขนาดใหญ่ที่มีผู้เข้าร่วม"
+            },
+            {
+              "text": "เกินกว่า",
+              "slot": "marker"
+            },
+            {
+              "text": " 1,000 คน",
+              "slot": "N"
+            },
+            {
+              "text": " มักจะต้องใช้เวลาเตรียมงาน 2–3 ปี"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame": "เป็น + N",
+      "fn": "topic",
+      "plainEnglish": "someone or something serves in that role",
+      "examples": [
+        {
+          "gloss": "A convention planner is a person who oversees everything from planning to accounting.",
+          "segments": [
+            {
+              "text": "ผู้เชี่ยวชาญด้านการจัดประชุมนานาชาติ หรือ นักวางแผนงานประชุม "
+            },
+            {
+              "text": "เป็น",
+              "slot": "marker"
+            },
+            {
+              "text": "ผู้ที่ดูแลตั้งแต่แผนงานไปจนถึงงานบัญชี",
+              "slot": "N"
+            }
+          ]
+        },
+        {
+          "gloss": "They serve as a representative in promoting the country to create a good impression on participants.",
+          "segments": [
+            {
+              "text": "ผู้เชี่ยวชาญด้านการจัดประชุมนานาชาติมีโอกาสได้พบปะชาวต่างชาติอยู่เสมอ จึงทำหน้าที่"
+            },
+            {
+              "text": "เป็น",
+              "slot": "marker"
+            },
+            {
+              "text": "ตัวแทนในการประชาสัมพันธ์ประเทศเพื่อสร้างความประทับใจแก่ผู้เข้าร่วมงาน",
+              "slot": "N"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame": "หมายถึง + N",
+      "fn": "topic",
+      "plainEnglish": "this term refers to that thing",
+      "examples": [
+        {
+          "gloss": "International convention means a meeting where different countries come together to discuss important designated topics.",
+          "segments": [
+            {
+              "text": "งานประชุมนานาชาติ "
+            },
+            {
+              "text": "หมายถึง",
+              "slot": "marker"
+            },
+            {
+              "text": " งานประชุมที่ประเทศต่าง ๆ มาร่วมกันอภิปรายหัวข้อสำคัญที่ถูกกำหนดขึ้น",
+              "slot": "N"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame": "อาจจะเป็น + N",
+      "fn": "topic",
+      "plainEnglish": "it may take the form of one of these",
+      "examples": [
+        {
+          "gloss": "It may be an exhibition, a discussion, a workshop, a seminar, or a breakout meeting.",
+          "segments": [
+            {
+              "text": "อาจจะเป็น",
+              "slot": "marker"
+            },
+            {
+              "text": "นิทรรศการ การอภิปราย การอบรมเชิงปฏิบัติการ การสัมมนา การประชุมย่อย",
+              "slot": "N"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame": "จะได้ + V",
+      "fn": "connector",
+      "plainEnglish": "so that one can then do that",
+      "examples": [
+        {
+          "gloss": "At the same time, they must know different countries well so that they can build goodwill with one another.",
+          "segments": [
+            {
+              "text": "ขณะเดียวกันก็ต้องมีความรู้เกี่ยวกับประเทศต่าง ๆ เป็นอย่างดี เช่น ภาษา มารยาทในสังคม วิธีการทักทาย วิถีชีวิต หรือพื้นฐานทางวัฒนธรรมเพื่อ"
+            },
+            {
+              "text": "จะได้",
+              "slot": "marker"
+            },
+            {
+              "text": "สร้างไมตรีต่อกัน",
+              "slot": "V"
+            }
+          ]
+        },
+        {
+          "gloss": "Many countries therefore compete so that they can become the host.",
+          "segments": [
+            {
+              "text": "ด้วยเหตุนี้ หลายประเทศจึงแข่งขันกันเพื่อให้ได้เป็นผู้จัดงาน"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame": "หาก + Clause",
+      "fn": "connector",
+      "plainEnglish": "if that condition is true",
+      "examples": [
+        {
+          "gloss": "If they get to organize a big event, they will have a chance to face unexpected situations.",
+          "segments": [
+            {
+              "text": "หาก",
+              "slot": "marker"
+            },
+            {
+              "text": "ได้จัดงานใหญ่ ๆ ก็จะมีโอกาสเผชิญสถานการณ์ที่คาดไม่ถึง",
+              "slot": "Clause"
+            }
+          ]
+        },
+        {
+          "gloss": "If you want to become an international convention specialist, apart from being good at English, you must also seriously study history and culture.",
+          "segments": [
+            {
+              "text": "หาก",
+              "slot": "marker"
+            },
+            {
+              "text": "อยากเป็นผู้เชี่ยวชาญด้านการจัดประชุมนานาชาติ นอกจากต้องเก่งภาษาอังกฤษแล้ว ยังต้องตั้งใจเรียนรู้ประวัติศาสตร์และวัฒนธรรม เพื่อทำให้ประเทศของเราเป็นที่รู้จักในต่างประเทศ",
+              "slot": "Clause"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame": "ถูก + V",
+      "fn": "passive",
+      "plainEnglish": "the thing is affected by an action done to it",
+      "examples": [
+        {
+          "gloss": "International conventions are meetings where countries come together to discuss important topics that have been set in advance.",
+          "segments": [
+            {
+              "text": "งานประชุมนานาชาติ หมายถึง งานประชุมที่ประเทศต่าง ๆ มาร่วมกันอภิปรายหัวข้อสำคัญที่"
+            },
+            {
+              "text": "ถูก",
+              "slot": "marker"
+            },
+            {
+              "text": "กำหนดขึ้น",
+              "slot": "V"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "phrases": [
+    {
+      "thai": "วางแผนและควบคุมดูแลการจัดงานในระดับนานาชาติ",
+      "gloss": "Plan and supervise the organization of international-level events.",
+      "words": [
+        {
+          "thai": "วางแผน",
+          "gloss": "plan"
+        },
+        {
+          "thai": "และ",
+          "gloss": "and"
+        },
+        {
+          "thai": "ควบคุมดูแล",
+          "gloss": "supervise"
+        },
+        {
+          "thai": "การจัดงาน",
+          "gloss": "event organization"
+        },
+        {
+          "thai": "ในระดับนานาชาติ",
+          "gloss": "at the international level"
+        }
+      ],
+      "source": "prose",
+      "context": "Role · Intl. event planning"
+    },
+    {
+      "thai": "เช่น",
+      "gloss": "for example",
+      "words": [
+        {
+          "thai": "เช่น",
+          "gloss": "for example"
+        }
+      ],
+      "source": "prose",
+      "context": "Role · Intl. event planning"
+    },
+    {
+      "thai": "งานนิทรรศการ",
+      "gloss": "exhibition",
+      "words": [
+        {
+          "thai": "งานนิทรรศการ",
+          "gloss": "exhibition"
+        }
+      ],
+      "source": "prose",
+      "context": "Role · Intl. event planning"
+    },
+    {
+      "thai": "งานแสดงสินค้า",
+      "gloss": "trade fair",
+      "words": [
+        {
+          "thai": "งานแสดงสินค้า",
+          "gloss": "trade fair"
+        }
+      ],
+      "source": "prose",
+      "context": "Role · Intl. event planning"
+    },
+    {
+      "thai": "งานประชุมวิชาการ",
+      "gloss": "academic conference",
+      "words": [
+        {
+          "thai": "งานประชุมวิชาการ",
+          "gloss": "academic conference"
+        }
+      ],
+      "source": "prose",
+      "context": "Role · Intl. event planning"
+    },
+    {
+      "thai": "งานเสวนา",
+      "gloss": "forum event",
+      "words": [
+        {
+          "thai": "งานเสวนา",
+          "gloss": "forum event"
+        }
+      ],
+      "source": "prose",
+      "context": "Role · Intl. event planning"
+    },
+    {
+      "thai": "งานสัมมนา",
+      "gloss": "seminar",
+      "words": [
+        {
+          "thai": "งานสัมมนา",
+          "gloss": "seminar"
+        }
+      ],
+      "source": "prose",
+      "context": "Role · Intl. event planning"
+    },
+    {
+      "thai": "ที่มีหลายประเทศเข้าร่วมงาน",
+      "gloss": "with participants from many countries joining the event",
+      "words": [
+        {
+          "thai": "ที่",
+          "gloss": "that / which"
+        },
+        {
+          "thai": "มี",
+          "gloss": "have"
+        },
+        {
+          "thai": "หลายประเทศ",
+          "gloss": "many countries"
+        },
+        {
+          "thai": "เข้าร่วมงาน",
+          "gloss": "participate in the event"
+        }
+      ],
+      "source": "prose",
+      "context": "Role · Intl. event planning"
+    },
+    {
+      "thai": "รับผิดชอบการจัดงานระดับนานาชาติ",
+      "gloss": "Be responsible for organizing international-level events.",
+      "words": [
+        {
+          "thai": "รับผิดชอบ",
+          "gloss": "be responsible for"
+        },
+        {
+          "thai": "การจัดงาน",
+          "gloss": "event organization"
+        },
+        {
+          "thai": "ระดับนานาชาติ",
+          "gloss": "international-level"
+        }
+      ],
+      "source": "heading",
+      "context": "Heading · Intl. event duty"
+    },
+    {
+      "thai": "เมื่อโลกแคบลง",
+      "gloss": "As the world grows smaller,",
+      "words": [
+        {
+          "thai": "เมื่อ",
+          "gloss": "when / as"
+        },
+        {
+          "thai": "โลก",
+          "gloss": "world"
+        },
+        {
+          "thai": "แคบลง",
+          "gloss": "becomes smaller"
+        }
+      ],
+      "source": "prose",
+      "context": "Heading · Intl. event duty"
+    },
+    {
+      "thai": "งานพบปะหรือการประชุมระดับนานาชาติก็มีรูปแบบหลากหลายมากขึ้น",
+      "gloss": "international meetups or conferences have also become much more varied in form.",
+      "words": [
+        {
+          "thai": "งานพบปะ",
+          "gloss": "meetup event"
+        },
+        {
+          "thai": "หรือ",
+          "gloss": "or"
+        },
+        {
+          "thai": "การประชุมระดับนานาชาติ",
+          "gloss": "international conference"
+        },
+        {
+          "thai": "ก็",
+          "gloss": "also"
+        },
+        {
+          "thai": "มี",
+          "gloss": "have"
+        },
+        {
+          "thai": "รูปแบบ",
+          "gloss": "form"
+        },
+        {
+          "thai": "หลากหลาย",
+          "gloss": "varied"
+        },
+        {
+          "thai": "มากขึ้น",
+          "gloss": "more and more"
+        }
+      ],
+      "source": "prose",
+      "context": "Heading · Intl. event duty"
+    },
+    {
+      "thai": "งานประชุมระดับนานาชาติ",
+      "gloss": "international conference",
+      "words": [
+        {
+          "thai": "งานประชุมระดับนานาชาติ",
+          "gloss": "international conference"
+        }
+      ],
+      "source": "prose",
+      "context": "Heading · Intl. event duty"
+    },
+    {
+      "thai": "ซึ่งจัดขึ้นเพื่อให้ตัวแทนจากประเทศต่าง ๆ",
+      "gloss": "which is organized so that representatives from various countries",
+      "words": [
+        {
+          "thai": "ซึ่ง",
+          "gloss": "which"
+        },
+        {
+          "thai": "จัด",
+          "gloss": "organize"
+        },
+        {
+          "thai": "ขึ้น",
+          "gloss": "up; be held"
+        },
+        {
+          "thai": "เพื่อ",
+          "gloss": "in order to"
+        },
+        {
+          "thai": "ให้",
+          "gloss": "let; enable"
+        },
+        {
+          "thai": "ตัวแทน",
+          "gloss": "representative"
+        },
+        {
+          "thai": "จาก",
+          "gloss": "from"
+        },
+        {
+          "thai": "ประเทศต่าง ๆ",
+          "gloss": "various countries"
+        }
+      ],
+      "source": "prose",
+      "context": "Role · Int’l event planning"
+    },
+    {
+      "thai": "ได้มาแลกเปลี่ยนความคิดเห็นหรือแก้ไขปัญหาร่วมกัน",
+      "gloss": "can come to exchange opinions or solve problems together",
+      "words": [
+        {
+          "thai": "ได้",
+          "gloss": "can"
+        },
+        {
+          "thai": "มา",
+          "gloss": "come"
+        },
+        {
+          "thai": "แลกเปลี่ยน",
+          "gloss": "exchange"
+        },
+        {
+          "thai": "ความคิดเห็น",
+          "gloss": "opinions"
+        },
+        {
+          "thai": "หรือ",
+          "gloss": "or"
+        },
+        {
+          "thai": "แก้ไข",
+          "gloss": "solve; remedy"
+        },
+        {
+          "thai": "ปัญหา",
+          "gloss": "problem"
+        },
+        {
+          "thai": "ร่วมกัน",
+          "gloss": "together"
+        }
+      ],
+      "source": "prose",
+      "context": "Role · Int’l event planning"
+    },
+    {
+      "thai": "การที่บุคคลสำคัญจากแต่ละประเทศมาร่วมงานประชุมนานาชาติ",
+      "gloss": "The fact that important figures from each country come to attend an international conference",
+      "words": [
+        {
+          "thai": "การที่",
+          "gloss": "the fact that"
+        },
+        {
+          "thai": "บุคคลสำคัญ",
+          "gloss": "important person; dignitary"
+        },
+        {
+          "thai": "จาก",
+          "gloss": "from"
+        },
+        {
+          "thai": "แต่ละ",
+          "gloss": "each"
+        },
+        {
+          "thai": "ประเทศ",
+          "gloss": "country"
+        },
+        {
+          "thai": "มา",
+          "gloss": "come"
+        },
+        {
+          "thai": "ร่วมงาน",
+          "gloss": "attend the event"
+        },
+        {
+          "thai": "ประชุม",
+          "gloss": "conference; meeting"
+        },
+        {
+          "thai": "นานาชาติ",
+          "gloss": "international"
+        }
+      ],
+      "source": "prose",
+      "context": "Role · Int’l event planning"
+    },
+    {
+      "thai": "ทำให้เมืองหรือประเทศที่จัดงานได้ยกระดับภาพลักษณ์และสร้างชื่อเสียงในระดับนานาชาติ",
+      "gloss": "raises the image of the city or country hosting the event and builds an international reputation",
+      "words": [
+        {
+          "thai": "ทำให้",
+          "gloss": "cause to; make"
+        },
+        {
+          "thai": "เมือง",
+          "gloss": "city"
+        },
+        {
+          "thai": "หรือ",
+          "gloss": "or"
+        },
+        {
+          "thai": "ประเทศ",
+          "gloss": "country"
+        },
+        {
+          "thai": "ที่",
+          "gloss": "that; which"
+        },
+        {
+          "thai": "จัดงาน",
+          "gloss": "host the event"
+        },
+        {
+          "thai": "ได้",
+          "gloss": "obtain; achieve"
+        },
+        {
+          "thai": "ยกระดับ",
+          "gloss": "raise; elevate"
+        },
+        {
+          "thai": "ภาพลักษณ์",
+          "gloss": "image"
+        },
+        {
+          "thai": "และ",
+          "gloss": "and"
+        },
+        {
+          "thai": "สร้าง",
+          "gloss": "build; create"
+        },
+        {
+          "thai": "ชื่อเสียง",
+          "gloss": "reputation"
+        },
+        {
+          "thai": "ในระดับนานาชาติ",
+          "gloss": "at the international level"
+        }
+      ],
+      "source": "prose",
+      "context": "Role · Int’l event planning"
+    },
+    {
+      "thai": "ด้วยเหตุนี้",
+      "gloss": "For this reason,",
+      "words": [
+        {
+          "thai": "ด้วยเหตุนี้",
+          "gloss": "for this reason"
+        }
+      ],
+      "source": "prose",
+      "context": "Role · Int’l event planning"
+    },
+    {
+      "thai": "หลายประเทศจึงแข่งขันกันเพื่อให้ได้เป็นผู้จัดงาน",
+      "gloss": "many countries therefore compete to become the organizer",
+      "words": [
+        {
+          "thai": "หลาย",
+          "gloss": "many"
+        },
+        {
+          "thai": "ประเทศ",
+          "gloss": "countries"
+        },
+        {
+          "thai": "จึง",
+          "gloss": "therefore"
+        },
+        {
+          "thai": "แข่งขัน",
+          "gloss": "compete"
+        },
+        {
+          "thai": "กัน",
+          "gloss": "with one another"
+        },
+        {
+          "thai": "เพื่อ",
+          "gloss": "in order to"
+        },
+        {
+          "thai": "ให้ได้",
+          "gloss": "to succeed in getting"
+        },
+        {
+          "thai": "เป็น",
+          "gloss": "be; become"
+        },
+        {
+          "thai": "ผู้จัดงาน",
+          "gloss": "organizer; host"
+        }
+      ],
+      "source": "prose",
+      "context": "Role · Int’l event planning"
+    },
+    {
+      "thai": "โดยผู้เชี่ยวชาญด้านการจัดประชุมนานาชาติจะทำหน้าที่ดำเนินการจัดงานดังกล่าว",
+      "gloss": "with international conference specialists serving to carry out the event in question",
+      "words": [
+        {
+          "thai": "โดย",
+          "gloss": "with; by"
+        },
+        {
+          "thai": "ผู้เชี่ยวชาญ",
+          "gloss": "specialist"
+        },
+        {
+          "thai": "ด้าน",
+          "gloss": "in the field of"
+        },
+        {
+          "thai": "การจัดประชุม",
+          "gloss": "conference organization"
+        },
+        {
+          "thai": "นานาชาติ",
+          "gloss": "international"
+        },
+        {
+          "thai": "จะ",
+          "gloss": "will"
+        },
+        {
+          "thai": "ทำหน้าที่",
+          "gloss": "serve the role; be responsible for"
+        },
+        {
+          "thai": "ดำเนินการ",
+          "gloss": "carry out"
+        },
+        {
+          "thai": "จัดงาน",
+          "gloss": "organize the event"
+        },
+        {
+          "thai": "ดังกล่าว",
+          "gloss": "said; aforementioned"
+        }
+      ],
+      "source": "prose",
+      "context": "Role · Int’l event planning"
+    },
+    {
+      "thai": "งานของผู้เชี่ยวชาญด้านการจัดประชุมนานาชาติ",
+      "gloss": "The work of international conference specialists",
+      "words": [
+        {
+          "thai": "งาน",
+          "gloss": "work"
+        },
+        {
+          "thai": "ของ",
+          "gloss": "of"
+        },
+        {
+          "thai": "ผู้เชี่ยวชาญ",
+          "gloss": "specialist"
+        },
+        {
+          "thai": "ด้าน",
+          "gloss": "in the field of"
+        },
+        {
+          "thai": "การจัดประชุม",
+          "gloss": "conference organization"
+        },
+        {
+          "thai": "นานาชาติ",
+          "gloss": "international"
+        }
+      ],
+      "source": "heading",
+      "context": "Role · Int’l conference experts"
+    },
+    {
+      "thai": "วางแผนขั้นตอนทั้งหมดและควบคุมดูแลการจัดงาน",
+      "gloss": "plan all the steps and supervise the organization of the event",
+      "words": [
+        {
+          "thai": "วางแผน",
+          "gloss": "plan"
+        },
+        {
+          "thai": "ขั้นตอน",
+          "gloss": "steps; procedures"
+        },
+        {
+          "thai": "ทั้งหมด",
+          "gloss": "all"
+        },
+        {
+          "thai": "และ",
+          "gloss": "and"
+        },
+        {
+          "thai": "ควบคุมดูแล",
+          "gloss": "supervise; oversee"
+        },
+        {
+          "thai": "การจัดงาน",
+          "gloss": "event organization"
+        }
+      ],
+      "source": "heading",
+      "context": "Duties · Planning & oversight"
+    },
+    {
+      "thai": "ผู้เชี่ยวชาญด้านการจัดประชุมนานาชาติ",
+      "gloss": "international conference specialists",
+      "words": [
+        {
+          "thai": "ผู้เชี่ยวชาญ",
+          "gloss": "specialist"
+        },
+        {
+          "thai": "ด้าน",
+          "gloss": "in the field of"
+        },
+        {
+          "thai": "การจัดประชุม",
+          "gloss": "conference organization"
+        },
+        {
+          "thai": "นานาชาติ",
+          "gloss": "international"
+        }
+      ],
+      "source": "prose",
+      "context": "Duties · Planning & oversight"
+    },
+    {
+      "thai": "หรือ",
+      "gloss": "or",
+      "words": [
+        {
+          "thai": "หรือ",
+          "gloss": "or"
+        }
+      ],
+      "source": "prose",
+      "context": "Duties · Planning & oversight"
+    },
+    {
+      "thai": "นักวางแผนงานประชุม",
+      "gloss": "conference planners",
+      "words": [
+        {
+          "thai": "นักวางแผน",
+          "gloss": "planner"
+        },
+        {
+          "thai": "งานประชุม",
+          "gloss": "conference work; conference event"
+        }
+      ],
+      "source": "prose",
+      "context": "Duties · Planning & oversight"
+    },
+    {
+      "thai": "เป็นผู้ที่ดูแลตั้งแต่แผนงานไปจนถึงงานบัญชี",
+      "gloss": "They are responsible for everything from the work plan all the way to accounting.",
+      "words": [
+        {
+          "thai": "เป็น",
+          "gloss": "be"
+        },
+        {
+          "thai": "ผู้ที่",
+          "gloss": "person who"
+        },
+        {
+          "thai": "ดูแล",
+          "gloss": "take care of"
+        },
+        {
+          "thai": "ตั้งแต่",
+          "gloss": "from"
+        },
+        {
+          "thai": "แผนงาน",
+          "gloss": "work plan"
+        },
+        {
+          "thai": "ไปจนถึง",
+          "gloss": "all the way to"
+        },
+        {
+          "thai": "งานบัญชี",
+          "gloss": "accounting work"
+        }
+      ],
+      "source": "prose",
+      "context": "Responsibilities · Event planning"
+    },
+    {
+      "thai": "เมื่อจะจัดงานประชุมนานาชาติ",
+      "gloss": "When organizing an international conference,",
+      "words": [
+        {
+          "thai": "เมื่อ",
+          "gloss": "when"
+        },
+        {
+          "thai": "จะ",
+          "gloss": "will"
+        },
+        {
+          "thai": "จัดงาน",
+          "gloss": "organize an event"
+        },
+        {
+          "thai": "ประชุมนานาชาติ",
+          "gloss": "international conference"
+        }
+      ],
+      "source": "prose",
+      "context": "Responsibilities · Event planning"
+    },
+    {
+      "thai": "สิ่งที่ต้องทำคือวางกำหนดการของงานประชุม",
+      "gloss": "what must be done is to set the conference schedule.",
+      "words": [
+        {
+          "thai": "สิ่งที่",
+          "gloss": "what"
+        },
+        {
+          "thai": "ต้องทำ",
+          "gloss": "must do"
+        },
+        {
+          "thai": "คือ",
+          "gloss": "is"
+        },
+        {
+          "thai": "วางกำหนดการ",
+          "gloss": "set the schedule"
+        },
+        {
+          "thai": "ของ",
+          "gloss": "of"
+        },
+        {
+          "thai": "งานประชุม",
+          "gloss": "conference"
+        }
+      ],
+      "source": "prose",
+      "context": "Responsibilities · Event planning"
+    },
+    {
+      "thai": "คัดเลือกผู้เข้าร่วมงานประชุมและวิทยากรรับเชิญ",
+      "gloss": "Select conference participants and guest speakers.",
+      "words": [
+        {
+          "thai": "คัดเลือก",
+          "gloss": "select"
+        },
+        {
+          "thai": "ผู้เข้าร่วมงานประชุม",
+          "gloss": "conference participants"
+        },
+        {
+          "thai": "และ",
+          "gloss": "and"
+        },
+        {
+          "thai": "วิทยากรรับเชิญ",
+          "gloss": "guest speakers"
+        }
+      ],
+      "source": "prose",
+      "context": "Responsibilities · Event planning"
+    },
+    {
+      "thai": "จากนั้นก็จัดทีมงานและคณะกรรมการเพื่อดำเนินงาน",
+      "gloss": "After that, organize the staff team and committee to carry out the work.",
+      "words": [
+        {
+          "thai": "จากนั้น",
+          "gloss": "after that"
+        },
+        {
+          "thai": "ก็",
+          "gloss": "then"
+        },
+        {
+          "thai": "จัด",
+          "gloss": "arrange"
+        },
+        {
+          "thai": "ทีมงาน",
+          "gloss": "staff team"
+        },
+        {
+          "thai": "และ",
+          "gloss": "and"
+        },
+        {
+          "thai": "คณะกรรมการ",
+          "gloss": "committee"
+        },
+        {
+          "thai": "เพื่อ",
+          "gloss": "in order to"
+        },
+        {
+          "thai": "ดำเนินงาน",
+          "gloss": "carry out the work"
+        }
+      ],
+      "source": "prose",
+      "context": "Responsibilities · Event planning"
+    },
+    {
+      "thai": "รวมทั้งจัดเตรียมงานในเรื่องอื่น ๆ",
+      "gloss": "including preparing work in other matters as well.",
+      "words": [
+        {
+          "thai": "รวมทั้ง",
+          "gloss": "including"
+        },
+        {
+          "thai": "จัดเตรียม",
+          "gloss": "prepare"
+        },
+        {
+          "thai": "งาน",
+          "gloss": "work"
+        },
+        {
+          "thai": "ใน",
+          "gloss": "in"
+        },
+        {
+          "thai": "เรื่องอื่น ๆ",
+          "gloss": "other matters"
+        }
+      ],
+      "source": "prose",
+      "context": "Responsibilities · Event planning"
+    },
+    {
+      "thai": "จัดโปรแกรมท่องเที่ยวของผู้ร่วมประชุม",
+      "gloss": "Arrange the travel program for conference participants.",
+      "words": [
+        {
+          "thai": "จัด",
+          "gloss": "arrange"
+        },
+        {
+          "thai": "โปรแกรมท่องเที่ยว",
+          "gloss": "travel program"
+        },
+        {
+          "thai": "ของ",
+          "gloss": "for"
+        },
+        {
+          "thai": "ผู้ร่วมประชุม",
+          "gloss": "conference participants"
+        }
+      ],
+      "source": "prose",
+      "context": "Responsibilities · Event planning"
+    },
+    {
+      "thai": "จองที่พักและตั๋วเครื่องบินสำหรับผู้ร่วมประชุม",
+      "gloss": "Book accommodation and plane tickets for conference participants.",
+      "words": [
+        {
+          "thai": "จอง",
+          "gloss": "book"
+        },
+        {
+          "thai": "ที่พัก",
+          "gloss": "accommodation"
+        },
+        {
+          "thai": "และ",
+          "gloss": "and"
+        },
+        {
+          "thai": "ตั๋วเครื่องบิน",
+          "gloss": "plane tickets"
+        },
+        {
+          "thai": "สำหรับ",
+          "gloss": "for"
+        },
+        {
+          "thai": "ผู้ร่วมประชุม",
+          "gloss": "conference participants"
+        }
+      ],
+      "source": "prose",
+      "context": "Responsibilities · Event planning"
+    },
+    {
+      "thai": "เลือกสถานที่จัดประชุม",
+      "gloss": "Choose the meeting venue.",
+      "words": [
+        {
+          "thai": "เลือก",
+          "gloss": "choose"
+        },
+        {
+          "thai": "สถานที่จัดประชุม",
+          "gloss": "meeting venue"
+        }
+      ],
+      "source": "prose",
+      "context": "Responsibilities · Event planning"
+    },
+    {
+      "thai": "นอกจากนี้ยังต้องจัดเตรียมกิจกรรมทางสังคมเพิ่มเติมด้วย",
+      "gloss": "In addition, social activities must also be prepared as well.",
+      "words": [
+        {
+          "thai": "นอกจากนี้",
+          "gloss": "in addition"
+        },
+        {
+          "thai": "ยัง",
+          "gloss": "still / also"
+        },
+        {
+          "thai": "ต้อง",
+          "gloss": "must"
+        },
+        {
+          "thai": "จัดเตรียม",
+          "gloss": "prepare"
+        },
+        {
+          "thai": "กิจกรรมทางสังคม",
+          "gloss": "social activities"
+        },
+        {
+          "thai": "เพิ่มเติม",
+          "gloss": "additionally"
+        },
+        {
+          "thai": "ด้วย",
+          "gloss": "too"
+        }
+      ],
+      "source": "prose",
+      "context": "Responsibilities · Event planning"
+    },
+    {
+      "thai": "โดยทั่วไปแล้ว",
+      "gloss": "Generally speaking,",
+      "words": [
+        {
+          "thai": "โดยทั่วไปแล้ว",
+          "gloss": "generally speaking"
+        }
+      ],
+      "source": "prose",
+      "context": "Responsibilities · Event planning"
+    },
+    {
+      "thai": "งานประชุมขนาดใหญ่ที่มีผู้เข้าร่วมเกินกว่า",
+      "gloss": "large conferences with more participants than",
+      "words": [
+        {
+          "thai": "งานประชุม",
+          "gloss": "conference"
+        },
+        {
+          "thai": "ขนาดใหญ่",
+          "gloss": "large-scale"
+        },
+        {
+          "thai": "ที่",
+          "gloss": "that / which"
+        },
+        {
+          "thai": "มี",
+          "gloss": "have"
+        },
+        {
+          "thai": "ผู้เข้าร่วม",
+          "gloss": "participants"
+        },
+        {
+          "thai": "เกินกว่า",
+          "gloss": "more than"
+        }
+      ],
+      "source": "prose",
+      "context": "Responsibilities · Event planning"
+    },
+    {
+      "thai": "คน",
+      "gloss": "people",
+      "words": [
+        {
+          "thai": "คน",
+          "gloss": "person; people"
+        }
+      ],
+      "source": "prose",
+      "context": "Planning · Overall process"
+    },
+    {
+      "thai": "มักจะต้องใช้เวลาเตรียมงาน",
+      "gloss": "often have to spend time preparing the event",
+      "words": [
+        {
+          "thai": "มักจะ",
+          "gloss": "often"
+        },
+        {
+          "thai": "ต้อง",
+          "gloss": "must; have to"
+        },
+        {
+          "thai": "ใช้เวลา",
+          "gloss": "spend time"
+        },
+        {
+          "thai": "เตรียมงาน",
+          "gloss": "prepare the event; event preparation"
+        }
+      ],
+      "source": "prose",
+      "context": "Planning · Overall process"
+    },
+    {
+      "thai": "ปี",
+      "gloss": "year",
+      "words": [
+        {
+          "thai": "ปี",
+          "gloss": "year"
+        }
+      ],
+      "source": "prose",
+      "context": "Planning · Overall process"
+    },
+    {
+      "thai": "เป็นทูตเฉพาะกิจ",
+      "gloss": "to be a special envoy",
+      "words": [
+        {
+          "thai": "เป็น",
+          "gloss": "be"
+        },
+        {
+          "thai": "ทูต",
+          "gloss": "envoy; ambassador"
+        },
+        {
+          "thai": "เฉพาะกิจ",
+          "gloss": "special-mission; ad hoc"
+        }
+      ],
+      "source": "heading",
+      "context": "Role · Special envoy"
+    },
+    {
+      "thai": "งานประชุมนานาชาติเป็นงานที่ทุกประเทศต้องการจัด",
+      "gloss": "International conferences are events that every country wants to host",
+      "words": [
+        {
+          "thai": "งานประชุมนานาชาติ",
+          "gloss": "international conference"
+        },
+        {
+          "thai": "เป็น",
+          "gloss": "be"
+        },
+        {
+          "thai": "งาน",
+          "gloss": "event"
+        },
+        {
+          "thai": "ที่",
+          "gloss": "that; which"
+        },
+        {
+          "thai": "ทุกประเทศ",
+          "gloss": "every country"
+        },
+        {
+          "thai": "ต้องการ",
+          "gloss": "want"
+        },
+        {
+          "thai": "จัด",
+          "gloss": "hold; host"
+        }
+      ],
+      "source": "prose",
+      "context": "Role · Special envoy"
+    },
+    {
+      "thai": "เนื่องจากเมื่อจัดแล้วจะส่งผลดีต่อเศรษฐกิจของประเทศเป็นอย่างมาก",
+      "gloss": "because once they are held, they have a very positive effect on the country's economy",
+      "words": [
+        {
+          "thai": "เนื่องจาก",
+          "gloss": "because"
+        },
+        {
+          "thai": "เมื่อ",
+          "gloss": "when; once"
+        },
+        {
+          "thai": "จัด",
+          "gloss": "hold; organize"
+        },
+        {
+          "thai": "แล้ว",
+          "gloss": "then; once already"
+        },
+        {
+          "thai": "จะ",
+          "gloss": "will"
+        },
+        {
+          "thai": "ส่งผลดี",
+          "gloss": "have a positive effect"
+        },
+        {
+          "thai": "ต่อ",
+          "gloss": "toward; on"
+        },
+        {
+          "thai": "เศรษฐกิจ",
+          "gloss": "economy"
+        },
+        {
+          "thai": "ของ",
+          "gloss": "of"
+        },
+        {
+          "thai": "ประเทศ",
+          "gloss": "country"
+        },
+        {
+          "thai": "เป็นอย่างมาก",
+          "gloss": "greatly; very much"
+        }
+      ],
+      "source": "prose",
+      "context": "Role · Special envoy"
+    },
+    {
+      "thai": "ผู้เชี่ยวชาญด้านการจัดประชุมนานาชาติจึงมีหน้าที่ประชาสัมพันธ์ข้อมูล",
+      "gloss": "Experts in organizing international conferences therefore have the duty to publicize information",
+      "words": [
+        {
+          "thai": "ผู้เชี่ยวชาญ",
+          "gloss": "expert"
+        },
+        {
+          "thai": "ด้าน",
+          "gloss": "in the field of"
+        },
+        {
+          "thai": "การจัดประชุมนานาชาติ",
+          "gloss": "the organizing of international conferences"
+        },
+        {
+          "thai": "จึง",
+          "gloss": "therefore"
+        },
+        {
+          "thai": "มีหน้าที่",
+          "gloss": "have the duty to"
+        },
+        {
+          "thai": "ประชาสัมพันธ์",
+          "gloss": "publicize; promote"
+        },
+        {
+          "thai": "ข้อมูล",
+          "gloss": "information"
+        }
+      ],
+      "source": "prose",
+      "context": "Role · Special envoy"
+    },
+    {
+      "thai": "ศักยภาพในการจัดงาน",
+      "gloss": "the capability to organize events",
+      "words": [
+        {
+          "thai": "ศักยภาพ",
+          "gloss": "potential; capability"
+        },
+        {
+          "thai": "ใน",
+          "gloss": "in; for"
+        },
+        {
+          "thai": "การจัดงาน",
+          "gloss": "organizing events"
+        }
+      ],
+      "source": "prose",
+      "context": "Role · Special envoy"
+    },
+    {
+      "thai": "เสน่ห์ของประเทศ",
+      "gloss": "the country's charm",
+      "words": [
+        {
+          "thai": "เสน่ห์",
+          "gloss": "charm; appeal"
+        },
+        {
+          "thai": "ของ",
+          "gloss": "of"
+        },
+        {
+          "thai": "ประเทศ",
+          "gloss": "country"
+        }
+      ],
+      "source": "prose",
+      "context": "Role · Special envoy"
+    },
+    {
+      "thai": "เพื่อให้ต่างชาติสนใจและเดินทางมาที่ประเทศของตน",
+      "gloss": "so that foreigners will be interested and travel to their country",
+      "words": [
+        {
+          "thai": "เพื่อให้",
+          "gloss": "so that"
+        },
+        {
+          "thai": "ต่างชาติ",
+          "gloss": "foreigners; foreign nationals"
+        },
+        {
+          "thai": "สนใจ",
+          "gloss": "be interested"
+        },
+        {
+          "thai": "และ",
+          "gloss": "and"
+        },
+        {
+          "thai": "เดินทาง",
+          "gloss": "travel"
+        },
+        {
+          "thai": "มา",
+          "gloss": "come"
+        },
+        {
+          "thai": "ที่",
+          "gloss": "to"
+        },
+        {
+          "thai": "ประเทศ",
+          "gloss": "country"
+        },
+        {
+          "thai": "ของ",
+          "gloss": "of"
+        },
+        {
+          "thai": "ตน",
+          "gloss": "oneself; their own"
+        }
+      ],
+      "source": "prose",
+      "context": "Role · Special envoy"
+    },
+    {
+      "thai": "ยินดีต้อนรับครับ!",
+      "gloss": "Welcome!",
+      "words": [
+        {
+          "thai": "ยินดีต้อนรับ",
+          "gloss": "welcome"
+        },
+        {
+          "thai": "ครับ",
+          "gloss": "polite particle (male speaker)"
+        }
+      ],
+      "source": "quote",
+      "context": "Role · Special envoy"
+    },
+    {
+      "thai": "โอ้!",
+      "gloss": "Oh!",
+      "words": [
+        {
+          "thai": "โอ้",
+          "gloss": "oh"
+        }
+      ],
+      "source": "quote",
+      "context": "Role · Special envoy"
+    },
+    {
+      "thai": "สวยมาก",
+      "gloss": "very beautiful",
+      "words": [
+        {
+          "thai": "สวย",
+          "gloss": "beautiful"
+        },
+        {
+          "thai": "มาก",
+          "gloss": "very"
+        }
+      ],
+      "source": "quote",
+      "context": "Role · Special envoy"
+    },
+    {
+      "thai": "ความเข้าใจในวัฒนธรรมต่างชาติเป็นสิ่งจำเป็น",
+      "gloss": "Understanding foreign cultures is essential.",
+      "words": [
+        {
+          "thai": "ความเข้าใจ",
+          "gloss": "understanding"
+        },
+        {
+          "thai": "ใน",
+          "gloss": "in"
+        },
+        {
+          "thai": "วัฒนธรรม",
+          "gloss": "culture"
+        },
+        {
+          "thai": "ต่างชาติ",
+          "gloss": "foreign"
+        },
+        {
+          "thai": "เป็น",
+          "gloss": "is"
+        },
+        {
+          "thai": "สิ่งจำเป็น",
+          "gloss": "something necessary; essential"
+        }
+      ],
+      "source": "heading",
+      "context": "Opening definition"
+    },
+    {
+      "thai": "ผู้เชี่ยวชาญด้านการจัดประชุมนานาชาติมีโอกาสได้พบปะชาวต่างชาติอยู่เสมอ",
+      "gloss": "International conference organizing specialists always have opportunities to meet foreigners.",
+      "words": [
+        {
+          "thai": "ผู้เชี่ยวชาญ",
+          "gloss": "specialist"
+        },
+        {
+          "thai": "ด้าน",
+          "gloss": "in the field of"
+        },
+        {
+          "thai": "การจัดประชุม",
+          "gloss": "conference organizing"
+        },
+        {
+          "thai": "นานาชาติ",
+          "gloss": "international"
+        },
+        {
+          "thai": "มีโอกาส",
+          "gloss": "have the opportunity"
+        },
+        {
+          "thai": "ได้",
+          "gloss": "to get to; have a chance to"
+        },
+        {
+          "thai": "พบปะ",
+          "gloss": "meet; interact with"
+        },
+        {
+          "thai": "ชาวต่างชาติ",
+          "gloss": "foreigners"
+        },
+        {
+          "thai": "อยู่เสมอ",
+          "gloss": "always; regularly"
+        }
+      ],
+      "source": "prose",
+      "context": "Opening definition"
+    },
+    {
+      "thai": "จึงทำหน้าที่เป็นตัวแทนในการประชาสัมพันธ์ประเทศเพื่อสร้างความประทับใจแก่ผู้เข้าร่วมงาน",
+      "gloss": "thus serving as representatives in publicizing the country in order to create a good impression on the event participants",
+      "words": [
+        {
+          "thai": "จึง",
+          "gloss": "thus"
+        },
+        {
+          "thai": "ทำหน้าที่",
+          "gloss": "serve; act in the role"
+        },
+        {
+          "thai": "เป็น",
+          "gloss": "as; be"
+        },
+        {
+          "thai": "ตัวแทน",
+          "gloss": "representative"
+        },
+        {
+          "thai": "ใน",
+          "gloss": "in"
+        },
+        {
+          "thai": "การประชาสัมพันธ์",
+          "gloss": "public relations; publicity"
+        },
+        {
+          "thai": "ประเทศ",
+          "gloss": "the country"
+        },
+        {
+          "thai": "เพื่อ",
+          "gloss": "in order to"
+        },
+        {
+          "thai": "สร้าง",
+          "gloss": "create"
+        },
+        {
+          "thai": "ความประทับใจ",
+          "gloss": "impression"
+        },
+        {
+          "thai": "แก่",
+          "gloss": "to; for"
+        },
+        {
+          "thai": "ผู้เข้าร่วมงาน",
+          "gloss": "participants; attendees"
+        }
+      ],
+      "source": "prose",
+      "context": "Opening definition"
+    },
+    {
+      "thai": "ด้านศิลปวัฒนธรรม",
+      "gloss": "arts and culture",
+      "words": [
+        {
+          "thai": "ด้าน",
+          "gloss": "aspect; field"
+        },
+        {
+          "thai": "ศิลปวัฒนธรรม",
+          "gloss": "arts and culture"
+        }
+      ],
+      "source": "prose",
+      "context": "Opening definition"
+    },
+    {
+      "thai": "ขนบธรรมเนียมประเพณี",
+      "gloss": "customs and traditions",
+      "words": [
+        {
+          "thai": "ขนบธรรมเนียมประเพณี",
+          "gloss": "customs and traditions"
+        }
+      ],
+      "source": "prose",
+      "context": "Opening definition"
+    },
+    {
+      "thai": "ขณะเดียวกันก็ต้องมีความรู้เกี่ยวกับประเทศต่าง ๆ",
+      "gloss": "At the same time, they must also have good knowledge about various countries",
+      "words": [
+        {
+          "thai": "ขณะเดียวกัน",
+          "gloss": "at the same time"
+        },
+        {
+          "thai": "ก็",
+          "gloss": "also"
+        },
+        {
+          "thai": "ต้อง",
+          "gloss": "must"
+        },
+        {
+          "thai": "มี",
+          "gloss": "have"
+        },
+        {
+          "thai": "ความรู้",
+          "gloss": "knowledge"
+        },
+        {
+          "thai": "เกี่ยวกับ",
+          "gloss": "about; concerning"
+        },
+        {
+          "thai": "ประเทศต่าง ๆ",
+          "gloss": "various countries"
+        }
+      ],
+      "source": "prose",
+      "context": "Opening definition"
+    },
+    {
+      "thai": "เป็นอย่างดี",
+      "gloss": "very well",
+      "words": [
+        {
+          "thai": "เป็นอย่างดี",
+          "gloss": "very well"
+        }
+      ],
+      "source": "prose",
+      "context": "Opening definition"
+    },
+    {
+      "thai": "ภาษา",
+      "gloss": "language",
+      "words": [
+        {
+          "thai": "ภาษา",
+          "gloss": "language"
+        }
+      ],
+      "source": "prose",
+      "context": "Opening definition"
+    },
+    {
+      "thai": "มารยาทในสังคม",
+      "gloss": "social manners",
+      "words": [
+        {
+          "thai": "มารยาท",
+          "gloss": "manners"
+        },
+        {
+          "thai": "ใน",
+          "gloss": "in"
+        },
+        {
+          "thai": "สังคม",
+          "gloss": "society; social settings"
+        }
+      ],
+      "source": "prose",
+      "context": "Opening definition"
+    },
+    {
+      "thai": "วิธีการทักทาย",
+      "gloss": "ways of greeting",
+      "words": [
+        {
+          "thai": "วิธีการ",
+          "gloss": "method; way"
+        },
+        {
+          "thai": "ทักทาย",
+          "gloss": "greet"
+        }
+      ],
+      "source": "prose",
+      "context": "Opening definition"
+    },
+    {
+      "thai": "วิถีชีวิต",
+      "gloss": "way of life",
+      "words": [
+        {
+          "thai": "วิถีชีวิต",
+          "gloss": "way of life"
+        }
+      ],
+      "source": "prose",
+      "context": "Opening definition"
+    },
+    {
+      "thai": "หรือพื้นฐานทางวัฒนธรรมเพื่อจะได้สร้างไมตรีต่อกัน",
+      "gloss": "or a cultural background, so that they can build goodwill with each other",
+      "words": [
+        {
+          "thai": "หรือ",
+          "gloss": "or"
+        },
+        {
+          "thai": "พื้นฐาน",
+          "gloss": "foundation; background"
+        },
+        {
+          "thai": "ทางวัฒนธรรม",
+          "gloss": "cultural"
+        },
+        {
+          "thai": "เพื่อ",
+          "gloss": "in order to"
+        },
+        {
+          "thai": "จะ",
+          "gloss": "will; to"
+        },
+        {
+          "thai": "ได้",
+          "gloss": "get to; be able to"
+        },
+        {
+          "thai": "สร้าง",
+          "gloss": "build; create"
+        },
+        {
+          "thai": "ไมตรี",
+          "gloss": "friendship; goodwill"
+        },
+        {
+          "thai": "ต่อกัน",
+          "gloss": "toward each other"
+        }
+      ],
+      "source": "prose",
+      "context": "Need · Foreign cultures"
+    },
+    {
+      "thai": "โดยไม่เกิดความเข้าใจผิดและทำเรื่องผิดพลาดขึ้น",
+      "gloss": "without causing misunderstandings and making mistakes happen",
+      "words": [
+        {
+          "thai": "โดยไม่",
+          "gloss": "without"
+        },
+        {
+          "thai": "เกิด",
+          "gloss": "arise; occur"
+        },
+        {
+          "thai": "ความเข้าใจผิด",
+          "gloss": "misunderstanding"
+        },
+        {
+          "thai": "และ",
+          "gloss": "and"
+        },
+        {
+          "thai": "ทำ",
+          "gloss": "make; do"
+        },
+        {
+          "thai": "เรื่องผิดพลาด",
+          "gloss": "mistakes; erroneous matters"
+        },
+        {
+          "thai": "ขึ้น",
+          "gloss": "up; occur"
+        }
+      ],
+      "source": "prose",
+      "context": "Need · Foreign cultures"
+    },
+    {
+      "thai": "ความรู้และความคิดในระดับนานาชาติเป็นสิ่งจำเป็น",
+      "gloss": "International-level knowledge and thinking are necessary",
+      "words": [
+        {
+          "thai": "ความรู้",
+          "gloss": "knowledge"
+        },
+        {
+          "thai": "และ",
+          "gloss": "and"
+        },
+        {
+          "thai": "ความคิด",
+          "gloss": "thinking; ideas"
+        },
+        {
+          "thai": "ในระดับนานาชาติ",
+          "gloss": "at the international level"
+        },
+        {
+          "thai": "เป็น",
+          "gloss": "be"
+        },
+        {
+          "thai": "สิ่งจำเป็น",
+          "gloss": "necessity; something necessary"
+        }
+      ],
+      "source": "heading",
+      "context": "Need · International outlook"
+    },
+    {
+      "thai": "ผู้เชี่ยวชาญด้านการจัดประชุมนานาชาติต้องใช้คอมพิวเตอร์เป็น",
+      "gloss": "Specialists in organizing international conferences must be able to use computers",
+      "words": [
+        {
+          "thai": "ผู้เชี่ยวชาญ",
+          "gloss": "specialist; expert"
+        },
+        {
+          "thai": "ด้าน",
+          "gloss": "in the field of"
+        },
+        {
+          "thai": "การจัดประชุมนานาชาติ",
+          "gloss": "organizing international conferences"
+        },
+        {
+          "thai": "ต้อง",
+          "gloss": "must"
+        },
+        {
+          "thai": "ใช้",
+          "gloss": "use"
+        },
+        {
+          "thai": "คอมพิวเตอร์",
+          "gloss": "computer"
+        },
+        {
+          "thai": "เป็น",
+          "gloss": "be able to"
+        }
+      ],
+      "source": "prose",
+      "context": "Need · International outlook"
+    },
+    {
+      "thai": "มีภาษาต่างประเทศที่ถนัด",
+      "gloss": "be proficient in foreign languages",
+      "words": [
+        {
+          "thai": "มี",
+          "gloss": "have"
+        },
+        {
+          "thai": "ภาษาต่างประเทศ",
+          "gloss": "foreign languages"
+        },
+        {
+          "thai": "ที่",
+          "gloss": "that"
+        },
+        {
+          "thai": "ถนัด",
+          "gloss": "be proficient in; be skilled at"
+        }
+      ],
+      "source": "prose",
+      "context": "Need · International outlook"
+    },
+    {
+      "thai": "และมีความรู้และความคิดเกี่ยวกับสถานการณ์ระหว่างประเทศ",
+      "gloss": "and have knowledge and ideas about the international situation",
+      "words": [
+        {
+          "thai": "และ",
+          "gloss": "and"
+        },
+        {
+          "thai": "มี",
+          "gloss": "have"
+        },
+        {
+          "thai": "ความรู้",
+          "gloss": "knowledge"
+        },
+        {
+          "thai": "และ",
+          "gloss": "and"
+        },
+        {
+          "thai": "ความคิด",
+          "gloss": "ideas; thinking"
+        },
+        {
+          "thai": "เกี่ยวกับ",
+          "gloss": "about; concerning"
+        },
+        {
+          "thai": "สถานการณ์ระหว่างประเทศ",
+          "gloss": "international situation"
+        }
+      ],
+      "source": "prose",
+      "context": "Need · International outlook"
+    },
+    {
+      "thai": "นอกจากนี้ยังต้องมีความรู้ที่หลากหลาย",
+      "gloss": "In addition, they must also have a wide range of knowledge",
+      "words": [
+        {
+          "thai": "นอกจากนี้",
+          "gloss": "in addition"
+        },
+        {
+          "thai": "ยัง",
+          "gloss": "still; also"
+        },
+        {
+          "thai": "ต้อง",
+          "gloss": "must"
+        },
+        {
+          "thai": "มี",
+          "gloss": "have"
+        },
+        {
+          "thai": "ความรู้",
+          "gloss": "knowledge"
+        },
+        {
+          "thai": "ที่หลากหลาย",
+          "gloss": "that is diverse; varied"
+        }
+      ],
+      "source": "prose",
+      "context": "Need · International outlook"
+    },
+    {
+      "thai": "ตลาด",
+      "gloss": "market",
+      "words": [
+        {
+          "thai": "ตลาด",
+          "gloss": "market"
+        }
+      ],
+      "source": "prose",
+      "context": "Need · International outlook"
+    },
+    {
+      "thai": "การท่องเที่ยว",
+      "gloss": "tourism",
+      "words": [
+        {
+          "thai": "การท่องเที่ยว",
+          "gloss": "tourism; traveling"
+        }
+      ],
+      "source": "prose",
+      "context": "Need · International outlook"
+    },
+    {
+      "thai": "แผนจัดงานอีเวนต์",
+      "gloss": "event planning",
+      "words": [
+        {
+          "thai": "แผน",
+          "gloss": "plan"
+        },
+        {
+          "thai": "จัดงานอีเวนต์",
+          "gloss": "organize events; event management"
+        }
+      ],
+      "source": "prose",
+      "context": "Need · International outlook"
+    },
+    {
+      "thai": "การวางแผนและจัดเตรียมการประชุม",
+      "gloss": "planning and preparing a meeting",
+      "words": [
+        {
+          "thai": "การวางแผน",
+          "gloss": "planning"
+        },
+        {
+          "thai": "และ",
+          "gloss": "and"
+        },
+        {
+          "thai": "จัดเตรียม",
+          "gloss": "prepare; arrange"
+        },
+        {
+          "thai": "การประชุม",
+          "gloss": "meeting; conference"
+        }
+      ],
+      "source": "prose",
+      "context": "Need · International outlook"
+    },
+    {
+      "thai": "นอกจากความสามารถในการทำงานและความเป็นผู้นำแล้ว",
+      "gloss": "Besides work ability and leadership,",
+      "words": [
+        {
+          "thai": "นอกจาก",
+          "gloss": "besides; apart from"
+        },
+        {
+          "thai": "ความสามารถ",
+          "gloss": "ability"
+        },
+        {
+          "thai": "ในการทำงาน",
+          "gloss": "in working; for work"
+        },
+        {
+          "thai": "และ",
+          "gloss": "and"
+        },
+        {
+          "thai": "ความเป็นผู้นำ",
+          "gloss": "leadership"
+        },
+        {
+          "thai": "แล้ว",
+          "gloss": "already; then"
+        }
+      ],
+      "source": "prose",
+      "context": "Need · International outlook"
+    },
+    {
+      "thai": "การคุมทีมงานและการมีมนุษยสัมพันธ์ที่ดีเยี่ยมก็เป็นสิ่งจำเป็น",
+      "gloss": "Managing a work team and having excellent interpersonal skills are also essential.",
+      "words": [
+        {
+          "thai": "การคุมทีมงาน",
+          "gloss": "managing a work team"
+        },
+        {
+          "thai": "และ",
+          "gloss": "and"
+        },
+        {
+          "thai": "การมีมนุษยสัมพันธ์ที่ดีเยี่ยม",
+          "gloss": "having excellent interpersonal skills"
+        },
+        {
+          "thai": "ก็",
+          "gloss": "also"
+        },
+        {
+          "thai": "เป็น",
+          "gloss": "be"
+        },
+        {
+          "thai": "สิ่งจำเป็น",
+          "gloss": "something necessary"
+        }
+      ],
+      "source": "prose",
+      "context": "Requirements · International"
+    },
+    {
+      "thai": "หากได้จัดงานใหญ่ ๆ",
+      "gloss": "If one has to organize a large event,",
+      "words": [
+        {
+          "thai": "หาก",
+          "gloss": "if"
+        },
+        {
+          "thai": "ได้",
+          "gloss": "have the chance to / get to"
+        },
+        {
+          "thai": "จัดงานใหญ่ ๆ",
+          "gloss": "organize a large event"
+        }
+      ],
+      "source": "prose",
+      "context": "Requirements · International"
+    },
+    {
+      "thai": "ก็จะมีโอกาสเผชิญสถานการณ์ที่คาดไม่ถึง",
+      "gloss": "then there will be a chance of facing unexpected situations.",
+      "words": [
+        {
+          "thai": "ก็",
+          "gloss": "then"
+        },
+        {
+          "thai": "จะ",
+          "gloss": "will"
+        },
+        {
+          "thai": "มีโอกาส",
+          "gloss": "have a chance"
+        },
+        {
+          "thai": "เผชิญ",
+          "gloss": "face"
+        },
+        {
+          "thai": "สถานการณ์ที่คาดไม่ถึง",
+          "gloss": "unexpected situations"
+        }
+      ],
+      "source": "prose",
+      "context": "Requirements · International"
+    },
+    {
+      "thai": "ต้องฝึกแก้ปัญหาเฉพาะหน้า",
+      "gloss": "One must practice solving immediate problems on the spot.",
+      "words": [
+        {
+          "thai": "ต้อง",
+          "gloss": "must"
+        },
+        {
+          "thai": "ฝึก",
+          "gloss": "practice"
+        },
+        {
+          "thai": "แก้ปัญหาเฉพาะหน้า",
+          "gloss": "solve immediate problems on the spot"
+        }
+      ],
+      "source": "prose",
+      "context": "Requirements · International"
+    },
+    {
+      "thai": "และรู้จักเจรจาต่อรองเมื่อผู้ร่วมประชุมมีข้อเรียกร้องต่าง ๆ",
+      "gloss": "and know how to negotiate when participants in the meeting have various demands.",
+      "words": [
+        {
+          "thai": "และ",
+          "gloss": "and"
+        },
+        {
+          "thai": "รู้จัก",
+          "gloss": "know how to"
+        },
+        {
+          "thai": "เจรจาต่อรอง",
+          "gloss": "negotiate"
+        },
+        {
+          "thai": "เมื่อ",
+          "gloss": "when"
+        },
+        {
+          "thai": "ผู้ร่วมประชุม",
+          "gloss": "meeting participants"
+        },
+        {
+          "thai": "มี",
+          "gloss": "have"
+        },
+        {
+          "thai": "ข้อเรียกร้องต่าง ๆ",
+          "gloss": "various demands"
+        }
+      ],
+      "source": "prose",
+      "context": "Requirements · International"
+    },
+    {
+      "thai": "งานประชุมนานาชาติ",
+      "gloss": "International conference",
+      "words": [
+        {
+          "thai": "งานประชุมนานาชาติ",
+          "gloss": "international conference"
+        }
+      ],
+      "source": "heading",
+      "context": "Section heading"
+    },
+    {
+      "thai": "หมายถึง",
+      "gloss": "means",
+      "words": [
+        {
+          "thai": "หมายถึง",
+          "gloss": "means"
+        }
+      ],
+      "source": "prose",
+      "context": "Opening definition"
+    },
+    {
+      "thai": "งานประชุมที่ประเทศต่าง ๆ",
+      "gloss": "a meeting where various countries",
+      "words": [
+        {
+          "thai": "งานประชุม",
+          "gloss": "meeting"
+        },
+        {
+          "thai": "ที่",
+          "gloss": "that / where"
+        },
+        {
+          "thai": "ประเทศต่าง ๆ",
+          "gloss": "various countries"
+        }
+      ],
+      "source": "prose",
+      "context": "Opening definition"
+    },
+    {
+      "thai": "มาร่วมกันอภิปรายหัวข้อสำคัญที่ถูกกำหนดขึ้น",
+      "gloss": "come together to discuss an important topic that has been set.",
+      "words": [
+        {
+          "thai": "มา",
+          "gloss": "come"
+        },
+        {
+          "thai": "ร่วมกัน",
+          "gloss": "together"
+        },
+        {
+          "thai": "อภิปราย",
+          "gloss": "discuss"
+        },
+        {
+          "thai": "หัวข้อสำคัญ",
+          "gloss": "important topic"
+        },
+        {
+          "thai": "ที่",
+          "gloss": "that"
+        },
+        {
+          "thai": "ถูกกำหนดขึ้น",
+          "gloss": "has been set"
+        }
+      ],
+      "source": "prose",
+      "context": "Opening definition"
+    },
+    {
+      "thai": "อาจจะเป็นนิทรรศการ",
+      "gloss": "It may be an exhibition,",
+      "words": [
+        {
+          "thai": "อาจจะเป็น",
+          "gloss": "may be"
+        },
+        {
+          "thai": "นิทรรศการ",
+          "gloss": "exhibition"
+        }
+      ],
+      "source": "prose",
+      "context": "Opening definition"
+    },
+    {
+      "thai": "การอภิปราย",
+      "gloss": "a discussion,",
+      "words": [
+        {
+          "thai": "การอภิปราย",
+          "gloss": "discussion"
+        }
+      ],
+      "source": "prose",
+      "context": "Opening definition"
+    },
+    {
+      "thai": "การอบรมเชิงปฏิบัติการ",
+      "gloss": "or a workshop.",
+      "words": [
+        {
+          "thai": "การอบรมเชิงปฏิบัติการ",
+          "gloss": "workshop / practical training"
+        }
+      ],
+      "source": "prose",
+      "context": "Opening definition"
+    },
+    {
+      "thai": "การสัมมนา",
+      "gloss": "a seminar",
+      "words": [
+        {
+          "thai": "การสัมมนา",
+          "gloss": "seminar"
+        }
+      ],
+      "source": "prose",
+      "context": "Types · Int'l conferences"
+    },
+    {
+      "thai": "การประชุมย่อย",
+      "gloss": "a breakout meeting",
+      "words": [
+        {
+          "thai": "การประชุมย่อย",
+          "gloss": "breakout meeting"
+        }
+      ],
+      "source": "prose",
+      "context": "Types · Int'l conferences"
+    },
+    {
+      "thai": "โดยรูปแบบของงานประชุมอาจแตกต่างกันตามคณะผู้ร่วมประชุม",
+      "gloss": "The format of a meeting may vary depending on the group of participants.",
+      "words": [
+        {
+          "thai": "โดย",
+          "gloss": "with / as for"
+        },
+        {
+          "thai": "รูปแบบ",
+          "gloss": "format"
+        },
+        {
+          "thai": "ของ",
+          "gloss": "of"
+        },
+        {
+          "thai": "งานประชุม",
+          "gloss": "conference event"
+        },
+        {
+          "thai": "อาจ",
+          "gloss": "may"
+        },
+        {
+          "thai": "แตกต่างกัน",
+          "gloss": "differ"
+        },
+        {
+          "thai": "ตาม",
+          "gloss": "according to / depending on"
+        },
+        {
+          "thai": "คณะผู้ร่วมประชุม",
+          "gloss": "group of participants"
+        }
+      ],
+      "source": "prose",
+      "context": "Types · Int'l conferences"
+    },
+    {
+      "thai": "วิธีดำเนินการประชุมหรือหัวข้อประชุม",
+      "gloss": "the way the meeting is conducted or the meeting topic",
+      "words": [
+        {
+          "thai": "วิธีดำเนินการประชุม",
+          "gloss": "method of conducting a meeting"
+        },
+        {
+          "thai": "หรือ",
+          "gloss": "or"
+        },
+        {
+          "thai": "หัวข้อประชุม",
+          "gloss": "meeting topic"
+        }
+      ],
+      "source": "prose",
+      "context": "Types · Int'l conferences"
+    },
+    {
+      "thai": "งานประชุมนานาชาติมีส่วนช่วยในด้านการพัฒนาอุตสาหกรรม",
+      "gloss": "International conferences help contribute to industrial development",
+      "words": [
+        {
+          "thai": "งานประชุมนานาชาติ",
+          "gloss": "international conference event"
+        },
+        {
+          "thai": "มีส่วนช่วย",
+          "gloss": "help contribute"
+        },
+        {
+          "thai": "ในด้าน",
+          "gloss": "in the area of"
+        },
+        {
+          "thai": "การพัฒนาอุตสาหกรรม",
+          "gloss": "industrial development"
+        }
+      ],
+      "source": "prose",
+      "context": "Benefits · Int'l conferences"
+    },
+    {
+      "thai": "รวมทั้งทำให้เกิดการแลกเปลี่ยนระหว่างประเทศในด้านวัฒนธรรม",
+      "gloss": "including causing international exchange in culture",
+      "words": [
+        {
+          "thai": "รวมทั้ง",
+          "gloss": "including"
+        },
+        {
+          "thai": "ทำให้เกิด",
+          "gloss": "bring about"
+        },
+        {
+          "thai": "การแลกเปลี่ยนระหว่างประเทศ",
+          "gloss": "international exchange"
+        },
+        {
+          "thai": "ในด้านวัฒนธรรม",
+          "gloss": "in the area of culture"
+        }
+      ],
+      "source": "prose",
+      "context": "Benefits · Int'l conferences"
+    },
+    {
+      "thai": "สังคม",
+      "gloss": "society",
+      "words": [
+        {
+          "thai": "สังคม",
+          "gloss": "society"
+        }
+      ],
+      "source": "prose",
+      "context": "Benefits · Int'l conferences"
+    },
+    {
+      "thai": "เศรษฐกิจ",
+      "gloss": "economy",
+      "words": [
+        {
+          "thai": "เศรษฐกิจ",
+          "gloss": "economy"
+        }
+      ],
+      "source": "prose",
+      "context": "Benefits · Int'l conferences"
+    },
+    {
+      "thai": "การเมือง",
+      "gloss": "politics",
+      "words": [
+        {
+          "thai": "การเมือง",
+          "gloss": "politics"
+        }
+      ],
+      "source": "prose",
+      "context": "Benefits · Int'l conferences"
+    },
+    {
+      "thai": "ฯลฯ",
+      "gloss": "etc.",
+      "words": [
+        {
+          "thai": "ฯลฯ",
+          "gloss": "etc."
+        }
+      ],
+      "source": "prose",
+      "context": "Benefits · Int'l conferences"
+    },
+    {
+      "thai": "อยากเป็นผู้เชี่ยวชาญด้านการจัดประชุมนานาชาติ",
+      "gloss": "Want to become a specialist in organizing international conferences",
+      "words": [
+        {
+          "thai": "อยาก",
+          "gloss": "want to"
+        },
+        {
+          "thai": "เป็น",
+          "gloss": "become"
+        },
+        {
+          "thai": "ผู้เชี่ยวชาญ",
+          "gloss": "specialist"
+        },
+        {
+          "thai": "ด้าน",
+          "gloss": "in"
+        },
+        {
+          "thai": "การจัดประชุมนานาชาติ",
+          "gloss": "organizing international conferences"
+        }
+      ],
+      "source": "heading",
+      "context": "Career path · Int'l conferences"
+    },
+    {
+      "thai": "ต้องเรียนอะไร",
+      "gloss": "what do you need to study?",
+      "words": [
+        {
+          "thai": "ต้อง",
+          "gloss": "must / need to"
+        },
+        {
+          "thai": "เรียน",
+          "gloss": "study"
+        },
+        {
+          "thai": "อะไร",
+          "gloss": "what"
+        }
+      ],
+      "source": "heading",
+      "context": "Career path · Int'l conferences"
+    },
+    {
+      "thai": "ต้องเรียนคณะศิลปศาสตร์",
+      "gloss": "You should study in the Faculty of Liberal Arts.",
+      "words": [
+        {
+          "thai": "ต้อง",
+          "gloss": "must; should"
+        },
+        {
+          "thai": "เรียน",
+          "gloss": "study"
+        },
+        {
+          "thai": "คณะศิลปศาสตร์",
+          "gloss": "Faculty of Liberal Arts"
+        }
+      ],
+      "source": "prose",
+      "context": "What to study"
+    },
+    {
+      "thai": "สาขาวิชาการท่องเที่ยว",
+      "gloss": "the field of tourism",
+      "words": [
+        {
+          "thai": "สาขาวิชาการท่องเที่ยว",
+          "gloss": "field of tourism; tourism studies"
+        }
+      ],
+      "source": "prose",
+      "context": "What to study"
+    },
+    {
+      "thai": "หรือคณะบริหารธุรกิจ",
+      "gloss": "or the Faculty of Business Administration",
+      "words": [
+        {
+          "thai": "หรือ",
+          "gloss": "or"
+        },
+        {
+          "thai": "คณะบริหารธุรกิจ",
+          "gloss": "Faculty of Business Administration"
+        }
+      ],
+      "source": "prose",
+      "context": "What to study"
+    },
+    {
+      "thai": "สาขาวิชาการจัดการ",
+      "gloss": "the field of management",
+      "words": [
+        {
+          "thai": "สาขาวิชาการจัดการ",
+          "gloss": "field of management; management studies"
+        }
+      ],
+      "source": "prose",
+      "context": "What to study"
+    },
+    {
+      "thai": "หรือเข้าร่วมหลักสูตรฝึกอบรมของสถาบันที่เกี่ยวข้อง",
+      "gloss": "or take part in a training course offered by a relevant institution",
+      "words": [
+        {
+          "thai": "หรือ",
+          "gloss": "or"
+        },
+        {
+          "thai": "เข้าร่วม",
+          "gloss": "join; participate in"
+        },
+        {
+          "thai": "หลักสูตรฝึกอบรม",
+          "gloss": "training course"
+        },
+        {
+          "thai": "ของ",
+          "gloss": "of"
+        },
+        {
+          "thai": "สถาบัน",
+          "gloss": "institution"
+        },
+        {
+          "thai": "ที่เกี่ยวข้อง",
+          "gloss": "relevant; related"
+        }
+      ],
+      "source": "prose",
+      "context": "What to study"
+    },
+    {
+      "thai": "สำนักงานส่งเสริมการจัดประชุมและนิทรรศการ",
+      "gloss": "Thailand Convention and Exhibition Bureau",
+      "words": [
+        {
+          "thai": "สำนักงาน",
+          "gloss": "office; bureau"
+        },
+        {
+          "thai": "ส่งเสริม",
+          "gloss": "promote"
+        },
+        {
+          "thai": "การจัดประชุม",
+          "gloss": "conference organization"
+        },
+        {
+          "thai": "และ",
+          "gloss": "and"
+        },
+        {
+          "thai": "นิทรรศการ",
+          "gloss": "exhibition"
+        }
+      ],
+      "source": "prose",
+      "context": "What to study"
+    },
+    {
+      "thai": "(องค์การมหาชน)",
+      "gloss": "(public organization)",
+      "words": [
+        {
+          "thai": "องค์การมหาชน",
+          "gloss": "public organization"
+        }
+      ],
+      "source": "prose",
+      "context": "What to study"
+    },
+    {
+      "thai": "สมาคมส่งเสริมการประชุมนานาชาติ",
+      "gloss": "Thailand Incentive and Convention Association",
+      "words": [
+        {
+          "thai": "สมาคม",
+          "gloss": "association"
+        },
+        {
+          "thai": "ส่งเสริม",
+          "gloss": "promote"
+        },
+        {
+          "thai": "การประชุมนานาชาติ",
+          "gloss": "international conferences"
+        }
+      ],
+      "source": "prose",
+      "context": "What to study"
+    },
+    {
+      "thai": "(ไทย)",
+      "gloss": "(Thai)",
+      "words": [
+        {
+          "thai": "ไทย",
+          "gloss": "Thai"
+        }
+      ],
+      "source": "prose",
+      "context": "What to study"
+    },
+    {
+      "thai": "การจัดการข้อมูลข่าวสาร",
+      "gloss": "information management",
+      "words": [
+        {
+          "thai": "การจัดการ",
+          "gloss": "management"
+        },
+        {
+          "thai": "ข้อมูลข่าวสาร",
+          "gloss": "information; data and news"
+        }
+      ],
+      "source": "prose",
+      "context": "What to study"
+    },
+    {
+      "thai": "การวางแผนงานประชุมและการปฏิบัติงาน",
+      "gloss": "meeting planning and operations",
+      "words": [
+        {
+          "thai": "การวางแผนงานประชุม",
+          "gloss": "meeting planning"
+        },
+        {
+          "thai": "และ",
+          "gloss": "and"
+        },
+        {
+          "thai": "การปฏิบัติงาน",
+          "gloss": "operations; work execution"
+        }
+      ],
+      "source": "prose",
+      "context": "What to study"
+    },
+    {
+      "thai": "ล้วนเป็นคุณสมบัติที่เกี่ยวข้องกับการเป็นผู้เชี่ยวชาญด้านการจัดประชุมนานาชาติ",
+      "gloss": "all are qualifications related to being an international conference specialist",
+      "words": [
+        {
+          "thai": "ล้วน",
+          "gloss": "all"
+        },
+        {
+          "thai": "เป็น",
+          "gloss": "be; are"
+        },
+        {
+          "thai": "คุณสมบัติ",
+          "gloss": "qualification; attribute"
+        },
+        {
+          "thai": "ที่เกี่ยวข้อง",
+          "gloss": "related; relevant"
+        },
+        {
+          "thai": "กับ",
+          "gloss": "with; to"
+        },
+        {
+          "thai": "การเป็น",
+          "gloss": "being"
+        },
+        {
+          "thai": "ผู้เชี่ยวชาญ",
+          "gloss": "specialist; expert"
+        },
+        {
+          "thai": "ด้าน",
+          "gloss": "in the area of"
+        },
+        {
+          "thai": "การจัดประชุมนานาชาติ",
+          "gloss": "international conference organization"
+        }
+      ],
+      "source": "prose",
+      "context": "What to study"
+    },
+    {
+      "thai": "สิ่งสำคัญคือการสั่งสมประสบการณ์การทำงานในระดับนานาชาติ",
+      "gloss": "What is important is building up international work experience.",
+      "words": [
+        {
+          "thai": "สิ่งสำคัญ",
+          "gloss": "important thing"
+        },
+        {
+          "thai": "คือ",
+          "gloss": "is"
+        },
+        {
+          "thai": "การสั่งสม",
+          "gloss": "the accumulation"
+        },
+        {
+          "thai": "ประสบการณ์",
+          "gloss": "experience"
+        },
+        {
+          "thai": "การทำงาน",
+          "gloss": "work; working"
+        },
+        {
+          "thai": "ในระดับนานาชาติ",
+          "gloss": "at the international level"
+        }
+      ],
+      "source": "prose",
+      "context": "Career path · Qualifications"
+    },
+    {
+      "thai": "โดยต้องมีใจรักและมีความโดดเด่นด้านภาษาด้วย",
+      "gloss": "You also need to have a passion for it and stand out in languages as well.",
+      "words": [
+        {
+          "thai": "โดย",
+          "gloss": "by; with that"
+        },
+        {
+          "thai": "ต้อง",
+          "gloss": "must"
+        },
+        {
+          "thai": "มี",
+          "gloss": "have"
+        },
+        {
+          "thai": "ใจรัก",
+          "gloss": "passion"
+        },
+        {
+          "thai": "และ",
+          "gloss": "and"
+        },
+        {
+          "thai": "มี",
+          "gloss": "have"
+        },
+        {
+          "thai": "ความโดดเด่น",
+          "gloss": "distinction; prominence"
+        },
+        {
+          "thai": "ด้านภาษา",
+          "gloss": "in languages"
+        },
+        {
+          "thai": "ด้วย",
+          "gloss": "also"
+        }
+      ],
+      "source": "prose",
+      "context": "Career path · Qualifications"
+    },
+    {
+      "thai": "เส้นทางสู่อาชีพ:",
+      "gloss": "Path to the profession:",
+      "words": [
+        {
+          "thai": "เส้นทางสู่อาชีพ",
+          "gloss": "path to the profession"
+        }
+      ],
+      "source": "heading",
+      "context": "Section heading"
+    },
+    {
+      "thai": "ต้องเข้าใจประวัติศาสตร์และวัฒนธรรมของแต่ละประเทศ",
+      "gloss": "You must understand the history and culture of each country.",
+      "words": [
+        {
+          "thai": "ต้อง",
+          "gloss": "must"
+        },
+        {
+          "thai": "เข้าใจ",
+          "gloss": "understand"
+        },
+        {
+          "thai": "ประวัติศาสตร์",
+          "gloss": "history"
+        },
+        {
+          "thai": "และ",
+          "gloss": "and"
+        },
+        {
+          "thai": "วัฒนธรรม",
+          "gloss": "culture"
+        },
+        {
+          "thai": "ของ",
+          "gloss": "of"
+        },
+        {
+          "thai": "แต่ละประเทศ",
+          "gloss": "each country"
+        }
+      ],
+      "source": "heading",
+      "context": "Career path · Qualifications"
+    },
+    {
+      "thai": "การวางแผนและการจัดงานประชุมต้องอาศัยความรู้ความสามารถของผู้เชี่ยวชาญด้านการจัดประชุมนานาชาติ",
+      "gloss": "Planning and organizing international conferences requires the knowledge and ability of international conference specialists.",
+      "words": [
+        {
+          "thai": "การวางแผน",
+          "gloss": "planning"
+        },
+        {
+          "thai": "และ",
+          "gloss": "and"
+        },
+        {
+          "thai": "การจัดงานประชุม",
+          "gloss": "conference organization"
+        },
+        {
+          "thai": "ต้องอาศัย",
+          "gloss": "requires; relies on"
+        },
+        {
+          "thai": "ความรู้ความสามารถ",
+          "gloss": "knowledge and ability"
+        },
+        {
+          "thai": "ของ",
+          "gloss": "of"
+        },
+        {
+          "thai": "ผู้เชี่ยวชาญ",
+          "gloss": "specialist"
+        },
+        {
+          "thai": "ด้าน",
+          "gloss": "in; in the field of"
+        },
+        {
+          "thai": "การจัดประชุมนานาชาติ",
+          "gloss": "international conference organization"
+        }
+      ],
+      "source": "prose",
+      "context": "Career path · Qualifications"
+    },
+    {
+      "thai": "ตลอดจนความละเอียดถี่ถ้วนในการบริหารจัดการและการควบคุมดูแลการดำเนินงานทั้งหมด",
+      "gloss": "as well as meticulousness in administration and in supervising and controlling all operations.",
+      "words": [
+        {
+          "thai": "ตลอดจน",
+          "gloss": "as well as"
+        },
+        {
+          "thai": "ความละเอียดถี่ถ้วน",
+          "gloss": "meticulousness"
+        },
+        {
+          "thai": "ใน",
+          "gloss": "in"
+        },
+        {
+          "thai": "การบริหารจัดการ",
+          "gloss": "management"
+        },
+        {
+          "thai": "และ",
+          "gloss": "and"
+        },
+        {
+          "thai": "การควบคุมดูแล",
+          "gloss": "supervision and control"
+        },
+        {
+          "thai": "การดำเนินงาน",
+          "gloss": "operations"
+        },
+        {
+          "thai": "ทั้งหมด",
+          "gloss": "all"
+        }
+      ],
+      "source": "prose",
+      "context": "Career path · Qualifications"
+    },
+    {
+      "thai": "การจัดงานประชุมนานาชาติ",
+      "gloss": "International conference organization",
+      "words": [
+        {
+          "thai": "การจัดงานประชุมนานาชาติ",
+          "gloss": "international conference organization"
+        }
+      ],
+      "source": "prose",
+      "context": "Career path · Qualifications"
+    },
+    {
+      "thai": "งาน",
+      "gloss": "event",
+      "words": [
+        {
+          "thai": "งาน",
+          "gloss": "event; work"
+        }
+      ],
+      "source": "prose",
+      "context": "Career path · Qualifications"
+    },
+    {
+      "thai": "จะใช้เวลาเตรียมการประมาณ",
+      "gloss": "will take about ... to prepare",
+      "words": [
+        {
+          "thai": "จะ",
+          "gloss": "will"
+        },
+        {
+          "thai": "ใช้เวลา",
+          "gloss": "take time"
+        },
+        {
+          "thai": "เตรียมการ",
+          "gloss": "prepare; make preparations"
+        },
+        {
+          "thai": "ประมาณ",
+          "gloss": "approximately"
+        }
+      ],
+      "source": "prose",
+      "context": "Career path · Qualifications"
+    },
+    {
+      "thai": "ไปจนถึง",
+      "gloss": "up to",
+      "words": [
+        {
+          "thai": "ไปจนถึง",
+          "gloss": "up to; as far as"
+        }
+      ],
+      "source": "prose",
+      "context": "Career path · Qualifications"
+    },
+    {
+      "thai": "หากอยากเป็นผู้เชี่ยวชาญด้านการจัดประชุมนานาชาติ",
+      "gloss": "If you want to become a specialist in international conference organization,",
+      "words": [
+        {
+          "thai": "หาก",
+          "gloss": "if"
+        },
+        {
+          "thai": "อยากเป็น",
+          "gloss": "want to become"
+        },
+        {
+          "thai": "ผู้เชี่ยวชาญ",
+          "gloss": "specialist"
+        },
+        {
+          "thai": "ด้าน",
+          "gloss": "in; in the field of"
+        },
+        {
+          "thai": "การจัดประชุมนานาชาติ",
+          "gloss": "international conference organization"
+        }
+      ],
+      "source": "prose",
+      "context": "Career path · Qualifications"
+    },
+    {
+      "thai": "นอกจากต้องเก่งภาษาอังกฤษแล้ว",
+      "gloss": "Besides needing to be good at English,",
+      "words": [
+        {
+          "thai": "นอกจาก",
+          "gloss": "besides"
+        },
+        {
+          "thai": "ต้อง",
+          "gloss": "must"
+        },
+        {
+          "thai": "เก่ง",
+          "gloss": "be good at"
+        },
+        {
+          "thai": "ภาษาอังกฤษ",
+          "gloss": "English"
+        },
+        {
+          "thai": "แล้ว",
+          "gloss": "already; in addition"
+        }
+      ],
+      "source": "prose",
+      "context": "Career path · Qualifications"
+    },
+    {
+      "thai": "ยังต้องตั้งใจเรียนรู้ประวัติศาสตร์และวัฒนธรรม",
+      "gloss": "still need to earnestly study history and culture",
+      "words": [
+        {
+          "thai": "ยัง",
+          "gloss": "still"
+        },
+        {
+          "thai": "ต้อง",
+          "gloss": "must; need to"
+        },
+        {
+          "thai": "ตั้งใจ",
+          "gloss": "earnestly; attentively"
+        },
+        {
+          "thai": "เรียนรู้",
+          "gloss": "learn; study"
+        },
+        {
+          "thai": "ประวัติศาสตร์",
+          "gloss": "history"
+        },
+        {
+          "thai": "และ",
+          "gloss": "and"
+        },
+        {
+          "thai": "วัฒนธรรม",
+          "gloss": "culture"
+        }
+      ],
+      "source": "prose",
+      "context": "Career path · Cultural knowledge"
+    },
+    {
+      "thai": "เพื่อทำให้ประเทศของเราเป็นที่รู้จักในต่างประเทศ",
+      "gloss": "in order to make our country known abroad",
+      "words": [
+        {
+          "thai": "เพื่อ",
+          "gloss": "in order to"
+        },
+        {
+          "thai": "ทำให้",
+          "gloss": "make; cause to"
+        },
+        {
+          "thai": "ประเทศ",
+          "gloss": "country"
+        },
+        {
+          "thai": "ของ",
+          "gloss": "of"
+        },
+        {
+          "thai": "เรา",
+          "gloss": "we; our"
+        },
+        {
+          "thai": "เป็นที่รู้จัก",
+          "gloss": "be known; become well-known"
+        },
+        {
+          "thai": "ในต่างประเทศ",
+          "gloss": "abroad; in foreign countries"
+        }
+      ],
+      "source": "prose",
+      "context": "Career path · Cultural knowledge"
+    }
+  ]
+}

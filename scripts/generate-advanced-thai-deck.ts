@@ -32,7 +32,7 @@
  * phrases are skipped, so a crash (or a rate limit) never loses earlier work.
  */
 import { config } from "dotenv";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 import OpenAI from "openai";
 import { normalizeForCompare, readClauses, type RawClause } from "../seed/advanced-thai/split";
@@ -222,6 +222,43 @@ const GRAMMAR_SCHEMA = {
   required: ["grammar"],
 } as const;
 
+// --- Cross-theme grammar dedupe -----------------------------------------------
+// A NEW theme must not re-teach a grammar rule an earlier theme already carries
+// (owner's rule, 2026-07-17). "Same rule" means the same Thai marker material:
+// the frame's Thai-script runs, ignoring slot names, +, and punctuation. So a
+// new "โดย + Clause" duplicates the taught "โดย + V", while a near-synonym
+// marker (รวมทั้ง next to the taught รวมถึง) is a DIFFERENT rule and is allowed —
+// the owner chose exact-marker dedupe over synonym dedupe deliberately.
+//
+// The exclusion list is fed to the model in the grammar prompt, and then — because
+// a prompt is a request, not a guarantee — enforced again on whatever comes back.
+
+const THAI_RUN = /[฀-๿]+/g;
+
+/** The frame's Thai marker material, as a comparable signature. */
+function markerSignature(frame: string): string {
+  return [...new Set(frame.match(THAI_RUN) ?? [])].sort().join("|");
+}
+
+/** Every grammar frame already taught by the OTHER themes' generated decks. */
+function loadTaughtFrames(): { frame: string; theme: string }[] {
+  const dir = "seed/advanced-thai/themes";
+  if (!existsSync(dir)) return [];
+  const taught: { frame: string; theme: string }[] = [];
+  for (const file of readdirSync(dir)) {
+    if (!file.endsWith(".generated.json")) continue;
+    if (file === `${SLUG}.generated.json`) continue;
+    const theme = JSON.parse(readFileSync(`${dir}/${file}`, "utf8")) as Theme;
+    for (const g of theme.grammar) taught.push({ frame: g.frame, theme: theme.slug });
+  }
+  return taught;
+}
+
+const TAUGHT_FRAMES = loadTaughtFrames();
+const TAUGHT_BY_SIGNATURE = new Map(
+  TAUGHT_FRAMES.map((t) => [markerSignature(t.frame), t]),
+);
+
 // --- Prompts ----------------------------------------------------------------
 
 const PHRASE_PROMPT = `You are segmenting and glossing Thai clauses for a flashcard deck aimed at an advanced learner.
@@ -262,7 +299,14 @@ Find up to ${MAX_GRAMMAR} patterns that the text actually USES (not patterns it 
     * Give the pattern word itself (ทำให้, แข่งกัน, เพื่อ, โดย …) the slot "marker".
     * Give each slot's realisation the slot's own name.
     * Ordinary surrounding context gets slot: null.
-  Segments are used instead of character offsets on purpose: Thai stacks vowels and tone marks, so an offset pair is neither hand-authorable nor reviewable.`;
+  Segments are used instead of character offsets on purpose: Thai stacks vowels and tone marks, so an offset pair is neither hand-authorable nor reviewable.`
+  + (TAUGHT_FRAMES.length === 0
+    ? ""
+    : `
+
+The learner has ALREADY been taught the following patterns by earlier decks. Do NOT return any of them — not reworded, not with different slot names:
+${TAUGHT_FRAMES.map((t) => `- ${t.frame}`).join("\n")}
+A pattern counts as already taught only when its Thai marker word(s) are the same. A DIFFERENT marker word that happens to play a similar role — a synonym of a taught marker — is new material and IS wanted.`);
 
 // --- Generation --------------------------------------------------------------
 
@@ -329,7 +373,11 @@ function badSplits(
   return bad;
 }
 
-async function generatePhrases(clauses: RawClause[], done: Set<string>): Promise<PhraseEntry[]> {
+async function generatePhrases(
+  clauses: RawClause[],
+  done: Set<string>,
+  persist: (fresh: PhraseEntry[]) => void,
+): Promise<PhraseEntry[]> {
   // A clause that occurs twice in the document is ONE card, not two. เช่น ("for
   // example") appears three times in นักโฆษณา, ที่เหมาะสม twice — and three
   // identical flashcards would be a bug, not thoroughness. Deduplicating here also
@@ -400,6 +448,13 @@ async function generatePhrases(clauses: RawClause[], done: Set<string>): Promise
       });
     }
 
+    // Write what exists the moment it exists. The resume feature reads the output
+    // file, so it is only as good as the last write — an end-of-run write turns
+    // "resumable" into "resumable unless the crash happens during the paid part",
+    // which is exactly when it happens (this bit the first phu-chiao-chan run:
+    // 8 completed batches were lost to a mid-run API error).
+    persist(out);
+
     console.log(`ok (${out.length} total)`);
   }
 
@@ -445,6 +500,9 @@ async function main() {
     console.log(`clauses       : ${clauses.length}  → ${phraseRequests} phrase request(s)`);
     console.log(`vocab target  : up to ${MAX_VOCAB}   (1 request)`);
     console.log(`grammar target: up to ${MAX_GRAMMAR}   (1 request)`);
+    console.log(
+      `already taught: ${TAUGHT_FRAMES.length} frame(s) from other themes are excluded`,
+    );
     console.log(`total requests: ${requests}`);
     console.log(
       `est. tokens   : ~${Math.round(estIn / 1000)}k in, ~${Math.round(estOut / 1000)}k out`,
@@ -484,17 +542,39 @@ async function main() {
     console.log(`[resume] ${done.size} phrase(s) already generated — skipping them.\n`);
   }
 
-  const fresh = await generatePhrases(clauses, done);
-
   // Keep the document's own order rather than "resumed first, new after" — and one
   // entry per DISTINCT clause, so a phrase the document happens to repeat does not
   // become two identical cards.
-  const byThai = new Map<string, PhraseEntry>(
-    [...donePhrases, ...fresh].map((p) => [p.thai, p]),
-  );
-  const phrases: PhraseEntry[] = uniqueByThai(clauses)
-    .map((c) => byThai.get(c.thai))
-    .filter((p): p is PhraseEntry => Boolean(p));
+  const mergePhrases = (fresh: PhraseEntry[]): PhraseEntry[] => {
+    const byThai = new Map<string, PhraseEntry>(
+      [...donePhrases, ...fresh].map((p) => [p.thai, p]),
+    );
+    return uniqueByThai(clauses)
+      .map((c) => byThai.get(c.thai))
+      .filter((p): p is PhraseEntry => Boolean(p));
+  };
+
+  const writeTheme = (theme: Theme) => {
+    mkdirSync(dirname(OUT), { recursive: true });
+    writeFileSync(OUT, JSON.stringify(theme, null, 2), "utf8");
+  };
+
+  // Handed to generatePhrases so every completed batch lands on disk immediately;
+  // vocab/grammar carry whatever an earlier run already produced.
+  const persist = (fresh: PhraseEntry[]) => {
+    writeTheme({
+      slug: SLUG!,
+      titleThai,
+      titleEnglish,
+      summary: previous?.summary ?? "",
+      vocab: previous?.vocab ?? [],
+      grammar: previous?.grammar ?? [],
+      phrases: mergePhrases(fresh),
+    });
+  };
+
+  const fresh = await generatePhrases(clauses, done, persist);
+  const phrases = mergePhrases(fresh);
 
   let vocab: VocabEntry[] = previous?.vocab ?? [];
   let summary = previous?.summary ?? "";
@@ -515,6 +595,18 @@ async function main() {
   } else {
     console.log(`[vocab  ] ${vocab.length} already present — skipping.`);
   }
+
+  // Vocab was paid for too — it goes on disk before the grammar call gets a
+  // chance to crash.
+  writeTheme({
+    slug: SLUG!,
+    titleThai,
+    titleEnglish,
+    summary,
+    vocab,
+    grammar: previous?.grammar ?? [],
+    phrases,
+  });
 
   let grammar: GrammarPattern[] = previous?.grammar ?? [];
   if (grammar.length === 0) {
@@ -539,6 +631,20 @@ async function main() {
     console.log(`[grammar] ${grammar.length} already present — skipping.`);
   }
 
+  // The prompt asked; this enforces. Any pattern whose Thai marker material
+  // matches an already-taught frame is dropped — including on a resumed run,
+  // because the rule holds regardless of which run produced the pattern.
+  const dropped = grammar.filter((g) => TAUGHT_BY_SIGNATURE.has(markerSignature(g.frame)));
+  if (dropped.length > 0) {
+    grammar = grammar.filter((g) => !TAUGHT_BY_SIGNATURE.has(markerSignature(g.frame)));
+    console.log(`\n⚠ ${dropped.length} grammar pattern(s) DROPPED as already taught:`);
+    for (const g of dropped) {
+      const hit = TAUGHT_BY_SIGNATURE.get(markerSignature(g.frame))!;
+      console.log(`    ${g.frame}  — taught as "${hit.frame}" in ${hit.theme}`);
+    }
+    console.log(`  ${grammar.length} pattern(s) remain.`);
+  }
+
   const theme: Theme = {
     slug: SLUG!,
     titleThai,
@@ -549,8 +655,7 @@ async function main() {
     phrases,
   };
 
-  mkdirSync(dirname(OUT), { recursive: true });
-  writeFileSync(OUT, JSON.stringify(theme, null, 2), "utf8");
+  writeTheme(theme);
 
   console.log(`\nWrote ${OUT}`);
   console.log(
