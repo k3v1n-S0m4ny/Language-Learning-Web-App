@@ -14286,5 +14286,4256 @@
     ],
     "hsk": 6,
     "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b0318307f74cfb416cbd09d6a25bb2db.mp3"
+  },
+  {
+    "headword": "是。",
+    "isPhrase": false,
+    "wholeGloss": "Yes.",
+    "wholePinyin": "shì",
+    "tags": [
+      "basics"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "是",
+        "gloss": "yes",
+        "pinyin": "shì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b5141d3d19e9a04855acdb2dd5218b09.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b1734670076e941e59dfab6c17f60e8c.mp3"
+  },
+  {
+    "headword": "不是。",
+    "isPhrase": true,
+    "wholeGloss": "No.",
+    "wholePinyin": "bù shì",
+    "tags": [
+      "basics"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "不",
+        "gloss": "not",
+        "pinyin": "bù",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b02dfe2160c687c22f0762f388d6e2bc.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "是",
+        "gloss": "is",
+        "pinyin": "shì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b5141d3d19e9a04855acdb2dd5218b09.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/ff6ea90a4338e4ee979fc7afa57197b8.mp3"
+  },
+  {
+    "headword": "请坐。",
+    "isPhrase": true,
+    "wholeGloss": "Please, have a seat.",
+    "wholePinyin": "qǐng zuò",
+    "tags": [
+      "basics"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "请",
+        "gloss": "please",
+        "pinyin": "qǐng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/88d5840fab773af6bd7f9b6a4660d300.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "坐",
+        "gloss": "sit",
+        "pinyin": "zuò",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/4247f1a43b8230cb0a150548d6f1ec33.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/cd543ed71ff0c9d0f0e78ff2fd97734f.mp3"
+  },
+  {
+    "headword": "谢谢你。",
+    "isPhrase": true,
+    "wholeGloss": "Thank you.",
+    "wholePinyin": "xièxiè nǐ",
+    "tags": [
+      "basics"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "谢谢",
+        "gloss": "thank",
+        "pinyin": "xièxiè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1bf7ac688560d3b0f11d5d8068602076.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "你",
+        "gloss": "you",
+        "pinyin": "nǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a0c7716669b5ded0d8051abfc232b828.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/077c7c128a208ffa39f217839d45c4e7.mp3"
+  },
+  {
+    "headword": "非常感谢你。",
+    "isPhrase": true,
+    "wholeGloss": "Thank you very much.",
+    "wholePinyin": "fēicháng gǎnxiè nǐ",
+    "tags": [
+      "basics"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "非常",
+        "gloss": "very",
+        "pinyin": "fēicháng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/2ccec3b4199d4dcb4634d4d0f04fc5bb.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "感谢",
+        "gloss": "thank",
+        "pinyin": "gǎnxiè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/dad6b0308cc47c38f4129227e4b6b38d.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "你",
+        "gloss": "you",
+        "pinyin": "nǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a0c7716669b5ded0d8051abfc232b828.mp3"
+      }
+    ],
+    "hsk": 2,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/2d89ed36381b5ed7356c6827bd5b5c55.mp3"
+  },
+  {
+    "headword": "不客气。",
+    "isPhrase": true,
+    "wholeGloss": "You're welcome.",
+    "wholePinyin": "bù kèqì",
+    "tags": [
+      "basics"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "不",
+        "gloss": "not",
+        "pinyin": "bù",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b02dfe2160c687c22f0762f388d6e2bc.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "客气",
+        "gloss": "polite",
+        "pinyin": "kèqì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/74fa9d6a54d409bbc9c727de7c821d98.mp3"
+      }
+    ],
+    "hsk": 5,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/70661aa036371d9d56362c5452f70b38.mp3"
+  },
+  {
+    "headword": "劳驾。",
+    "isPhrase": false,
+    "wholeGloss": "Excuse me. (to get attention)",
+    "wholePinyin": "láojià",
+    "tags": [
+      "basics"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "劳驾",
+        "gloss": "excuse me",
+        "pinyin": "láojià",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/0ebd5ef5dae2b2f863484a0fc4a76f84.mp3"
+      }
+    ],
+    "hsk": 6,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/433416ece9fb006b02418bf90b401ddf.mp3"
+  },
+  {
+    "headword": "请让一下。",
+    "isPhrase": true,
+    "wholeGloss": "Excuse me. (to get past)",
+    "wholePinyin": "qǐng ràng yī xià",
+    "tags": [
+      "basics"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "请",
+        "gloss": "please",
+        "pinyin": "qǐng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/88d5840fab773af6bd7f9b6a4660d300.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "让",
+        "gloss": "let",
+        "pinyin": "ràng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/ad3757440409cf73fad2d995bef31559.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "一下",
+        "gloss": "a bit",
+        "pinyin": "yī xià",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/11a9d8072cf9e368f4f11d5643dfc656.mp3"
+      }
+    ],
+    "hsk": 2,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/bc4a5e025ad247b281e404105bdfa9a9.mp3"
+  },
+  {
+    "headword": "对不起。",
+    "isPhrase": false,
+    "wholeGloss": "Sorry.",
+    "wholePinyin": "duìbuqǐ",
+    "tags": [
+      "basics"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "对不起",
+        "gloss": "sorry",
+        "pinyin": "duìbuqǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/73cc81388c9bd644a7fc3a07e6a29f8f.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/cf375783c8751dd3c1ecac34282e8f51.mp3"
+  },
+  {
+    "headword": "随便。",
+    "isPhrase": false,
+    "wholeGloss": "As you please.",
+    "wholePinyin": "suíbiàn",
+    "tags": [
+      "basics"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "随便",
+        "gloss": "as you please",
+        "pinyin": "suíbiàn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a5689144ca713f236e8d6ac96d06034a.mp3"
+      }
+    ],
+    "hsk": 2,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b8eb179a7237130503d61c662b87f75f.mp3"
+  },
+  {
+    "headword": "没关系。",
+    "isPhrase": true,
+    "wholeGloss": "No problem.",
+    "wholePinyin": "méi guānxi",
+    "tags": [
+      "basics"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "没",
+        "gloss": "no",
+        "pinyin": "méi",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/279e8b3573607d17a262bf1250f71ebc.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "关系",
+        "gloss": "problem",
+        "pinyin": "guānxi",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/253aaff19a3946210734a03d39152570.mp3"
+      }
+    ],
+    "hsk": 3,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/0c0fe39896eeb6672f27ed680b7d68ee.mp3"
+  },
+  {
+    "headword": "大家好。",
+    "isPhrase": true,
+    "wholeGloss": "Greetings all.",
+    "wholePinyin": "dàjiā hǎo",
+    "tags": [
+      "greetings & goodbyes"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "大家",
+        "gloss": "everyone",
+        "pinyin": "dàjiā",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/16b54b7ab3b5e9841d7204dd3ac143dc.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "好",
+        "gloss": "hello",
+        "pinyin": "hǎo",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f867f34178594f891eb70a4260f62b1d.mp3"
+      }
+    ],
+    "hsk": 2,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/ab70e4139d691521019d232371efc78d.mp3"
+  },
+  {
+    "headword": "你好。",
+    "isPhrase": true,
+    "wholeGloss": "Hello. (general)",
+    "wholePinyin": "nǐ hǎo",
+    "tags": [
+      "greetings & goodbyes"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "你",
+        "gloss": "you",
+        "pinyin": "nǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a0c7716669b5ded0d8051abfc232b828.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "好",
+        "gloss": "good",
+        "pinyin": "hǎo",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f867f34178594f891eb70a4260f62b1d.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/81fddea03ec6aa29ed52fc9b346ca130.mp3"
+  },
+  {
+    "headword": "您好。",
+    "isPhrase": true,
+    "wholeGloss": "Hello. (Beijing, polite)",
+    "wholePinyin": "nín hǎo",
+    "tags": [
+      "greetings & goodbyes"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "您",
+        "gloss": "you (polite)",
+        "pinyin": "nín",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/9bbfbbc76f7ac5e0f16274e3a30766ee.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "好",
+        "gloss": "good",
+        "pinyin": "hǎo",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f867f34178594f891eb70a4260f62b1d.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/9e0b733d1ab88dc81bea6e71ecf5b1f8.mp3"
+  },
+  {
+    "headword": "吃饭了吗？",
+    "isPhrase": true,
+    "wholeGloss": "Hi. (lit: Have you eaten?)",
+    "wholePinyin": "chī fàn le ma",
+    "tags": [
+      "greetings & goodbyes"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "吃",
+        "gloss": "eat",
+        "pinyin": "chī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c814805bc6d0365aba3364f68cddbb53.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "饭",
+        "gloss": "meal",
+        "pinyin": "fàn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f9fb8bcb87a58ef14e9680b39adecce0.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "了",
+        "gloss": "(completed action marker)",
+        "pinyin": "le",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b2dd27e84f07f49b4cb38d142c3ca9b4.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "吗",
+        "gloss": "(question particle)",
+        "pinyin": "ma",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5ac1612110def2c499accdb0f55b8fb0.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/2ab354a4041b1932ae7a4a254e9a5abd.mp3"
+  },
+  {
+    "headword": "下午好。",
+    "isPhrase": true,
+    "wholeGloss": "Good afternoon.",
+    "wholePinyin": "xiàwǔ hǎo",
+    "tags": [
+      "greetings & goodbyes"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "下午",
+        "gloss": "afternoon",
+        "pinyin": "xiàwǔ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/af81dcf37aa86091075e43941c4dfaa7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "好",
+        "gloss": "good",
+        "pinyin": "hǎo",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f867f34178594f891eb70a4260f62b1d.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c2ad08d4c3d15ca882b6adb7389a9130.mp3"
+  },
+  {
+    "headword": "晚上好。",
+    "isPhrase": true,
+    "wholeGloss": "Good evening.",
+    "wholePinyin": "wǎnshàng hǎo",
+    "tags": [
+      "greetings & goodbyes"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "晚上",
+        "gloss": "evening",
+        "pinyin": "wǎnshàng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a9b1124b34615118f85ed09bec2cc88b.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "好",
+        "gloss": "good",
+        "pinyin": "hǎo",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f867f34178594f891eb70a4260f62b1d.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c757eec269805278efaaccfed04e3aaf.mp3"
+  },
+  {
+    "headword": "早上好。",
+    "isPhrase": true,
+    "wholeGloss": "Good morning. (after breakfast)",
+    "wholePinyin": "zǎoshang hǎo",
+    "tags": [
+      "greetings & goodbyes"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "早上",
+        "gloss": "morning",
+        "pinyin": "zǎoshang",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c6fe2eb2c986c38352fe8ca32ce453d7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "好",
+        "gloss": "good",
+        "pinyin": "hǎo",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f867f34178594f891eb70a4260f62b1d.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6fd8c45faf06755868bbd5ca9505d720.mp3"
+  },
+  {
+    "headword": "你好吗？",
+    "isPhrase": true,
+    "wholeGloss": "How are you? (general)",
+    "wholePinyin": "nǐ hǎo ma",
+    "tags": [
+      "greetings & goodbyes"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "你",
+        "gloss": "you",
+        "pinyin": "nǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a0c7716669b5ded0d8051abfc232b828.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "好",
+        "gloss": "good",
+        "pinyin": "hǎo",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f867f34178594f891eb70a4260f62b1d.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "吗",
+        "gloss": "question particle",
+        "pinyin": "ma",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5ac1612110def2c499accdb0f55b8fb0.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/d0e2a7709b7a8f5969d74c3e917ca0f6.mp3"
+  },
+  {
+    "headword": "您好吗？",
+    "isPhrase": true,
+    "wholeGloss": "How are you? (Beijing, polite)",
+    "wholePinyin": "nín hǎo ma",
+    "tags": [
+      "greetings & goodbyes"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "您",
+        "gloss": "you (polite)",
+        "pinyin": "nín",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/9bbfbbc76f7ac5e0f16274e3a30766ee.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "好",
+        "gloss": "good",
+        "pinyin": "hǎo",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f867f34178594f891eb70a4260f62b1d.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "吗",
+        "gloss": "question particle",
+        "pinyin": "ma",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5ac1612110def2c499accdb0f55b8fb0.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/4e0613168fd724ecc526453885d8a31e.mp3"
+  },
+  {
+    "headword": "好。你呢？",
+    "isPhrase": true,
+    "wholeGloss": "Fine. And you?",
+    "wholePinyin": "hǎo nǐ ne",
+    "tags": [
+      "greetings & goodbyes"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "好",
+        "gloss": "fine",
+        "pinyin": "hǎo",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f867f34178594f891eb70a4260f62b1d.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "你",
+        "gloss": "you",
+        "pinyin": "nǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a0c7716669b5ded0d8051abfc232b828.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "呢",
+        "gloss": "question particle",
+        "pinyin": "ne",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/02811cec0b734158f35f1573aa0769c7.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/d92e967840358afdd286c2d855b83069.mp3"
+  },
+  {
+    "headword": "你叫什么名字？",
+    "isPhrase": true,
+    "wholeGloss": "What's your name?",
+    "wholePinyin": "nǐ jiào shénme míngzì",
+    "tags": [
+      "greetings & goodbyes"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "你",
+        "gloss": "you",
+        "pinyin": "nǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a0c7716669b5ded0d8051abfc232b828.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "叫",
+        "gloss": "called",
+        "pinyin": "jiào",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b71852847d38252f491303448c342e40.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "什么",
+        "gloss": "what",
+        "pinyin": "shénme",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c1b52e0e64a33deadd3ae5c09421ace2.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "名字",
+        "gloss": "name",
+        "pinyin": "míngzì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6773310492a96fcf96035a33dc957b7f.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/da5f7e0ff07cb3dd9217f5ba84858195.mp3"
+  },
+  {
+    "headword": "我叫凯文。",
+    "isPhrase": true,
+    "wholeGloss": "My name is Kevin.",
+    "wholePinyin": "wǒ jiào kǎi wén",
+    "tags": [
+      "greetings & goodbyes"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "叫",
+        "gloss": "am called",
+        "pinyin": "jiào",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b71852847d38252f491303448c342e40.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "凯文",
+        "gloss": "Kevin",
+        "pinyin": "kǎi wén",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/cda40683b8908991be0bf74b4a96fd25.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/d1bd26e70432dc1bf500a38c6483d23e.mp3"
+  },
+  {
+    "headword": "给你介绍我的朋友。",
+    "isPhrase": true,
+    "wholeGloss": "I'd like to introduce you to my friend.",
+    "wholePinyin": "gěi nǐ jièshào wǒ de péngyou",
+    "tags": [
+      "greetings & goodbyes"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "给",
+        "gloss": "to",
+        "pinyin": "gěi",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6e55fb9d8a3dacc1708dbcd943d26e7b.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "你",
+        "gloss": "you",
+        "pinyin": "nǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a0c7716669b5ded0d8051abfc232b828.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "介绍",
+        "gloss": "introduce",
+        "pinyin": "jièshào",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/66a66f52a2b114b54638c45bbc1338f6.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "我",
+        "gloss": "my",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 4,
+        "hanzi": "的",
+        "gloss": "(possessive particle)",
+        "pinyin": "de",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8af2350cfd65805bd50b6813ab70f85f.mp3"
+      },
+      {
+        "position": 5,
+        "hanzi": "朋友",
+        "gloss": "friend",
+        "pinyin": "péngyou",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/677aad1a0ee44cd64f79887236a96c3a.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6478efe7b2d24d28537220ce3ec4b972.mp3"
+  },
+  {
+    "headword": "幸会。",
+    "isPhrase": true,
+    "wholeGloss": "I'm pleased to meet you.",
+    "wholePinyin": "xìng huì",
+    "tags": [
+      "greetings & goodbyes"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "幸",
+        "gloss": "pleased",
+        "pinyin": "xìng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/7f5f68e3a4602d3f95924c4bfb69fc58.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "会",
+        "gloss": "meet",
+        "pinyin": "huì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5ba1e3c0eb6361618e95cb63fa67ce0f.mp3"
+      }
+    ],
+    "hsk": 6,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/62a7500366afda212d3e2d71c4cc0e8c.mp3"
+  },
+  {
+    "headword": "这是我的孩子。",
+    "isPhrase": true,
+    "wholeGloss": "This is my child.",
+    "wholePinyin": "zhè shì wǒ de háizi",
+    "tags": [
+      "greetings & goodbyes"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "这",
+        "gloss": "this",
+        "pinyin": "zhè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/d409ab2ab3f8a04e1057b97dddd673c6.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "是",
+        "gloss": "is",
+        "pinyin": "shì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b5141d3d19e9a04855acdb2dd5218b09.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "我",
+        "gloss": "my",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "的",
+        "gloss": "(possessive particle)",
+        "pinyin": "de",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8af2350cfd65805bd50b6813ab70f85f.mp3"
+      },
+      {
+        "position": 4,
+        "hanzi": "孩子",
+        "gloss": "child",
+        "pinyin": "háizi",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5f887419f463425a6f06d8823b08d258.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/126df112eca70c0f140131cdc690f7b6.mp3"
+  },
+  {
+    "headword": "这是我的同事。",
+    "isPhrase": true,
+    "wholeGloss": "This is my colleague.",
+    "wholePinyin": "zhè shì wǒ de tóngshì",
+    "tags": [
+      "greetings & goodbyes"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "这",
+        "gloss": "this",
+        "pinyin": "zhè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/d409ab2ab3f8a04e1057b97dddd673c6.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "是",
+        "gloss": "is",
+        "pinyin": "shì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b5141d3d19e9a04855acdb2dd5218b09.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "我",
+        "gloss": "my",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "的",
+        "gloss": "(possessive particle)",
+        "pinyin": "de",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8af2350cfd65805bd50b6813ab70f85f.mp3"
+      },
+      {
+        "position": 4,
+        "hanzi": "同事",
+        "gloss": "colleague",
+        "pinyin": "tóngshì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6ae62af4619f648642f0e64ad31c9d65.mp3"
+      }
+    ],
+    "hsk": 2,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f265978186909e7fb987cea45a610474.mp3"
+  },
+  {
+    "headword": "这是我的朋友。",
+    "isPhrase": true,
+    "wholeGloss": "This is my friend.",
+    "wholePinyin": "zhè shì wǒ de péngyou",
+    "tags": [
+      "greetings & goodbyes"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "这",
+        "gloss": "this",
+        "pinyin": "zhè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/d409ab2ab3f8a04e1057b97dddd673c6.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "是",
+        "gloss": "is",
+        "pinyin": "shì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b5141d3d19e9a04855acdb2dd5218b09.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "我",
+        "gloss": "my",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "的",
+        "gloss": "(possessive particle)",
+        "pinyin": "de",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8af2350cfd65805bd50b6813ab70f85f.mp3"
+      },
+      {
+        "position": 4,
+        "hanzi": "朋友",
+        "gloss": "friend",
+        "pinyin": "péngyou",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/677aad1a0ee44cd64f79887236a96c3a.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/9dec556c7b343d240287b0ef87a0dbbb.mp3"
+  },
+  {
+    "headword": "这是我的对象。",
+    "isPhrase": true,
+    "wholeGloss": "This is my partner (intimate).",
+    "wholePinyin": "zhè shì wǒ de duìxiàng",
+    "tags": [
+      "greetings & goodbyes"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "这",
+        "gloss": "this",
+        "pinyin": "zhè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/d409ab2ab3f8a04e1057b97dddd673c6.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "是",
+        "gloss": "is",
+        "pinyin": "shì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b5141d3d19e9a04855acdb2dd5218b09.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "我",
+        "gloss": "my",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "的",
+        "gloss": "(possessive particle)",
+        "pinyin": "de",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8af2350cfd65805bd50b6813ab70f85f.mp3"
+      },
+      {
+        "position": 4,
+        "hanzi": "对象",
+        "gloss": "partner",
+        "pinyin": "duìxiàng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/53f92c063963188534b2e9ada6d16385.mp3"
+      }
+    ],
+    "hsk": 3,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/05be72e03fb135ac3a953396ccd854ca.mp3"
+  },
+  {
+    "headword": "再见。",
+    "isPhrase": false,
+    "wholeGloss": "Goodbye.",
+    "wholePinyin": "zàijiàn",
+    "tags": [
+      "greetings & goodbyes"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "再见",
+        "gloss": "goodbye",
+        "pinyin": "zàijiàn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c90a1cdb561d0269284d52e41013bb2b.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/06263c2d6ffcb55ac60d57cc5c4aa66e.mp3"
+  },
+  {
+    "headword": "拜拜。",
+    "isPhrase": false,
+    "wholeGloss": "Bye.",
+    "wholePinyin": "bàibài",
+    "tags": [
+      "greetings & goodbyes"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "拜拜",
+        "gloss": "bye",
+        "pinyin": "bàibài",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/40b65f7c83f4a2af1aaa0cac8efcee94.mp3"
+      }
+    ],
+    "hsk": 2,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/87ac9b24c0b4c3d416edb2e8fcecab33.mp3"
+  },
+  {
+    "headword": "回头见。",
+    "isPhrase": true,
+    "wholeGloss": "See you later.",
+    "wholePinyin": "huítóujiàn",
+    "tags": [
+      "greetings & goodbyes"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "回头",
+        "gloss": "later",
+        "pinyin": "huítóu",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a3992fa0fc39234059340fe99e212e6f.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "见",
+        "gloss": "see",
+        "pinyin": "jiàn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b1c57d1cf6573f2e93875de093076bff.mp3"
+      }
+    ],
+    "hsk": 5,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3a042a8aa0711ebcba88b8323ae33d4d.mp3"
+  },
+  {
+    "headword": "晚安。",
+    "isPhrase": true,
+    "wholeGloss": "Good night.",
+    "wholePinyin": "wǎn ān",
+    "tags": [
+      "greetings & goodbyes"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "晚安",
+        "gloss": "good night",
+        "pinyin": "wǎn'ān",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/7196ef2fbde2c02f528f132ba992dad9.mp3"
+      }
+    ],
+    "hsk": 2,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6738be7c67815ca5857b419a0a956ba5.mp3"
+  },
+  {
+    "headword": "先生，你好。",
+    "isPhrase": true,
+    "wholeGloss": "Hello, Mr/Sir (lit: first-born).",
+    "wholePinyin": "xiānsheng nǐ hǎo",
+    "tags": [
+      "titles & addressing"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "先生",
+        "gloss": "Mr/Sir",
+        "pinyin": "xiānsheng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/cd98e43da31bb1b90dc152851c85c7d2.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "你好",
+        "gloss": "hello",
+        "pinyin": "nǐ hǎo",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/670d9743542cae3ea7ebe36af56bd536.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/e688c7c036aa889b9580239281bfe0b9.mp3"
+  },
+  {
+    "headword": "女士，你好。",
+    "isPhrase": true,
+    "wholeGloss": "Hello, Mrs/Madam.",
+    "wholePinyin": "nǚshì nǐ hǎo",
+    "tags": [
+      "titles & addressing"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "女士",
+        "gloss": "Mrs/Madam",
+        "pinyin": "nǚshì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/d87cff0000c6a6950025070adaecca24.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "你好",
+        "gloss": "hello",
+        "pinyin": "nǐ hǎo",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/670d9743542cae3ea7ebe36af56bd536.mp3"
+      }
+    ],
+    "hsk": 4,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/225f0403abec2255718649ec58b8a8f7.mp3"
+  },
+  {
+    "headword": "小姐，你好。",
+    "isPhrase": true,
+    "wholeGloss": "Hello, Ms/Miss (lit: little sister).",
+    "wholePinyin": "xiǎojiě nǐ hǎo",
+    "tags": [
+      "titles & addressing"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "小姐",
+        "gloss": "Ms/Miss",
+        "pinyin": "xiǎojiě",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/84a5f7a062dd9a13a4dc089bf06d674e.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "你好",
+        "gloss": "hello",
+        "pinyin": "nǐ hǎo",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/670d9743542cae3ea7ebe36af56bd536.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f723326012157287400cd7b4f179c5ca.mp3"
+  },
+  {
+    "headword": "出去吗？",
+    "isPhrase": true,
+    "wholeGloss": "Stepping out?",
+    "wholePinyin": "chū qù ma",
+    "tags": [
+      "making conversation"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "出",
+        "gloss": "go out",
+        "pinyin": "chū",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/4d5f7e15c8a569bfc0f1f798cdde3be8.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "去",
+        "gloss": "go",
+        "pinyin": "qù",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/99ae21ea6c39ccc19fba135c236c1592.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "吗",
+        "gloss": "question particle",
+        "pinyin": "ma",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5ac1612110def2c499accdb0f55b8fb0.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/daf31d784bdedb3e3e762c5cc7d9ee52.mp3"
+  },
+  {
+    "headword": "你来啦！",
+    "isPhrase": true,
+    "wholeGloss": "You've arrived!",
+    "wholePinyin": "nǐ lái la",
+    "tags": [
+      "making conversation"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "你",
+        "gloss": "you",
+        "pinyin": "nǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a0c7716669b5ded0d8051abfc232b828.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "来",
+        "gloss": "come",
+        "pinyin": "lái",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6d8229118caa20c2dd8b4f1aed17c77d.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "啦",
+        "gloss": "(particle indicating change of state)",
+        "pinyin": "la",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/0f8dc412bb3bb862a73f8feb71e15a71.mp3"
+      }
+    ],
+    "hsk": 6,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/95961f4d28293ded733fc34e29ff1c22.mp3"
+  },
+  {
+    "headword": "买菜去？",
+    "isPhrase": true,
+    "wholeGloss": "Off to the market?",
+    "wholePinyin": "mǎi cài qù",
+    "tags": [
+      "making conversation"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "买",
+        "gloss": "buy",
+        "pinyin": "mǎi",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/2cd2507d65de178ff6e3d7c45b7b0808.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "菜",
+        "gloss": "vegetables",
+        "pinyin": "cài",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/45f0c2d97be1214dc1a24cf44c7a38a3.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "去",
+        "gloss": "go",
+        "pinyin": "qù",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/99ae21ea6c39ccc19fba135c236c1592.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8ddb28fade2af84805be6bfd59e8963d.mp3"
+  },
+  {
+    "headword": "你住这里吗？",
+    "isPhrase": true,
+    "wholeGloss": "Do you live here?",
+    "wholePinyin": "nǐ zhù zhèlǐ ma",
+    "tags": [
+      "making conversation"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "你",
+        "gloss": "you",
+        "pinyin": "nǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a0c7716669b5ded0d8051abfc232b828.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "住",
+        "gloss": "live",
+        "pinyin": "zhù",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/cbba0a98abd10ccc947c40b35efb6a37.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "这里",
+        "gloss": "here",
+        "pinyin": "zhèlǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/467d6a749e06b07a374c32aa8a58c5d5.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "吗",
+        "gloss": "question particle",
+        "pinyin": "ma",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5ac1612110def2c499accdb0f55b8fb0.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/62dfc89ed78eb174110fa18c7e68269b.mp3"
+  },
+  {
+    "headword": "上哪儿去？",
+    "isPhrase": true,
+    "wholeGloss": "Where are you going?",
+    "wholePinyin": "shàng nǎr qù",
+    "tags": [
+      "making conversation"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "上",
+        "gloss": "go",
+        "pinyin": "shàng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/db5ba671d244ee8284613c31e1b84384.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "哪儿",
+        "gloss": "where",
+        "pinyin": "nǎr",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1ca22981984a89e6d592ae9fd8583373.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "去",
+        "gloss": "go",
+        "pinyin": "qù",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/99ae21ea6c39ccc19fba135c236c1592.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b8ad7f390e3edcab4a42de968f3a0509.mp3"
+  },
+  {
+    "headword": "你在干吗？",
+    "isPhrase": true,
+    "wholeGloss": "What are you doing?",
+    "wholePinyin": "nǐ zài gàn má",
+    "tags": [
+      "making conversation"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "你",
+        "gloss": "you",
+        "pinyin": "nǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a0c7716669b5ded0d8051abfc232b828.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "在",
+        "gloss": "(progressive marker) be ...-ing",
+        "pinyin": "zài",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/12404a0b638172406b8776fd1e1a36bf.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "干吗",
+        "gloss": "doing what",
+        "pinyin": "gànmá",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c0057aa35d18d6cb87bc5cb7f56242a1.mp3"
+      }
+    ],
+    "hsk": 3,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/2d8967aad5a15c2b15ed031032a17b15.mp3"
+  },
+  {
+    "headword": "喜欢这里吗？",
+    "isPhrase": true,
+    "wholeGloss": "Do you like it here?",
+    "wholePinyin": "xǐ huān zhè lǐ ma",
+    "tags": [
+      "making conversation"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "喜欢",
+        "gloss": "like",
+        "pinyin": "xǐ huān",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/653b04330b75751f79b5031887ef159e.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "这里",
+        "gloss": "here",
+        "pinyin": "zhè lǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/467d6a749e06b07a374c32aa8a58c5d5.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "吗",
+        "gloss": "question particle",
+        "pinyin": "ma",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5ac1612110def2c499accdb0f55b8fb0.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/20727c0824b0bd6ef24c8625166d9d3c.mp3"
+  },
+  {
+    "headword": "我很喜欢这里。",
+    "isPhrase": true,
+    "wholeGloss": "I love it here.",
+    "wholePinyin": "wǒ hěn xǐhuān zhèlǐ",
+    "tags": [
+      "making conversation"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "很",
+        "gloss": "very",
+        "pinyin": "hěn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f2b91797ea3a71714f6a11f7975ba6ce.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "喜欢",
+        "gloss": "like",
+        "pinyin": "xǐhuān",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/653b04330b75751f79b5031887ef159e.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "这里",
+        "gloss": "here",
+        "pinyin": "zhèlǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/467d6a749e06b07a374c32aa8a58c5d5.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/98d0943d770dbda413462eb7352cf233.mp3"
+  },
+  {
+    "headword": "你来这里旅游吗？",
+    "isPhrase": true,
+    "wholeGloss": "Are you here on holidays?",
+    "wholePinyin": "nǐ lái zhèlǐ lǚyóu ma",
+    "tags": [
+      "making conversation"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "你",
+        "gloss": "you",
+        "pinyin": "nǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a0c7716669b5ded0d8051abfc232b828.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "来",
+        "gloss": "come",
+        "pinyin": "lái",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6d8229118caa20c2dd8b4f1aed17c77d.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "这里",
+        "gloss": "here",
+        "pinyin": "zhèlǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/467d6a749e06b07a374c32aa8a58c5d5.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "旅游",
+        "gloss": "travel",
+        "pinyin": "lǚyóu",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c8bf3f878e389b57c6ec603293451f77.mp3"
+      },
+      {
+        "position": 4,
+        "hanzi": "吗",
+        "gloss": "question particle",
+        "pinyin": "ma",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5ac1612110def2c499accdb0f55b8fb0.mp3"
+      }
+    ],
+    "hsk": 2,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a6b23dc0d8a8df7cc5fdbdeffc775292.mp3"
+  },
+  {
+    "headword": "我来这里旅游。",
+    "isPhrase": true,
+    "wholeGloss": "I'm here for a holiday.",
+    "wholePinyin": "wǒ lái zhèlǐ lǚyóu",
+    "tags": [
+      "making conversation"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "来",
+        "gloss": "come",
+        "pinyin": "lái",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6d8229118caa20c2dd8b4f1aed17c77d.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "这里",
+        "gloss": "here",
+        "pinyin": "zhèlǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/467d6a749e06b07a374c32aa8a58c5d5.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "旅游",
+        "gloss": "travel",
+        "pinyin": "lǚyóu",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c8bf3f878e389b57c6ec603293451f77.mp3"
+      }
+    ],
+    "hsk": 2,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b51a245b8942630184b982ef0566df04.mp3"
+  },
+  {
+    "headword": "我来这里出差。",
+    "isPhrase": true,
+    "wholeGloss": "I'm here on business.",
+    "wholePinyin": "wǒ lái zhèlǐ chūchāi",
+    "tags": [
+      "making conversation"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "来",
+        "gloss": "come",
+        "pinyin": "lái",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6d8229118caa20c2dd8b4f1aed17c77d.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "这里",
+        "gloss": "here",
+        "pinyin": "zhèlǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/467d6a749e06b07a374c32aa8a58c5d5.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "出差",
+        "gloss": "on business",
+        "pinyin": "chūchāi",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1e9edcf99729b47bd246d78febb41a4a.mp3"
+      }
+    ],
+    "hsk": 5,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/277d7333e74920167eb05ce2874cdab6.mp3"
+  },
+  {
+    "headword": "我来这里留学。",
+    "isPhrase": true,
+    "wholeGloss": "I'm here to study.",
+    "wholePinyin": "wǒ lái zhèlǐ liúxué",
+    "tags": [
+      "making conversation"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "来",
+        "gloss": "come",
+        "pinyin": "lái",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6d8229118caa20c2dd8b4f1aed17c77d.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "这里",
+        "gloss": "here",
+        "pinyin": "zhèlǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/467d6a749e06b07a374c32aa8a58c5d5.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "留学",
+        "gloss": "study",
+        "pinyin": "liúxué",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3a036c64c60c77d1376cd7731af3afeb.mp3"
+      }
+    ],
+    "hsk": 3,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/d77bc5fe2f8b44e07d607d7d2259237f.mp3"
+  },
+  {
+    "headword": "你在这里住多久？",
+    "isPhrase": true,
+    "wholeGloss": "How long are you here for?",
+    "wholePinyin": "nǐ zài zhèlǐ zhù duōjiǔ",
+    "tags": [
+      "making conversation"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "你",
+        "gloss": "you",
+        "pinyin": "nǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a0c7716669b5ded0d8051abfc232b828.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "在",
+        "gloss": "at",
+        "pinyin": "zài",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/12404a0b638172406b8776fd1e1a36bf.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "这里",
+        "gloss": "here",
+        "pinyin": "zhèlǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/467d6a749e06b07a374c32aa8a58c5d5.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "住",
+        "gloss": "stay",
+        "pinyin": "zhù",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/cbba0a98abd10ccc947c40b35efb6a37.mp3"
+      },
+      {
+        "position": 4,
+        "hanzi": "多久",
+        "gloss": "how long",
+        "pinyin": "duōjiǔ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/bab0356c4850fa5bb7dd5993faa80234.mp3"
+      }
+    ],
+    "hsk": 2,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3fa70e1061e1a301f0a390b7a36c0473.mp3"
+  },
+  {
+    "headword": "我住四个星期。",
+    "isPhrase": true,
+    "wholeGloss": "I'm staying for four weeks.",
+    "wholePinyin": "wǒ zhù sì gè xīngqī",
+    "tags": [
+      "making conversation"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "住",
+        "gloss": "stay",
+        "pinyin": "zhù",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/cbba0a98abd10ccc947c40b35efb6a37.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "四",
+        "gloss": "four",
+        "pinyin": "sì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/754a9d5828d502f19ae91df8f089811d.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "个",
+        "gloss": "(measure word)",
+        "pinyin": "gè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3a116815bc9da10d888ffcca7311803a.mp3"
+      },
+      {
+        "position": 4,
+        "hanzi": "星期",
+        "gloss": "weeks",
+        "pinyin": "xīngqī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c398134d7d1f58e7c31cc6cb8eba142f.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1769b9f5e8b64be6191ee17d47f668f0.mp3"
+  },
+  {
+    "headword": "我可以拍你吗？",
+    "isPhrase": true,
+    "wholeGloss": "Can I take a photo of you?",
+    "wholePinyin": "wǒ kěyǐ pāi nǐ ma",
+    "tags": [
+      "making conversation"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "可以",
+        "gloss": "can",
+        "pinyin": "kěyǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/0ef5c86fab94f13a7b7d54aa531ceb5d.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "拍",
+        "gloss": "take a photo",
+        "pinyin": "pāi",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a23c93546acced8cc830f390f303a4a5.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "你",
+        "gloss": "you",
+        "pinyin": "nǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a0c7716669b5ded0d8051abfc232b828.mp3"
+      },
+      {
+        "position": 4,
+        "hanzi": "吗",
+        "gloss": "question particle",
+        "pinyin": "ma",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5ac1612110def2c499accdb0f55b8fb0.mp3"
+      }
+    ],
+    "hsk": 3,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/e71b05b757942abf95d49b2818db323b.mp3"
+  },
+  {
+    "headword": "太好看了！",
+    "isPhrase": true,
+    "wholeGloss": "That's beautiful!",
+    "wholePinyin": "tài hǎo kàn le",
+    "tags": [
+      "making conversation"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "太",
+        "gloss": "too",
+        "pinyin": "tài",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/e7ace7adf264b714b8eab09139eae139.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "好看",
+        "gloss": "beautiful",
+        "pinyin": "hǎo kàn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f2aedcbd1c742e2b312585329b19a0df.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "了",
+        "gloss": "(particle)",
+        "pinyin": "le",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b2dd27e84f07f49b4cb38d142c3ca9b4.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/7f70c4af85a1f7179f8c3eb0222be485.mp3"
+  },
+  {
+    "headword": "开玩笑。",
+    "isPhrase": true,
+    "wholeGloss": "Just joking.",
+    "wholePinyin": "kāi wánxiào",
+    "tags": [
+      "making conversation"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "开玩笑",
+        "gloss": "to joke; just kidding",
+        "pinyin": "kāi wánxiào",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/14a4954fcab18f2419f1bdfb837b4d54.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5cbb091576e99f5e21f9206ed73c2069.mp3"
+  },
+  {
+    "headword": "这个叫什么？",
+    "isPhrase": true,
+    "wholeGloss": "What's this called?",
+    "wholePinyin": "zhè gè jiào shén me",
+    "tags": [
+      "making conversation"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "这",
+        "gloss": "this",
+        "pinyin": "zhè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/d409ab2ab3f8a04e1057b97dddd673c6.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "个",
+        "gloss": "measure word",
+        "pinyin": "gè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3a116815bc9da10d888ffcca7311803a.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "叫",
+        "gloss": "called",
+        "pinyin": "jiào",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b71852847d38252f491303448c342e40.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "什么",
+        "gloss": "what",
+        "pinyin": "shén me",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c1b52e0e64a33deadd3ae5c09421ace2.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3152bc4bc1eb53674a9692536465b04c.mp3"
+  },
+  {
+    "headword": "你在这儿习惯吗？",
+    "isPhrase": true,
+    "wholeGloss": "Are you accustomed to life here?",
+    "wholePinyin": "nǐ zài zhèr xíguàn ma",
+    "tags": [
+      "making conversation"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "你",
+        "gloss": "you",
+        "pinyin": "nǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a0c7716669b5ded0d8051abfc232b828.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "在",
+        "gloss": "at",
+        "pinyin": "zài",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/12404a0b638172406b8776fd1e1a36bf.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "这儿",
+        "gloss": "here",
+        "pinyin": "zhèr",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/19a29e87c975dd9db5462dbaf4a698e6.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "习惯",
+        "gloss": "accustomed",
+        "pinyin": "xíguàn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/9c6f7c9b854ab80236383be046802c2f.mp3"
+      },
+      {
+        "position": 4,
+        "hanzi": "吗",
+        "gloss": "question particle",
+        "pinyin": "ma",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5ac1612110def2c499accdb0f55b8fb0.mp3"
+      }
+    ],
+    "hsk": 2,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/02fb36d3c71a5eff0c62a0bdbe0a6428.mp3"
+  },
+  {
+    "headword": "你从哪儿来？",
+    "isPhrase": true,
+    "wholeGloss": "Where are you from?",
+    "wholePinyin": "nǐ cóng nǎr lái",
+    "tags": [
+      "nationalities"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "你",
+        "gloss": "you",
+        "pinyin": "nǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a0c7716669b5ded0d8051abfc232b828.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "从",
+        "gloss": "from",
+        "pinyin": "cóng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/2719a8ea304b8cbfac62209ab10f877d.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "哪儿",
+        "gloss": "where",
+        "pinyin": "nǎr",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1ca22981984a89e6d592ae9fd8583373.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "来",
+        "gloss": "come",
+        "pinyin": "lái",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6d8229118caa20c2dd8b4f1aed17c77d.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/d05eaddc40f6e6a33657ba5cfc8bccb8.mp3"
+  },
+  {
+    "headword": "我从澳大利亚来。",
+    "isPhrase": true,
+    "wholeGloss": "I'm from Australia.",
+    "wholePinyin": "wǒ cóng àodàlìyà lái",
+    "tags": [
+      "nationalities"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "从",
+        "gloss": "from",
+        "pinyin": "cóng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/2719a8ea304b8cbfac62209ab10f877d.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "澳大利亚",
+        "gloss": "Australia",
+        "pinyin": "àodàlìyà",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/0b1001a02c971a01ebc585b5cb04897b.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "来",
+        "gloss": "come",
+        "pinyin": "lái",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6d8229118caa20c2dd8b4f1aed17c77d.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/ac1b02a7eccec09cba5690e75a63a52b.mp3"
+  },
+  {
+    "headword": "我从加拿大来。",
+    "isPhrase": true,
+    "wholeGloss": "I'm from Canada.",
+    "wholePinyin": "wǒ cóng jiānádà lái",
+    "tags": [
+      "nationalities"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "从",
+        "gloss": "from",
+        "pinyin": "cóng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/2719a8ea304b8cbfac62209ab10f877d.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "加拿大",
+        "gloss": "Canada",
+        "pinyin": "jiānádà",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6930e3f7dd59ab4d2f00e770a9e9ced0.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "来",
+        "gloss": "come",
+        "pinyin": "lái",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6d8229118caa20c2dd8b4f1aed17c77d.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8795dfe82f6f2621af3827319e15fba0.mp3"
+  },
+  {
+    "headword": "我从新加坡来。",
+    "isPhrase": true,
+    "wholeGloss": "I'm from Singapore.",
+    "wholePinyin": "wǒ cóng xīnjiāpō lái",
+    "tags": [
+      "nationalities"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "从",
+        "gloss": "from",
+        "pinyin": "cóng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/2719a8ea304b8cbfac62209ab10f877d.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "新加坡",
+        "gloss": "Singapore",
+        "pinyin": "xīnjiāpō",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f98b2fc82a45eadf7a1438ed0b4be1c7.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "来",
+        "gloss": "come",
+        "pinyin": "lái",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6d8229118caa20c2dd8b4f1aed17c77d.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/52e04e58015c6007d067334dc749349b.mp3"
+  },
+  {
+    "headword": "你多大了？",
+    "isPhrase": true,
+    "wholeGloss": "How old are you?",
+    "wholePinyin": "nǐ duō dà le",
+    "tags": [
+      "age"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "你",
+        "gloss": "you",
+        "pinyin": "nǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a0c7716669b5ded0d8051abfc232b828.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "多",
+        "gloss": "how",
+        "pinyin": "duō",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1940119f0571646018c3cc8986182471.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "大",
+        "gloss": "big",
+        "pinyin": "dà",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/7d4ca7f48effd6022051d7437696e2a3.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "了",
+        "gloss": "particle",
+        "pinyin": "le",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b2dd27e84f07f49b4cb38d142c3ca9b4.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/ecd4e5b26da5bd54e1efaf6d3940a653.mp3"
+  },
+  {
+    "headword": "我三十岁。",
+    "isPhrase": true,
+    "wholeGloss": "I'm thirty years old.",
+    "wholePinyin": "wǒ sānshí suì",
+    "tags": [
+      "age"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "三十",
+        "gloss": "thirty",
+        "pinyin": "sānshí",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a70676fba2a260e89793ebcc9d613314.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "岁",
+        "gloss": "years old",
+        "pinyin": "suì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/43e84a7a98a4fc35a8fc0c1cbce32e25.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/455b437745ec5cb5764791302c1f654e.mp3"
+  },
+  {
+    "headword": "你的女儿多大了？",
+    "isPhrase": true,
+    "wholeGloss": "How old is your daughter?",
+    "wholePinyin": "nǐ de nǚ'ér duō dà le",
+    "tags": [
+      "age"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "你",
+        "gloss": "your",
+        "pinyin": "nǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a0c7716669b5ded0d8051abfc232b828.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "的",
+        "gloss": "(possessive particle)",
+        "pinyin": "de",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8af2350cfd65805bd50b6813ab70f85f.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "女儿",
+        "gloss": "daughter",
+        "pinyin": "nǚ'ér",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/115425d59e4ae5f5c99d237ba80caa27.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "多大",
+        "gloss": "how old",
+        "pinyin": "duō dà",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5fc589b3fa00099ea34317b2e841cfce.mp3"
+      },
+      {
+        "position": 4,
+        "hanzi": "了",
+        "gloss": "(particle indicating change)",
+        "pinyin": "le",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b2dd27e84f07f49b4cb38d142c3ca9b4.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/92bc1eac93664e1792ef609dc09af3b2.mp3"
+  },
+  {
+    "headword": "你的儿子多大了？",
+    "isPhrase": true,
+    "wholeGloss": "How old is your son?",
+    "wholePinyin": "nǐ de érzi duō dà le",
+    "tags": [
+      "age"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "你",
+        "gloss": "you",
+        "pinyin": "nǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a0c7716669b5ded0d8051abfc232b828.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "的",
+        "gloss": "possessive particle",
+        "pinyin": "de",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8af2350cfd65805bd50b6813ab70f85f.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "儿子",
+        "gloss": "son",
+        "pinyin": "érzi",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/9231b93fd67f48d7cb959b7928c32787.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "多",
+        "gloss": "how",
+        "pinyin": "duō",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1940119f0571646018c3cc8986182471.mp3"
+      },
+      {
+        "position": 4,
+        "hanzi": "大",
+        "gloss": "old",
+        "pinyin": "dà",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/7d4ca7f48effd6022051d7437696e2a3.mp3"
+      },
+      {
+        "position": 5,
+        "hanzi": "了",
+        "gloss": "particle indicating change",
+        "pinyin": "le",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b2dd27e84f07f49b4cb38d142c3ca9b4.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/11cb0831d14adcc50ac18d43deb4e6fd.mp3"
+  },
+  {
+    "headword": "她五岁。",
+    "isPhrase": true,
+    "wholeGloss": "She is five years old.",
+    "wholePinyin": "tā wǔ suì",
+    "tags": [
+      "age"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "她",
+        "gloss": "she",
+        "pinyin": "tā",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/2ab425e0c6b932cbcf03e5394ad2ec49.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "五",
+        "gloss": "five",
+        "pinyin": "wǔ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c9b87f516a38ea36a0ca35f5137d4676.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "岁",
+        "gloss": "years old",
+        "pinyin": "suì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/43e84a7a98a4fc35a8fc0c1cbce32e25.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/7b3e3429083305e85b8ce0372e9f13cd.mp3"
+  },
+  {
+    "headword": "太老了！",
+    "isPhrase": true,
+    "wholeGloss": "Too old!",
+    "wholePinyin": "tài lǎo le",
+    "tags": [
+      "age"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "太",
+        "gloss": "too",
+        "pinyin": "tài",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/e7ace7adf264b714b8eab09139eae139.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "老",
+        "gloss": "old",
+        "pinyin": "lǎo",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f91f5faf747033148d6c6fc6bd120669.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "了",
+        "gloss": "(particle)",
+        "pinyin": "le",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b2dd27e84f07f49b4cb38d142c3ca9b4.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/569a4505885444979581a3dbbdefd8f9.mp3"
+  },
+  {
+    "headword": "我比看起来年轻。",
+    "isPhrase": true,
+    "wholeGloss": "I'm younger than I look.",
+    "wholePinyin": "wǒ bǐ kàn qǐlái niánqīng",
+    "tags": [
+      "age"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "比",
+        "gloss": "than",
+        "pinyin": "bǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/ab158a8483c3b86ea459a25c1850b91d.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "看起来",
+        "gloss": "look",
+        "pinyin": "kàn qǐlái",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a59578c39815d097c07d8f1de06aa728.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "年轻",
+        "gloss": "young",
+        "pinyin": "niánqīng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/82c3aeef9c316dfaa196fe233b631224.mp3"
+      }
+    ],
+    "hsk": 3,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/d5478452735e46e0492d727345cc1433.mp3"
+  },
+  {
+    "headword": "你挣多少钱？",
+    "isPhrase": true,
+    "wholeGloss": "How much do you earn?",
+    "wholePinyin": "nǐ zhèng duōshǎo qián",
+    "tags": [
+      "occupations & studies"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "你",
+        "gloss": "you",
+        "pinyin": "nǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a0c7716669b5ded0d8051abfc232b828.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "挣",
+        "gloss": "earn",
+        "pinyin": "zhèng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/fc39c5670a35c0b670665711339ae475.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "多少",
+        "gloss": "how much",
+        "pinyin": "duōshǎo",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/fb8f01cb6d4be28b2e0b326fb16d8006.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "钱",
+        "gloss": "money",
+        "pinyin": "qián",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/0eb863c78da3e38b6b92d1f3999566e5.mp3"
+      }
+    ],
+    "hsk": 5,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/29bedfd3c12acf195e809e9fc7f6a8f0.mp3"
+  },
+  {
+    "headword": "你做什么工作？",
+    "isPhrase": true,
+    "wholeGloss": "What's your occupation?",
+    "wholePinyin": "nǐ zuò shénme gōngzuò",
+    "tags": [
+      "occupations & studies"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "你",
+        "gloss": "you",
+        "pinyin": "nǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a0c7716669b5ded0d8051abfc232b828.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "做",
+        "gloss": "do",
+        "pinyin": "zuò",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/94f5404441e8c480117d2b802038130d.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "什么",
+        "gloss": "what",
+        "pinyin": "shénme",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c1b52e0e64a33deadd3ae5c09421ace2.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "工作",
+        "gloss": "work",
+        "pinyin": "gōngzuò",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/bc62d1b6b936c78dbbd0bbe5572e32d0.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3ef4eea6a85cd2a37edcf6ca918834a2.mp3"
+  },
+  {
+    "headword": "我是个会计。",
+    "isPhrase": true,
+    "wholeGloss": "I'm an accountant.",
+    "wholePinyin": "wǒ shì gè kuàijì",
+    "tags": [
+      "occupations & studies"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "是",
+        "gloss": "am",
+        "pinyin": "shì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b5141d3d19e9a04855acdb2dd5218b09.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "个",
+        "gloss": "a",
+        "pinyin": "gè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3a116815bc9da10d888ffcca7311803a.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "会计",
+        "gloss": "accountant",
+        "pinyin": "kuàijì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/d649e95568caf62d76248cb26b2cdd12.mp3"
+      }
+    ],
+    "hsk": 4,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/691bee65ae6458c36b986c3552ff3f53.mp3"
+  },
+  {
+    "headword": "我是个厨师。",
+    "isPhrase": true,
+    "wholeGloss": "I'm a chef.",
+    "wholePinyin": "wǒ shì gè chúshī",
+    "tags": [
+      "occupations & studies"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "是",
+        "gloss": "am",
+        "pinyin": "shì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b5141d3d19e9a04855acdb2dd5218b09.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "个",
+        "gloss": "a",
+        "pinyin": "gè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3a116815bc9da10d888ffcca7311803a.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "厨师",
+        "gloss": "chef",
+        "pinyin": "chúshī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f3b0cec1fb28bb53955c5dba9bb61822.mp3"
+      }
+    ],
+    "hsk": 6,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1fa379a43c21235572cf49b4f5048354.mp3"
+  },
+  {
+    "headword": "我是个工程师。",
+    "isPhrase": true,
+    "wholeGloss": "I'm an engineer.",
+    "wholePinyin": "wǒ shì gè gōng chéng shī",
+    "tags": [
+      "occupations & studies"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "是",
+        "gloss": "am",
+        "pinyin": "shì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b5141d3d19e9a04855acdb2dd5218b09.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "个",
+        "gloss": "a",
+        "pinyin": "gè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3a116815bc9da10d888ffcca7311803a.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "工程师",
+        "gloss": "engineer",
+        "pinyin": "gōng chéng shī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/bc2f82f27d245369ef4a9f2390255f88.mp3"
+      }
+    ],
+    "hsk": 3,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b241dec2da4ca141211ff12ef7959eb5.mp3"
+  },
+  {
+    "headword": "我是个记者。",
+    "isPhrase": true,
+    "wholeGloss": "I'm a journalist.",
+    "wholePinyin": "wǒ shì gè jìzhě",
+    "tags": [
+      "occupations & studies"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "是",
+        "gloss": "am",
+        "pinyin": "shì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b5141d3d19e9a04855acdb2dd5218b09.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "个",
+        "gloss": "a",
+        "pinyin": "gè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3a116815bc9da10d888ffcca7311803a.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "记者",
+        "gloss": "journalist",
+        "pinyin": "jìzhě",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5df8707c1e58ee5d8836124ac09bb9fc.mp3"
+      }
+    ],
+    "hsk": 3,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/92e1e9d6ed1ca184dc8f0189ad18f1b7.mp3"
+  },
+  {
+    "headword": "我是个老师。",
+    "isPhrase": true,
+    "wholeGloss": "I'm a teacher.",
+    "wholePinyin": "wǒ shì gè lǎoshī",
+    "tags": [
+      "occupations & studies"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "是",
+        "gloss": "am",
+        "pinyin": "shì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b5141d3d19e9a04855acdb2dd5218b09.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "个",
+        "gloss": "a",
+        "pinyin": "gè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3a116815bc9da10d888ffcca7311803a.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "老师",
+        "gloss": "teacher",
+        "pinyin": "lǎoshī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c9a31a3f670b7f9973f2004ed383fc8c.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a6b3f87a7f6b6441c8c660512bd2b396.mp3"
+  },
+  {
+    "headword": "我做生意。",
+    "isPhrase": true,
+    "wholeGloss": "I do business.",
+    "wholePinyin": "wǒ zuò shēngyì",
+    "tags": [
+      "occupations & studies"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "做",
+        "gloss": "do",
+        "pinyin": "zuò",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/94f5404441e8c480117d2b802038130d.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "生意",
+        "gloss": "business",
+        "pinyin": "shēngyì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f0a9e190013faac2bbe373506fd22c17.mp3"
+      }
+    ],
+    "hsk": 3,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3ee522dc7cb3b71f01fc626a071c604a.mp3"
+  },
+  {
+    "headword": "我打工。",
+    "isPhrase": true,
+    "wholeGloss": "I do casual work.",
+    "wholePinyin": "wǒ dǎgōng",
+    "tags": [
+      "occupations & studies"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "打工",
+        "gloss": "do casual work",
+        "pinyin": "dǎgōng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/53f7a3d320cda260d1a873cea3366f78.mp3"
+      }
+    ],
+    "hsk": 2,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5ab6bfab801f1cc759447ba44d970e73.mp3"
+  },
+  {
+    "headword": "我做秘书工作。",
+    "isPhrase": true,
+    "wholeGloss": "I work in administration.",
+    "wholePinyin": "wǒ zuò mìshū gōngzuò",
+    "tags": [
+      "occupations & studies"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "做",
+        "gloss": "do",
+        "pinyin": "zuò",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/94f5404441e8c480117d2b802038130d.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "秘书",
+        "gloss": "secretary",
+        "pinyin": "mìshū",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/92cce6abf36642938112eb586c8c0473.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "工作",
+        "gloss": "work",
+        "pinyin": "gōngzuò",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/bc62d1b6b936c78dbbd0bbe5572e32d0.mp3"
+      }
+    ],
+    "hsk": 4,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/ac5ff80eeed3525bd8c7abcbd4ecba34.mp3"
+  },
+  {
+    "headword": "我做卫生工作。",
+    "isPhrase": true,
+    "wholeGloss": "I work in health.",
+    "wholePinyin": "wǒ zuò wèishēng gōngzuò",
+    "tags": [
+      "occupations & studies"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "做",
+        "gloss": "do",
+        "pinyin": "zuò",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/94f5404441e8c480117d2b802038130d.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "卫生",
+        "gloss": "health",
+        "pinyin": "wèishēng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1156fe3779e4a44759bfcf2565a5ad6a.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "工作",
+        "gloss": "work",
+        "pinyin": "gōngzuò",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/bc62d1b6b936c78dbbd0bbe5572e32d0.mp3"
+      }
+    ],
+    "hsk": 3,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/fa39ab5d84bc701ae2da12d711663457.mp3"
+  },
+  {
+    "headword": "我做销售工作。",
+    "isPhrase": true,
+    "wholeGloss": "I work in sales and marketing.",
+    "wholePinyin": "wǒ zuò xiāoshòu gōngzuò",
+    "tags": [
+      "occupations & studies"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "做",
+        "gloss": "do",
+        "pinyin": "zuò",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/94f5404441e8c480117d2b802038130d.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "销售",
+        "gloss": "sales",
+        "pinyin": "xiāoshòu",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f04b061471b1fd165d7af6258fe4f698.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "工作",
+        "gloss": "work",
+        "pinyin": "gōngzuò",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/bc62d1b6b936c78dbbd0bbe5572e32d0.mp3"
+      }
+    ],
+    "hsk": 4,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/97816e70a9823e2d5a3200442e6a0c35.mp3"
+  },
+  {
+    "headword": "我退休了。",
+    "isPhrase": true,
+    "wholeGloss": "I'm retired.",
+    "wholePinyin": "wǒ tuìxiū le",
+    "tags": [
+      "occupations & studies"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "退休",
+        "gloss": "retired",
+        "pinyin": "tuìxiū",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/cab7ee5e1382a6f3326427887910a00f.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "了",
+        "gloss": "(completed action)",
+        "pinyin": "le",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b2dd27e84f07f49b4cb38d142c3ca9b4.mp3"
+      }
+    ],
+    "hsk": 3,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/67bf4c9389ba3893c1a67e85fc0396d8.mp3"
+  },
+  {
+    "headword": "我是自由职业者。",
+    "isPhrase": true,
+    "wholeGloss": "I'm self-employed.",
+    "wholePinyin": "wǒ shì zìyóu zhíyè zhě",
+    "tags": [
+      "occupations & studies"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "是",
+        "gloss": "am",
+        "pinyin": "shì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b5141d3d19e9a04855acdb2dd5218b09.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "自由",
+        "gloss": "free",
+        "pinyin": "zìyóu",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/d1047eed5dd5db0db2da62a36d4f2051.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "职业者",
+        "gloss": "professional",
+        "pinyin": "zhíyè zhě",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/ba083146a381b37b4ae7e2f5808ce079.mp3"
+      }
+    ],
+    "hsk": 5,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/fc5ff69c7c2393a57331a9535ed05a3f.mp3"
+  },
+  {
+    "headword": "我失业了。",
+    "isPhrase": true,
+    "wholeGloss": "I'm unemployed.",
+    "wholePinyin": "wǒ shīyè le",
+    "tags": [
+      "occupations & studies"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "失业",
+        "gloss": "unemployed",
+        "pinyin": "shīyè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/9fa4c944be11cd8dcd908a1e78450d50.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "了",
+        "gloss": "(particle indicating change of state)",
+        "pinyin": "le",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b2dd27e84f07f49b4cb38d142c3ca9b4.mp3"
+      }
+    ],
+    "hsk": 4,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/4d4cb85e8e02d6cb24cb8545b2f16495.mp3"
+  },
+  {
+    "headword": "你学什么？",
+    "isPhrase": true,
+    "wholeGloss": "What are you studying?",
+    "wholePinyin": "nǐ xué shénme",
+    "tags": [
+      "occupations & studies"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "你",
+        "gloss": "you",
+        "pinyin": "nǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a0c7716669b5ded0d8051abfc232b828.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "学",
+        "gloss": "study",
+        "pinyin": "xué",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8a6949a38384ceae41a21fb3cdfef202.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "什么",
+        "gloss": "what",
+        "pinyin": "shénme",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c1b52e0e64a33deadd3ae5c09421ace2.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/eef4716d888ca66fae93152b806010f6.mp3"
+  },
+  {
+    "headword": "我学文科。",
+    "isPhrase": true,
+    "wholeGloss": "I'm studying humanities.",
+    "wholePinyin": "wǒ xué wénkē",
+    "tags": [
+      "occupations & studies"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "学",
+        "gloss": "study",
+        "pinyin": "xué",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8a6949a38384ceae41a21fb3cdfef202.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "文科",
+        "gloss": "humanities",
+        "pinyin": "wénkē",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3e33fc26a96f2bc503e4e519ceced90a.mp3"
+      }
+    ],
+    "hsk": 7,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/17e41bdb7c2b9dca28214541eae23a9c.mp3"
+  },
+  {
+    "headword": "我学中文。",
+    "isPhrase": true,
+    "wholeGloss": "I'm studying (Mandarin) Chinese.",
+    "wholePinyin": "wǒ xué zhōngwén",
+    "tags": [
+      "occupations & studies"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "学",
+        "gloss": "study",
+        "pinyin": "xué",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8a6949a38384ceae41a21fb3cdfef202.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "中文",
+        "gloss": "Chinese",
+        "pinyin": "zhōngwén",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/72726d8818f693066ceb69afa364218b.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/eb273a7704cfa43e4de0ce6ddaade816.mp3"
+  },
+  {
+    "headword": "我学理科。",
+    "isPhrase": true,
+    "wholeGloss": "I'm studying science.",
+    "wholePinyin": "wǒ xué lǐkē",
+    "tags": [
+      "occupations & studies"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "学",
+        "gloss": "study",
+        "pinyin": "xué",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8a6949a38384ceae41a21fb3cdfef202.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "理科",
+        "gloss": "science",
+        "pinyin": "lǐkē",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/85b235cfbd4a369c85d54517fb56d785.mp3"
+      }
+    ],
+    "hsk": 7,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/ae3bbf0967b71e2caf92d0db3d98d628.mp3"
+  },
+  {
+    "headword": "你结婚了吗？",
+    "isPhrase": true,
+    "wholeGloss": "Are you married?",
+    "wholePinyin": "nǐ jiéhūn le ma",
+    "tags": [
+      "family"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "你",
+        "gloss": "you",
+        "pinyin": "nǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a0c7716669b5ded0d8051abfc232b828.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "结婚",
+        "gloss": "married",
+        "pinyin": "jiéhūn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/ed7486a07a29fff1db4f6e2bfa90eb54.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "了",
+        "gloss": "(completed action marker)",
+        "pinyin": "le",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b2dd27e84f07f49b4cb38d142c3ca9b4.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "吗",
+        "gloss": "(question particle)",
+        "pinyin": "ma",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5ac1612110def2c499accdb0f55b8fb0.mp3"
+      }
+    ],
+    "hsk": 3,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/0ab0b20128c083f116e5f1310886f8f7.mp3"
+  },
+  {
+    "headword": "我有伴儿。",
+    "isPhrase": true,
+    "wholeGloss": "I live with someone.",
+    "wholePinyin": "wǒ yǒu bànr",
+    "tags": [
+      "family"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "有",
+        "gloss": "have",
+        "pinyin": "yǒu",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/90ce0f66f09488f205e53736a105dfd3.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "伴儿",
+        "gloss": "companion",
+        "pinyin": "bànr",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/73c4b8db3c72507ee6e135ecc8e6b5d6.mp3"
+      }
+    ],
+    "hsk": 7,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/47b1d7ed68847b6b2e123fd00c834734.mp3"
+  },
+  {
+    "headword": "我离婚了。",
+    "isPhrase": true,
+    "wholeGloss": "I'm divorced.",
+    "wholePinyin": "wǒ lí hūn le",
+    "tags": [
+      "family"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "离婚",
+        "gloss": "divorced",
+        "pinyin": "lí hūn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/93619bc860a58a44020869869d64a53b.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "了",
+        "gloss": "(completed action marker)",
+        "pinyin": "le",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b2dd27e84f07f49b4cb38d142c3ca9b4.mp3"
+      }
+    ],
+    "hsk": 3,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b279f6c1cc6671a3ad01ceb89caddb28.mp3"
+  },
+  {
+    "headword": "我有伴。",
+    "isPhrase": true,
+    "wholeGloss": "I'm in a relationship.",
+    "wholePinyin": "wǒ yǒu bàn",
+    "tags": [
+      "family"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "有",
+        "gloss": "have",
+        "pinyin": "yǒu",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/90ce0f66f09488f205e53736a105dfd3.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "伴",
+        "gloss": "partner",
+        "pinyin": "bàn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/214679b1a4ea3d46cdc24b4622f66f5c.mp3"
+      }
+    ],
+    "hsk": 7,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/ca175c15f4cecb71c4bec11a8665b4a3.mp3"
+  },
+  {
+    "headword": "我结婚了。",
+    "isPhrase": true,
+    "wholeGloss": "I'm married.",
+    "wholePinyin": "wǒ jiéhūn le",
+    "tags": [
+      "family"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "结婚",
+        "gloss": "married",
+        "pinyin": "jiéhūn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/ed7486a07a29fff1db4f6e2bfa90eb54.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "了",
+        "gloss": "(completed action marker)",
+        "pinyin": "le",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b2dd27e84f07f49b4cb38d142c3ca9b4.mp3"
+      }
+    ],
+    "hsk": 3,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/bf37d465380f62613bf699e1218f8fbb.mp3"
+  },
+  {
+    "headword": "我分手了。",
+    "isPhrase": true,
+    "wholeGloss": "I'm separated.",
+    "wholePinyin": "wǒ fēnshǒu le",
+    "tags": [
+      "family"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "分手",
+        "gloss": "separated",
+        "pinyin": "fēnshǒu",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/08e2f1b6bb934e6878b5e0464b45d0e9.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "了",
+        "gloss": "(completed action marker)",
+        "pinyin": "le",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b2dd27e84f07f49b4cb38d142c3ca9b4.mp3"
+      }
+    ],
+    "hsk": 4,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/2167c58a13e575b7d92adf3c4c7e3ad0.mp3"
+  },
+  {
+    "headword": "我单身。",
+    "isPhrase": true,
+    "wholeGloss": "I'm single.",
+    "wholePinyin": "wǒ dānshēn",
+    "tags": [
+      "family"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "单身",
+        "gloss": "single",
+        "pinyin": "dānshēn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3a35683fe9358976de0797f1aabc801f.mp3"
+      }
+    ],
+    "hsk": 7,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a8f30d046f5da422891329b658f6a65f.mp3"
+  },
+  {
+    "headword": "你成家了吗？",
+    "isPhrase": true,
+    "wholeGloss": "Do you have a family of your own?",
+    "wholePinyin": "nǐ chéng jiā le ma",
+    "tags": [
+      "family"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "你",
+        "gloss": "you",
+        "pinyin": "nǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a0c7716669b5ded0d8051abfc232b828.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "成家",
+        "gloss": "start a family",
+        "pinyin": "chéng jiā",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/9b91a07af26274d0b1d5eebd8edf871b.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "了",
+        "gloss": "(particle)",
+        "pinyin": "le",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b2dd27e84f07f49b4cb38d142c3ca9b4.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "吗",
+        "gloss": "(question particle)",
+        "pinyin": "ma",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5ac1612110def2c499accdb0f55b8fb0.mp3"
+      }
+    ],
+    "hsk": 7,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3a60a5fd5793e4993e8b70e4b30d3814.mp3"
+  },
+  {
+    "headword": "你有兄弟吗？",
+    "isPhrase": true,
+    "wholeGloss": "Do you have a brother?",
+    "wholePinyin": "nǐ yǒu xiōngdì ma",
+    "tags": [
+      "family"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "你",
+        "gloss": "you",
+        "pinyin": "nǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a0c7716669b5ded0d8051abfc232b828.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "有",
+        "gloss": "have",
+        "pinyin": "yǒu",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/90ce0f66f09488f205e53736a105dfd3.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "兄弟",
+        "gloss": "brother",
+        "pinyin": "xiōngdì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f6c71210522b228724afa3d344c791e1.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "吗",
+        "gloss": "question particle",
+        "pinyin": "ma",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5ac1612110def2c499accdb0f55b8fb0.mp3"
+      }
+    ],
+    "hsk": 4,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/ade87015ee69ee2dca37ca6cb7b79141.mp3"
+  },
+  {
+    "headword": "你有女儿吗？",
+    "isPhrase": true,
+    "wholeGloss": "Do you have a daughter?",
+    "wholePinyin": "nǐ yǒu nǚ'ér ma",
+    "tags": [
+      "family"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "你",
+        "gloss": "you",
+        "pinyin": "nǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a0c7716669b5ded0d8051abfc232b828.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "有",
+        "gloss": "have",
+        "pinyin": "yǒu",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/90ce0f66f09488f205e53736a105dfd3.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "女儿",
+        "gloss": "daughter",
+        "pinyin": "nǚ'ér",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/115425d59e4ae5f5c99d237ba80caa27.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "吗",
+        "gloss": "question particle",
+        "pinyin": "ma",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5ac1612110def2c499accdb0f55b8fb0.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/4a7a9555817b9e6384fabc8e8e2a727a.mp3"
+  },
+  {
+    "headword": "你有儿子吗？",
+    "isPhrase": true,
+    "wholeGloss": "Do you have a son?",
+    "wholePinyin": "nǐ yǒu érzi ma",
+    "tags": [
+      "family"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "你",
+        "gloss": "you",
+        "pinyin": "nǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a0c7716669b5ded0d8051abfc232b828.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "有",
+        "gloss": "have",
+        "pinyin": "yǒu",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/90ce0f66f09488f205e53736a105dfd3.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "儿子",
+        "gloss": "son",
+        "pinyin": "érzi",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/9231b93fd67f48d7cb959b7928c32787.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "吗",
+        "gloss": "question particle",
+        "pinyin": "ma",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5ac1612110def2c499accdb0f55b8fb0.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/4fcf7d6acf4d0ab9de46373e9d1f62d1.mp3"
+  },
+  {
+    "headword": "你有孙女吗？",
+    "isPhrase": true,
+    "wholeGloss": "Do you have a granddaughter?",
+    "wholePinyin": "nǐ yǒu sūnnǚ ma",
+    "tags": [
+      "family"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "你",
+        "gloss": "you",
+        "pinyin": "nǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a0c7716669b5ded0d8051abfc232b828.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "有",
+        "gloss": "have",
+        "pinyin": "yǒu",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/90ce0f66f09488f205e53736a105dfd3.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "孙女",
+        "gloss": "granddaughter",
+        "pinyin": "sūnnǚ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/4fe498fffc2f6f463422d41c92b68663.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "吗",
+        "gloss": "question particle",
+        "pinyin": "ma",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5ac1612110def2c499accdb0f55b8fb0.mp3"
+      }
+    ],
+    "hsk": 4,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/67526d4d13a64bf405a4401e4b728e80.mp3"
+  },
+  {
+    "headword": "你有孙子吗？",
+    "isPhrase": true,
+    "wholeGloss": "Do you have a grandson?",
+    "wholePinyin": "nǐ yǒu sūnzi ma",
+    "tags": [
+      "family"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "你",
+        "gloss": "you",
+        "pinyin": "nǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a0c7716669b5ded0d8051abfc232b828.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "有",
+        "gloss": "have",
+        "pinyin": "yǒu",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/90ce0f66f09488f205e53736a105dfd3.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "孙子",
+        "gloss": "grandson",
+        "pinyin": "sūnzi",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/42a49b81be0d92c7eae4c45114634eec.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "吗",
+        "gloss": "question particle",
+        "pinyin": "ma",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5ac1612110def2c499accdb0f55b8fb0.mp3"
+      }
+    ],
+    "hsk": 4,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/762dab609ad91e7fbd8833d33812b756.mp3"
+  },
+  {
+    "headword": "我有丈夫。",
+    "isPhrase": true,
+    "wholeGloss": "I have a husband.",
+    "wholePinyin": "wǒ yǒu zhàngfu",
+    "tags": [
+      "family"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "有",
+        "gloss": "have",
+        "pinyin": "yǒu",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/90ce0f66f09488f205e53736a105dfd3.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "丈夫",
+        "gloss": "husband",
+        "pinyin": "zhàngfu",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/142646ce3064eee65042ab30253e1381.mp3"
+      }
+    ],
+    "hsk": 4,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/11d0f7cd2c83d76076def61e3231980a.mp3"
+  },
+  {
+    "headword": "我有太太。",
+    "isPhrase": true,
+    "wholeGloss": "I have a wife.",
+    "wholePinyin": "wǒ yǒu tàitai",
+    "tags": [
+      "family"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "有",
+        "gloss": "have",
+        "pinyin": "yǒu",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/90ce0f66f09488f205e53736a105dfd3.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "太太",
+        "gloss": "wife",
+        "pinyin": "tàitai",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/56ad3419ffde913ad4c38a96b79112af.mp3"
+      }
+    ],
+    "hsk": 2,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/570a4f7bc4948a4b752464a726a28bbe.mp3"
+  },
+  {
+    "headword": "我有对象。",
+    "isPhrase": true,
+    "wholeGloss": "I have a partner (intimate).",
+    "wholePinyin": "wǒ yǒu duìxiàng",
+    "tags": [
+      "family"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "有",
+        "gloss": "have",
+        "pinyin": "yǒu",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/90ce0f66f09488f205e53736a105dfd3.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "对象",
+        "gloss": "partner",
+        "pinyin": "duìxiàng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/53f92c063963188534b2e9ada6d16385.mp3"
+      }
+    ],
+    "hsk": 3,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/20a28331300074f4e60bd81b044e4416.mp3"
+  },
+  {
+    "headword": "我没有姐妹。",
+    "isPhrase": true,
+    "wholeGloss": "I don't have a sister.",
+    "wholePinyin": "wǒ méiyǒu jiěmèi",
+    "tags": [
+      "family"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "没有",
+        "gloss": "don't have",
+        "pinyin": "méiyǒu",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f127804b9227e152766662c76e1946d5.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "姐妹",
+        "gloss": "sister",
+        "pinyin": "jiěmèi",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/22a82bc61fef0e31b6c2ec54591b931b.mp3"
+      }
+    ],
+    "hsk": 4,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/45dce0ca95d96053fea32cf2c23b5043.mp3"
+  },
+  {
+    "headword": "我父亲是个老师。",
+    "isPhrase": true,
+    "wholeGloss": "My father is a teacher.",
+    "wholePinyin": "wǒ fùqīn shì gè lǎoshī",
+    "tags": [
+      "family"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "父亲",
+        "gloss": "father",
+        "pinyin": "fùqīn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/069af863e908e627e1e2c28c64cd9710.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "是",
+        "gloss": "is",
+        "pinyin": "shì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b5141d3d19e9a04855acdb2dd5218b09.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "个",
+        "gloss": "a",
+        "pinyin": "gè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3a116815bc9da10d888ffcca7311803a.mp3"
+      },
+      {
+        "position": 4,
+        "hanzi": "老师",
+        "gloss": "teacher",
+        "pinyin": "lǎoshī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c9a31a3f670b7f9973f2004ed383fc8c.mp3"
+      }
+    ],
+    "hsk": 3,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/71fd42537244f30d03d2880d12475dab.mp3"
+  },
+  {
+    "headword": "我母亲是个老师。",
+    "isPhrase": true,
+    "wholeGloss": "My mother is a teacher.",
+    "wholePinyin": "wǒ mǔqīn shì gè lǎoshī",
+    "tags": [
+      "family"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "母亲",
+        "gloss": "mother",
+        "pinyin": "mǔqīn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/568f6dca9137594612c20ea33a37b029.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "是",
+        "gloss": "is",
+        "pinyin": "shì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b5141d3d19e9a04855acdb2dd5218b09.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "个",
+        "gloss": "a",
+        "pinyin": "gè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3a116815bc9da10d888ffcca7311803a.mp3"
+      },
+      {
+        "position": 4,
+        "hanzi": "老师",
+        "gloss": "teacher",
+        "pinyin": "lǎoshī",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c9a31a3f670b7f9973f2004ed383fc8c.mp3"
+      }
+    ],
+    "hsk": 3,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/47814f7729f6096eaee51eca9c5af4a9.mp3"
+  },
+  {
+    "headword": "明天我要走了。",
+    "isPhrase": true,
+    "wholeGloss": "I'm leaving tomorrow.",
+    "wholePinyin": "míngtiān wǒ yào zǒu le",
+    "tags": [
+      "farewells"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "明天",
+        "gloss": "tomorrow",
+        "pinyin": "míngtiān",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b1d841b978fb524c350a0c4e32ab661a.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "我",
+        "gloss": "I",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "要",
+        "gloss": "will",
+        "pinyin": "yào",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/975f35218ed8782e677da0207b26d7a1.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "走",
+        "gloss": "leave",
+        "pinyin": "zǒu",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f66de6c4cd41cdff6c5d8ba092129d5c.mp3"
+      },
+      {
+        "position": 4,
+        "hanzi": "了",
+        "gloss": "(particle indicating change of state)",
+        "pinyin": "le",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b2dd27e84f07f49b4cb38d142c3ca9b4.mp3"
+      }
+    ],
+    "hsk": 2,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/71e666c0ddccb9151ab95c9c7d52c421.mp3"
+  },
+  {
+    "headword": "有机会来泰国，可以住我那儿。",
+    "isPhrase": true,
+    "wholeGloss": "If you come to Thailand, you can stay with me.",
+    "wholePinyin": "yǒu jīhuì lái tàiguó kěyǐ zhù wǒ nàr",
+    "tags": [
+      "farewells"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "有",
+        "gloss": "have",
+        "pinyin": "yǒu",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/90ce0f66f09488f205e53736a105dfd3.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "机会",
+        "gloss": "opportunity",
+        "pinyin": "jīhuì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/558d9951283ea1e2f8feb871e1250990.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "来",
+        "gloss": "come",
+        "pinyin": "lái",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6d8229118caa20c2dd8b4f1aed17c77d.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "泰国",
+        "gloss": "Thailand",
+        "pinyin": "tàiguó",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8f6ee8c64166eba0e61a8a30442ec542.mp3"
+      },
+      {
+        "position": 4,
+        "hanzi": "可以",
+        "gloss": "can",
+        "pinyin": "kěyǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/0ef5c86fab94f13a7b7d54aa531ceb5d.mp3"
+      },
+      {
+        "position": 5,
+        "hanzi": "住",
+        "gloss": "stay",
+        "pinyin": "zhù",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/cbba0a98abd10ccc947c40b35efb6a37.mp3"
+      },
+      {
+        "position": 6,
+        "hanzi": "我",
+        "gloss": "me",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 7,
+        "hanzi": "那儿",
+        "gloss": "there",
+        "pinyin": "nàr",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b4444021ad3e9b894ff04584a5d00a1b.mp3"
+      }
+    ],
+    "hsk": 3,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/436b7b92afec102395c6690e99934772.mp3"
+  },
+  {
+    "headword": "保持联系！",
+    "isPhrase": true,
+    "wholeGloss": "Keep in touch!",
+    "wholePinyin": "bǎochí liánxì",
+    "tags": [
+      "farewells"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "保持",
+        "gloss": "keep",
+        "pinyin": "bǎochí",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/9fdbd574134bba1960b47f2b00876bf2.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "联系",
+        "gloss": "contact",
+        "pinyin": "liánxì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/bfc967329e10188c44f768070e04d06e.mp3"
+      }
+    ],
+    "hsk": 3,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1f4620429c39559bda5082dd1d24de01.mp3"
+  },
+  {
+    "headword": "认识你实在很高兴。",
+    "isPhrase": true,
+    "wholeGloss": "It's been great meeting you.",
+    "wholePinyin": "rènshi nǐ shízài hěn gāoxìng",
+    "tags": [
+      "farewells"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "认识",
+        "gloss": "meet",
+        "pinyin": "rènshi",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1c17dc403125481f9fcbe687f0b94c60.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "你",
+        "gloss": "you",
+        "pinyin": "nǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a0c7716669b5ded0d8051abfc232b828.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "实在",
+        "gloss": "really",
+        "pinyin": "shízài",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/4ccbedff559116497d612c79211975bb.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "很",
+        "gloss": "very",
+        "pinyin": "hěn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f2b91797ea3a71714f6a11f7975ba6ce.mp3"
+      },
+      {
+        "position": 4,
+        "hanzi": "高兴",
+        "gloss": "happy",
+        "pinyin": "gāoxìng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/5fcaf1452472773f6a5f9bdf626c7194.mp3"
+      }
+    ],
+    "hsk": 2,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/db981016fa38cee1e6e7945436b5c5e4.mp3"
+  },
+  {
+    "headword": "你的邮箱地址是什么？",
+    "isPhrase": true,
+    "wholeGloss": "What's your email address?",
+    "wholePinyin": "nǐ de yóuxiāng dìzhǐ shì shénme",
+    "tags": [
+      "farewells"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "你",
+        "gloss": "you",
+        "pinyin": "nǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a0c7716669b5ded0d8051abfc232b828.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "的",
+        "gloss": "possessive particle",
+        "pinyin": "de",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8af2350cfd65805bd50b6813ab70f85f.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "邮箱",
+        "gloss": "email",
+        "pinyin": "yóuxiāng",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/73075237fd0f05f024dfe25d9b5289d7.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "地址",
+        "gloss": "address",
+        "pinyin": "dìzhǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/37aac5b4e639b93b620a8366fb9d1787.mp3"
+      },
+      {
+        "position": 4,
+        "hanzi": "是",
+        "gloss": "is",
+        "pinyin": "shì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b5141d3d19e9a04855acdb2dd5218b09.mp3"
+      },
+      {
+        "position": 5,
+        "hanzi": "什么",
+        "gloss": "what",
+        "pinyin": "shénme",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/c1b52e0e64a33deadd3ae5c09421ace2.mp3"
+      }
+    ],
+    "hsk": 4,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/becb7f0ed1ddbdd6102e0b02bc825e9a.mp3"
+  },
+  {
+    "headword": "给你我的地址。",
+    "isPhrase": true,
+    "wholeGloss": "Here's my address.",
+    "wholePinyin": "gěi nǐ wǒ de dìzhǐ",
+    "tags": [
+      "farewells"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "给",
+        "gloss": "give",
+        "pinyin": "gěi",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6e55fb9d8a3dacc1708dbcd943d26e7b.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "你",
+        "gloss": "you",
+        "pinyin": "nǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a0c7716669b5ded0d8051abfc232b828.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "我",
+        "gloss": "my",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "的",
+        "gloss": "(possessive particle)",
+        "pinyin": "de",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8af2350cfd65805bd50b6813ab70f85f.mp3"
+      },
+      {
+        "position": 4,
+        "hanzi": "地址",
+        "gloss": "address",
+        "pinyin": "dìzhǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/37aac5b4e639b93b620a8366fb9d1787.mp3"
+      }
+    ],
+    "hsk": 4,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a5a1c6d49464e1b3859e770c032f67a7.mp3"
+  },
+  {
+    "headword": "给你我的电话号码。",
+    "isPhrase": true,
+    "wholeGloss": "Here's my phone number.",
+    "wholePinyin": "gěi nǐ wǒ de diànhuà hàomǎ",
+    "tags": [
+      "farewells"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "给",
+        "gloss": "to give",
+        "pinyin": "gěi",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/6e55fb9d8a3dacc1708dbcd943d26e7b.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "你",
+        "gloss": "you",
+        "pinyin": "nǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a0c7716669b5ded0d8051abfc232b828.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "我",
+        "gloss": "I; my",
+        "pinyin": "wǒ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/b70bb4acc0484cf040de4c07c60f9db7.mp3"
+      },
+      {
+        "position": 3,
+        "hanzi": "的",
+        "gloss": "(possessive particle)",
+        "pinyin": "de",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8af2350cfd65805bd50b6813ab70f85f.mp3"
+      },
+      {
+        "position": 4,
+        "hanzi": "电话",
+        "gloss": "telephone",
+        "pinyin": "diànhuà",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/bf8b5d378f010ece0dc4d42c937a9404.mp3"
+      },
+      {
+        "position": 5,
+        "hanzi": "号码",
+        "gloss": "number",
+        "pinyin": "hàomǎ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/260db5567c734574a27588c9130cdb97.mp3"
+      }
+    ],
+    "hsk": 4,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/e753356bc87c3f818090c531e6f28c6d.mp3"
+  },
+  {
+    "headword": "一路平安！",
+    "isPhrase": true,
+    "wholeGloss": "Bon voyage!",
+    "wholePinyin": "yī lù píng ān",
+    "tags": [
+      "well-wishing"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "一路",
+        "gloss": "journey",
+        "pinyin": "yī lù",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f8f70f06540d1063f26418efe53b2e20.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "平安",
+        "gloss": "safe",
+        "pinyin": "píng ān",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/572027d3290df33676c11e87dda8c1fb.mp3"
+      }
+    ],
+    "hsk": 5,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3483e55b55d1a23da5df3e8a496cbe3b.mp3"
+  },
+  {
+    "headword": "恭喜，恭喜！",
+    "isPhrase": true,
+    "wholeGloss": "Congratulations!",
+    "wholePinyin": "gōngxǐ gōngxǐ",
+    "tags": [
+      "well-wishing"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "恭喜",
+        "gloss": "congratulations",
+        "pinyin": "gōngxǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f48293fdb16d36fa0514ae1b8c6f0c82.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "恭喜",
+        "gloss": "congratulations",
+        "pinyin": "gōngxǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f48293fdb16d36fa0514ae1b8c6f0c82.mp3"
+      }
+    ],
+    "hsk": 7,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/ff017a694065424f46bb3658c07ff531.mp3"
+  },
+  {
+    "headword": "祝你好运！",
+    "isPhrase": true,
+    "wholeGloss": "Good luck!",
+    "wholePinyin": "zhù nǐ hǎo yùn",
+    "tags": [
+      "well-wishing"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "祝",
+        "gloss": "wish",
+        "pinyin": "zhù",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/e2a4be97bb6a13343154e15c93b55fff.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "你",
+        "gloss": "you",
+        "pinyin": "nǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/a0c7716669b5ded0d8051abfc232b828.mp3"
+      },
+      {
+        "position": 2,
+        "hanzi": "好运",
+        "gloss": "good luck",
+        "pinyin": "hǎo yùn",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/25c6d6e7135e3eaa787646f2c11baad1.mp3"
+      }
+    ],
+    "hsk": 5,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/dc84256526bdf860ba1672c7cc09ac49.mp3"
+  },
+  {
+    "headword": "生日快乐！",
+    "isPhrase": true,
+    "wholeGloss": "Happy birthday!",
+    "wholePinyin": "shēngrì kuàilè",
+    "tags": [
+      "well-wishing"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "生日",
+        "gloss": "birthday",
+        "pinyin": "shēngrì",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/8f5ecd9fc26937ef19dc3c1232a0af30.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "快乐",
+        "gloss": "happy",
+        "pinyin": "kuàilè",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/da374d4d4e9ac6fcf9a819438183a9ad.mp3"
+      }
+    ],
+    "hsk": 2,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/1d03275776a748a64bd6571a3cde9324.mp3"
+  },
+  {
+    "headword": "新年好！",
+    "isPhrase": true,
+    "wholeGloss": "Happy (Chinese) New Year!",
+    "wholePinyin": "xīnnián hǎo",
+    "tags": [
+      "well-wishing"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "新年",
+        "gloss": "New Year",
+        "pinyin": "xīnnián",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/3dc45bf582a4cb3177b8868c30955081.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "好",
+        "gloss": "good",
+        "pinyin": "hǎo",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f867f34178594f891eb70a4260f62b1d.mp3"
+      }
+    ],
+    "hsk": 1,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/35279b63e7d6cdfa0b806e824a76b970.mp3"
+  },
+  {
+    "headword": "恭喜发财！",
+    "isPhrase": true,
+    "wholeGloss": "Congratulations, may you make lots of money! (Chinese New Year, esp. southern China)",
+    "wholePinyin": "gōngxǐ fācái",
+    "tags": [
+      "well-wishing"
+    ],
+    "words": [
+      {
+        "position": 0,
+        "hanzi": "恭喜",
+        "gloss": "congratulations",
+        "pinyin": "gōngxǐ",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/f48293fdb16d36fa0514ae1b8c6f0c82.mp3"
+      },
+      {
+        "position": 1,
+        "hanzi": "发财",
+        "gloss": "make money",
+        "pinyin": "fācái",
+        "audioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/39a8fe2be270ae55e810de4e52d949ec.mp3"
+      }
+    ],
+    "hsk": 7,
+    "wholeAudioUrl": "https://l8q3faq0rcb5b5ix.public.blob.vercel-storage.com/audio/219b91ec418f636e8cac078eaf861bba.mp3"
   }
 ]

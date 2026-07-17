@@ -1,5 +1,5 @@
 {
-  "_about": "HSK 3.0 band per Card, the audit trail behind cards.hsk_level. Each band was adjudicated by one Haiku agent anchored to a deterministic per-word lookup against seed/mandarin/hsk30-wordlist.json; a final consistency sweep flagged 3 outliers, all reviewed and approved by the owner (see correctedFrom/correction). Band 7 = the merged HSK 7-9 advanced band; 8 and 9 are never used. Applied to the deck by scripts/level-hsk.ts.",
+  "_about": "HSK 3.0 band per Card, the audit trail behind cards.hsk_level. Each band was adjudicated by one Haiku agent anchored to a deterministic per-word lookup against seed/mandarin/hsk30-wordlist.json; a final consistency sweep flagged 3 outliers, all reviewed and approved by the owner (see correctedFrom/correction). Band 7 = the merged HSK 7-9 advanced band; 8 and 9 are never used. Applied to the deck by scripts/level-hsk.ts. The 2026-07-17 meeting-people batch (117 cards) was adjudicated by Claude (Fable 5) anchored to the same deterministic wordlist lookup, with unlisted colloquialisms and set phrases placed by judgment (see each rationale).",
   "_generated": "2026-07-13",
   "cards": [
     {
@@ -2395,6 +2395,708 @@
       "hsk": 6,
       "confidence": "medium",
       "rationale": "解放 is HSK 5, raised to 6 as a historical-period term banded with the dynasty family."
+    },
+    {
+      "headword": "是。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "Single HSK 1 copula used as a bare affirmative; no grammar to elevate."
+    },
+    {
+      "headword": "不是。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "不 and 是 are both HSK 1; simple negated copula as a bare negative reply."
+    },
+    {
+      "headword": "请坐。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "请 and 坐 are both HSK 1; polite imperative is HSK 1 material."
+    },
+    {
+      "headword": "谢谢你。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "谢谢 and 你 are both HSK 1; canonical HSK 1 set phrase."
+    },
+    {
+      "headword": "非常感谢你。",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "maxBand 2 (感谢); intensifier + verb + object with no advanced grammar."
+    },
+    {
+      "headword": "不客气。",
+      "hsk": 5,
+      "confidence": "medium",
+      "rationale": "The set-phrase reply is taught early, but 客气 sits at band 5 in the official wordlist and the verdict follows the vocabulary floor."
+    },
+    {
+      "headword": "劳驾。",
+      "hsk": 6,
+      "confidence": "medium",
+      "rationale": "劳驾 is not in the HSK 3.0 list; a colloquial northern politeness formula well outside the core curriculum — placed in band 6."
+    },
+    {
+      "headword": "请让一下。",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "maxBand 2 (让); 一下 is a compositional HSK 1 measure compound; simple polite imperative."
+    },
+    {
+      "headword": "对不起。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "对不起 is an HSK 1 list match; standalone apology."
+    },
+    {
+      "headword": "随便。",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "随便 is an HSK 2 list match used as a standalone reply."
+    },
+    {
+      "headword": "没关系。",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "maxBand 3 (关系); fixed reply with no grammar beyond the floor."
+    },
+    {
+      "headword": "大家好。",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "maxBand 2 (大家); greeting formula with no elevation needed."
+    },
+    {
+      "headword": "你好。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "The canonical HSK 1 greeting; both words band 1."
+    },
+    {
+      "headword": "您好。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "您 and 好 are both HSK 1; polite-register greeting is still band 1 material."
+    },
+    {
+      "headword": "吃饭了吗？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words HSK 1; sentence-final 了吗 in a set greeting is HSK 1 material."
+    },
+    {
+      "headword": "下午好。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "下午 and 好 are both HSK 1; formulaic greeting."
+    },
+    {
+      "headword": "晚上好。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "晚上 and 好 are both HSK 1; formulaic greeting."
+    },
+    {
+      "headword": "早上好。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "早上 and 好 are both HSK 1; formulaic greeting."
+    },
+    {
+      "headword": "你好吗？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words HSK 1; simple 吗 question."
+    },
+    {
+      "headword": "您好吗？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words HSK 1; polite 吗 question."
+    },
+    {
+      "headword": "好。你呢？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words HSK 1; bounce-back 呢 question is HSK 1 grammar."
+    },
+    {
+      "headword": "你叫什么名字？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words HSK 1; the canonical name question."
+    },
+    {
+      "headword": "我叫凯文。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "我 and 叫 are HSK 1; 凯文 is a proper name (transliteration) and does not raise the band."
+    },
+    {
+      "headword": "给你介绍我的朋友。",
+      "hsk": 1,
+      "confidence": "medium",
+      "rationale": "All list words are band 1 (给, 介绍, 朋友); the 给…介绍 double-object pattern is simple enough not to outrun the vocabulary."
+    },
+    {
+      "headword": "幸会。",
+      "hsk": 6,
+      "confidence": "medium",
+      "rationale": "幸会 is not in the HSK 3.0 list; a formal literary-register set greeting — placed in band 6."
+    },
+    {
+      "headword": "这是我的孩子。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words HSK 1; simple presentative sentence."
+    },
+    {
+      "headword": "这是我的同事。",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "maxBand 2 (同事); simple presentative sentence."
+    },
+    {
+      "headword": "这是我的朋友。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words HSK 1; simple presentative sentence."
+    },
+    {
+      "headword": "这是我的对象。",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "maxBand 3 (对象 in its 'partner' sense); simple presentative sentence."
+    },
+    {
+      "headword": "再见。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "再见 is an HSK 1 list match."
+    },
+    {
+      "headword": "拜拜。",
+      "hsk": 2,
+      "confidence": "medium",
+      "rationale": "拜拜 is not in the HSK 3.0 list; a ubiquitous informal loanword goodbye — placed low-intermediate at band 2."
+    },
+    {
+      "headword": "回头见。",
+      "hsk": 5,
+      "confidence": "medium",
+      "rationale": "回头 sits at band 5 in the wordlist, setting the floor; common set phrase but the verdict follows the vocabulary floor."
+    },
+    {
+      "headword": "晚安。",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "晚安 is an HSK 2 list match (segmented as the single listed word)."
+    },
+    {
+      "headword": "先生，你好。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "先生 is HSK 1 and 你好 is compositional band 1; vocative + greeting."
+    },
+    {
+      "headword": "女士，你好。",
+      "hsk": 4,
+      "confidence": "high",
+      "rationale": "女士 sits at band 4, setting the floor; vocative + greeting adds no grammar."
+    },
+    {
+      "headword": "小姐，你好。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "小姐 is HSK 1 and 你好 is compositional band 1; vocative + greeting."
+    },
+    {
+      "headword": "出去吗？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words HSK 1; elliptical 吗 question typical of street small talk."
+    },
+    {
+      "headword": "你来啦！",
+      "hsk": 6,
+      "confidence": "medium",
+      "rationale": "啦 (fusion particle) sits at band 6 in the wordlist, setting the floor for this exclamatory greeting."
+    },
+    {
+      "headword": "买菜去？",
+      "hsk": 1,
+      "confidence": "medium",
+      "rationale": "All words HSK 1; the colloquial purpose-去 tag question is informal but not lexically or structurally advanced."
+    },
+    {
+      "headword": "你住这里吗？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words HSK 1; simple 吗 question."
+    },
+    {
+      "headword": "上哪儿去？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words HSK 1; colloquial 上…去 motion question stays at band 1."
+    },
+    {
+      "headword": "你在干吗？",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "干吗 is an HSK 3 list match (segmented as the single listed word); progressive 在 is band 1-2 grammar."
+    },
+    {
+      "headword": "喜欢这里吗？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words HSK 1; subject-dropped 吗 question."
+    },
+    {
+      "headword": "我很喜欢这里。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words HSK 1; canonical 很 + verb pattern."
+    },
+    {
+      "headword": "你来这里旅游吗？",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "maxBand 2 (旅游); serial-verb purpose construction is early-band grammar."
+    },
+    {
+      "headword": "我来这里旅游。",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "maxBand 2 (旅游); serial-verb purpose construction."
+    },
+    {
+      "headword": "我来这里出差。",
+      "hsk": 5,
+      "confidence": "high",
+      "rationale": "出差 sits at band 5, setting the floor; same serial-verb frame as its siblings."
+    },
+    {
+      "headword": "我来这里留学。",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "留学 sits at band 3, setting the floor; same serial-verb frame as its siblings."
+    },
+    {
+      "headword": "你在这里住多久？",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "maxBand 2 (多久); duration question with no elevation needed."
+    },
+    {
+      "headword": "我住四个星期。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words HSK 1; verb + duration complement is band 1 material."
+    },
+    {
+      "headword": "我可以拍你吗？",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "拍 sits at band 3, setting the floor; permission 可以…吗 is band 2 grammar."
+    },
+    {
+      "headword": "太好看了！",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words HSK 1; the 太…了 exclamative is band 1 grammar."
+    },
+    {
+      "headword": "开玩笑。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "开玩笑 is an HSK 1 list match (segmented as the single listed word)."
+    },
+    {
+      "headword": "这个叫什么？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words HSK 1; simple naming question."
+    },
+    {
+      "headword": "你在这儿习惯吗？",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "maxBand 2 (习惯); locative + 吗 question with no elevation."
+    },
+    {
+      "headword": "你从哪儿来？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words HSK 1; canonical origin question."
+    },
+    {
+      "headword": "我从澳大利亚来。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "从…来 frame is all HSK 1; 澳大利亚 is a proper noun and does not raise the band."
+    },
+    {
+      "headword": "我从加拿大来。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "从…来 frame is all HSK 1; 加拿大 is a proper noun and does not raise the band."
+    },
+    {
+      "headword": "我从新加坡来。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "从…来 frame is all HSK 1; 新加坡 is a proper noun and does not raise the band."
+    },
+    {
+      "headword": "你多大了？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words HSK 1; the canonical age question."
+    },
+    {
+      "headword": "我三十岁。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "三十 is a compositional HSK 1 numeral; age statement is band 1 material."
+    },
+    {
+      "headword": "你的女儿多大了？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "多大 is compositional from HSK 1 多 and 大; all other words band 1."
+    },
+    {
+      "headword": "你的儿子多大了？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words HSK 1; same frame as the daughter variant."
+    },
+    {
+      "headword": "她五岁。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words HSK 1; bare age statement."
+    },
+    {
+      "headword": "太老了！",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words HSK 1; 太…了 exclamative."
+    },
+    {
+      "headword": "我比看起来年轻。",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "看起来 sits at band 3, setting the floor; 比-comparison is band 2 grammar."
+    },
+    {
+      "headword": "你挣多少钱？",
+      "hsk": 5,
+      "confidence": "high",
+      "rationale": "挣 sits at band 5, setting the floor; simple amount question otherwise."
+    },
+    {
+      "headword": "你做什么工作？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words HSK 1; the canonical occupation question."
+    },
+    {
+      "headword": "我是个会计。",
+      "hsk": 4,
+      "confidence": "high",
+      "rationale": "会计 sits at band 4, setting the floor; 是个 + profession frame is band 1."
+    },
+    {
+      "headword": "我是个厨师。",
+      "hsk": 6,
+      "confidence": "high",
+      "rationale": "厨师 sits at band 6, setting the floor; same profession frame."
+    },
+    {
+      "headword": "我是个工程师。",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "工程师 sits at band 3, setting the floor; same profession frame."
+    },
+    {
+      "headword": "我是个记者。",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "记者 sits at band 3, setting the floor; same profession frame."
+    },
+    {
+      "headword": "我是个老师。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words HSK 1; profession frame with band 1 noun."
+    },
+    {
+      "headword": "我做生意。",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "生意 sits at band 3, setting the floor; simple S-V-O."
+    },
+    {
+      "headword": "我打工。",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "打工 is an HSK 2 list match; bare S-V."
+    },
+    {
+      "headword": "我做秘书工作。",
+      "hsk": 4,
+      "confidence": "high",
+      "rationale": "秘书 sits at band 4, setting the floor; 做…工作 frame is band 1."
+    },
+    {
+      "headword": "我做卫生工作。",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "卫生 sits at band 3, setting the floor; same 做…工作 frame."
+    },
+    {
+      "headword": "我做销售工作。",
+      "hsk": 4,
+      "confidence": "high",
+      "rationale": "销售 sits at band 4, setting the floor; same 做…工作 frame."
+    },
+    {
+      "headword": "我退休了。",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "退休 sits at band 3, setting the floor; change-of-state 了 is early-band grammar."
+    },
+    {
+      "headword": "我是自由职业者。",
+      "hsk": 5,
+      "confidence": "medium",
+      "rationale": "自由职业者 is not listed as a whole; built from 自由 (2), 职业 (3) and the agentive 者 suffix — the modern compound 'freelancer' is placed at band 5."
+    },
+    {
+      "headword": "我失业了。",
+      "hsk": 4,
+      "confidence": "high",
+      "rationale": "失业 sits at band 4, setting the floor; change-of-state 了."
+    },
+    {
+      "headword": "你学什么？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words HSK 1; simple object question."
+    },
+    {
+      "headword": "我学文科。",
+      "hsk": 7,
+      "confidence": "high",
+      "rationale": "文科 sits in the merged 7-9 band, setting the floor; frame itself is band 1."
+    },
+    {
+      "headword": "我学中文。",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words HSK 1; simple S-V-O."
+    },
+    {
+      "headword": "我学理科。",
+      "hsk": 7,
+      "confidence": "high",
+      "rationale": "理科 sits in the merged 7-9 band, setting the floor; frame itself is band 1."
+    },
+    {
+      "headword": "你结婚了吗？",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "结婚 sits at band 3, setting the floor; 了吗 completed-action question."
+    },
+    {
+      "headword": "我有伴儿。",
+      "hsk": 7,
+      "confidence": "medium",
+      "rationale": "伴儿 is the erhua form of 伴, which sits in the merged 7-9 band — kept consistent with 我有伴。"
+    },
+    {
+      "headword": "我离婚了。",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "离婚 sits at band 3, setting the floor; change-of-state 了."
+    },
+    {
+      "headword": "我有伴。",
+      "hsk": 7,
+      "confidence": "high",
+      "rationale": "伴 sits in the merged 7-9 band, setting the floor; bare 有-statement otherwise."
+    },
+    {
+      "headword": "我结婚了。",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "结婚 sits at band 3, setting the floor; change-of-state 了."
+    },
+    {
+      "headword": "我分手了。",
+      "hsk": 4,
+      "confidence": "high",
+      "rationale": "分手 sits at band 4, setting the floor; change-of-state 了."
+    },
+    {
+      "headword": "我单身。",
+      "hsk": 7,
+      "confidence": "high",
+      "rationale": "单身 sits in the merged 7-9 band, setting the floor; bare predicate otherwise."
+    },
+    {
+      "headword": "你成家了吗？",
+      "hsk": 7,
+      "confidence": "high",
+      "rationale": "成家 sits in the merged 7-9 band, setting the floor; 了吗 question otherwise."
+    },
+    {
+      "headword": "你有兄弟吗？",
+      "hsk": 4,
+      "confidence": "high",
+      "rationale": "兄弟 sits at band 4, setting the floor; simple 有…吗 question."
+    },
+    {
+      "headword": "你有女儿吗？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words HSK 1; simple 有…吗 question."
+    },
+    {
+      "headword": "你有儿子吗？",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "All words HSK 1; simple 有…吗 question."
+    },
+    {
+      "headword": "你有孙女吗？",
+      "hsk": 4,
+      "confidence": "high",
+      "rationale": "孙女 sits at band 4, setting the floor; simple 有…吗 question."
+    },
+    {
+      "headword": "你有孙子吗？",
+      "hsk": 4,
+      "confidence": "high",
+      "rationale": "孙子 sits at band 4, setting the floor; simple 有…吗 question."
+    },
+    {
+      "headword": "我有丈夫。",
+      "hsk": 4,
+      "confidence": "high",
+      "rationale": "丈夫 sits at band 4, setting the floor; bare 有-statement."
+    },
+    {
+      "headword": "我有太太。",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "maxBand 2 (太太); bare 有-statement."
+    },
+    {
+      "headword": "我有对象。",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "对象 sits at band 3, setting the floor; bare 有-statement."
+    },
+    {
+      "headword": "我没有姐妹。",
+      "hsk": 4,
+      "confidence": "high",
+      "rationale": "姐妹 sits at band 4, setting the floor; negated 有-statement."
+    },
+    {
+      "headword": "我父亲是个老师。",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "父亲 sits at band 3, setting the floor; 是个 + profession frame."
+    },
+    {
+      "headword": "我母亲是个老师。",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "母亲 sits at band 3, setting the floor; 是个 + profession frame."
+    },
+    {
+      "headword": "明天我要走了。",
+      "hsk": 2,
+      "confidence": "medium",
+      "rationale": "All words are HSK 1, but the imminent-action 要…了 construction is band 2 grammar — raised above the vocabulary floor."
+    },
+    {
+      "headword": "有机会来泰国，可以住我那儿。",
+      "hsk": 3,
+      "confidence": "medium",
+      "rationale": "Vocabulary floor is 2 (机会, 可以; 泰国 is a proper noun), but the implicit conditional across two clauses and the colloquial pronoun+那儿 locative raise it to band 3."
+    },
+    {
+      "headword": "保持联系！",
+      "hsk": 3,
+      "confidence": "high",
+      "rationale": "保持 and 联系 are both band 3; imperative set phrase."
+    },
+    {
+      "headword": "认识你实在很高兴。",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "maxBand 2 (实在); clausal-subject pattern is within early-band greeting formulas."
+    },
+    {
+      "headword": "你的邮箱地址是什么？",
+      "hsk": 4,
+      "confidence": "high",
+      "rationale": "地址 sits at band 4, setting the floor (邮箱 is 3); simple 是什么 question."
+    },
+    {
+      "headword": "给你我的地址。",
+      "hsk": 4,
+      "confidence": "high",
+      "rationale": "地址 sits at band 4, setting the floor; verbless offer formula otherwise simple."
+    },
+    {
+      "headword": "给你我的电话号码。",
+      "hsk": 4,
+      "confidence": "high",
+      "rationale": "号码 sits at band 4, setting the floor (电话 is 1); same offer formula as the address card."
+    },
+    {
+      "headword": "一路平安！",
+      "hsk": 5,
+      "confidence": "high",
+      "rationale": "一路 sits at band 5, setting the floor; fixed farewell blessing."
+    },
+    {
+      "headword": "恭喜，恭喜！",
+      "hsk": 7,
+      "confidence": "high",
+      "rationale": "恭喜 sits in the merged 7-9 band, setting the floor; reduplicated congratulation formula."
+    },
+    {
+      "headword": "祝你好运！",
+      "hsk": 5,
+      "confidence": "high",
+      "rationale": "好运 sits at band 5, setting the floor; 祝-blessing frame is band 3."
+    },
+    {
+      "headword": "生日快乐！",
+      "hsk": 2,
+      "confidence": "high",
+      "rationale": "maxBand 2 (快乐); fixed birthday formula."
+    },
+    {
+      "headword": "新年好！",
+      "hsk": 1,
+      "confidence": "high",
+      "rationale": "新年 and 好 are both HSK 1; fixed New Year greeting."
+    },
+    {
+      "headword": "恭喜发财！",
+      "hsk": 7,
+      "confidence": "high",
+      "rationale": "恭喜 and 发财 both sit in the merged 7-9 band, setting the floor; fixed New Year blessing."
     }
   ]
 }
