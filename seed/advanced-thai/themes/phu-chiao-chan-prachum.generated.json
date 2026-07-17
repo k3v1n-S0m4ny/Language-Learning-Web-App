@@ -5,25 +5,6 @@
   "summary": "Plans and supervises international-level events such as exhibitions, trade fairs, academic conferences, discussion forums, and seminars attended by participants from multiple countries.",
   "vocab": [
     {
-      "thai": "ผู้เชี่ยวชาญ",
-      "gloss": "specialist; expert",
-      "pos": "noun",
-      "register": "formal",
-      "morphemes": [
-        {
-          "form": "ผู้",
-          "gloss": "person; one who",
-          "role": "prefix"
-        },
-        {
-          "form": "เชี่ยวชาญ",
-          "gloss": "expert; skilled",
-          "role": "root"
-        }
-      ],
-      "literal": "person + expert"
-    },
-    {
       "thai": "การจัดประชุม",
       "gloss": "conference organization",
       "pos": "noun",
@@ -205,19 +186,6 @@
         }
       ],
       "literal": "shape + pattern"
-    },
-    {
-      "thai": "หลากหลาย",
-      "gloss": "diverse; varied",
-      "pos": "adj",
-      "register": "formal",
-      "morphemes": [
-        {
-          "form": "หลากหลาย",
-          "gloss": "diverse; varied",
-          "role": "root"
-        }
-      ]
     },
     {
       "thai": "แลกเปลี่ยนความคิดเห็น",
