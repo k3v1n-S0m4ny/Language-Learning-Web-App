@@ -76,7 +76,18 @@ far cheaper than "history on ~830 cards".
       interval histogram + demotion leeches; `review-session.tsx` dispatches on `card.format`;
       `empty-state.tsx` → `mandarin-round-complete.tsx`; `rating-chart.tsx` →
       `distribution-chart.tsx`. All FSRS modules and `ts-fsrs` deleted.
+- [x] **Committed and merged.** The redesign was committed on `fix/tier3-just-rated-repeat` in five
+      commits (`1e74cf8` ladder engine + schema, `e477e8b` Advanced Thai, `d484e86` Mandarin,
+      `191e485` ts-fsrs drop, `037ddf8` plans) and squash-merged to **local `main` as `f7ecf70`**.
+      `git diff fix/tier3-just-rated-repeat main` is empty. Re-verified ON `main`: `npx tsc
+      --noEmit` → 0, `npx eslint app components lib scripts seed` → 0, `npx tsx --test
+      lib/ladder/*.test.ts lib/review/*.test.ts` → 0 (73/73), `npx next build` → 0.
+      Owner decision taken: commit `3bf34d4` (`pickFutureToday`) is **abandoned** — it rides in as a
+      no-op because the ladder deletes the file it fixed.
 - [ ] Phase 5 — prod migration (owner decision: this wipes real learner data).
+      **`main` is NOT pushed.** It is deliberately held local: pushing triggers a Vercel production
+      deploy, and `f7ecf70` reads ladder columns that production's schema does not have yet. The
+      push and the migration must happen together — migrate `0009`+`0010` on prod first, then push.
 
 **The repo typechecks and builds again.** `npx tsc --noEmit` → exit 0 and `npx next build` →
 success, both for the first time since Phase 2's schema rewrite.
