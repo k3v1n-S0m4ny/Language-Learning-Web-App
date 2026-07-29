@@ -1,20 +1,26 @@
 import type { SessionCounts } from "@/lib/review/types";
 
-// Session meta row: Due/New counts for the current study session. The
-// greeting + nav controls that used to live here moved to the floating
-// glass <TopBar> (Phase 1) — this keeps just the small, centered counts line
-// from the north-star reference.
+// Session meta row for the current round.
+//
+// Left / Repeats, not Due / New. The pair now describes the ROUND rather than the
+// queue: everything owed today, split by whether it has been asked yet — which is
+// what makes the finish line legible while you are still walking toward it. New
+// cards are not called out separately because they are inside `Left` from the
+// moment the round admits them; they are work owed today like any other card.
+//
+// Identical in shape to the Advanced Thai header (advanced-study-screen.tsx), and
+// deliberately so: one Learner, two courses, one reading of "how much is left".
 export function SessionHeader({ counts }: { counts: SessionCounts }) {
   return (
     <p className="flex items-center gap-2.5 text-xs font-semibold text-foreground-muted">
       <span>
-        Due <b className="font-semibold tabular-nums text-foreground">{counts.dueCount}</b>
+        Left <b className="font-semibold tabular-nums text-foreground">{counts.remaining}</b>
       </span>
       <span aria-hidden className="text-foreground-muted/50">
         ·
       </span>
       <span>
-        New <b className="font-semibold tabular-nums text-foreground">{counts.newRemaining}</b>
+        Repeats <b className="font-semibold tabular-nums text-foreground">{counts.repeats}</b>
       </span>
     </p>
   );

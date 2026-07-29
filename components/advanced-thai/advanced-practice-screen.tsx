@@ -4,37 +4,38 @@ import { useState } from "react";
 import Link from "next/link";
 import { SegmentedControl } from "@/components/ui/segmented-control";
 import type { AtCardKind, AtPracticeCounts, AtStudyCard } from "@/lib/advanced-thai/types";
-import type { IntervalHints } from "@/lib/review/types";
 import { AdvancedReviewSession } from "./advanced-review-session";
 import { ThaiFontProvider, type ThaiFont } from "./kit";
 
 const KIND_LABEL: Record<AtCardKind, string> = {
   vocab: "Vocabulary",
-  grammar: "Grammar",
   phrase: "Phrases",
 };
 
-// The client shell around a cross-theme practice-by-kind session. Deliberate
+// The client shell around a cross-theme practice-by-kind drill. Deliberate
 // sibling of AdvancedStudyScreen (see queries.ts's header comment on why the
-// duplication across this flow is not laziness) rather than a shared
-// component with branching props — the counts shape genuinely differs
-// (remaining/repeats vs due/new) and so does the empty state (no top-up here:
-// this flow never introduces an unseen card, so there is nothing to top up).
+// duplication across this flow is not laziness) rather than a shared component
+// with branching props — the two now differ in more than styling.
 //
-// Holds the same two things AdvancedStudyScreen holds outside the card
-// (letterform choice + the counts header/way out) for the same reason: both
-// must outlive the individual card, which AdvancedReviewSession does not
-// (it remounts on every rating, keyed by card.id).
+// THIS FLOW IS READ-ONLY AND HAS NO FINISH LINE. It writes no ladder state, so
+// nothing here can climb, drop or come due; the pool never shrinks and the drill
+// never ends. That is why there is no Left/Repeats pair, no round-complete
+// screen, and no `?since=` session identity in the URL — none of them have
+// anything to measure. What is left to say is how big the pool is and how many
+// cards this sitting has been through, and the second of those is client state
+// because it belongs to the sitting rather than to the database.
+//
+// Holds the letterform choice for the same reason AdvancedStudyScreen does: it
+// must outlive the individual card, which AdvancedReviewSession does not (it
+// remounts on every answer, keyed by card.id).
 export function AdvancedPracticeScreen({
   kind,
   counts,
   card,
-  hints,
 }: {
   kind: AtCardKind;
   counts: AtPracticeCounts;
   card: AtStudyCard | null;
-  hints: IntervalHints | null;
 }) {
   const [font, setFont] = useState<ThaiFont>("looped");
 
@@ -64,22 +65,20 @@ export function AdvancedPracticeScreen({
 
         <p className="flex items-center gap-2.5 text-xs font-semibold text-foreground-muted">
           <span>
-            Left <b className="font-semibold tabular-nums text-foreground">{counts.remaining}</b>
+            Drilling{" "}
+            <b className="font-semibold tabular-nums text-foreground">{counts.poolSize}</b> cards
           </span>
           <span aria-hidden className="text-foreground-muted/50">
             ·
           </span>
-          <span>
-            Repeats{" "}
-            <b className="font-semibold tabular-nums text-foreground">{counts.repeatCount}</b>
-          </span>
+          <span>nothing recorded</span>
         </p>
 
         <div className="flex w-full flex-1 flex-col items-center justify-center">
-          {card && hints ? (
-            <AdvancedReviewSession key={card.id} card={card} hints={hints} />
+          {card ? (
+            <AdvancedReviewSession key={card.id} card={card} mode="practice" />
           ) : (
-            <PracticeComplete kind={kind} poolSize={counts.poolSize} />
+            <NothingToPractice kind={kind} />
           )}
         </div>
       </main>
@@ -87,32 +86,19 @@ export function AdvancedPracticeScreen({
   );
 }
 
-// Advanced Thai's per-theme AllCaughtUp has a top-up CTA because that flow can
-// legitimately be short on cards (the daily cap). This flow cannot: the pool
-// is fixed to already-introduced cards, and there is no unseen-card cap to
-// raise — so there is deliberately no button here, only a way out.
-function PracticeComplete({ kind, poolSize }: { kind: AtCardKind; poolSize: number }) {
+// The only empty state this flow has. A drill over an existing pool cannot run
+// out — the draw is random and with replacement — so the sole way to reach a null
+// card is for the pool to be empty in the first place.
+function NothingToPractice({ kind }: { kind: AtCardKind }) {
   const label = KIND_LABEL[kind].toLowerCase();
 
   return (
     <div className="glass flex w-full max-w-md flex-col items-center gap-2 rounded-[var(--r-lg)] p-8 text-center animate-slide-up-fade">
-      {poolSize > 0 ? (
-        <>
-          <p className="text-lg font-semibold text-foreground">Session complete</p>
-          <p className="text-sm text-foreground-muted">
-            You practiced all <b className="tabular-nums text-foreground">{poolSize}</b> {label}{" "}
-            cards. Every rating counted toward the real schedule, same as the per-theme flow.
-          </p>
-        </>
-      ) : (
-        <>
-          <p className="text-lg font-semibold text-foreground">Nothing to practice yet</p>
-          <p className="text-sm text-foreground-muted">
-            No {label} cards have been introduced in any theme yet. Study a theme first, then come
-            back here.
-          </p>
-        </>
-      )}
+      <p className="text-lg font-semibold text-foreground">Nothing to practice yet</p>
+      <p className="text-sm text-foreground-muted">
+        No {label} cards have been introduced in any theme yet. Study a theme first, then come
+        back here.
+      </p>
       <Link
         href="/"
         className="mt-2 rounded-[var(--r-pill)] border border-border-base px-4 py-1.5 text-xs font-medium text-foreground-muted transition-colors hover:bg-background hover:text-foreground"

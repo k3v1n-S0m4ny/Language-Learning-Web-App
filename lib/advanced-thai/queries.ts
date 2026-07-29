@@ -1,26 +1,19 @@
-import { and, asc, count, eq, gt, gte, isNull, lt, lte, or, sql } from "drizzle-orm";
+import { and, asc, count, eq, isNull, lte, sql } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { atCards, atReviewStates, atThemes } from "@/lib/db/schema";
+import { buildOptions } from "@/lib/ladder/distractors";
+import { INITIAL_STATE, formatForStep, type StepFormat } from "@/lib/ladder/ladder";
+import { pickNext, type RoundCandidate } from "@/lib/ladder/round";
 import { ensureLearnerSettings } from "@/lib/review/queries";
-import {
-  createEmptyCard,
-  getScheduler,
-  hydrateFsrsCard,
-  previewIntervals,
-} from "@/lib/review/scheduler";
-import { endOfThailandDay, startOfThailandDay, thaiDateKey } from "@/lib/review/time";
-import type { IntervalHints } from "@/lib/review/types";
-import type {
-  GrammarPattern,
-  PhraseEntry,
-  VocabEntry,
-} from "@/seed/advanced-thai/types";
+import { startOfThailandDay, thaiDateKey } from "@/lib/review/time";
+import type { PhraseEntry, VocabEntry } from "@/seed/advanced-thai/types";
 import {
   AT_CARD_KINDS,
+  LADDER_FOR_KIND,
   type AtCardKind,
   type AtKindSummary,
   type AtPracticeCounts,
-  type AtSessionCounts,
+  type AtRoundCounts,
   type AtStudyCard,
   type AtThemeSummary,
 } from "./types";
@@ -33,42 +26,90 @@ import {
 // gate strategy through every call, which is more indirection than the ~80 lines
 // it would save.
 //
-// WHAT IS *NOT* DUPLICATED IS THE SCHEDULER. lib/review/scheduler.ts is pure and
-// database-agnostic, so this calls straight into it — same FSRS parameters, same
-// retention constant, same interval hints. There is exactly one scheduler in this
+// WHAT IS *NOT* DUPLICATED IS THE LADDER. lib/ladder/* is pure and
+// database-agnostic, so this calls straight into it — same step definitions, same
+// ordering rule, same option builder. There is exactly one ladder engine in this
 // app and there must remain exactly one.
 
-/** Rebuild the typed study card from the jsonb payload. */
+/**
+ * The answer a card is asking for at this step — and what the server grades
+ * against.
+ *
+ * "recognise" asks for the English, "produce" asks for the Thai. That is the only
+ * axis the format changes; MC and flashcard differ in how the answer is
+ * collected, not in what it is. Exported because actions.ts must re-derive the
+ * same value to grade a submitted choice, and there must be exactly one
+ * definition of what the right answer is.
+ */
+export function expectedAnswerFor(
+  payload: VocabEntry | PhraseEntry,
+  format: StepFormat,
+): string {
+  return format.startsWith("produce") ? payload.thai : payload.gloss;
+}
+
+/** Whether a step collects its answer as one of four options. */
+export function isMultipleChoice(format: StepFormat): boolean {
+  return format === "recognise-mc" || format === "produce-mc";
+}
+
+/**
+ * Attach the multiple-choice options, when the step calls for them.
+ *
+ * Distractors come from the SAME THEME (the plan's rule), which is why this takes
+ * a theme rather than deriving one: in cross-theme practice a card still draws its
+ * neighbours from the theme it belongs to, not from the whole deck. They are also
+ * drawn from the same KIND, so a vocab question is never answered by a whole
+ * phrase — a distractor that can be eliminated on shape alone is not a distractor.
+ *
+ * The card's own row is in the pool and is filtered out by buildOptions, which
+ * drops anything equal to the answer.
+ */
+async function optionsFor(
+  themeId: string,
+  kind: AtCardKind,
+  payload: VocabEntry | PhraseEntry,
+  format: StepFormat,
+): Promise<string[] | undefined> {
+  if (!isMultipleChoice(format)) return undefined;
+
+  const siblings = await db
+    .select({ payload: atCards.payload })
+    .from(atCards)
+    .where(and(eq(atCards.themeId, themeId), eq(atCards.kind, kind)));
+
+  const pool = siblings
+    .map((row) => expectedAnswerFor(row.payload as VocabEntry | PhraseEntry, format))
+    .filter((value): value is string => typeof value === "string");
+
+  return buildOptions(expectedAnswerFor(payload, format), pool);
+}
+
+/** Rebuild the typed study card from the jsonb payload plus the Learner's ladder state. */
 function toStudyCard(
   row: { id: string; kind: string; payload: unknown; audioUrl: string | null },
-  lapses: number,
+  step: number,
+  demotions: number,
+  options: string[] | undefined,
 ): AtStudyCard | null {
+  const base = { id: row.id, step, demotions, ...(options ? { options } : {}) };
+
   switch (row.kind) {
     case "vocab":
       return {
-        id: row.id,
+        ...base,
         kind: "vocab",
         payload: row.payload as VocabEntry,
         audioUrl: row.audioUrl,
-        lapses,
-      };
-    case "grammar":
-      // A grammar card's headline is an abstract frame, not a sayable utterance,
-      // so it never carries a clip — see scripts/generate-advanced-thai-audio.ts.
-      return {
-        id: row.id,
-        kind: "grammar",
-        payload: row.payload as GrammarPattern,
-        audioUrl: null,
-        lapses,
+        format: formatForStep(LADDER_FOR_KIND.vocab, step),
       };
     case "phrase":
       return {
-        id: row.id,
+        ...base,
         kind: "phrase",
         payload: row.payload as PhraseEntry,
         audioUrl: row.audioUrl,
-        lapses,
+        format: formatForStep(LADDER_FOR_KIND.phrase, step),
       };
     default:
       // `kind` is a plain text column so it can grow without a migration; an
@@ -84,7 +125,6 @@ export async function getThemeSummaries(
   now: Date = new Date(),
 ): Promise<AtThemeSummary[]> {
   const dayStart = startOfThailandDay(now);
-  const dayEnd = endOfThailandDay(now);
 
   const [settings, rows, newTodayRow] = await Promise.all([
     ensureLearnerSettings(learnerId),
@@ -102,10 +142,10 @@ export async function getThemeSummaries(
              t.title_thai,
              t.title_english,
              t.summary,
-             count(c.id)::int                                              AS total_cards,
-             count(rs.card_id)::int                                        AS seen_cards,
-             count(rs.card_id) FILTER (WHERE rs.due <= ${dayEnd})::int     AS due_count,
-             count(c.id) FILTER (WHERE rs.card_id IS NULL)::int            AS unseen_cards
+             count(c.id)::int                                           AS total_cards,
+             count(rs.card_id)::int                                     AS seen_cards,
+             count(rs.card_id) FILTER (WHERE rs.due <= ${now})::int      AS due_count,
+             count(c.id) FILTER (WHERE rs.card_id IS NULL)::int          AS unseen_cards
       FROM ${atThemes} t
       LEFT JOIN ${atCards} c ON c.theme_id = t.id
       LEFT JOIN ${atReviewStates} rs
@@ -147,119 +187,80 @@ export async function getThemeSummaries(
 }
 
 /**
- * Everything one theme's study screen needs.
+ * Everything one theme's round needs.
  *
- * The three-tier queue is lifted from the Mandarin flow (lib/review/queries.ts),
- * because the reasoning behind it is not Mandarin-specific:
+ * The three-tier queue this replaces is gone in full, and so is the reasoning
+ * behind it. Under FSRS a card could be scheduled minutes into the future, so
+ * "what do I serve now" needed a ready tier, a new tier, and a rescue tier for
+ * cards stranded just past `now` — plus pickFutureToday to stop the just-rated
+ * card being handed straight back. The ladder never schedules in minutes: a card
+ * still climbing is written with `due = now`, and a card that finishes goes at
+ * least a day out. So the batch is exactly `due <= now`, and the only question
+ * left is what order to serve it in.
  *
- *   Tier 1 — READY:        due <= now. Overdue cards and intraday learning steps
- *                          whose timer has elapsed.
- *   Tier 2 — NEW:          unseen cards in deck order, only while the daily cap
- *                          allows. (No band gate — Advanced Thai is ungated.)
- *   Tier 3 — FUTURE-TODAY: due > now but <= end of the Thailand day. A card just
- *                          rated Again sits here for ~1 minute; serving it
- *                          prevents a dead end when it is the only card left.
+ * That order is one rule — oldest-served first, never-served before that, deck
+ * order to break ties — and it lives in lib/ladder/round.ts rather than in this
+ * SQL, so it is testable and stated once for both courses. The just-rated card
+ * cannot repeat because stamping `last_review` puts it at the back of the line by
+ * construction.
  *
- * Priority: ready > (cap allows ? new : skip) > future-today. This is what stops
- * a freshly-failed card from immediately repeating: it is not `ready` yet, so a
- * new card is served instead, and it resurfaces only when its learning step
- * elapses.
+ * New cards join the batch here rather than being a separate tier: they are
+ * candidates with a null `last_review`, which orderRound already puts first. Pass
+ * one of a round is therefore the introduction pass, for free.
  */
-export async function getAdvancedStudyData(
+export async function getAdvancedRoundData(
   learnerId: string,
   themeSlug: string,
   now: Date = new Date(),
-): Promise<{
-  counts: AtSessionCounts;
-  card: AtStudyCard | null;
-  hints: IntervalHints | null;
-}> {
+): Promise<{ counts: AtRoundCounts; card: AtStudyCard | null }> {
   const dayStart = startOfThailandDay(now);
-  const dayEnd = endOfThailandDay(now);
 
-  const [settings, dueRow, newTodayRow, readyRow, newRow, futureRow, unseenRow] =
-    await Promise.all([
-      ensureLearnerSettings(learnerId),
-      // Due today, scoped to this theme.
-      db
-        .select({ n: count() })
-        .from(atReviewStates)
-        .innerJoin(atCards, eq(atCards.id, atReviewStates.cardId))
-        .where(
-          and(
-            eq(atReviewStates.learnerId, learnerId),
-            eq(atCards.themeId, themeSlug),
-            lte(atReviewStates.due, dayEnd),
-          ),
+  const [settings, newTodayRow, dueRows, unseenRows] = await Promise.all([
+    ensureLearnerSettings(learnerId),
+    // New cards introduced today — counted across ALL themes, because the cap is
+    // the learner's daily intake, not a per-theme allowance.
+    db
+      .select({ n: count() })
+      .from(atReviewStates)
+      .where(
+        and(
+          eq(atReviewStates.learnerId, learnerId),
+          sql`${atReviewStates.createdAt} >= ${dayStart}`,
         ),
-      // New cards introduced today — counted across ALL themes, because the cap
-      // is the learner's daily intake, not a per-theme allowance.
-      db
-        .select({ n: count() })
-        .from(atReviewStates)
-        .where(
-          and(
-            eq(atReviewStates.learnerId, learnerId),
-            sql`${atReviewStates.createdAt} >= ${dayStart}`,
-          ),
+      ),
+    // The batch: every started card in this theme that is owed now.
+    db
+      .select({
+        cardId: atReviewStates.cardId,
+        lastReview: atReviewStates.lastReview,
+        deckOrder: atCards.deckOrder,
+      })
+      .from(atReviewStates)
+      .innerJoin(atCards, eq(atCards.id, atReviewStates.cardId))
+      .where(
+        and(
+          eq(atReviewStates.learnerId, learnerId),
+          eq(atCards.themeId, themeSlug),
+          lte(atReviewStates.due, now),
         ),
-      // Tier 1.
-      db
-        .select({ cardId: atReviewStates.cardId })
-        .from(atReviewStates)
-        .innerJoin(atCards, eq(atCards.id, atReviewStates.cardId))
-        .where(
-          and(
-            eq(atReviewStates.learnerId, learnerId),
-            eq(atCards.themeId, themeSlug),
-            lte(atReviewStates.due, now),
-          ),
-        )
-        .orderBy(asc(atReviewStates.due))
-        .limit(1),
-      // Tier 2 — the first unseen card in deck order.
-      db
-        .select({ cardId: atCards.id })
-        .from(atCards)
-        .leftJoin(
-          atReviewStates,
-          and(
-            eq(atReviewStates.cardId, atCards.id),
-            eq(atReviewStates.learnerId, learnerId),
-          ),
-        )
-        .where(and(eq(atCards.themeId, themeSlug), isNull(atReviewStates.cardId)))
-        .orderBy(asc(atCards.deckOrder))
-        .limit(1),
-      // Tier 3.
-      db
-        .select({ cardId: atReviewStates.cardId })
-        .from(atReviewStates)
-        .innerJoin(atCards, eq(atCards.id, atReviewStates.cardId))
-        .where(
-          and(
-            eq(atReviewStates.learnerId, learnerId),
-            eq(atCards.themeId, themeSlug),
-            gt(atReviewStates.due, now),
-            lte(atReviewStates.due, dayEnd),
-          ),
-        )
-        .orderBy(asc(atReviewStates.due))
-        .limit(1),
-      // How many unseen cards remain — so the header's New count never promises
-      // a card that does not exist.
-      db
-        .select({ n: count() })
-        .from(atCards)
-        .leftJoin(
-          atReviewStates,
-          and(
-            eq(atReviewStates.cardId, atCards.id),
-            eq(atReviewStates.learnerId, learnerId),
-          ),
-        )
-        .where(and(eq(atCards.themeId, themeSlug), isNull(atReviewStates.cardId))),
-    ]);
+      ),
+    // Unseen cards in deck order. Every one is read, not just the first: the cap
+    // decides how many of them join the batch, and the count of what is left over
+    // is what the round-complete screen needs to know whether a top-up could
+    // produce anything.
+    db
+      .select({ cardId: atCards.id, deckOrder: atCards.deckOrder })
+      .from(atCards)
+      .leftJoin(
+        atReviewStates,
+        and(
+          eq(atReviewStates.cardId, atCards.id),
+          eq(atReviewStates.learnerId, learnerId),
+        ),
+      )
+      .where(and(eq(atCards.themeId, themeSlug), isNull(atReviewStates.cardId)))
+      .orderBy(asc(atCards.deckOrder)),
+  ]);
 
   const bonusToday =
     settings.bonusNewCardsDate === thaiDateKey(now) ? settings.bonusNewCards : 0;
@@ -267,52 +268,79 @@ export async function getAdvancedStudyData(
     0,
     settings.newCardsPerDay + bonusToday - (newTodayRow[0]?.n ?? 0),
   );
-  const unseenRemaining = unseenRow[0]?.n ?? 0;
-  const counts: AtSessionCounts = {
-    dueCount: dueRow[0]?.n ?? 0,
-    newRemaining: Math.min(capRemaining, unseenRemaining),
-    unseenRemaining,
+
+  const admitted = unseenRows.slice(0, capRemaining);
+  const candidates: RoundCandidate[] = [
+    ...dueRows.map((r) => ({
+      cardId: r.cardId,
+      lastReview: r.lastReview,
+      deckOrder: r.deckOrder,
+    })),
+    ...admitted.map((r) => ({ cardId: r.cardId, lastReview: null, deckOrder: r.deckOrder })),
+  ];
+
+  // Every candidate is by definition unfinished — a card that passed at its top
+  // step was scheduled a day out and is no longer in `due <= now`. So the batch
+  // size IS the finish line, and `repeats` is the already-seen-today subset of
+  // it. See AtRoundCounts for why `remaining` is cards-left rather than
+  // asks-left.
+  const counts: AtRoundCounts = {
+    remaining: candidates.length,
+    repeats: candidates.filter((c) => c.lastReview !== null && c.lastReview >= dayStart)
+      .length,
+    unseenRemaining: unseenRows.length,
   };
 
-  const chosenId =
-    readyRow[0]?.cardId ??
-    (counts.newRemaining > 0 ? newRow[0]?.cardId : undefined) ??
-    futureRow[0]?.cardId;
+  const chosenId = pickNext(candidates);
+  if (!chosenId) return { counts, card: null };
 
-  if (!chosenId) return { counts, card: null, hints: null };
+  return { counts, card: await loadStudyCard(learnerId, chosenId) };
+}
 
+/**
+ * Load one card at the step the Learner has it at.
+ *
+ * A card with no state row is one the round just admitted, so it reads at
+ * INITIAL_STATE rather than erroring — introduction is a normal path, not a
+ * missing-row edge case. The state row is written when the answer comes back, not
+ * when the card is served, so an abandoned session introduces nothing.
+ */
+async function loadStudyCard(
+  learnerId: string,
+  cardId: string,
+): Promise<AtStudyCard | null> {
   const [cardRow, stateRow] = await Promise.all([
     db
       .select({
         id: atCards.id,
+        themeId: atCards.themeId,
         kind: atCards.kind,
         payload: atCards.payload,
         audioUrl: atCards.audioUrl,
       })
       .from(atCards)
-      .where(eq(atCards.id, chosenId)),
+      .where(eq(atCards.id, cardId)),
     db
-      .select({ fsrsCard: atReviewStates.fsrsCard })
+      .select({ step: atReviewStates.step, demotions: atReviewStates.demotions })
       .from(atReviewStates)
       .where(
-        and(
-          eq(atReviewStates.learnerId, learnerId),
-          eq(atReviewStates.cardId, chosenId),
-        ),
+        and(eq(atReviewStates.learnerId, learnerId), eq(atReviewStates.cardId, cardId)),
       ),
   ]);
 
-  if (!cardRow[0]) return { counts, card: null, hints: null };
+  const row = cardRow[0];
+  if (!row) return null;
+  if (row.kind !== "vocab" && row.kind !== "phrase") return null;
 
-  const scheduler = getScheduler();
-  const fsrsCard = stateRow[0]
-    ? hydrateFsrsCard(stateRow[0].fsrsCard)
-    : createEmptyCard(now);
+  const step = stateRow[0]?.step ?? INITIAL_STATE.step;
+  const demotions = stateRow[0]?.demotions ?? INITIAL_STATE.demotions;
+  const kind = row.kind as AtCardKind;
+  const payload = row.payload as VocabEntry | PhraseEntry;
+  const format = formatForStep(LADDER_FOR_KIND[kind], step);
 
-  const card = toStudyCard(cardRow[0], fsrsCard.lapses);
-  if (!card) return { counts, card: null, hints: null };
+  const options = await optionsFor(row.themeId, kind, payload, format);
 
-  return { counts, card, hints: previewIntervals(scheduler, fsrsCard, now) };
+  return toStudyCard(row, step, demotions, options);
 }
 
 /** Every card kind with this Learner's progress through it — the practice picker's data. */
@@ -336,7 +364,7 @@ export async function getKindSummaries(learnerId: string): Promise<AtKindSummary
   // Fixed AT_CARD_KINDS order, zero-filled: a kind with no seeded cards yet must
   // not vanish from the picker, and an unknown `kind` value in the data (content
   // shipped ahead of the UI — same rationale as toStudyCard's default branch) is
-  // simply skipped rather than surfaced as a fourth, unhandled row.
+  // simply skipped rather than surfaced as a third, unhandled row.
   return AT_CARD_KINDS.map((kind) => {
     const row = byKind.get(kind);
     return {
@@ -348,152 +376,47 @@ export async function getKindSummaries(learnerId: string): Promise<AtKindSummary
 }
 
 /**
- * Everything one cross-theme practice-by-kind session needs.
+ * One card for a cross-theme practice drill.
  *
- * Unlike getAdvancedStudyData, the pool here is fixed by construction: every
- * query inner-joins at_review_states, so a card the Learner has never seen
- * cannot appear. There is no daily new-card cap to honor and no
- * ensureLearnerSettings call, because nothing here ever introduces a new card
- * — it only re-serves ones already in play. The `since` timestamp is what lets
- * the server tell "already practiced this session" apart from "practiced on an
- * earlier day, then left untouched" without any session storage:
+ * PRACTICE IS READ-ONLY. It writes no ladder state, so it has no round, no
+ * finish line, and no session boundary — which is why the `?since=` timestamp
+ * that used to thread a session identity through the URL is gone along with the
+ * three repeat tiers it fed. A card is drawn at random from everything the
+ * Learner has already met of this kind, asked at whatever step it currently sits
+ * at, and that is the whole flow.
  *
- *   Tier 1 — REPEAT-READY:    lastReview >= since AND due <= now. A card rated
- *                             in this session whose learning step has elapsed.
- *   Tier 2 — UNPRACTICED:     lastReview IS NULL OR lastReview < since, picked
- *                             at random. The bulk of the session — every pool
- *                             card not yet touched this time around.
- *   Tier 3 — FUTURE-TODAY:    lastReview >= since AND due > now AND
- *                             due <= end of Thailand day. Mirrors
- *                             getAdvancedStudyData's tier 3: a card just rated
- *                             Again sits here for ~1 minute so it can resurface
- *                             instead of ending the session early.
- *
- * Priority: repeat-ready > unpracticed > future-today — the same reasoning as
- * the per-theme flow, just without a cap to gate tier 2.
+ * Consequences worth stating, because they are features rather than oversights:
+ * a card can repeat within a sitting (the draw has no memory), answering here
+ * cannot demote a card the Learner is doing badly on, and nothing practised here
+ * counts toward or against a study round.
  */
 export async function getAdvancedPracticeData(
   learnerId: string,
   kind: AtCardKind,
-  since: Date,
-  now: Date = new Date(),
-): Promise<{
-  counts: AtPracticeCounts;
-  card: AtStudyCard | null;
-  hints: IntervalHints | null;
-}> {
-  const dayEnd = endOfThailandDay(now);
-
-  // Shared across every query below: this session's pool is this Learner's
-  // already-introduced cards of this one kind, across every theme.
-  const poolFilter = and(eq(atReviewStates.learnerId, learnerId), eq(atCards.kind, kind));
-  const unpracticed = or(
-    isNull(atReviewStates.lastReview),
-    lt(atReviewStates.lastReview, since),
+): Promise<{ counts: AtPracticeCounts; card: AtStudyCard | null }> {
+  const poolFilter = and(
+    eq(atReviewStates.learnerId, learnerId),
+    eq(atCards.kind, kind),
   );
 
-  const [remainingRow, repeatRow, poolRow, readyRow, unpracticedRow, futureRow] =
-    await Promise.all([
-      // Header `remaining` — pool cards not yet rated this session.
-      db
-        .select({ n: count() })
-        .from(atReviewStates)
-        .innerJoin(atCards, eq(atCards.id, atReviewStates.cardId))
-        .where(and(poolFilter, unpracticed)),
-      // Header `repeatCount` — practiced-this-session cards due again before
-      // end of Thai day. Tiers 1 and 3 combined: due <= now is a subset of
-      // due <= dayEnd, so one count covers both.
-      db
-        .select({ n: count() })
-        .from(atReviewStates)
-        .innerJoin(atCards, eq(atCards.id, atReviewStates.cardId))
-        .where(
-          and(
-            poolFilter,
-            gte(atReviewStates.lastReview, since),
-            lte(atReviewStates.due, dayEnd),
-          ),
-        ),
-      // Header `poolSize` — every card of this kind ever seen, across all themes.
-      db
-        .select({ n: count() })
-        .from(atReviewStates)
-        .innerJoin(atCards, eq(atCards.id, atReviewStates.cardId))
-        .where(poolFilter),
-      // Tier 1.
-      db
-        .select({ cardId: atReviewStates.cardId })
-        .from(atReviewStates)
-        .innerJoin(atCards, eq(atCards.id, atReviewStates.cardId))
-        .where(
-          and(poolFilter, gte(atReviewStates.lastReview, since), lte(atReviewStates.due, now)),
-        )
-        .orderBy(asc(atReviewStates.due))
-        .limit(1),
-      // Tier 2 — random pick; see plan's "per-request ORDER BY random()" note.
-      db
-        .select({ cardId: atReviewStates.cardId })
-        .from(atReviewStates)
-        .innerJoin(atCards, eq(atCards.id, atReviewStates.cardId))
-        .where(and(poolFilter, unpracticed))
-        .orderBy(sql`random()`)
-        .limit(1),
-      // Tier 3.
-      db
-        .select({ cardId: atReviewStates.cardId })
-        .from(atReviewStates)
-        .innerJoin(atCards, eq(atCards.id, atReviewStates.cardId))
-        .where(
-          and(
-            poolFilter,
-            gte(atReviewStates.lastReview, since),
-            gt(atReviewStates.due, now),
-            lte(atReviewStates.due, dayEnd),
-          ),
-        )
-        .orderBy(asc(atReviewStates.due))
-        .limit(1),
-    ]);
-
-  const counts: AtPracticeCounts = {
-    remaining: remainingRow[0]?.n ?? 0,
-    repeatCount: repeatRow[0]?.n ?? 0,
-    poolSize: poolRow[0]?.n ?? 0,
-  };
-
-  const chosenId = readyRow[0]?.cardId ?? unpracticedRow[0]?.cardId ?? futureRow[0]?.cardId;
-
-  if (!chosenId) return { counts, card: null, hints: null };
-
-  const [cardRow, stateRow] = await Promise.all([
+  const [poolRow, drawnRow] = await Promise.all([
     db
-      .select({
-        id: atCards.id,
-        kind: atCards.kind,
-        payload: atCards.payload,
-        audioUrl: atCards.audioUrl,
-      })
-      .from(atCards)
-      .where(eq(atCards.id, chosenId)),
-    db
-      .select({ fsrsCard: atReviewStates.fsrsCard })
+      .select({ n: count() })
       .from(atReviewStates)
-      .where(
-        and(eq(atReviewStates.learnerId, learnerId), eq(atReviewStates.cardId, chosenId)),
-      ),
+      .innerJoin(atCards, eq(atCards.id, atReviewStates.cardId))
+      .where(poolFilter),
+    db
+      .select({ cardId: atReviewStates.cardId })
+      .from(atReviewStates)
+      .innerJoin(atCards, eq(atCards.id, atReviewStates.cardId))
+      .where(poolFilter)
+      .orderBy(sql`random()`)
+      .limit(1),
   ]);
 
-  if (!cardRow[0]) return { counts, card: null, hints: null };
+  const counts: AtPracticeCounts = { poolSize: poolRow[0]?.n ?? 0 };
+  const chosenId = drawnRow[0]?.cardId;
+  if (!chosenId) return { counts, card: null };
 
-  const scheduler = getScheduler();
-  // Every card in this pool has an at_review_states row by construction (all
-  // three tiers inner-join it), so stateRow[0] is never actually absent — the
-  // createEmptyCard fallback exists only to keep this hydration identical to
-  // getAdvancedStudyData's, not because it is reachable here.
-  const fsrsCard = stateRow[0] ? hydrateFsrsCard(stateRow[0].fsrsCard) : createEmptyCard(now);
-
-  const card = toStudyCard(cardRow[0], fsrsCard.lapses);
-  if (!card) return { counts, card: null, hints: null };
-
-  return { counts, card, hints: previewIntervals(scheduler, fsrsCard, now) };
+  return { counts, card: await loadStudyCard(learnerId, chosenId) };
 }

@@ -124,10 +124,15 @@ export const cardTags = pgTable(
   (t) => [primaryKey({ columns: [t.cardId, t.tagId] })],
 );
 
-// --- Domain: per-Learner Review State (FSRS) -------------------------------
-// `fsrsCard` holds the full ts-fsrs Card object (robust to library field
-// changes); `due` mirrors fsrsCard.due as an indexed column for the
-// "what's due for this Learner" query.
+// --- Domain: per-Learner Ladder State --------------------------------------
+// Replaces the FSRS state that used to live here. There is no memory model and
+// no `fsrs_card` jsonb: a card's whole schedule is four integers plus `due`.
+//
+// `due` carries a second meaning it did not have under FSRS, and the round
+// mechanism depends on it: a card mid-climb is written with `due = now`, so it
+// stays inside the `due <= now` batch and keeps cycling today. Only a pass at
+// the top step schedules a card into the future, which is what drains it from
+// the round. See lib/ladder/round.ts.
 
 export const reviewStates = pgTable(
   "review_states",
@@ -140,7 +145,17 @@ export const reviewStates = pgTable(
       .notNull()
       .references(() => cards.id, { onDelete: "cascade" }),
     due: timestamp("due", { withTimezone: true }).notNull(),
-    fsrsCard: jsonb("fsrs_card").notNull(),
+    // 1-based position in the course's ladder (lib/ladder/ladder.ts LADDERS).
+    step: integer("step").notNull().default(1),
+    // Consecutive passes at the current step; two promotes.
+    passStreak: integer("pass_streak").notNull().default(0),
+    // Index into INTERVAL_RUNG_DAYS that the NEXT top-step pass schedules at.
+    intervalRung: integer("interval_rung").notNull().default(0),
+    // Lifetime demotions. Successor to the FSRS lapse count, and — with binary
+    // grading giving the scheduler no difficulty signal — the only evidence that
+    // a card is too hard for the interval it is being given.
+    demotions: integer("demotions").notNull().default(0),
+    // Ordering key for the round: oldest-served is served next. See round.ts.
     lastReview: timestamp("last_review", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true })
       .notNull()
@@ -165,20 +180,44 @@ export const reviewLogs = pgTable(
     cardId: uuid("card_id")
       .notNull()
       .references(() => cards.id, { onDelete: "cascade" }),
-    rating: integer("rating").notNull(),
-    log: jsonb("log").notNull(),
+    // The step the card was ASKED at, not the step it ended on — this is the
+    // record of what question was posed.
+    step: integer("step").notNull(),
+    passed: boolean("passed").notNull(),
     reviewedAt: timestamp("reviewed_at", { withTimezone: true })
       .notNull()
       .defaultNow(),
   },
   (t) => [
     index("review_logs_learner_idx").on(t.learnerId),
-    // The HSK gate resolves mastery by scanning this Learner's logs on every study
-    // render (lib/review/queries.ts::fetchGateRows). review_logs is append-only and
-    // grows by one row per rating forever, so without this the gate would get
-    // steadily slower for the Learners who use the app most.
+    // Retained from the FSRS era. The HSK gate no longer scans this table —
+    // mastery is now read straight off review_states.step — but /stats reads
+    // per-card answer history here, and the table is append-only and unbounded.
     index("review_logs_learner_card_idx").on(t.learnerId, t.cardId),
   ],
+);
+
+// --- Domain: HSK band unlocks ----------------------------------------------
+// The gate requires 100% of a band before the next opens. At that bar the gate
+// CANNOT be a live computation: seeding a single new HSK 1 card would drop the
+// band below 100% and re-lock everything above it, halting study every time
+// content ships. So an unlock is recorded as a fact and never recomputed.
+//
+// The row is write-once. Nothing may delete or recompute it — a later card
+// joining the band must still be learned, but it must not reopen the gate.
+export const hskUnlocks = pgTable(
+  "hsk_unlocks",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    learnerId: text("learner_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    band: integer("band").notNull(),
+    unlockedAt: timestamp("unlocked_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (t) => [uniqueIndex("hsk_unlocks_learner_band_uq").on(t.learnerId, t.band)],
 );
 
 export const learnerSettings = pgTable("learner_settings", {
@@ -186,16 +225,20 @@ export const learnerSettings = pgTable("learner_settings", {
     .primaryKey()
     .references(() => users.id, { onDelete: "cascade" }),
   newCardsPerDay: integer("new_cards_per_day").notNull().default(10),
-  // A today-only top-up on top of newCardsPerDay, requested from the Advanced
-  // Thai "all caught up" screen. `bonusNewCardsDate` stamps the Thailand day the
-  // bonus belongs to (thaiDateKey, "YYYY-MM-DD"); the read layer honors the bonus
-  // only when that stamp equals today, so it expires overnight with no cleanup.
-  // Deliberately read only by the Advanced Thai queries — a top-up taken there
-  // must not inflate the Mandarin/Read-Thai new-card intake.
+  // A today-only top-up on top of newCardsPerDay, requested from the round-
+  // complete screen ("Add 20 more cards today", repeatable).
+  // `bonusNewCardsDate` stamps the Thailand day the bonus belongs to
+  // (thaiDateKey, "YYYY-MM-DD"); the read layer honors the bonus only when that
+  // stamp equals today, so it expires overnight with no cleanup.
+  //
+  // Now read by BOTH courses. It was previously Advanced-Thai-only so a top-up
+  // could not inflate Mandarin intake; with rounds, the top-up is the Learner's
+  // only way to extend a finished session and both courses need it.
   bonusNewCards: integer("bonus_new_cards").notNull().default(0),
   bonusNewCardsDate: text("bonus_new_cards_date"),
-  // Vestigial — the scheduler now uses the global REQUEST_RETENTION constant
-  // (lib/review/config.ts). This column is kept to avoid a destructive DROP.
+  // Dead. Retention was an FSRS concept and FSRS is gone; the ladder schedules
+  // from a fixed table (lib/ladder/intervals.ts) with no retention target at
+  // all. Kept only to avoid a destructive DROP on a live column.
   requestRetention: real("request_retention").notNull().default(0.85),
   // Which course a Learner currently sees on the home screen (M11/A3).
   // 'mandarin' is the existing FSRS flashcard flow; 'thai' is the Read-Thai
@@ -317,19 +360,19 @@ export const thaiExamSessions = pgTable(
 );
 
 // --- Domain: Advanced Thai course (M16) -------------------------------------
-// The owner's personal third course: vocabulary, grammar and every phrase of a
-// themed Thai occupational text. Its own at_* tables, for two reasons:
+// The owner's personal third course: the vocabulary and every phrase of a themed
+// Thai occupational text. Its own at_* tables, for two reasons:
 //
 //   1. The shared Card Library above is Mandarin-shaped in its very column
 //      names (`whole_pinyin`, `words.hanzi`) — scripts/refresh-seed-db.ts
 //      already warns in writing that it is not split per language.
-//   2. A card here is one of THREE different shapes (vocab / grammar / phrase),
-//      not one. Modelling that as nullable columns on `cards` would make every
-//      Mandarin row carry six always-null Thai columns.
+//   2. A card here is one of several different shapes (vocab / phrase), not one.
+//      Modelling that as nullable columns on `cards` would make every Mandarin
+//      row carry six always-null Thai columns.
 //
-// Content shapes live in seed/advanced-thai/types.ts (VocabEntry /
-// GrammarPattern / PhraseEntry) — that module is the single source of truth,
-// shared by the extractor, the seed assertions and the card components.
+// Content shapes live in seed/advanced-thai/types.ts (VocabEntry / PhraseEntry)
+// — that module is the single source of truth, shared by the extractor, the seed
+// assertions and the card components.
 
 export const atThemes = pgTable("at_themes", {
   // Stable slug from the source document, e.g. "nak-kosana".
@@ -352,8 +395,8 @@ export const atThemes = pgTable("at_themes", {
 // The deck is regenerated by an LLM extractor whose JSON the owner then edits by
 // hand, so re-seeding is the normal case, not the exception. With random UUIDs a
 // re-seed could only be "delete the theme's rows and re-insert" — and
-// at_review_states.card_id cascades ON DELETE, so every FSRS interval built up on
-// those cards would be destroyed without a word. Keying on the card's own content
+// at_review_states.card_id cascades ON DELETE, so every ladder position built up
+// on those cards would be destroyed without a word. Keying on the card's own content
 // (see cardIdFor in scripts/seed-advanced-thai-db.ts) makes a re-seed an UPSERT:
 // fixing a gloss or a word split leaves the review history attached, and only a
 // genuinely different phrase becomes a genuinely different card.
@@ -364,7 +407,10 @@ export const atCards = pgTable(
     themeId: text("theme_id")
       .notNull()
       .references(() => atThemes.id, { onDelete: "cascade" }),
-    kind: text("kind").notNull(), // vocab | grammar | phrase
+    // vocab | phrase. 'grammar' was a third kind, removed with the ladder
+    // redesign: the ladder has no format that suits a pattern frame, and the
+    // rules it taught are carried by the phrase cards that instantiate them.
+    kind: text("kind").notNull(),
     payload: jsonb("payload").notNull(),
     // Preserves the source document's own order, so new cards surface in the
     // sequence the text introduces them — the at_* analogue of cards.deck_order.
@@ -384,16 +430,16 @@ export const atCards = pgTable(
   ],
 );
 
-// Mirror review_states / review_logs — same FSRS contract, same jsonb
-// `fsrs_card` — differing only in that card_id points at at_cards (text) instead
-// of cards (uuid). The SCHEDULER ITSELF IS NOT FORKED: lib/review/scheduler.ts
-// is pure and database-agnostic, and this course calls straight into it.
+// Mirror review_states / review_logs — same ladder contract, same four integers
+// — differing only in that card_id points at at_cards (text) instead of cards
+// (uuid). The LADDER ENGINE ITSELF IS NOT FORKED: lib/ladder/* is pure and
+// database-agnostic, and this course calls straight into it. Which ladder a card
+// climbs is decided by its `kind` (vocab and phrase have different ladders), not
+// by which table its state lives in.
 //
-// One index is deliberately NOT carried over. review_logs has a
-// (learner_id, card_id) index that exists solely for the HSK gate, which
-// re-derives mastery by scanning the log on every study render. Advanced Thai is
-// UNGATED by owner's decision (M16/B4) — nothing scans these logs per render — so
-// that index would be pure write cost. Add it if a gate is ever introduced.
+// One index is deliberately NOT carried over: review_logs has a
+// (learner_id, card_id) index, and Advanced Thai is UNGATED by owner's decision
+// (M16/B4) with no per-card log reads, so it would be pure write cost.
 export const atReviewStates = pgTable(
   "at_review_states",
   {
@@ -405,7 +451,10 @@ export const atReviewStates = pgTable(
       .notNull()
       .references(() => atCards.id, { onDelete: "cascade" }),
     due: timestamp("due", { withTimezone: true }).notNull(),
-    fsrsCard: jsonb("fsrs_card").notNull(),
+    step: integer("step").notNull().default(1),
+    passStreak: integer("pass_streak").notNull().default(0),
+    intervalRung: integer("interval_rung").notNull().default(0),
+    demotions: integer("demotions").notNull().default(0),
     lastReview: timestamp("last_review", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true })
       .notNull()
@@ -430,8 +479,8 @@ export const atReviewLogs = pgTable(
     cardId: text("card_id")
       .notNull()
       .references(() => atCards.id, { onDelete: "cascade" }),
-    rating: integer("rating").notNull(),
-    log: jsonb("log").notNull(),
+    step: integer("step").notNull(),
+    passed: boolean("passed").notNull(),
     reviewedAt: timestamp("reviewed_at", { withTimezone: true })
       .notNull()
       .defaultNow(),

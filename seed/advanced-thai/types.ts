@@ -2,20 +2,23 @@
  * Advanced Thai — the content contract.
  *
  * A "theme" is one source text (e.g. นักโฆษณา / advertiser). Every theme yields
- * three kinds of card, and these types are what the Phase-B extractor
+ * two kinds of card, and these types are what the Phase-B extractor
  * (scripts/generate-advanced-thai-deck.ts) must emit and what the owner reviews
  * before anything is seeded.
+ *
+ * A third kind, GRAMMAR, existed until the ladder redesign and is gone: the
+ * ladder asks every card in a recognise/produce format, and a pattern frame is
+ * neither recognisable nor producible as a unit. The rules it taught are carried
+ * by the phrase cards that instantiate them.
  *
  * Deliberate design note on SPANS. The obvious encoding for "highlight this part
  * of the sentence" is a pair of character offsets. That is a trap in Thai: the
  * script stacks vowels and tone marks above and below the consonant line, so a
  * single perceived "letter" is often several UTF-16 code units, and an offset
  * pair is neither hand-authorable nor reviewable — you cannot look at
- * `[14, 22]` and tell whether it is right. So both the grammar examples and the
- * phrase chunks are encoded as ORDERED SEGMENT ARRAYS instead: the full Thai
- * string is simply the segments joined, and each segment carries its own role.
- * A reviewer reads the segments and immediately sees whether the split is
- * correct.
+ * `[14, 22]` and tell whether it is right. So a phrase's chunks are encoded as an
+ * ORDERED WORD ARRAY instead: the full Thai string is simply the words joined,
+ * and a reviewer reads them and immediately sees whether the split is correct.
  */
 
 // --- Vocabulary -------------------------------------------------------------
@@ -44,47 +47,6 @@ export interface VocabEntry {
   literal?: string;
   /** Single-morpheme words (loanwords especially) carry exactly one entry. */
   morphemes: Morpheme[];
-}
-
-// --- Grammar ----------------------------------------------------------------
-
-/**
- * What the pattern DOES. Drives the --pattern-fn-* colour, which is threaded
- * through the frame, the slots, and the highlighted spans of every example, so
- * the abstract frame and its concrete realizations share one hue.
- */
-export type PatternFunction =
-  | "causative"
-  | "passive"
-  | "comparative"
-  | "topic"
-  | "connector"
-  | "reciprocal";
-
-/**
- * One segment of an example sentence. `slot` names which part of the frame this
- * segment realizes ("A", "B", "V"), or "marker" for the pattern word itself
- * (ทำให้, แข่งกัน, เพื่อ …). Segments with no `slot` are ordinary context and
- * render as plain ink.
- */
-export interface ExampleSegment {
-  text: string;
-  slot?: string;
-}
-
-export interface GrammarExample {
-  /** The full Thai sentence is `segments.map(s => s.text).join("")`. */
-  segments: ExampleSegment[];
-  gloss: string;
-}
-
-export interface GrammarPattern {
-  /** The abstract frame, e.g. "ทำให้ + N + V". Slot names must match the example segments. */
-  frame: string;
-  fn: PatternFunction;
-  /** What it does, in one plain-English line. No metalanguage. */
-  plainEnglish: string;
-  examples: GrammarExample[];
 }
 
 // --- Phrases ----------------------------------------------------------------
@@ -149,6 +111,5 @@ export interface Theme {
   /** The source text's own one-line definition of the occupation. */
   summary: string;
   vocab: VocabEntry[];
-  grammar: GrammarPattern[];
   phrases: PhraseEntry[];
 }

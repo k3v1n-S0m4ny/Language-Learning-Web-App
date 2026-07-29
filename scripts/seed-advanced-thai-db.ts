@@ -22,7 +22,7 @@
  * CARD IDS ARE CONTENT-DERIVED, WHICH IS WHAT MAKES RE-SEEDING SAFE.
  * at_review_states.card_id cascades ON DELETE, so if ids were random this
  * script could only refresh a theme by deleting its cards — silently destroying
- * every FSRS interval built up on them. Hashing the card's own identity instead
+ * every ladder position built up on them. Hashing the card's own identity instead
  * means a re-seed is an UPSERT: fix a gloss or a word split and the review
  * history stays attached, because it is still the same card. Only genuinely
  * different content gets a genuinely different id.
@@ -43,9 +43,7 @@ import { eq, inArray, notInArray, and } from "drizzle-orm";
 import * as schema from "../lib/db/schema";
 import { normalizeForCompare } from "../seed/advanced-thai/split";
 import type {
-  GrammarPattern,
   PartOfSpeech,
-  PatternFunction,
   PhraseEntry,
   PhraseSource,
   Register,
@@ -88,14 +86,6 @@ const PARTS_OF_SPEECH: readonly PartOfSpeech[] = [
   "classifier",
 ];
 const REGISTERS: readonly Register[] = ["formal", "colloquial", "technical"];
-const PATTERN_FUNCTIONS: readonly PatternFunction[] = [
-  "causative",
-  "passive",
-  "comparative",
-  "topic",
-  "connector",
-  "reciprocal",
-];
 const PHRASE_SOURCES: readonly PhraseSource[] = [
   "heading",
   "prose",
@@ -112,11 +102,12 @@ const THAI_CHAR = /[฀-๿]/;
  * A gloss is what the ENGLISH-speaking side of the card says, so it must not be
  * Thai. This looks like a check too obvious to need writing, and it is in the
  * deck precisely because it was not: the first extractor run returned all 29
- * grammar example glosses as the Thai sentence repeated back (the prompt asked
+ * glosses of one card kind as the Thai sentence repeated back (the prompt asked
  * for a "gloss" without saying "in English", and the model restated the source).
- * Vocab and phrase glosses were fine, so nothing else caught it — the cards
- * rendered perfectly, with the Thai sentence sitting where its translation
- * belonged. Only a human reading the card would have noticed. Now the seed does.
+ * The cards rendered perfectly, with the Thai sentence sitting where its
+ * translation belonged — only a human reading one would have noticed. That kind
+ * has since been deleted; the trap it exposed has not gone anywhere, so the check
+ * now guards every gloss the deck has.
  */
 function assertEnglish(
   value: string,
@@ -132,12 +123,11 @@ function assertEnglish(
 
 /**
  * A card's stable id: theme, kind, and a hash of the card's OWN identity — the
- * Thai for a vocab or phrase card, the frame for a grammar card. Deliberately NOT
- * a hash of the whole payload: if it were, correcting a gloss would mint a new id
- * and orphan the review history, which is the precise failure this is designed to
- * prevent.
+ * card's Thai. Deliberately NOT a hash of the whole payload: if it were,
+ * correcting a gloss would mint a new id and orphan the review history, which is
+ * the precise failure this is designed to prevent.
  */
-function cardIdFor(kind: "vocab" | "grammar" | "phrase", identity: string): string {
+function cardIdFor(kind: "vocab" | "phrase", identity: string): string {
   const hash = createHash("sha1")
     .update(normalizeForCompare(identity))
     .digest("hex")
@@ -232,43 +222,6 @@ function assertThemeValid(theme: Theme): void {
     }
   });
 
-  // --- Grammar ----------------------------------------------------------------
-  theme.grammar.forEach((g: GrammarPattern, i) => {
-    const at = `grammar[${i}] "${g.frame}"`;
-    if (!g.frame?.trim()) problems.push(`${at}: frame is empty`);
-    if (!g.plainEnglish?.trim()) problems.push(`${at}: plainEnglish is empty`);
-    else assertEnglish(g.plainEnglish, `${at} plainEnglish`, problems);
-    if (!PATTERN_FUNCTIONS.includes(g.fn)) {
-      problems.push(`${at}: fn "${g.fn}" is not one of ${PATTERN_FUNCTIONS.join("|")}`);
-    }
-    if (!g.examples?.length) {
-      problems.push(`${at}: has no examples`);
-      return;
-    }
-    g.examples.forEach((ex, j) => {
-      if (!ex.gloss?.trim()) problems.push(`${at} example[${j}]: gloss is empty`);
-      else assertEnglish(ex.gloss, `${at} example[${j}]`, problems);
-      if (!ex.segments?.length) {
-        problems.push(`${at} example[${j}]: has no segments`);
-        return;
-      }
-      for (const seg of ex.segments) {
-        if (!seg.text?.trim()) {
-          problems.push(`${at} example[${j}]: a segment has empty text`);
-        }
-        // "marker" is the pattern word itself and is never named in the frame as a
-        // slot; every OTHER slot must appear in the frame, or the Slot Frame card
-        // cannot paint the slot and its realization in one colour — which is the
-        // entire design of that card.
-        if (seg.slot && seg.slot !== "marker" && !g.frame.includes(seg.slot)) {
-          problems.push(
-            `${at} example[${j}]: slot "${seg.slot}" does not appear in the frame`,
-          );
-        }
-      }
-    });
-  });
-
   // --- Ids must be unique -----------------------------------------------------
   const ids = new Map<string, string>();
   const claim = (id: string, what: string) => {
@@ -277,7 +230,6 @@ function assertThemeValid(theme: Theme): void {
     else ids.set(id, what);
   };
   theme.vocab.forEach((v) => claim(cardIdFor("vocab", v.thai), v.thai));
-  theme.grammar.forEach((g) => claim(cardIdFor("grammar", g.frame), g.frame));
   theme.phrases.forEach((p) => claim(cardIdFor("phrase", p.thai), p.thai));
 
   if (problems.length > 0) {
@@ -288,9 +240,8 @@ function assertThemeValid(theme: Theme): void {
   }
 
   console.log(
-    `✓ assertions passed: ${theme.phrases.length} phrases, ${theme.vocab.length} vocab, ` +
-      `${theme.grammar.length} grammar — every word split rebuilds its phrase, every ` +
-      `morpheme set spells its word, every slot is in its frame.`,
+    `✓ assertions passed: ${theme.phrases.length} phrases, ${theme.vocab.length} vocab — ` +
+      `every word split rebuilds its phrase and every morpheme set spells its word.`,
   );
 }
 
@@ -308,23 +259,14 @@ function buildCards(theme: Theme): CardRow[] {
   const rows: CardRow[] = [];
   let order = 0;
 
-  // Vocabulary first, then grammar, then the phrases in document order: you meet
-  // the words, then the shapes they slot into, then the text itself.
+  // Vocabulary first, then the phrases in document order: you meet the words,
+  // then the text itself.
   for (const v of theme.vocab) {
     rows.push({
       id: cardIdFor("vocab", v.thai),
       themeId: theme.slug,
       kind: "vocab",
       payload: v,
-      deckOrder: order++,
-    });
-  }
-  for (const g of theme.grammar) {
-    rows.push({
-      id: cardIdFor("grammar", g.frame),
-      themeId: theme.slug,
-      kind: "grammar",
-      payload: g,
       deckOrder: order++,
     });
   }
@@ -378,7 +320,7 @@ async function main() {
   console.log(`\ntheme     : ${theme.slug} — ${theme.titleThai} (${theme.titleEnglish})`);
   console.log(`cards     : ${cards.length} (${added.length} new, ${cards.length - added.length} updated)`);
   console.log(`in DB now : ${existingIds.size}`);
-  console.log(`with FSRS : ${reviewedIds.size} card(s) already have review history`);
+  console.log(`on ladder : ${reviewedIds.size} card(s) already have review history`);
 
   if (orphans.length > 0) {
     const orphansWithHistory = orphans.filter((id) => reviewedIds.has(id));

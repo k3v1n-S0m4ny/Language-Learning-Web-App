@@ -22,7 +22,7 @@
  *
  * The LLM's job (scripts/generate-advanced-thai-deck.ts) is everything this
  * cannot do: the word segmentation inside a clause, the glosses, the readable
- * English context label, and the vocabulary and grammar extraction.
+ * English context label, and the vocabulary extraction.
  */
 import type { PhraseSource } from "./types";
 
@@ -119,8 +119,8 @@ function isTableSeparator(line: string): boolean {
  *
  * The FIRST h1 is the theme's title, not content, so it is skipped — but any
  * later h1 is a real section heading and IS content (this document's second h1,
- * "โฆษณาเป็นงานที่สร้างสรรค์โดยบุคคลหลายฝ่าย", is the very sentence its passive
- * grammar pattern is taught from). The table's header row is column labels
+ * "โฆษณาเป็นงานที่สร้างสรรค์โดยบุคคลหลายฝ่าย", is a full sentence in its own
+ * right, and becomes a phrase card). The table's header row is column labels
  * ("#", "ขั้นตอน", "บทสนทนา") rather than language, so it is skipped too.
  */
 export function readClauses(markdown: string): RawClause[] {

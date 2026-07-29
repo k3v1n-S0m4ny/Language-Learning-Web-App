@@ -1,82 +1,148 @@
-# Advanced Thai: cross-theme practice by card type
+# ACTIVE — Quizlet-style step ladder, replacing FSRS
 
-## Context
+Full approved plan: `C:\Users\User\.claude\plans\i-want-to-change-imperative-badger.md`
+Neon working branch: **`quizlet-ladder`** — `br-solitary-queen-apsbjzle`, project `blue-queen-01978548` (`neon-cyan-forest`)
 
-The Advanced Thai course (M16, owner-only) currently only offers per-theme review sessions: `getAdvancedStudyData` scopes every queue query to one `themeId`, and cards surface in due-order/deck-order. The owner wants a practice mode that pulls **all vocabulary cards (or all grammar, or all phrase cards) across every theme together, in random order, with FSRS still applying** — ratings recorded to `at_review_states`/`at_review_logs` and moving real due dates.
+## Why
 
-Decisions confirmed with the owner:
-- **Pool = only cards already introduced** (have an `at_review_states` row) of the chosen kind, across all themes — due or not. Unseen cards stay in the per-theme flow; the daily new-card cap is untouched.
-- **Random order** within the session.
-- **FSRS-driven repeats**: a card rated Again/Hard resurfaces within the session once due again (mirrors the per-theme tier-3 "future-today" behavior). Session ends when the pool is exhausted and no repeat is due before end of Thailand day.
+Both FSRS courses are a single flip card, four buttons, one `ts-fsrs` state per
+`(learner, card)`, and an infinite drip with no finish line. No direction concept exists —
+Mandarin is only Chinese→English, Advanced Thai only Thai→English, and the Learner is never
+asked to produce the target language.
 
-## Session-tracking design (the core problem)
+Replacing that with Quizlet's teaching shape: cards climb a ladder of progressively harder
+formats, sessions are bounded rounds with a completion moment, grading is binary pass/fail,
+and scheduling is a deterministic hand-tuned interval table rather than a memory model.
 
-The flow stays server-driven one-card-at-a-time (existing idiom), so the server must know which non-due cards were already practiced this session. Solution: a `since` timestamp searchParam.
+## Locked decisions
 
-- First load without a valid `since` → `redirect(\`/advanced-thai/practice/${kind}?since=${Date.now()}\`, RedirectType.replace)` (replace so Back goes home).
-- **Validity guard**: `since` must be a finite integer, `<= now`, and `>= startOfThailandDay(now).getTime()`; otherwise replace-redirect to a fresh one. Server clocks only — `lastReview` is also server-stamped.
-- **Practiced-this-session** = `lastReview >= since`. **Unpracticed** = `lastReview IS NULL OR lastReview < since` (NULL branch defensive; `submitAdvancedReview` always sets it). Cards reviewed earlier today in the per-theme flow have `lastReview < since` → correctly eligible.
-- **Three-tier pick** (mirrors `getAdvancedStudyData`'s reasoning — a just-failed card is not yet `due <= now`, so it can't immediately repeat):
-  1. REPEAT-READY: `lastReview >= since AND due <= now`, ORDER BY due ASC
-  2. UNPRACTICED: pool card with `lastReview IS NULL OR lastReview < since`, `ORDER BY random()` LIMIT 1
-  3. FUTURE-TODAY REPEAT: `lastReview >= since AND due > now AND due <= endOfThailandDay(now)`, ORDER BY due ASC
-  - All empty → session complete.
-- Mid-session refresh keeps `?since` → session continues. `refresh()` (from `next/cache`, verified in Next 16.2.6 docs) re-renders the calling route with query string intact, so `submitAdvancedReview` needs **no changes**.
-- Per-request `ORDER BY random()` replaces a seeded shuffle: the server serves one card at a time and repeat tiers are due-ordered anyway. Indexes already cover the queries (`at_cards_kind_idx`, `at_review_states_learner_due_idx`); pool is small.
+- Scheduler → deterministic step-interval ladder; `ts-fsrs` removed entirely.
+- Unit → one row per `(learner, card)`; a `step` column advances.
+- Grading → binary pass/fail everywhere (MC auto-graded, flashcards self-graded).
+- Promotion → two consecutive passes. The top step needs one pass and buys an interval rung.
+- Climb → a new card may climb its whole ladder in one session.
+- Re-queue → full cycle: every unfinished card served once per pass.
+- Failure → demote one step, reset rung to 0, increment `demotions`. **No demotion cap.**
+- Intervals → 3× growth: 1, 3, 9, 27, 81, 243, 729 days (capped).
+- Round → all due + capped new; "+20 new cards today", repeatable, expires at Bangkok midnight.
+- New cards → 10/day baseline + 20 per click.
+- HSK gate → kept, raised to **100%**; mastered = reached top step; unlocked bands stay unlocked.
+- Advanced Thai grammar → **deleted** (rows, seed JSON, extractor, component, `kind` enum).
+- Practice mode → read-only drill; random seen cards at current step; writes nothing.
+- Stats → rebuilt on step distribution; leech badge → `demotions`.
+- Migration → wipe the four FSRS tables; everyone restarts at step 1.
+- Read-Thai → **untouched**.
+- Rollout → Advanced Thai first, then Mandarin.
 
-## Files
+### Ladders
 
-### 1. `lib/advanced-thai/types.ts` (edit)
-- Add `export const AT_CARD_KINDS = ["vocab", "grammar", "phrase"] as const;` and derive `AtCardKind` from it (replaces the hand-written union at line 12) so route validation and the home section share one list.
-- Add:
-  - `AtPracticeCounts { remaining: number; repeatCount: number; poolSize: number }` — unpracticed left / practiced cards due again before end of Thai day / all seen cards of this kind.
-  - `AtKindSummary { kind: AtCardKind; seenCards: number; totalCards: number }`.
+| key | steps | exposures to graduate |
+|---|---|---|
+| `mandarin` | recognise-mc → recognise-card → produce-card | 5 |
+| `advanced-thai:vocab` | recognise-mc → recognise-card → produce-mc → produce-card | 7 |
+| `advanced-thai:phrase` | recognise-card | 1 |
 
-### 2. `lib/advanced-thai/queries.ts` (edit — two new functions)
-- **`getKindSummaries(learnerId)`** — one grouped query (same `db.execute(sql...)` style as `getThemeSummaries` at :74): `LEFT JOIN at_review_states` scoped to learner, `GROUP BY c.kind`, returning per-kind `total_cards` / `seen_cards`. Map into fixed `AT_CARD_KINDS` order, zero-fill absent kinds, skip unknown kinds (same rationale as `toStudyCard`'s default branch).
-- **`getAdvancedPracticeData(learnerId, kind, since, now = new Date())`** → `{ counts: AtPracticeCounts; card: AtStudyCard | null; hints }` — structured like `getAdvancedStudyData` (:160): `Promise.all` of small Drizzle selects, then the same card+state hydration (`toStudyCard` :34, `hydrateFsrsCard`, `previewIntervals` — rating buttons show real intervals). No `ensureLearnerSettings`, no cap logic (unseen cards excluded by construction: every query inner-joins `at_review_states`).
-  - All tiers: `innerJoin(atCards, eq(atCards.id, atReviewStates.cardId))` + `eq(atReviewStates.learnerId, learnerId)` + `eq(atCards.kind, kind)`, plus the tier predicates above.
-  - Counts: `remaining` = tier-2 where-count; `repeatCount` = `gte(lastReview, since) AND lte(due, dayEnd)` count; `poolSize` = learner+kind count.
-  - Chosen id: `tier1 ?? tier2 ?? tier3`; none → `{ counts, card: null, hints: null }`.
+## Live data (measured on the branch, 2026-07-29)
 
-### 3. `app/advanced-thai/practice/[kind]/page.tsx` (new)
-Modeled on `app/advanced-thai/[theme]/page.tsx`:
-1. `auth()` + `isAdvancedThaiLearner` (`lib/advanced-thai/access.ts`) → `notFound()` (allowlist course, leak nothing).
-2. `const { kind } = await params` (params/searchParams are Promises in this Next version); validate against `AT_CARD_KINDS` else `notFound()`.
-3. Parse/validate `since` (take first if array); invalid/stale → replace-redirect with fresh `since`.
-4. `getAdvancedPracticeData(...)` → render `<LangSync activeMode="advanced-thai" />` + `<AdvancedPracticeScreen kind counts card hints />`.
+| table | count |
+|---|---|
+| `cards` (Mandarin) | 515 |
+| `review_states` | **75** |
+| `review_logs` | 346 |
+| `at_cards` | 340 — vocab 79, grammar 25, phrase 236 |
+| `at_review_states` | **65** |
+| `at_review_logs` | 129 |
+| `thai_progress` (untouched) | 170 |
 
-Route note: the static `practice` segment beats the `[theme]` dynamic sibling; bare `/advanced-thai/practice` falls into `[theme]`, fails theme lookup, 404s — fine. Add a one-line comment reserving the `practice` slug (no future theme may use it).
+Corrects the approved plan's estimate: only 140 cards have ever been started, so the wipe is
+far cheaper than "history on ~830 cards".
 
-### 4. `components/advanced-thai/advanced-practice-screen.tsx` (new client component)
-Sibling of `advanced-study-screen.tsx` (deliberate-duplication idiom from the queries.ts header — counts shape and empty state genuinely differ):
-- Same shell: `ThaiFontProvider` + looped/loopless `SegmentedControl`, sticky header, "← Themes" link to `/`, title "Vocabulary · practice" (kind → Vocabulary / Grammar / Phrases).
-- Counts line: `Left {remaining} · Repeats {repeatCount}` (replaces Due/New).
-- Card area: `card && hints ? <AdvancedReviewSession key={card.id} card={card} hints={hints} /> : <PracticeComplete />`. **`AdvancedReviewSession` is reused unchanged** — it dispatches purely on `card.kind` and calls `submitAdvancedReview`, whose `refresh()` re-renders this route with `?since` intact.
-- `PracticeComplete` (local; like `AllCaughtUp` but **no top-up button** — cap/unseen out of scope here):
-  - `poolSize > 0`: "Session complete — you practiced all {poolSize} {label} cards" + note that ratings counted toward the real schedule + back link.
-  - `poolSize === 0` (deep link before any card of this kind is seen): "Nothing to practice yet" explainer.
+## Progress
 
-### 5. `components/advanced-thai/advanced-thai-home.tsx` (edit)
-- `const [themes, kinds] = await Promise.all([getThemeSummaries(learnerId), getKindSummaries(learnerId)]);`
-- Below the theme list (when themes exist), add a "Practice by type" section: three compact rows styled like the theme cards, each showing label + `{seenCards} cards` (tabular-nums matching existing counts style). `seenCards > 0` → `Link` to `/advanced-thai/practice/${kind}`; else non-interactive muted row ("no cards yet").
+- [x] **Phase 1 — ladder engine.** `lib/ladder/intervals.ts`, `ladder.ts`, `round.ts` plus three
+      colocated test files. 32/32 passing: `npx tsx --test lib/ladder/*.test.ts`.
+- [x] **Neon branch cut and verified** against expected table counts.
+- [x] **Phase 2 — schema + migration.** `0009_opposite_blue_marvel.sql` (wipe + drop FSRS columns
+      + create `hsk_unlocks`), `0010_steep_skaar.sql` (add ladder columns). Applied to the branch;
+      production verified untouched.
+- [x] **Phase 3 — Advanced Thai.** Grammar deleted from code (types, both generated decks, the
+      hand-extracted reference, the extractor, the seeder, the component, the CSS tokens);
+      `queries.ts` and `actions.ts` rewritten onto the ladder; three `components/ladder/*`
+      components + `lib/ladder/distractors.ts` (15 colocated tests); both screens and both routes
+      wired; practice mode now read-only with no `?since=`.
+- [x] **Phase 4 — Mandarin.** `lib/review/{types,hsk-gate,queries,actions,stats}.ts` rewritten onto
+      the ladder; HSK gate raised to 100% with persistent unlocks (`hsk_unlocks`); mastery is now
+      "reached the top step" read off `review_states.step`; stats rebuilt on step distribution +
+      interval histogram + demotion leeches; `review-session.tsx` dispatches on `card.format`;
+      `empty-state.tsx` → `mandarin-round-complete.tsx`; `rating-chart.tsx` →
+      `distribution-chart.tsx`. All FSRS modules and `ts-fsrs` deleted.
+- [ ] Phase 5 — prod migration (owner decision: this wipes real learner data).
 
-### No changes
-`lib/advanced-thai/actions.ts` (`submitAdvancedReview` re-checks allowlist, accepts any at_card id, sets `lastReview = now`, `refresh()`), `lib/review/scheduler.ts`, `lib/review/time.ts`, `advanced-review-session.tsx`, `rating-buttons.tsx`, schema (no migration).
+**The repo typechecks and builds again.** `npx tsc --noEmit` → exit 0 and `npx next build` →
+success, both for the first time since Phase 2's schema rewrite.
 
-## Edge cases (accepted)
-- **Second session same day**: re-entering from home mints a fresh `since`; whole pool eligible again. Intended — FSRS still records every rating truthfully.
-- **Cross-flow interleave**: rating a card in the per-theme flow mid-practice marks it practiced-this-session. Harmless.
-- **Tier-3 early serve**: an Again card (due ~1 min) can surface seconds early when it's the last thing left — identical to existing per-theme tier-3 behavior.
-- **Thai-midnight boundary**: repeats scheduled past midnight drop out mid-session — matches per-theme semantics.
-- **`remaining` reads 0 during repeat-drain** while cards still appear — the `Repeats` count in the header explains why; show both.
+## Migration mechanics worth remembering
 
-## Verification
-1. `npx tsc --noEmit` (or the repo's typecheck script) after each layer.
-2. Local dev against a Neon branch is NOT needed — read-only new queries + reuse of the existing rating action; but remember `.env.local` DATABASE_URL **is production** (memory), so manual testing happens as real owner data, which is acceptable here (practice ratings are real ratings by design).
-3. Manual flow on localhost: home shows the three practice rows with seen counts → start Vocabulary practice → URL gains `?since=` → cards from BOTH themes appear in random order → rate one Again → after its step elapses it resurfaces (tier 1/3) → refresh mid-session keeps position semantics → finish session → "Session complete" (no top-up button) → re-enter for a fresh session → confirm `at_review_states.due` moved for practiced cards.
-4. Grammar practice specifically: grammar cards have `audioUrl: null` and don't flip — confirm `AdvancedReviewSession` renders them fine in the mixed-theme queue (it dispatches on kind, so it should).
-5. Owner-only guard: hitting `/advanced-thai/practice/vocab` as a non-allowlisted user → 404.
+`drizzle-kit generate` needs a TTY whenever one table has **both** added and dropped columns —
+it prompts to disambiguate renames, and Claude's shell has no TTY. Worse, it would have offered
+`rating` → `step` (both integer) as a plausible rename, silently reinterpreting FSRS ratings as
+ladder positions. **Fix: split into two migrations** — drops first, adds second. Neither diff is
+ambiguous, so neither prompts.
 
-## Execution order
-types.ts → queries.ts (+ typecheck) → route page → practice screen → home section → manual verify.
+The wipe lives in `0009`, before the adds, because `0010` adds `NOT NULL` columns with no default
+to the log tables and that cannot succeed while rows exist. Keeps the pair replayable on prod.
+
+`drizzle.config.ts` calls `config({ path: ".env.local" })` **without** `override: true`, so
+dotenv will not clobber an already-set variable. Setting `$env:DATABASE_URL` inline wins — verified
+empirically before running anything. Shell state does not persist between tool calls, so the
+variable must be set in the same command as the migrate.
+
+## Design refinement made during implementation
+
+**The round is not persisted.** Full-cycle ordering needs no round table, no batch snapshot and
+no pass counter. Two invariants produce it for free:
+
+1. Any answer that does NOT finish a card sets `due = now` and stamps `last_review` — the card
+   stays in the batch (`due <= now`) and moves to the back of the line.
+2. An answer that finishes a card schedules it ≥ 1 day out, so it drains from the batch on its own.
+
+Serving the unfinished card with the oldest `last_review` (nulls first, deck-order tiebreak) is
+then exact round-robin, expressible as `ORDER BY last_review ASC NULLS FIRST, deck_order ASC
+LIMIT 1`. This is also why `lib/review/queue.ts` and `pickFutureToday` are deleted rather than
+ported: Tier 3 existed to rescue cards FSRS had scheduled minutes ahead, and nothing is ever
+scheduled in minutes now.
+
+## Decisions made during Phase 3
+
+**`Left N` counts CARDS left, not asks left.** The approved plan specified a `Left N · Repeats N`
+header borrowed from practice mode, where `remaining` meant "not yet served this session". Built
+that way and run against the branch, it reads **0 after the tenth answer of seventy** — a ten-card
+round of new vocab is ~70 answers, and the counter flatlines at zero with the whole climb still
+ahead. `remaining` is now every card in the batch short of a top-step pass, so it holds at 10 and
+reaches 0 exactly at the finish line; `repeats` is the already-asked-today subset of it.
+
+*Open for the owner:* the genuinely smooth progress number is EXPOSURES remaining, computable
+exactly from `(step, pass_streak)` — 70 → 0 monotonically. It was not built because it changes the
+header's shape from what was approved, and a round opening at "Left 68" may read as punishing.
+
+**Two submit actions, not one.** `submitAnswer(cardId, step, passed)` cannot work for multiple
+choice: the client is never told which option is correct, so it has no verdict to send.
+`submitAdvancedSelfGrade(cardId, step, passed)` takes the flashcard's self-graded boolean;
+`submitAdvancedChoice(cardId, step, choice)` takes the chosen STRING and grades it server-side,
+returning the verdict for the feedback highlight. A third, `gradeAdvancedChoice`, is the same
+comparison with the write left out — practice mode's grader, since practice must not record.
+
+**Neither submit action calls `refresh()`.** Refreshing from inside the action swaps the card out
+from under a correct/incorrect highlight the Learner has not read. The session component drives
+advancement with `router.refresh()` after a 1.1s feedback hold. `addNewCardsToday` still refreshes:
+it has no feedback to hold.
+
+**The client's `step` is a staleness guard, never the step graded at.** It is compared against the
+stored one and the request is rejected on a mismatch. Without that, a replayed submission applies
+at whatever step the card has since climbed to — promoting a card on the strength of an answer
+given to an easier question.
+
+**`shuffled`/`pick` moved to `lib/shuffle.ts`.** They were private to `lib/thai/drill.ts`, which
+imports the database; importing them from there would have dragged a DB connection into
+`lib/ladder/`, whose whole contract is that it runs under `tsx --test`. One implementation, both
+callers, no dependencies.

@@ -8,11 +8,22 @@ import { getHskGate } from "@/lib/review/queries";
 import { HskLadder } from "@/components/stats/hsk-ladder";
 import { ReviewsChart } from "@/components/stats/reviews-chart";
 import { ForecastChart } from "@/components/stats/forecast-chart";
-import { RatingChart } from "@/components/stats/rating-chart";
+import { DistributionChart } from "@/components/stats/distribution-chart";
 import { CountUp } from "@/components/ui/count-up";
 import { StatCard } from "@/components/ui/stat-card";
+import type { StepFormat } from "@/lib/ladder/ladder";
 import type { HskGate } from "@/lib/review/hsk-gate";
 import type { LearnerStats } from "@/lib/review/stats";
+
+// What each ladder step asks, in the Learner's words. The step formats are a
+// shared vocabulary (both courses use them), but the wording is Mandarin's —
+// "produce" here means writing or saying the hanzi.
+const STEP_LABELS: Record<StepFormat, string> = {
+  "recognise-mc": "Recognise (MC)",
+  "recognise-card": "Recognise",
+  "produce-mc": "Produce (MC)",
+  "produce-card": "Produce",
+};
 
 // Stats page — read-only progress view for both learners side by side.
 // proxy.ts already redirects unauthenticated visitors; auth() here is a
@@ -116,10 +127,31 @@ function LearnerColumn({
         <ForecastChart data={stats.dueForecast} />
       </div>
 
-      {/* Rating breakdown (A8) */}
+      {/* Where the started cards sit on the ladder — the rating breakdown's
+          replacement. That chart counted button presses over all time and only
+          ever grew; this is a live snapshot of how far the deck has climbed. */}
       <div>
-        <SectionLabel>Rating breakdown</SectionLabel>
-        <RatingChart ratingCounts={stats.ratingCounts} />
+        <SectionLabel>Ladder spread</SectionLabel>
+        <DistributionChart
+          data={stats.stepCounts.map((s) => ({
+            label: STEP_LABELS[s.format],
+            count: s.count,
+          }))}
+          // An ordered ramp, so "further along" reads as further along. Reuses the
+          // functional rating tokens rather than inventing a second palette.
+          colors={["var(--rate-hard)", "var(--rate-good)", "var(--rate-easy)"]}
+          emptyLabel="No cards started yet"
+        />
+      </div>
+
+      {/* How far out the graduated cards are scheduled. Unordered buckets, so a
+          single accent fill — colour would imply a ranking that isn't there. */}
+      <div>
+        <SectionLabel>Interval spread</SectionLabel>
+        <DistributionChart
+          data={stats.intervalBuckets}
+          emptyLabel="No cards have graduated yet"
+        />
       </div>
     </section>
   );

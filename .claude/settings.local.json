@@ -7,7 +7,21 @@
       "Bash(npx eslint *)",
       "Bash(echo \"SCOPED_LINT_EXIT:$?\")",
       "Bash(tail -60 /tmp_lint_out.txt)",
-      "Bash(rm -f /tmp_lint_out.txt)"
+      "Bash(rm -f /tmp_lint_out.txt)",
+      "mcp__chrome-devtools__list_pages",
+      "mcp__chrome-devtools__resize_page",
+      "mcp__chrome-devtools__new_page",
+      "mcp__chrome-devtools__emulate",
+      "mcp__chrome-devtools__navigate_page",
+      "mcp__chrome-devtools__take_snapshot",
+      "mcp__chrome-devtools__take_screenshot",
+      "mcp__chrome-devtools__evaluate_script",
+      "Read(//c/Users/User/Software Projects/Language-Learning-App/**)",
+      "Bash(mv components/advanced-thai/bakeoff/kit.tsx components/advanced-thai/kit.tsx)",
+      "Bash(mv components/advanced-thai/bakeoff/vocab-lexeme-slab.tsx components/advanced-thai/vocab-lexeme-slab.tsx)",
+      "Bash(mv components/advanced-thai/bakeoff/grammar-slot-frame.tsx components/advanced-thai/grammar-slot-frame.tsx)",
+      "Bash(mv components/advanced-thai/bakeoff/phrase-slab.tsx components/advanced-thai/phrase-slab.tsx)",
+      "Bash(node -e \"console.log\\(require\\('next/package.json'\\).version\\)\")"
     ]
   }
 }

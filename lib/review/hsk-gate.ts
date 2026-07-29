@@ -1,18 +1,28 @@
 // The HSK band gate: new Cards are only served from a band the Learner has
-// unlocked, and a band unlocks once the band below it is 80% mastered.
+// unlocked, and a band unlocks once the band below it is fully mastered.
 //
 // Pure — no database access, no `@/lib/db` import (importing it constructs a
 // neon() client at module load, which throws under `tsx --test`). Same rationale
 // as lib/thai/exam-pure.ts. Every gate decision in the app is made here, so the
-// queue and the Server Action cannot drift apart.
+// queue and the Server Actions cannot drift apart.
 
-// 80, not 90. The bar is a fraction of a band's cards, so every Card added to a band
-// raises the absolute number needed to clear it. Seeding the travel/transport set put
-// 29 new Cards into band 1 (130 -> 159), which at 90% moved the bar from 117 to 144
-// mastered — the band grew faster than the Learner could climb it. 80% keeps the gate's
-// purpose (do not serve HSK 4 to someone who has not met HSK 1) while leaving the
-// ladder reachable as the deck grows.
-export const HSK_UNLOCK_THRESHOLD_PERCENT = 80;
+// Relative, not "@/lib/ladder/ladder": this module must stay importable by
+// `tsx --test`, which does not resolve the tsconfig path alias. Same constraint
+// as lib/ladder/distractors.ts.
+import { topStep } from "../ladder/ladder";
+
+// 100, raised from 80 with the move to the ladder. Under FSRS "mastered" meant a
+// rating pattern — Easy once, or Good on an already-graduated card — which a
+// Learner could hit on a card they barely knew, so the bar had to sit below 100%
+// to stay reachable. Reaching the top step of the ladder is a far harder and far
+// more honest claim: five correct answers across three formats, ending in cold
+// English→Chinese production. At that standard "you have learnt this band" means
+// every card in it, and a partial bar would let genuinely unlearnt cards through.
+//
+// This is only safe BECAUSE unlocks are persisted (see hsk_unlocks in schema.ts).
+// A live 100% computation would re-lock a cleared band the moment one card was
+// seeded into it, halting study — see bandsToPersist below.
+export const HSK_UNLOCK_THRESHOLD_PERCENT = 100;
 
 // Bands 1-6 are as published; 7 is the merged "HSK 7-9" advanced band, which HSK
 // itself does not subdivide. See the cards.hsk_level comment in lib/db/schema.ts.
@@ -24,45 +34,29 @@ export function hskLabel(band: number): string {
 
 // === Mastery ================================================================
 //
-// A Card is mastered when the Learner has EITHER rated it Easy at least once, OR
-// recalled it correctly (Good/Easy) *after* it had already graduated to Review
-// state and survived a real multi-day interval.
+// A Card is mastered when it has reached the top step of the Mandarin ladder —
+// English→Chinese production. Getting there takes five correct answers (two at
+// multiple choice, two at recognition, then the promotion into production), and
+// no lucky single rating can shortcut it.
 //
-// Easy alone would be wrong in both directions: a Learner who honestly rates Good
-// (the grade FSRS wants) would never master anything and would sit at band 1
-// forever, while pressing Easy on a card seen for the first time would be a free
-// unlock. The second clause lets honest grading progress; the Easy clause remains
-// a guaranteed escape hatch, which is what makes every Card masterable and so
-// makes a hard deadlock impossible.
-//
-// review_logs is append-only, so mastery is permanently sticky — a later lapse can
-// never re-lock a band the Learner already opened. (This is the load-bearing lesson
-// from lib/thai/exam-pure.ts:14-24: gate on a sticky signal, never a live one.)
-//
-// PROBE (ts-fsrs v5.4.0, `npx tsx`, request_retention=0.85): ReviewLog.state is the
-// state the Card was in BEFORE the review, not after.
-//   NEW      + Again/Hard/Good  -> log.state=0 (New)       -> card.state=1 (Learning)
-//   NEW      + Easy             -> log.state=0 (New)       -> card.state=2 (Review)
-//   LEARNING + Good/Easy        -> log.state=1 (Learning)  -> card.state=2 (Review)
-//   REVIEW   + Again            -> log.state=2 (Review)    -> card.state=3 (Relearning)
-//   REVIEW   + Hard/Good/Easy   -> log.state=2 (Review)    -> card.state=2 (Review)
-//   State enum: New=0, Learning=1, Review=2, Relearning=3
-// So `log.state === 2` means "this review happened while the Card was graduated",
-// which is exactly the evidence of retention we want. A first-sight Easy logs
-// state=0 and is therefore admitted only by the Easy clause, as intended.
-const STATE_REVIEW = 2;
-const RATING_GOOD = 3;
-const RATING_EASY = 4;
+// This replaces isMasteryLog, which read the append-only review_logs table and
+// was therefore permanently sticky: a later lapse could not un-master a card.
+// Reading `review_states.step` instead is a LIVE signal — a demotion out of the
+// top step does reduce the mastered count. That reversal is deliberate and it is
+// safe only because the UNLOCK is stored separately and never recomputed: the
+// count can fall, the door it already opened cannot close. Gate on a sticky
+// signal, never a live one (lib/thai/exam-pure.ts:14-24) — here the sticky signal
+// is the hsk_unlocks row, not the step.
+const MANDARIN_TOP_STEP = topStep("mandarin");
 
-/** `priorState` is ReviewLog.state — the Card's state BEFORE this review. */
-export function isMasteryLog(rating: number, priorState: number): boolean {
-  if (rating === RATING_EASY) return true;
-  return priorState === STATE_REVIEW && rating >= RATING_GOOD;
+/** `step` is review_states.step, or null when the Card has never been introduced. */
+export function isMastered(step: number | null): boolean {
+  return step !== null && step >= MANDARIN_TOP_STEP;
 }
 
 // === The ladder =============================================================
 //
-// unlocked(1) = true;  unlocked(B) = unlocked(B-1) AND bandPasses(B-1).
+// unlocked(1) = true;  unlocked(B) = unlocked(B-1) AND (bandPasses(B-1) OR stored(B)).
 //
 // Once false the ladder is false for every band above, so the unlocked set is
 // always a PREFIX 1..K — a single scalar, never a set. Keep it that way: nothing
@@ -71,9 +65,9 @@ export function isMasteryLog(rating: number, priorState: number): boolean {
 /**
  * A band with no Cards passes. If it did not, an empty band would be an infinite
  * wall that pins the ladder forever with no action a Learner could take to clear
- * it — and refresh-seed-db.ts can empty a band by deleting Cards. This is why the
- * gate does NOT reuse Thai's isUnitUnlocked(percentMastered(...)), whose
- * percentMastered(0, 0) returns 0 and would fail an empty band.
+ * it — and refresh-seed-db.ts can empty a band. This is why the gate does NOT
+ * reuse Thai's isUnitUnlocked(percentMastered(...)), whose percentMastered(0, 0)
+ * returns 0 and would fail an empty band.
  */
 export function bandPasses(mastered: number, total: number): boolean {
   if (total === 0) return true;
@@ -86,7 +80,8 @@ export function requiredToPass(total: number): number {
 }
 
 /**
- * The single eligibility predicate, used by BOTH the queue and submitReview.
+ * The single eligibility predicate, used by BOTH the round builder and the
+ * submit action.
  *
  * A null band is ungated: an unlevelled Card can never be adjudicated, so it must
  * never be strandable. Note this cannot be safely re-expressed in SQL — `hsk_level
@@ -103,10 +98,11 @@ export function isCardEligible(
 export interface GateCardRow {
   id: string;
   hskLevel: number | null;
-  /** Has a review_states row for this Learner — i.e. has been introduced. */
-  seen: boolean;
-  /** Has a review_logs row satisfying isMasteryLog. */
-  mastered: boolean;
+  /**
+   * The Learner's ladder position on this Card, or null when no review_states
+   * row exists — which is also what "unseen" means, so the two are one field.
+   */
+  step: number | null;
 }
 
 export interface BandProgress {
@@ -126,58 +122,71 @@ export interface HskGate {
   nextBand: number | null;
   /** The lowest band still under threshold — what actually blocks nextBand. */
   blockingBand: BandProgress | null;
-  /** First unseen, eligible Card in deck order. Replaces the old Tier-2 query. */
-  firstEligibleUnseenId: string | null;
-  /** Unseen Cards the gate would actually serve. Replaces the raw `unseen` count. */
-  eligibleUnseenCount: number;
+  /** Unseen, eligible Cards in deck order — the round's new-card supply. */
+  eligibleUnseenIds: string[];
+  /**
+   * Bands that have just been EARNED and are not yet recorded in hsk_unlocks.
+   * The caller writes these (from a Server Action, never from a render). See the
+   * derivation below for why an unlock earned from an empty band is not included.
+   */
+  bandsToPersist: number[];
 }
 
 /**
- * Derive the whole gate from one deck-ordered scan of the Learner's cards.
- * `rows` MUST already be sorted by deck_order — firstEligibleUnseenId is just the
- * first match, and the queue relies on that ordering (M9/A5).
+ * Derive the whole gate from one deck-ordered scan of the Learner's cards plus
+ * their recorded unlocks.
+ *
+ * `rows` MUST already be sorted by deck_order — eligibleUnseenIds is just the
+ * matches in order, and the round relies on that to introduce cards in deck-file
+ * sequence.
+ *
+ * `storedUnlocks` are the bands already written to hsk_unlocks. They are ORs, not
+ * overrides: a stored band is open whatever the live counts say, which is the
+ * whole point of storing them.
  */
-export function computeGate(rows: GateCardRow[]): HskGate {
+export function computeGate(
+  rows: GateCardRow[],
+  storedUnlocks: Iterable<number> = [],
+): HskGate {
+  const stored = new Set(storedUnlocks);
+
   const totals = new Map<number, { total: number; mastered: number }>();
   for (const row of rows) {
     if (row.hskLevel === null) continue;
     const tally = totals.get(row.hskLevel) ?? { total: 0, mastered: 0 };
     tally.total += 1;
-    if (row.mastered) tally.mastered += 1;
+    if (isMastered(row.step)) tally.mastered += 1;
     totals.set(row.hskLevel, tally);
   }
 
+  const tallyFor = (band: number) => totals.get(band) ?? { total: 0, mastered: 0 };
   const passes = (band: number): boolean => {
-    const tally = totals.get(band);
+    const { mastered, total } = tallyFor(band);
     // A band absent from the tally has no Cards at all, and must pass — see bandPasses.
-    return bandPasses(tally?.mastered ?? 0, tally?.total ?? 0);
+    return bandPasses(mastered, total);
   };
 
-  // K = the first band under threshold; every band above it is locked.
+  // K = the first band that neither passes live nor has its successor already
+  // recorded; every band above it is locked.
   //
-  // This is the WHOLE gate. There is deliberately no "highest band already served"
-  // high-water mark on top of it.
-  //
-  // An earlier version had one, to stop the gate from yanking away a band the
-  // Learner was already working in. That protection was redundant and actively
-  // harmful. Redundant, because a Card already in review_states is exempt from the
-  // gate anyway — the gate only ever filters UNSEEN Cards, so nothing in progress can
-  // be stranded (see the tier comments in queries.ts). Harmful, because the deck is
-  // not band-ordered (an HSK 7-9 Card sits at deck position 63), so ordinary study
-  // had already served the owner Cards from bands 2, 3, 4, 6 and 7 — the high-water
-  // mark read that as "band 7 unlocked" and, since the ladder is a prefix, handed
-  // them the entire deck. The gate was switched off for the only active Learner.
+  // There is deliberately no "highest band already served" high-water mark on top
+  // of this. An earlier version had one, and it was both redundant (a Card already
+  // in review_states is exempt from the gate anyway — the gate only ever filters
+  // UNSEEN Cards) and harmful: the deck is not band-ordered, so ordinary study had
+  // served the owner Cards from bands 2, 3, 4, 6 and 7, the high-water mark read
+  // that as "band 7 unlocked", and the ladder being a prefix it handed over the
+  // whole deck. hsk_unlocks is the sanctioned replacement — it records bands
+  // actually EARNED, not bands merely encountered.
   let unlockedBand = MAX_HSK_BAND;
   for (let band = 1; band < MAX_HSK_BAND; band += 1) {
-    if (!passes(band)) {
-      unlockedBand = band;
-      break;
-    }
+    if (passes(band) || stored.has(band + 1)) continue;
+    unlockedBand = band;
+    break;
   }
 
   const bands: BandProgress[] = [];
   for (let band = 1; band <= MAX_HSK_BAND; band += 1) {
-    const { total, mastered } = totals.get(band) ?? { total: 0, mastered: 0 };
+    const { total, mastered } = tallyFor(band);
     if (total === 0) continue;
     bands.push({
       band,
@@ -189,23 +198,40 @@ export function computeGate(rows: GateCardRow[]): HskGate {
     });
   }
 
-  // Without a high-water mark the ladder is exact, so the band that blocks progress is
-  // always the highest unlocked one — you are held at the first band you have not cleared.
+  // The band that blocks progress is the highest unlocked one — you are held at
+  // the first band you have not cleared. A band held open only by a stored unlock
+  // is not blocking anything, so this reads the live counts.
   const nextBand = unlockedBand < MAX_HSK_BAND ? unlockedBand + 1 : null;
   const blockingBand =
     bands.find((b) => b.band === unlockedBand && !bandPasses(b.mastered, b.total)) ??
     null;
 
-  const eligibleUnseen = rows.filter(
-    (row) => !row.seen && isCardEligible(row.hskLevel, unlockedBand),
-  );
+  // Which unlocks are worth writing down.
+  //
+  // Only a band EARNED by clearing a non-empty band below it. An unlock that
+  // exists only because the band below is empty is left unrecorded on purpose:
+  // persisting it would mean seeding that empty band later could never gate
+  // anything, because the door above it was already nailed open. Empty bands
+  // still unlock live (bandPasses), they just do not become permanent facts.
+  const bandsToPersist: number[] = [];
+  for (let band = 2; band <= unlockedBand; band += 1) {
+    if (stored.has(band)) continue;
+    const below = tallyFor(band - 1);
+    if (below.total > 0 && bandPasses(below.mastered, below.total)) {
+      bandsToPersist.push(band);
+    }
+  }
+
+  const eligibleUnseenIds = rows
+    .filter((row) => row.step === null && isCardEligible(row.hskLevel, unlockedBand))
+    .map((row) => row.id);
 
   return {
     bands,
     unlockedBand,
     nextBand,
     blockingBand,
-    firstEligibleUnseenId: eligibleUnseen[0]?.id ?? null,
-    eligibleUnseenCount: eligibleUnseen.length,
+    eligibleUnseenIds,
+    bandsToPersist,
   };
 }

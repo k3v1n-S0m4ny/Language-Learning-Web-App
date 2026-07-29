@@ -27,14 +27,19 @@ export function HskLadder({ gate }: { gate: HskGate }) {
                 {hskLabel(band.band)}
               </p>
               <p className="text-xs text-foreground-muted">
-                {/* Name the band that ACTUALLY blocks, which is not always band-1:
-                    the grandfather high-water mark can leave a lower band short while
-                    a higher one is already open. Pointing at the wrong band would send
-                    the learner off to study something that changes nothing. */}
+                {/* Name the band that ACTUALLY blocks, which is not always the one
+                    directly below: a stored unlock can hold a band open while the
+                    band under it has since fallen short. Pointing at the wrong one
+                    would send the learner off to study something that changes
+                    nothing.
+
+                    "At the top" rather than "mastered": the bar is now reaching the
+                    ladder's top step — producing the phrase from the English — and
+                    saying so is the difference between a number and an instruction. */}
                 {locked
-                  ? `Locked — master ${hskLabel(gate.blockingBand?.band ?? band.band - 1)} first`
-                  : `${band.mastered} / ${band.total} mastered${
-                      blocking ? ` — ${band.required} to unlock the next band` : ""
+                  ? `Locked — finish ${hskLabel(gate.blockingBand?.band ?? band.band - 1)} first`
+                  : `${band.mastered} / ${band.total} at the top step${
+                      blocking ? ` — all ${band.required} unlock the next band` : ""
                     }`}
               </p>
             </div>

@@ -15,9 +15,9 @@
  * cents of TTS either way. The reason is that ~500 extra blobs is real complexity
  * to carry for a per-word "hear it" affordance the owner did not want.)
  *
- * GRAMMAR CARDS GET NO AUDIO, deliberately: a card's headline is an abstract frame
- * ("ทำให้ + N + V") which is not a sayable Thai utterance, and its examples are
- * sentences already drawn from the same text the phrase cards cover.
+ * A third kind, GRAMMAR, deliberately got no audio — a pattern frame
+ * ("ทำให้ + N + V") is not a sayable Thai utterance. It was deleted with the
+ * ladder redesign, so the manifest builder now covers every kind there is.
  *
  * VOICE: th-TH-Neural2-C — the same native Thai voice Read-Thai settled on after
  * the Chirp3-HD voices (Google's GLOBAL multilingual personas) were found to
@@ -113,7 +113,8 @@ async function buildManifest(): Promise<ClipSpec[]> {
     } else if (card.kind === "vocab") {
       text = (card.payload as VocabEntry).thai;
     }
-    // grammar → no clip; see the header note.
+    // Any other `kind` is content shipped ahead of this script — skipped, not
+    // guessed at. `kind` is a plain text column precisely so that can happen.
 
     if (!text?.trim()) continue;
     clips.push({ cardId: card.id, kind: card.kind, text: text.trim() });

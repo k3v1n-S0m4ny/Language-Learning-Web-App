@@ -67,15 +67,6 @@ export const MORPH_CLASS: Record<string, string> = {
   suffix: "bg-[var(--morph-suffix)] text-[var(--morph-suffix-ink)]",
 };
 
-export const PATTERN_FN_CLASS: Record<string, string> = {
-  causative: "bg-[var(--pattern-fn-causative)] text-[var(--pattern-fn-causative-ink)]",
-  passive: "bg-[var(--pattern-fn-passive)] text-[var(--pattern-fn-passive-ink)]",
-  comparative: "bg-[var(--pattern-fn-comparative)] text-[var(--pattern-fn-comparative-ink)]",
-  topic: "bg-[var(--pattern-fn-topic)] text-[var(--pattern-fn-topic-ink)]",
-  connector: "bg-[var(--pattern-fn-connector)] text-[var(--pattern-fn-connector-ink)]",
-  reciprocal: "bg-[var(--pattern-fn-reciprocal)] text-[var(--pattern-fn-reciprocal-ink)]",
-};
-
 // --- Primitives -------------------------------------------------------------
 
 /**
@@ -92,7 +83,7 @@ export function CardShell({
 }: {
   radius?: "lg" | "xl";
   className?: string;
-  /** Pointer-only reveal shortcut — see the note in grammar-slot-frame.tsx. */
+  /** Pointer-only reveal shortcut; the keyboard path is the button below the card. */
   onClick?: () => void;
   children: ReactNode;
 }) {

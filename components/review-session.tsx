@@ -1,82 +1,122 @@
 "use client";
 
 import { useEffect, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { motion, useReducedMotion } from "motion/react";
-import { submitReview } from "@/lib/review/actions";
+import { McQuestion, type McVerdict } from "@/components/ladder/mc-question";
+import { PassFailRow, RevealButton } from "@/components/ladder/flashcard";
+import { submitChoice, submitSelfGrade } from "@/lib/review/actions";
 import { setSessionActive } from "@/lib/ux/session-focus";
-import type {
-  IntervalHints,
-  RatingValue,
-  StudyCard,
-} from "@/lib/review/types";
+import type { StudyCard } from "@/lib/review/types";
 import { playAudio } from "./audio-button";
 import { CardBack } from "./card-back";
 import { CardFront } from "./card-front";
-import { RatingButtons } from "./rating-buttons";
 
-// Owns the per-Card interaction state. Keyed by card.id at the call site so
-// reveal state resets when the next Card loads. Submitting a rating runs
-// the server action inside a transition; while pending we show a
-// lightweight "next Card" placeholder instead of leaving the rated Card
-// frozen on screen (perceived-instant advance).
+// Owns the per-Card interaction state for Mandarin — the counterpart of
+// components/advanced-thai/advanced-review-session.tsx.
+//
+// IT DISPATCHES ON `card.format`. That is the whole ladder change: a Card is not
+// one question any more. The same row is a four-option recognition question at
+// step 1, the familiar flip card at step 2, and a cold English→Chinese recall at
+// step 3 — where the flip card returns, but front-to-back reversed.
+//
+// Keyed by card.id at the call site, so the interaction state resets when the
+// next Card loads.
 //
 // Reveal is a 3D spring flip (front -> back) via `motion`, with both faces
 // mounted simultaneously (stacked, backface-hidden) inside a perspective
-// container. `prefers-reduced-motion` users get an instant swap instead —
-// only one face is ever mounted, no 3D transform at all.
-export function ReviewSession({
-  card,
-  hints,
-}: {
-  card: StudyCard;
-  hints: IntervalHints;
-}) {
+// container. `prefers-reduced-motion` users get an instant swap instead — only
+// one face is ever mounted, no 3D transform at all.
+
+// How long the correct/incorrect highlight stays up before the next Card is
+// requested. Long enough to read which option was right on a miss, short enough
+// that a run of easy Cards does not feel gated. Matches Advanced Thai.
+const FEEDBACK_MS = 1100;
+
+// Marks that the Learner committed at least one answer this session, so the
+// round-complete screen can tell "just finished a round" from "idle revisit,
+// nothing due" and reserve the confetti for the former. Written only AFTER a
+// successful await, so a failed submit (network error, auth expiry, stale step)
+// never arms the celebration. sessionStorage, so it resets with the tab.
+function markAnswered() {
+  try {
+    sessionStorage.setItem("review-session:rated", "1");
+  } catch {
+    /* private mode / storage disabled — celebration gate simply won't fire */
+  }
+}
+
+export function ReviewSession({ card }: { card: StudyCard }) {
+  const router = useRouter();
+
   const [revealed, setRevealed] = useState(false);
+  const [verdict, setVerdict] = useState<McVerdict | null>(null);
+  const [pending, startTransition] = useTransition();
+  // Set the moment an answer is committed, so the Card cannot be answered twice
+  // while the feedback timer and the refresh are both in flight.
+  const [answered, setAnswered] = useState(false);
   const [pinyinShown, setPinyinShown] = useState(false);
   const [toneColorOn, setToneColorOn] = useState(true);
-  const [pending, startTransition] = useTransition();
   const reduceMotion = useReducedMotion();
 
   // Recede the bottom nav while a review session is on screen (Phase 4) — the
-  // store resets on unmount (e.g. deck cleared → EmptyState, or navigating away).
+  // store resets on unmount (round complete, or navigating away).
   useEffect(() => {
     setSessionActive(true);
     return () => setSessionActive(false);
   }, []);
 
+  const producing = card.format.startsWith("produce");
+
   function reveal() {
     if (revealed) return;
     setRevealed(true);
-    // Play inside the click/keydown handler so it counts as a user gesture.
+    // Played inside the click/keydown handler so it counts as a user gesture, and
+    // only on reveal — never on the front. On a produce step the front asks for
+    // the Chinese, and audio before the reveal would answer the question out loud.
     // playAudio is a no-op when wholeAudioUrl is null.
     playAudio(card.wholeAudioUrl);
   }
 
-  function rate(rating: RatingValue) {
-    startTransition(async () => {
-      await submitReview(card.id, rating);
-      // One-shot gate signal for the Mandarin "deck cleared" celebration
-      // (Phase 3, components/empty-state.tsx): marks that the learner rated
-      // at least one review THIS session, so EmptyState can distinguish
-      // "just finished a review session" from "idle revisit, nothing due" —
-      // confetti is reserved for the former only. Written AFTER a
-      // successful await (post-review fix: previously written before the
-      // await, so a failed submitReview — network error, auth expiry,
-      // invalid rating — still counted toward the gate) so only a
-      // genuinely-completed review arms the celebration. sessionStorage
-      // (not localStorage) so this naturally resets on a new tab/session;
-      // wrapped in try/catch for private-mode/storage-disabled, matching
-      // the same guard used by ui/theme-toggle.tsx elsewhere in the app.
-      try {
-        sessionStorage.setItem("review-session:rated", "1");
-      } catch {
-        /* private mode / storage disabled — celebration gate simply won't fire */
-      }
+  function advance() {
+    startTransition(() => {
+      router.refresh();
     });
   }
 
-  // The server action + re-render is in flight: advance immediately in the UI.
-  if (pending) {
+  function selfGrade(passed: boolean) {
+    if (answered) return;
+    setAnswered(true);
+    // Belt-and-braces. Reveal state survives a re-render that keeps the same
+    // card.id, so a round that hands the same Card back — legitimate when it is
+    // the only one left unfinished — would otherwise show it face-up.
+    setRevealed(false);
+    startTransition(async () => {
+      await submitSelfGrade(card.id, card.step, passed);
+      markAnswered();
+      router.refresh();
+    });
+  }
+
+  function choose(choice: string) {
+    if (answered) return;
+    setAnswered(true);
+    startTransition(async () => {
+      const result = await submitChoice(card.id, card.step, choice);
+      markAnswered();
+      setVerdict({ chosen: choice, ...result });
+      // The one audio rule: it fires on the COMMIT, alongside the feedback, never
+      // before it.
+      playAudio(card.wholeAudioUrl);
+      setTimeout(advance, FEEDBACK_MS);
+    });
+  }
+
+  // The answer is committed and the next Card is being fetched. Showing a spinner
+  // instead of the answered Card stops it sitting frozen on screen — but NOT
+  // while multiple-choice feedback is up, which is the one thing the Learner is
+  // meant to be reading.
+  if (pending && verdict === null && answered) {
     return (
       <div className="flex w-full max-w-md flex-col items-center justify-center gap-4 py-16 animate-fade-in">
         <div
@@ -88,6 +128,31 @@ export function ReviewSession({
     );
   }
 
+  if (card.format === "recognise-mc" || card.format === "produce-mc") {
+    return (
+      <McQuestion
+        eyebrow={producing ? "Which is the Chinese?" : "What does it mean?"}
+        prompt={
+          producing ? (
+            <p className="text-[clamp(1.25rem,5vw,1.75rem)] font-medium leading-snug text-foreground">
+              {card.wholeGloss}
+            </p>
+          ) : (
+            <p className="font-hanzi text-[clamp(2rem,10vw,3.5rem)] font-medium leading-tight text-foreground">
+              {card.headword}
+            </p>
+          )
+        }
+        options={card.options ?? []}
+        // Chinese options need the hanzi cut; English glosses must not get it.
+        optionClassName={producing ? "font-hanzi text-lg" : "text-sm"}
+        verdict={verdict}
+        pending={pending}
+        onChoose={choose}
+      />
+    );
+  }
+
   const backFace = (
     <CardBack
       card={card}
@@ -96,6 +161,10 @@ export function ReviewSession({
       toneColorOn={toneColorOn}
       onToggleToneColor={() => setToneColorOn((v) => !v)}
     />
+  );
+
+  const frontFace = (
+    <CardFront card={card} direction={producing ? "produce" : "recognise"} />
   );
 
   return (
@@ -117,7 +186,7 @@ export function ReviewSession({
           revealed ? (
             backFace
           ) : (
-            <CardFront card={card} />
+            frontFace
           )
         ) : (
           <motion.div
@@ -137,7 +206,7 @@ export function ReviewSession({
               aria-hidden={revealed}
               inert={revealed}
             >
-              <CardFront card={card} />
+              {frontFace}
             </div>
             <div
               className="absolute inset-0"
@@ -152,16 +221,9 @@ export function ReviewSession({
       </div>
 
       {!revealed ? (
-        <button
-          type="button"
-          onClick={reveal}
-          className="rounded-[var(--r-pill)] px-8 py-3 text-sm font-semibold text-on-earthy shadow-[inset_0_1px_0_0_rgba(255,255,255,0.3)] transition-transform active:scale-95"
-          style={{ background: "linear-gradient(135deg, var(--accent), var(--accent-3))" }}
-        >
-          Show answer
-        </button>
+        <RevealButton onClick={reveal} />
       ) : (
-        <RatingButtons hints={hints} pending={pending} onRate={rate} />
+        <PassFailRow pending={pending} onGrade={selfGrade} />
       )}
     </div>
   );

@@ -1,18 +1,20 @@
 /**
  * Dev-only: backdate a Learner's Review States so their Cards become due now, for
- * testing the "due first" branch of the study screen without waiting real days.
+ * building a round without waiting real days.
  *
  *   npm run dev:fast-forward -- learner@example.com
  *
- * Backdates both review_states.due and the due inside fsrs_card (jsonb) to one hour
- * ago. config() runs before the db client is built so DATABASE_URL is read.
+ * Backdates review_states.due to one hour ago. There is no second copy of the due
+ * date to keep in sync any more — the FSRS jsonb blob that used to hold one is
+ * gone, and `due` is the whole schedule. config() runs before the db client is
+ * built so DATABASE_URL is read.
  */
 import { config } from "dotenv";
 config({ path: ".env.local" });
 
 import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
-import { eq, sql } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import * as schema from "../lib/db/schema";
 
 const conn = neon(process.env.DATABASE_URL!);
@@ -39,11 +41,7 @@ async function main() {
 
   const updated = await db
     .update(schema.reviewStates)
-    .set({
-      due: past,
-      // Keep the jsonb due in sync so ts-fsrs sees the same backdated date.
-      fsrsCard: sql`jsonb_set(${schema.reviewStates.fsrsCard}, '{due}', to_jsonb(${past.toISOString()}::text))`,
-    })
+    .set({ due: past })
     .where(eq(schema.reviewStates.learnerId, learner.id))
     .returning({ cardId: schema.reviewStates.cardId });
 

@@ -15,8 +15,11 @@
  * they span the whole length distribution from คัต! (4 characters) to the single
  * longest clause in the document (71), and cover all five source kinds. If a
  * design survives these it survives the deck; if it only looks good on the short
- * quoted ones, the bake-off would have flattered it. Vocabulary (10) and grammar
- * (5) are likewise a slice, sized so all candidates fit on one screen.
+ * quoted ones, the bake-off would have flattered it. Vocabulary (10) is likewise
+ * a slice, sized so all candidates fit on one screen.
+ *
+ * The bake-off also carried five grammar patterns. That card kind was deleted
+ * with the ladder redesign, and so was its slice.
  */
 import type { Theme } from "../types";
 
@@ -145,121 +148,6 @@ export const NAK_KOSANA: Theme = {
       morphemes: [
         { form: "ถล่ม", gloss: "to collapse, to cave in", role: "root" },
         { form: "ทลาย", gloss: "to crumble, to give way", role: "root" },
-      ],
-    },
-  ],
-
-  // --- Grammar ------------------------------------------------------------
-  // Slot names in each `frame` must match the `slot` values on the example
-  // segments — that is what lets the Slot Frame card paint the frame's slot and
-  // its real-world realization in the same colour.
-  grammar: [
-    {
-      frame: "ทำให้ + N + V",
-      fn: "causative",
-      plainEnglish: "makes N do V / causes N to become V",
-      examples: [
-        {
-          segments: [
-            { text: "สำรวจข้อมูลว่าโฆษณาแบบไหนจะ" },
-            { text: "ทำให้", slot: "marker" },
-            { text: "สินค้า", slot: "N" },
-            { text: "ขายดีขึ้น", slot: "V" },
-          ],
-          gloss: "Research which kind of advertising will make the product sell better.",
-        },
-        {
-          segments: [
-            { text: "วิเคราะห์ว่าสื่อช่องทางใดจะ" },
-            { text: "ทำให้", slot: "marker" },
-            { text: "คน", slot: "N" },
-            { text: "รู้จักโฆษณาที่ผลิตออกมาได้ดีที่สุด", slot: "V" },
-          ],
-          gloss:
-            "Analyse which media channel will best make people aware of the advertisement produced.",
-        },
-      ],
-    },
-    {
-      frame: "แข่งกัน + V",
-      fn: "reciprocal",
-      plainEnglish: "compete with one another to do V",
-      examples: [
-        {
-          segments: [
-            { text: "บริษัทโฆษณาจะ" },
-            { text: "แข่งกัน", slot: "marker" },
-            { text: "เสนอแผนโฆษณา", slot: "V" },
-            { text: "ให้แก่ลูกค้า" },
-          ],
-          gloss:
-            "The advertising agencies compete with one another to pitch their ad plans to the client.",
-        },
-      ],
-    },
-    {
-      frame: "เพื่อ + V",
-      fn: "connector",
-      plainEnglish: "in order to V — states the purpose of what came before",
-      examples: [
-        {
-          segments: [
-            { text: "นำไปเผยแพร่ทางสื่อต่าง ๆ ที่เหมาะสม " },
-            { text: "เพื่อ", slot: "marker" },
-            { text: "ใช้เป็นสื่อที่จะนำข้อมูลข่าวสารไปยังผู้บริโภค", slot: "V" },
-          ],
-          gloss:
-            "…and place it in suitable media channels, in order to use them to carry the message to consumers.",
-        },
-        {
-          segments: [
-            { text: "จากนั้นจึงวางแผนงานโฆษณา" },
-            { text: "เพื่อ", slot: "marker" },
-            { text: "ให้ผู้บริโภครู้จักสินค้า", slot: "V" },
-          ],
-          gloss: "…then plans the advertising campaign, in order to make consumers aware of the product.",
-        },
-        {
-          segments: [
-            { text: "ยังควรรู้ภาษาต่างประเทศ" },
-            { text: "เพื่อ", slot: "marker" },
-            { text: "จะได้รับทราบข้อมูลข่าวสารใหม่ ๆ", slot: "V" },
-          ],
-          gloss: "…should also know foreign languages, in order to receive new information.",
-        },
-      ],
-    },
-    {
-      frame: "ยิ่ง + Clause + ก็ยิ่ง + Adj",
-      fn: "comparative",
-      plainEnglish: "the more Clause, the more Adj",
-      examples: [
-        {
-          segments: [
-            { text: "ยิ่ง", slot: "marker" },
-            { text: "ถ้าได้สะสมประสบการณ์ในชมรมโฆษณา", slot: "Clause" },
-            { text: " หรือผ่านประสบการณ์อื่น ๆ … " },
-            { text: "ก็ยิ่ง", slot: "marker" },
-            { text: "ดี", slot: "Adj" },
-          ],
-          gloss:
-            "The more experience you accumulate in an advertising club — or through other experience — the better.",
-        },
-      ],
-    },
-    {
-      frame: "N + โดย + Agent",
-      fn: "passive",
-      plainEnglish: "N, done by Agent — names who performed the action",
-      examples: [
-        {
-          segments: [
-            { text: "โฆษณาเป็นงานที่สร้างสรรค์", slot: "N" },
-            { text: "โดย", slot: "marker" },
-            { text: "บุคคลหลายฝ่าย", slot: "Agent" },
-          ],
-          gloss: "Advertising is work created by people from many different disciplines.",
-        },
       ],
     },
   ],

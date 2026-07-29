@@ -5,32 +5,34 @@ import {
   computeGate,
   hskLabel,
   isCardEligible,
-  isMasteryLog,
+  isMastered,
   requiredToPass,
   HSK_UNLOCK_THRESHOLD_PERCENT,
   MAX_HSK_BAND,
   type GateCardRow,
 } from "./hsk-gate";
 
-// Build a band of `total` cards, `mastered` of them mastered, `seen` introduced.
-// Ids are stable and deck-ordered within the band so firstEligibleUnseenId is predictable.
+const TOP = 3; // Mandarin ladder: recognise-mc -> recognise-card -> produce-card
+
+// Build a band of `total` cards. `mastered` of them sit at the top step, and a
+// further `seen - mastered` have been introduced but are still climbing. Ids are
+// stable and deck-ordered within the band so eligibleUnseenIds is predictable.
 function band(
   b: number | null,
   total: number,
   opts: { mastered?: number; seen?: number } = {},
 ): GateCardRow[] {
   const mastered = opts.mastered ?? 0;
-  const seen = opts.seen ?? mastered; // a mastered card has necessarily been seen
+  const seen = Math.max(opts.seen ?? mastered, mastered);
   return Array.from({ length: total }, (_, i) => ({
     id: `b${b ?? "null"}-c${i}`,
     hskLevel: b,
-    seen: i < Math.max(seen, mastered),
-    mastered: i < mastered,
+    step: i < mastered ? TOP : i < seen ? 1 : null,
   }));
 }
 
-test("threshold is 80% and band 7 is the merged advanced band", () => {
-  assert.equal(HSK_UNLOCK_THRESHOLD_PERCENT, 80);
+test("threshold is 100% and band 7 is the merged advanced band", () => {
+  assert.equal(HSK_UNLOCK_THRESHOLD_PERCENT, 100);
   assert.equal(MAX_HSK_BAND, 7);
   assert.equal(hskLabel(1), "HSK 1");
   assert.equal(hskLabel(6), "HSK 6");
@@ -38,59 +40,37 @@ test("threshold is 80% and band 7 is the merged advanced band", () => {
 });
 
 // === mastery predicate ======================================================
-// priorState is ReviewLog.state: New=0, Learning=1, Review=2, Relearning=3.
 
-test("Easy always masters, from any prior state (the escape hatch)", () => {
-  for (const priorState of [0, 1, 2, 3]) {
-    assert.equal(isMasteryLog(4, priorState), true);
-  }
+test("mastery is reaching the top step, and nothing below it counts", () => {
+  assert.equal(isMastered(null), false); // never introduced
+  assert.equal(isMastered(1), false);
+  assert.equal(isMastered(2), false);
+  assert.equal(isMastered(TOP), true);
 });
 
-test("correct recall on a graduated card masters (Good and Easy)", () => {
-  assert.equal(isMasteryLog(3, 2), true);
-  assert.equal(isMasteryLog(4, 2), true);
-});
-
-test("an honest Good-grader does eventually master — the whole point of the union", () => {
-  // Good on first sight does not master (no retention evidence yet)...
-  assert.equal(isMasteryLog(3, 0), false);
-  // ...nor mid-learning-step...
-  assert.equal(isMasteryLog(3, 1), false);
-  // ...but Good once the card has graduated does. A Good-only learner is never stuck.
-  assert.equal(isMasteryLog(3, 2), true);
-});
-
-test("Again never masters, and Hard alone never masters", () => {
-  for (const priorState of [0, 1, 2, 3]) {
-    assert.equal(isMasteryLog(1, priorState), false);
-    assert.equal(isMasteryLog(2, priorState), false);
-  }
-});
-
-test("a lapsed (relearning) card is not mastered by Good — it must graduate again", () => {
-  assert.equal(isMasteryLog(3, 3), false);
+test("a step above the top still counts as mastered", () => {
+  // Defensive: a stored step can only exceed the top if a ladder shrinks under
+  // existing data. That must read as mastered, not as un-mastered.
+  assert.equal(isMastered(TOP + 1), true);
 });
 
 // === bandPasses =============================================================
 
-test("bandPasses at, above and below the 80% line", () => {
-  assert.equal(bandPasses(104, 130), true); // exactly 80%
-  assert.equal(bandPasses(103, 130), false);
+test("bandPasses needs every card in the band", () => {
   assert.equal(bandPasses(130, 130), true);
+  assert.equal(bandPasses(129, 130), false);
   assert.equal(bandPasses(0, 130), false);
 });
 
 test("an EMPTY band passes — otherwise it is an infinite wall", () => {
-  // percentMastered(0, 0) would be 0% and would fail; a band with no cards offers
-  // the learner no action that could ever clear it. refresh-seed-db.ts can empty a band.
+  // A band with no cards offers the learner no action that could ever clear it,
+  // and refresh-seed-db.ts can empty a band.
   assert.equal(bandPasses(0, 0), true);
 });
 
-test("requiredToPass rounds up", () => {
-  assert.equal(requiredToPass(159), 128); // band 1 after the transport seed
-  assert.equal(requiredToPass(130), 104);
-  assert.equal(requiredToPass(32), 26);
-  assert.equal(requiredToPass(17), 14);
+test("requiredToPass is the whole band", () => {
+  assert.equal(requiredToPass(159), 159);
+  assert.equal(requiredToPass(17), 17);
   assert.equal(requiredToPass(0), 0);
 });
 
@@ -110,27 +90,34 @@ test("a card is eligible iff its band is at or below the unlocked band", () => {
 
 // === the ladder =============================================================
 
-test("a fresh learner is unlocked to band 1 only, and is served a band-1 card", () => {
+test("a fresh learner is unlocked to band 1 only, and is served band-1 cards", () => {
   const gate = computeGate([...band(1, 10), ...band(2, 10), ...band(3, 10)]);
   assert.equal(gate.unlockedBand, 1);
   assert.equal(gate.nextBand, 2);
-  assert.equal(gate.firstEligibleUnseenId, "b1-c0");
-  assert.equal(gate.eligibleUnseenCount, 10); // band 1 only, not all 30
+  assert.equal(gate.eligibleUnseenIds[0], "b1-c0");
+  assert.equal(gate.eligibleUnseenIds.length, 10); // band 1 only, not all 30
 });
 
-test("clearing 80% of band 1 unlocks band 2 — and only band 2", () => {
+test("90% of band 1 is no longer enough — the bar is every card", () => {
+  const gate = computeGate([...band(1, 10, { mastered: 9 }), ...band(2, 10)]);
+  assert.equal(gate.unlockedBand, 1);
+  assert.equal(gate.blockingBand?.band, 1);
+  assert.equal(gate.blockingBand?.required, 10);
+  assert.deepEqual(gate.bandsToPersist, []);
+});
+
+test("clearing band 1 in full unlocks band 2 — and only band 2", () => {
   const gate = computeGate([
-    ...band(1, 10, { mastered: 9 }),
+    ...band(1, 10, { mastered: 10 }),
     ...band(2, 10),
     ...band(3, 10),
   ]);
   assert.equal(gate.unlockedBand, 2);
   assert.equal(gate.nextBand, 3);
-  assert.equal(gate.eligibleUnseenCount, 11); // 1 unseen in band 1 + 10 in band 2
+  assert.equal(gate.eligibleUnseenIds.length, 10); // band 2's ten, band 3 locked
 });
 
 test("the unlocked set is a PREFIX: a gap low down locks everything above it", () => {
-  // Band 2 is fully mastered, but band 1 is not — bands 2 AND 3 stay locked anyway.
   const gate = computeGate([
     ...band(1, 10, { mastered: 5 }),
     ...band(2, 10, { mastered: 10 }),
@@ -154,7 +141,6 @@ test("mastering every band unlocks the top of the ladder and reports no next ban
 });
 
 test("an empty band does not wall off the bands above it", () => {
-  // No band-2 cards exist at all. Band 3 must still be reachable.
   const gate = computeGate([...band(1, 10, { mastered: 10 }), ...band(3, 10)]);
   assert.equal(gate.unlockedBand >= 3, true);
   assert.equal(gate.bands.some((b) => b.band === 2), false); // not reported: no cards
@@ -162,8 +148,64 @@ test("an empty band does not wall off the bands above it", () => {
 
 test("null-band cards are served even to a band-1 learner, and never counted in a band", () => {
   const gate = computeGate([...band(1, 10), ...band(null, 3)]);
-  assert.equal(gate.eligibleUnseenCount, 13);
+  assert.equal(gate.eligibleUnseenIds.length, 13);
   assert.equal(gate.bands.every((b) => b.total === 10), true);
+});
+
+// === persistent unlocks =====================================================
+//
+// The reason the bar can be 100% at all. A live computation at that bar re-locks a
+// cleared band the moment a single card is seeded into it, which would halt study
+// every time the deck grows.
+
+test("clearing a band marks the next one for persisting", () => {
+  const gate = computeGate([...band(1, 10, { mastered: 10 }), ...band(2, 10)]);
+  assert.deepEqual(gate.bandsToPersist, [2]);
+});
+
+test("an already-stored band is not offered for persisting again", () => {
+  const gate = computeGate([...band(1, 10, { mastered: 10 }), ...band(2, 10)], [2]);
+  assert.equal(gate.unlockedBand, 2);
+  assert.deepEqual(gate.bandsToPersist, []);
+});
+
+test("SEEDING A NEW CARD INTO A CLEARED BAND DOES NOT RE-LOCK THE BAND ABOVE", () => {
+  // Learner cleared band 1 (10/10) and band 2 was recorded.
+  const before = computeGate([...band(1, 10, { mastered: 10 }), ...band(2, 10)]);
+  assert.deepEqual(before.bandsToPersist, [2]);
+
+  // 20 fresh band-1 cards are seeded. Band 1 is 10/30 live — but band 2 is a
+  // stored fact, so it stays open and study continues.
+  const after = computeGate(
+    [...band(1, 30, { mastered: 10 }), ...band(2, 10, { seen: 3 })],
+    [2],
+  );
+  assert.equal(after.unlockedBand, 2);
+  assert.equal(after.bands.find((b) => b.band === 2)?.unlocked, true);
+  // The new band-1 cards are servable, so the live count can be repaired.
+  assert.equal(after.eligibleUnseenIds.length > 0, true);
+});
+
+test("a demotion out of the top step lowers the count but cannot close the door", () => {
+  // Mastery is a LIVE read of `step`, so this card genuinely stops counting...
+  const gate = computeGate([...band(1, 10, { mastered: 9 }), ...band(2, 10)], [2]);
+  assert.equal(gate.bands.find((b) => b.band === 1)?.mastered, 9);
+  // ...but band 2 was already earned and recorded.
+  assert.equal(gate.unlockedBand, 2);
+});
+
+test("a stored unlock opens exactly its own band, not the ladder above it", () => {
+  const gate = computeGate([...band(1, 10), ...band(2, 10), ...band(3, 10)], [2]);
+  assert.equal(gate.unlockedBand, 2);
+  assert.equal(gate.bands.find((b) => b.band === 3)?.unlocked, false);
+});
+
+test("an unlock earned only from an EMPTY band below is never written down", () => {
+  // Band 2 has no cards, so band 3 opens live. Persisting that would mean seeding
+  // band 2 later could never gate anything — the door would already be nailed open.
+  const gate = computeGate([...band(1, 10, { mastered: 10 }), ...band(3, 10)]);
+  assert.equal(gate.unlockedBand >= 3, true);
+  assert.deepEqual(gate.bandsToPersist, [2]); // band 2 was earned off band 1; band 3 was not
 });
 
 // === no grandfather =========================================================
@@ -172,89 +214,55 @@ test("null-band cards are served even to a band-1 learner, and never counted in 
 // not band-ordered (an HSK 7-9 card sits at deck position 63), so ordinary study had
 // already shown the owner cards from bands 2/3/4/6/7 — an earlier "highest band seen"
 // high-water mark read that as band 7 unlocked and, the ladder being a prefix, handed
-// them the whole deck. The gate was switched off for the only active learner.
-//
-// Nothing is stranded by this: the gate filters UNSEEN cards only, so those
-// already-introduced high-band cards keep coming due through the queue's tier 1/3.
+// them the whole deck.
 
 test("being SERVED a high-band card does not unlock that band", () => {
   const gate = computeGate([
-    ...band(1, 130, { mastered: 0, seen: 20 }),
-    ...band(6, 7, { mastered: 0, seen: 1 }), // one band-6 card already introduced
+    ...band(1, 130, { seen: 20 }),
+    ...band(6, 7, { seen: 1 }), // one band-6 card already introduced, still at step 1
   ]);
   assert.equal(gate.unlockedBand, 1);
   assert.equal(gate.blockingBand?.band, 1);
   assert.equal(gate.bands.find((b) => b.band === 6)?.unlocked, false);
 });
 
-test("only MASTERY unlocks a band — seeing every card in it is not enough", () => {
-  // Every band-1 card seen, but only half mastered: band 2 stays shut.
+test("only reaching the TOP STEP unlocks — climbing every card halfway is not enough", () => {
   const gate = computeGate([
-    ...band(1, 10, { mastered: 5, seen: 10 }),
+    ...band(1, 10, { mastered: 0, seen: 10 }),
     ...band(2, 10),
   ]);
   assert.equal(gate.unlockedBand, 1);
   assert.equal(gate.bands.find((b) => b.band === 2)?.unlocked, false);
 });
 
-test("a mastered card is never un-mastered, so a lapse cannot re-lock a band", () => {
-  // Mastery reads append-only review_logs, so a lapse cannot remove it. Modelled here
-  // as: the mastered count is what it is, regardless of current FSRS state.
-  const gate = computeGate([...band(1, 10, { mastered: 9 }), ...band(2, 10)]);
-  assert.equal(gate.unlockedBand, 2);
-});
-
-test("seeding new band-1 cards can re-lock band 2 for new intake — but strands nothing", () => {
-  // Learner cleared band 1 (9/10) and is working through band 2.
-  const before = computeGate([
-    ...band(1, 10, { mastered: 9 }),
-    ...band(2, 10, { seen: 3 }),
-  ]);
-  assert.equal(before.unlockedBand, 2);
-
-  // 20 fresh band-1 cards are seeded. Band 1 drops to 9/30 = 30%, so band 2 closes to
-  // NEW cards again. That is correct: the learner has genuinely not mastered 80% of
-  // band 1 any more. Their 3 in-progress band-2 cards are untouched — the gate never
-  // filters seen cards — and the fresh band-1 cards are servable, so there is a way back.
-  const after = computeGate([
-    ...band(1, 30, { mastered: 9 }),
-    ...band(2, 10, { seen: 3 }),
-  ]);
-  assert.equal(after.unlockedBand, 1);
-  assert.equal(after.blockingBand?.band, 1);
-  assert.equal(after.eligibleUnseenCount > 0, true);
-});
-
 // === counts / queue contract ================================================
 
-test("eligibleUnseenCount never promises a card the gate would refuse to serve", () => {
-  // The header count must match what the queue actually serves (the A6 invariant).
+test("eligibleUnseenIds never promises a card the gate would refuse to serve", () => {
   const rows = [...band(1, 10, { mastered: 10 }), ...band(3, 5)];
   const gate = computeGate(rows);
   const servable = rows.filter(
-    (r) => !r.seen && isCardEligible(r.hskLevel, gate.unlockedBand),
+    (r) => r.step === null && isCardEligible(r.hskLevel, gate.unlockedBand),
   ).length;
-  assert.equal(gate.eligibleUnseenCount, servable);
+  assert.equal(gate.eligibleUnseenIds.length, servable);
 });
 
-test("firstEligibleUnseenId respects deck order, not band order", () => {
+test("eligibleUnseenIds respects deck order, not band order", () => {
   // Rows arrive in deck order. A band-2 card sitting earlier in the deck must not be
   // served ahead of a band-1 card while band 2 is locked.
   const rows: GateCardRow[] = [
-    { id: "early-b2", hskLevel: 2, seen: false, mastered: false },
-    { id: "later-b1", hskLevel: 1, seen: false, mastered: false },
+    { id: "early-b2", hskLevel: 2, step: null },
+    { id: "later-b1", hskLevel: 1, step: null },
   ];
   const gate = computeGate(rows);
   assert.equal(gate.unlockedBand, 1);
-  assert.equal(gate.firstEligibleUnseenId, "later-b1");
+  assert.deepEqual(gate.eligibleUnseenIds, ["later-b1"]);
 });
 
-test("no eligible unseen cards left reports null, not a locked card", () => {
+test("no eligible unseen cards left reports an empty list, not a locked card", () => {
   const gate = computeGate([
-    ...band(1, 10, { mastered: 5, seen: 10 }), // all seen, only half mastered
+    ...band(1, 10, { mastered: 5, seen: 10 }), // all seen, only half at the top
     ...band(2, 10), // locked
   ]);
   assert.equal(gate.unlockedBand, 1);
-  assert.equal(gate.firstEligibleUnseenId, null);
-  assert.equal(gate.eligibleUnseenCount, 0);
+  assert.deepEqual(gate.eligibleUnseenIds, []);
 });

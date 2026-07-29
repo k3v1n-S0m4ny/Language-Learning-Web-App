@@ -2900,7 +2900,7 @@
   {
     "headword": "(十)点五分。",
     "isPhrase": true,
-    "wholeGloss": "Five past (ten).",
+    "wholeGloss": "(Ten):05",
     "wholePinyin": "shí diǎn wǔ fēn",
     "tags": [
       "time & dates"
@@ -2941,7 +2941,7 @@
   {
     "headword": "(十)点十五分。",
     "isPhrase": true,
-    "wholeGloss": "Quarter past (ten).",
+    "wholeGloss": "(Ten):15",
     "wholePinyin": "diǎn shíwǔ fēn",
     "tags": [
       "time & dates"
@@ -2975,7 +2975,7 @@
   {
     "headword": "(十)点三十分。",
     "isPhrase": true,
-    "wholeGloss": "Half past (ten).",
+    "wholeGloss": "(Ten):30",
     "wholePinyin": "diǎn sānshí fēn",
     "tags": [
       "time & dates"
@@ -3009,7 +3009,7 @@
   {
     "headword": "(十)点四十分。",
     "isPhrase": true,
-    "wholeGloss": "Twenty to (eleven).",
+    "wholeGloss": "(Ten):40",
     "wholePinyin": "shí diǎn sìshí fēn",
     "tags": [
       "time & dates"
@@ -3050,7 +3050,7 @@
   {
     "headword": "(十)点四十五分。",
     "isPhrase": true,
-    "wholeGloss": "Quarter to (eleven).",
+    "wholeGloss": "(Ten):45",
     "wholePinyin": "shí diǎn sìshíwǔ fēn",
     "tags": [
       "time & dates"

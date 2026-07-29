@@ -1,41 +1,61 @@
 "use client";
 
 import { useEffect, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { playAudio } from "@/components/audio-button";
-import { RatingButtons } from "@/components/rating-buttons";
-import { submitAdvancedReview } from "@/lib/advanced-thai/actions";
+import { McQuestion, type McVerdict } from "@/components/ladder/mc-question";
+import { PassFailRow, RevealButton } from "@/components/ladder/flashcard";
+import {
+  gradeAdvancedChoice,
+  submitAdvancedChoice,
+  submitAdvancedSelfGrade,
+} from "@/lib/advanced-thai/actions";
 import type { AtStudyCard } from "@/lib/advanced-thai/types";
-import type { IntervalHints, RatingValue } from "@/lib/review/types";
 import { setSessionActive } from "@/lib/ux/session-focus";
-import { GrammarSlotFrame } from "./grammar-slot-frame";
 import { PhraseSlab } from "./phrase-slab";
+import { useThaiFont } from "./kit";
 import { VocabLexemeSlab } from "./vocab-lexeme-slab";
 
 // Owns the per-card interaction state for Advanced Thai — the counterpart of
-// components/review-session.tsx, and it reuses that flow's RatingButtons and its
-// FSRS contract unchanged.
+// components/review-session.tsx.
 //
-// The one structural difference is that THE CARD IS NOT ONE SHAPE. Three designs
-// won the bake-off and they are genuinely different objects: a vocab card and a
-// phrase card flip (there is a question on the front and an answer on the back);
-// a grammar card does not (its frame is what the examples must be read against,
-// so hiding it would defeat the card). Rather than force a single flip container
-// on all three, this dispatches on `card.kind` and lets each design own its own
-// reveal — while the session keeps ownership of the things that must stay
-// consistent across all three: WHEN the answer is revealed, the audio firing on
-// reveal, and the rating.
+// IT DISPATCHES ON `card.format`, NOT ON `card.kind`. That inversion is the whole
+// ladder change: a card is not one question any more. The same vocab row is a
+// four-option recognition question at step 1, a flip card at step 2, a
+// four-option production question at step 3 and a cold recall at step 4. Kind
+// still decides which FACE draws the card (the two bake-off designs), but format
+// decides what is being ASKED, and those are now different axes.
 //
-// Keyed by card.id at the call site, so reveal state resets when the next card
-// loads.
+// Keyed by card.id at the call site, so the interaction state resets when the
+// next card loads.
+//
+// `mode` decides whether an answer is RECORDED. A round writes ladder state; a
+// practice drill does not write at all, so its cards cannot climb, cannot be
+// demoted and cannot be dragged into a round by being drilled. The interaction is
+// otherwise identical, deliberately — practice should feel like study, it just
+// must not count as it.
+
+// How long the correct/incorrect highlight stays up before the next card is
+// requested. Long enough to read which option was right on a miss, short enough
+// that a run of easy cards does not feel gated.
+const FEEDBACK_MS = 1100;
+
 export function AdvancedReviewSession({
   card,
-  hints,
+  mode = "round",
 }: {
   card: AtStudyCard;
-  hints: IntervalHints;
+  mode?: "round" | "practice";
 }) {
+  const router = useRouter();
+  const thai = useThaiFont();
+
   const [revealed, setRevealed] = useState(false);
+  const [verdict, setVerdict] = useState<McVerdict | null>(null);
   const [pending, startTransition] = useTransition();
+  // Set the moment an answer is committed, so the card cannot be answered twice
+  // while the feedback timer and the refresh are both in flight.
+  const [answered, setAnswered] = useState(false);
 
   // Recede the bottom nav while a session is on screen; resets on unmount.
   useEffect(() => {
@@ -43,23 +63,60 @@ export function AdvancedReviewSession({
     return () => setSessionActive(false);
   }, []);
 
+  const producing = card.format.startsWith("produce");
+
   function reveal() {
     if (revealed) return;
     setRevealed(true);
-    // Played inside the click/keydown handler so it counts as a user gesture.
-    // A no-op when audioUrl is null — which is always the case for grammar cards.
+    // Played inside the click/keydown handler so it counts as a user gesture, and
+    // only on reveal — never on the front. On a produce step the front asks for
+    // the Thai, and audio before the commit would answer the question out loud.
     playAudio(card.audioUrl);
   }
 
-  function rate(rating: RatingValue) {
-    startTransition(async () => {
-      await submitAdvancedReview(card.id, rating);
+  function advance() {
+    startTransition(() => {
+      router.refresh();
     });
   }
 
-  // The server action + re-render is in flight: advance immediately in the UI so
-  // the rated card does not sit frozen on screen.
-  if (pending) {
+  function selfGrade(passed: boolean) {
+    if (answered) return;
+    setAnswered(true);
+    // Belt-and-braces. Reveal state survives a re-render that keeps the same
+    // card.id, so a round that hands the same card back — legitimate when it is
+    // the only one left unfinished — would otherwise show it face-up.
+    setRevealed(false);
+    // In practice there is nothing to submit: the Learner has already seen the
+    // answer, and the verdict is theirs alone. Just draw the next card.
+    if (mode === "practice") return advance();
+    startTransition(async () => {
+      await submitAdvancedSelfGrade(card.id, card.step, passed);
+      router.refresh();
+    });
+  }
+
+  function choose(choice: string) {
+    if (answered) return;
+    setAnswered(true);
+    startTransition(async () => {
+      const result =
+        mode === "practice"
+          ? await gradeAdvancedChoice(card.id, card.step, choice)
+          : await submitAdvancedChoice(card.id, card.step, choice);
+      setVerdict({ chosen: choice, ...result });
+      // The plan's one audio rule: it fires on the COMMIT, alongside the
+      // feedback, never before it.
+      playAudio(card.audioUrl);
+      setTimeout(advance, FEEDBACK_MS);
+    });
+  }
+
+  // The answer is committed and the next card is being fetched. Showing a
+  // spinner instead of the answered card stops it sitting frozen on screen — but
+  // NOT while multiple-choice feedback is up, which is the one thing the Learner
+  // is meant to be reading.
+  if (pending && verdict === null && answered) {
     return (
       <div className="flex w-full max-w-md flex-col items-center justify-center gap-4 py-16 animate-fade-in">
         <div
@@ -71,17 +128,51 @@ export function AdvancedReviewSession({
     );
   }
 
+  if (card.format === "recognise-mc" || card.format === "produce-mc") {
+    // Only vocab reaches a multiple-choice step — the phrase ladder is a single
+    // rung of recognise-card — so the prompt below reads the vocab payload
+    // directly rather than branching on kind.
+    const entry = card.kind === "vocab" ? card.payload : null;
+    if (!entry) return null;
+
+    return (
+      <McQuestion
+        eyebrow={producing ? "Which is the Thai?" : "What does it mean?"}
+        prompt={
+          producing ? (
+            <p className="text-[clamp(1.25rem,5vw,1.75rem)] font-medium leading-snug text-foreground">
+              {entry.gloss}
+            </p>
+          ) : (
+            <p
+              className={`${thai} text-[clamp(2rem,9vw,3.25rem)] font-medium leading-tight text-foreground`}
+            >
+              {entry.thai}
+            </p>
+          )
+        }
+        options={card.options ?? []}
+        // Thai options need the Learner's chosen letterform; English ones must not
+        // get it, or the gloss renders in a Thai-first cut.
+        optionClassName={producing ? `${thai} text-lg` : "text-sm"}
+        verdict={verdict}
+        pending={pending}
+        onChoose={choose}
+      />
+    );
+  }
+
   return (
     <div className="flex w-full max-w-md flex-col items-center gap-6 animate-slide-up-fade">
-      {card.kind === "vocab" && (
+      {card.kind === "vocab" ? (
         <VocabLexemeSlab
           entry={card.payload}
           audioUrl={card.audioUrl}
           revealed={revealed}
           onReveal={reveal}
+          direction={producing ? "produce" : "recognise"}
         />
-      )}
-      {card.kind === "phrase" && (
+      ) : (
         <PhraseSlab
           phrase={card.payload}
           audioUrl={card.audioUrl}
@@ -89,21 +180,11 @@ export function AdvancedReviewSession({
           onReveal={reveal}
         />
       )}
-      {card.kind === "grammar" && (
-        <GrammarSlotFrame pattern={card.payload} revealed={revealed} onReveal={reveal} />
-      )}
 
       {!revealed ? (
-        <button
-          type="button"
-          onClick={reveal}
-          className="rounded-[var(--r-pill)] px-8 py-3 text-sm font-semibold text-on-earthy shadow-[inset_0_1px_0_0_rgba(255,255,255,0.3)] transition-transform active:scale-95"
-          style={{ background: "linear-gradient(135deg, var(--accent), var(--accent-3))" }}
-        >
-          Show answer
-        </button>
+        <RevealButton onClick={reveal} />
       ) : (
-        <RatingButtons hints={hints} pending={pending} onRate={rate} />
+        <PassFailRow pending={pending} onGrade={selfGrade} />
       )}
     </div>
   );

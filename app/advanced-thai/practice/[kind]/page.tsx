@@ -1,9 +1,8 @@
-import { notFound, redirect, RedirectType } from "next/navigation";
+import { notFound } from "next/navigation";
 import { auth } from "@/auth";
 import { isAdvancedThaiLearner } from "@/lib/advanced-thai/access";
 import { getAdvancedPracticeData } from "@/lib/advanced-thai/queries";
 import { AT_CARD_KINDS, type AtCardKind } from "@/lib/advanced-thai/types";
-import { startOfThailandDay } from "@/lib/review/time";
 import { AdvancedPracticeScreen } from "@/components/advanced-thai/advanced-practice-screen";
 import { LangSync } from "@/components/lang-sync";
 
@@ -15,12 +14,16 @@ import { LangSync } from "@/components/lang-sync";
 //
 // Same allowlist guard and notFound() (not a redirect, not an access-denied
 // page) as app/advanced-thai/[theme]/page.tsx — see that file's comment.
+//
+// The `?since=` timestamp this route used to mint and validate is GONE. It
+// existed to give a write-through practice session a boundary, so the server
+// could tell "already practiced this sitting" from "practiced on an earlier day".
+// Practice writes nothing now, so it has no sitting to identify and no repeat
+// queue to track — the URL is just the kind.
 export default async function AdvancedThaiPractice({
   params,
-  searchParams,
 }: {
   params: Promise<{ kind: string }>;
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const session = await auth();
   const learner = session?.user;
@@ -32,36 +35,12 @@ export default async function AdvancedThaiPractice({
   if (!AT_CARD_KINDS.includes(kindParam as AtCardKind)) notFound();
   const kind = kindParam as AtCardKind;
 
-  const now = new Date();
-  const sinceParam = (await searchParams).since;
-  const sinceRaw = Array.isArray(sinceParam) ? sinceParam[0] : sinceParam;
-  const sinceMs = sinceRaw === undefined ? NaN : Number(sinceRaw);
-
-  // Validity guard: `since` must be a finite integer, no later than now, and no
-  // earlier than the start of today's Thailand day — anything else (missing,
-  // malformed, stale from a previous day) mints a fresh session. Server clock
-  // only; `lastReview` is also server-stamped, so there is no clock skew to
-  // reconcile against a client-supplied timestamp.
-  const isValidSince =
-    Number.isInteger(sinceMs) &&
-    sinceMs <= now.getTime() &&
-    sinceMs >= startOfThailandDay(now).getTime();
-
-  if (!isValidSince) {
-    redirect(`/advanced-thai/practice/${kind}?since=${now.getTime()}`, RedirectType.replace);
-  }
-
-  const { counts, card, hints } = await getAdvancedPracticeData(
-    learnerId,
-    kind,
-    new Date(sinceMs),
-    now,
-  );
+  const { counts, card } = await getAdvancedPracticeData(learnerId, kind);
 
   return (
     <>
       <LangSync activeMode="advanced-thai" />
-      <AdvancedPracticeScreen kind={kind} counts={counts} card={card} hints={hints} />
+      <AdvancedPracticeScreen kind={kind} counts={counts} card={card} />
     </>
   );
 }

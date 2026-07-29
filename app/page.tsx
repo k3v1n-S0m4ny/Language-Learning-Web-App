@@ -3,8 +3,8 @@ import { isRestrictedLearner } from "@/lib/access";
 import { isAdvancedThaiLearner } from "@/lib/advanced-thai/access";
 import { ensureLearnerSettings, getStudyScreenData } from "@/lib/review/queries";
 import { AdvancedThaiHome } from "@/components/advanced-thai/advanced-thai-home";
-import { EmptyState } from "@/components/empty-state";
 import { LangSync } from "@/components/lang-sync";
+import { MandarinRoundComplete } from "@/components/mandarin-round-complete";
 import { ReviewSession } from "@/components/review-session";
 import { SessionHeader } from "@/components/session-header";
 import { TopBar } from "@/components/top-bar";
@@ -58,8 +58,8 @@ export default async function Home() {
     );
   }
 
-  const { counts, card, hints } = await getStudyScreenData(learnerId);
-  const inSession = Boolean(card && hints);
+  const { counts, card } = await getStudyScreenData(learnerId);
+  const inSession = card !== null;
 
   return (
     <main className="flex min-h-dvh flex-col items-center gap-6 page-gutter pb-[calc(5rem+var(--safe-bottom))] sm:pb-8">
@@ -74,10 +74,10 @@ export default async function Home() {
       <SessionHeader counts={counts} />
 
       <div className="flex w-full flex-1 flex-col items-center justify-center">
-        {card && hints ? (
-          <ReviewSession key={card.id} card={card} hints={hints} />
+        {card ? (
+          <ReviewSession key={card.id} card={card} />
         ) : (
-          <EmptyState gate={counts.gate} />
+          <MandarinRoundComplete gate={counts.gate} />
         )}
       </div>
     </main>

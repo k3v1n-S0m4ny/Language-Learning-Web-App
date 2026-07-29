@@ -2,7 +2,7 @@
 
 import { tokenizePhrasePinyin } from "@/lib/mandarin/pinyin-tone";
 import { computeSandhi, computeSandhiFromSyllables, sliceSandhiByWord } from "@/lib/mandarin/tone-sandhi";
-import { isLeech } from "@/lib/review/config";
+import { isLeech } from "@/lib/ladder/ladder";
 import type { StudyCard } from "@/lib/review/types";
 import { AudioButton } from "./audio-button";
 import { PinyinSyllables } from "./pinyin-syllables";
@@ -28,7 +28,7 @@ export function CardBack({
   toneColorOn: boolean;
   onToggleToneColor: () => void;
 }) {
-  const leech = isLeech({ lapses: card.lapses });
+  const leech = isLeech(card.demotions);
 
   // card.words always carries at least one entry for non-phrase Cards too
   // (the seed pipeline segments even a single-word headword into one word
@@ -57,7 +57,7 @@ export function CardBack({
         </p>
         {leech && (
           <span
-            title={`Lapsed ${card.lapses} times — needs review`}
+            title={`Dropped a step ${card.demotions} times — needs review`}
             className="glass rounded-[var(--r-pill)] px-2 py-0.5 text-xs font-medium text-foreground"
           >
             leech

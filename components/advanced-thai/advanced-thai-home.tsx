@@ -6,7 +6,6 @@ import { ProgressRing } from "@/components/progress-ring";
 
 const KIND_LABEL: Record<AtCardKind, string> = {
   vocab: "Vocabulary",
-  grammar: "Grammar",
   phrase: "Phrases",
 };
 
@@ -45,7 +44,7 @@ export async function AdvancedThaiHome({
       <div className="flex w-full max-w-2xl flex-col gap-1 pt-2">
         <h1 className="text-xl font-semibold tracking-tight text-foreground">Advanced Thai</h1>
         <p className="text-sm text-foreground-muted">
-          Vocabulary, grammar and every phrase, from real Thai occupational texts.
+          Vocabulary and every phrase, from real Thai occupational texts.
         </p>
       </div>
 

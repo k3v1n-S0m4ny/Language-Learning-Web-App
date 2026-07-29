@@ -12,6 +12,7 @@
 import { and, eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { thaiItems } from "@/lib/db/schema";
+import { pick, shuffled } from "@/lib/shuffle";
 import { ALL_THAI_ITEMS } from "@/seed/thai/items";
 import type { Tone } from "@/seed/thai/types";
 import { DRILL_ROUND_SIZE } from "./mastery";
@@ -144,19 +145,6 @@ function mutateFinalIpa(ipa: string, correctFinal: string): string[] {
   const base = ipa.slice(0, ipa.length - correctRepr.length);
   const alts = (FINAL_GROUPS[correctFinal] ?? []).filter((f) => f !== correctFinal);
   return alts.map((f) => base + FINAL_IPA[f]).filter((v) => v !== ipa);
-}
-
-function shuffled<T>(arr: T[]): T[] {
-  const copy = [...arr];
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
-}
-
-function pick<T>(arr: T[], n: number): T[] {
-  return shuffled(arr).slice(0, n);
 }
 
 export function metadataOf(item: ItemRow): Record<string, unknown> {

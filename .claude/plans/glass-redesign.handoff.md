@@ -1,51 +1,101 @@
 ---
 feature: glass-redesign
-created: 2026-07-03T22:57:37.575697+00:00
-source-session: e511518b-0f97-4df0-8f89-ad04ebb60013
-context-at-handoff: 477k (red)
+created: 2026-07-04T10:13:05.245960+00:00
+source-session: 75783099-0709-4dbd-88d4-9d7fb151307f
+context-at-handoff: 152k (red)
 ---
 
-# Handoff: Apple-glassmorphic redesign — Phase 1 done, Phase 2 (Thai) next
+# Handoff: Apple-glassmorphic redesign — Phases 0–3 done, Phase 4 (Polish + cutover) next
 
 ## Goal
-Redesign the whole language app around an Apple "Liquid Glass" aesthetic, token-first, on branch `glass-redesign` (off `main`). Design is 100% locked (do NOT re-open decisions). Phase 0 (foundation) and Phase 1 (Mandarin study flow) are complete & verified. Next milestone: **Phase 2 — Read-Thai**.
+Redesign the whole language app around an Apple "Liquid Glass" aesthetic, token-first, on branch
+`glass-redesign` (off `main`). Design is 100% locked — do NOT re-open decisions. Phases 0/1/2/3 are
+complete, reviewed PASS, verified green, and COMMITTED. Final milestone: **Phase 4 — Polish + Vercel
+preview → whole-app cutover merge to `main`.** This is the owner-involved phase (live browser audits +
+a preview deploy he signs off on before the cutover), unlike 0–3.
 
-## Completed (this session)
-- **Design: fully locked & validated** (3 HTML bake-offs + 2 working north-stars, Mandarin & Thai, light+dark). All decisions in the spec + memory below.
-- **Phase 0 (committed `446cf39`):** `app/globals.css` token system (`[data-theme]` dark migration + no-JS fallback; radius/glass/spring/display tokens; Mandarin tone hues; restyled Thai class+tone palettes; `[data-lang]` accents); no-flash theme script + `ThemeToggle`; `motion` v12; `AmbientMesh`; glass primitives in `components/ui/`; `LangSync`; LXGW WenKai Kai hanzi subset (`app/fonts/lxgw-wenkai-subset.woff2`, `scripts/subset-hanzi-font.ts`). Verified green.
-- **Phase 1 (COMPLETE, code-reviewed PASS-WITH-NITS, all findings fixed, UNCOMMITTED):**
-  - `lib/mandarin/pinyin-tone.ts` + `tone-sandhi.ts` (+ `.test.ts`, 24 tests) — SPOKEN-tone sandhi derived from citation pinyin at render time, NO DB change.
-  - New `components/top-bar.tsx` (floating glass, recedes in-session), `components/pinyin-syllables.tsx`.
-  - Reskinned (Mandarin only): `card-front.tsx`, `card-back.tsx` (tone-coloured pinyin + tone-colour toggle), `word-chip.tsx` (per-word gloss-reveal + audio PRESERVED, context-sliced tone colour), `rating-buttons.tsx` (solid vivid + glass press), `review-session.tsx` (real 3D `motion` flip + reduced-motion instant-swap + `inert` hidden face), `mode-toggle.tsx` → glass segmented control (with pending affordance), `session-header.tsx`, `empty-state.tsx`, `audio-button.tsx`, `sign-out-button.tsx`, `app/page.tsx` (Mandarin branch only — Thai branch untouched).
-  - `globals.css`: rating-ramp tokens + AA-retuned tone hues (all ≥4.5:1 both themes).
-  - VERIFIED first-hand: `npm test` 24/24, `npm run build` exit 0, `npm run lint` exit 0. No DB/Thai/stats touches.
+## Completed (committed on `glass-redesign`)
+- **446cf39 Phase 0** — token foundation (`app/globals.css` themes/radius/glass/spring/display tokens,
+  Mandarin+Thai palettes, `[data-lang]` accents; no-flash theme script + `ThemeToggle`; `motion` v12;
+  `AmbientMesh`; glass primitives in `components/ui/`; `LangSync`; LXGW WenKai Kai subset).
+- **1cdf332 Phase 1** — Mandarin study flow (tone-sandhi engine + 24 tests, floating `TopBar`,
+  reskinned card/flip/rating/word-chip). Mechanics preserved.
+- **28dd313 Phase 2** — Read-Thai glass-native retoken (Thai class+tone palettes, TopBar, glass unit map,
+  flat-retokened drills, lessons; `@source not "../.claude"` in globals.css). Reviewed PASS.
+- **45b5b40 Phase 3** — Stats + celebrations (THIS session). Hero count-up + glass metric cards on both
+  stats pages; restyled Recharts (area fills, per-language accent series, glass tooltips, reduced-motion
+  gating); two intensity ramps → glass-native heat scale (`components/thai/stats/heat-scale.ts` +
+  `--heat-0..4`/`--heat-N-ink` tokens); milestone `Celebration` (confetti+spring) wired into Thai
+  unit-unlock + Mandarin deck-cleared (sessionStorage one-shot gate). New primitives:
+  `components/ui/{count-up,stat-card,celebration}.tsx`, `components/stats/glass-tooltip.ts`. Phase 3 AA
+  block in globals.css. Reviewed **PASS after 2 blockers fixed** (heat-ramp CSS cascade collision failing
+  AA on worst cells; celebration spring-pop mis-gated on idle empty-state) — see phase3.review.md.
 
-## Remaining tasks
-1. **Commit Phase 1** (13 modified + new `lib/mandarin/`, `components/top-bar.tsx`, `components/pinyin-syllables.tsx`) — owner commits when he chooses.
-2. **Phase 2 — Read-Thai:** reskin `components/thai/thai-home.tsx`, `unit-row.tsx`, `progress-ring.tsx` (glass unit map + saffron rings); `components/thai/drill/*` = **flat, retokened**; `components/thai/lessons/*` + `lib/thai/tone.ts` `TONE_STROKE` + `class-badge.tsx` + tone-confusion-matrix → **restyled glass-native class + 5-tone palettes** (values in the spec). Wire the Thai branch of `top-bar.tsx`/`app/page.tsx`.
-3. Phase 3 (stats hero count-up + glass cards + rich milestone celebrations). Phase 4 (a11y audit, cross-device, Vercel preview cutover).
+## Verified state (as of handoff)
+- `git branch --show-current` → `glass-redesign`; HEAD **45b5b40**; Phase 3 fully committed.
+- Working tree has ONLY: uncommitted agent-memory (`.claude/agent-memory/code-reviewer/*`) + THIS
+  handoff file. No source is uncommitted. `lib/**`/`seed/**` untouched across all 4 phases.
+- `npm test` → 24/24. `npm run build` → exit 0 (only the pre-existing two-lockfile Turbopack
+  workspace-root warning — harmless, present every phase). `npm run lint` → exit 0.
+
+## Remaining tasks — Phase 4 (Polish + cutover)
+Per the spec's "Build order → Phase 4", "Accessibility", "Verification (end-to-end)":
+1. **Vercel preview FIRST** (owner wants a live URL before the cutover). Vercel CLI is NOT installed
+   (`npm i -g vercel`). Determine how this project deploys: check if the repo is Git-linked to a Vercel
+   project (pushing `glass-redesign` would auto-build a preview) vs. needing the CLI. Ask the owner /
+   confirm before deploying. ⚠ Pure frontend, no env/DB change — the preview hits the SAME prod DB
+   ([[vercel-prod-db-is-dev-db]]); it's read-mostly but be aware.
+2. **Full AA audit** (the reviewer explicitly deferred the LIVE contrast pass to QA/Phase 4; static-code
+   review + computed ratios are done and documented in globals.css Phase 0–3 blocks). Use chrome-devtools
+   MCP: script contrast checks on rating ramp, 5 Mandarin tone hues, 5 Thai tone hues, 3 Thai class
+   chips, and the new `--heat-*` ramp — in BOTH themes. Target AA (4.5:1 small text / 3:1 graphical).
+3. **Reduced-motion sweep** — emulate `prefers-reduced-motion: reduce`; confirm fallbacks on: card flip,
+   ambient mesh, celebrations (confetti+spring both suppressed), count-ups (instant final value), chart
+   entry animations (`isAnimationActive` off). Known LOW residual: `motion`'s `useReducedMotion()`
+   returns null on SSR/first render — a numeric CountUp hero could briefly SSR "0" for a reduced-motion
+   user (inherited lib behavior since Phase 1, flagged in phase3.review.md — decide if worth fixing now).
+4. **Cross-device + hanzi/Thai-glyph legibility** — mobile viewport; hanzi (LXGW WenKai) at small sizes;
+   Thai glyphs sized ~1.6× (a Thai consonant fills only ~50% of its font-size). Screenshot every screen
+   in light+dark+both languages.
+5. **Bundle check** — confirm `motion` + LXGW WenKai subset impact is acceptable; hanzi subset stays small.
+6. **Whole-app cohesive review on the preview**, then the **single cutover merge `glass-redesign` → `main`**
+   (owner confirms the merge — never merge/push to main without explicit go).
 
 ## Next steps (start here)
-1. `cd "C:/Users/User/Software Projects/Language-Learning-App"` — confirm branch `glass-redesign`, `git status` (Phase 1 changes present, uncommitted).
-2. Ask owner whether to commit Phase 1 now (he wanted to eyeball a Vercel preview first). If yes: `git add -A && git commit` (Phase 1 message; end with the required Co-Authored-By/Claude-Session trailers).
-3. Begin Phase 2: read the spec's "Per-surface specs" (Read-Thai) + the Thai north-star mock as the visual target, then delegate to `implementer` (clean context), scoped Thai-only, preserving all drill mechanics. Code-review after.
+1. `cd "C:/Users/User/Software Projects/Language-Learning-App"`; confirm branch `glass-redesign`,
+   HEAD `45b5b40`. Read the spec's "Verification (end-to-end)" + "Accessibility" sections.
+2. **Resolve the deploy path with the owner** (task 1) before anything else — it gates the live audits.
+   Then stand up the Vercel preview.
+3. Run the live audits (AA / reduced-motion / cross-device) against the preview using chrome-devtools MCP
+   (or the qa-engineer agent). File findings; fix any AA/reduced-motion misses via the implementer
+   (clean context) → code-reviewer, same chain as 0–3. Write `.claude/plans/glass-redesign-phase4.*` docs.
+4. On owner sign-off: merge to `main`. Owner decides commit/merge timing.
 
 ## Key decisions + rationale
-- All locked design decisions live in the spec + memory (below). Highlights: Liquid-Glass floating chrome over SOLID legible content; per-language quiet mesh; both light/dark + manual toggle; vivid per-language accents; Mandarin = Kai hanzi + tone-coloured pinyin (SANDHI-applied, citation mark kept + recoloured + dotted cue) + 3D flip; Thai = restyled glass-native colours + FLAT drills; stats hero + rich milestone-only celebrations; branch→preview→whole cutover.
-- **★ Hard principle:** Mandarin and Thai are DIFFERENT systems — shared design language, each keeps a surface fitting its own pedagogy; reskin must PRESERVE existing mechanics (per-word gloss reveal + per-word audio + global pinyin toggle).
+- All locked design lives in the spec (see Read before starting). **Mandarin ≠ Thai** — shared design
+  language, each keeps a surface fitting its own pedagogy; reskins PRESERVE mechanics, never remove
+  interactions ([[mandarin-thai-distinct-card-design]]).
+- **Pure frontend across all phases** — no schema/data change. Keep Phase 4 that way (the preview will
+  hit prod DB read-mostly; don't run migrations/seeds).
+- Handoff chain is the local `.claude/plans/` (project-local), NOT `~/.claude/plans/`.
+- Two reviewer-memory notes from Phase 3 are uncommitted in the tree (Tailwind same-property class
+  cascade collisions; partial gating in multi-effect celebration components) — leave for the owner.
 
 ## Dead ends — do not retry
-- **The Thai north-star mock's squished ก is a MOCK-ONLY system-font-fallback artifact, NOT a design/build issue.** The real app bundles Noto Sans Thai (web font). Do NOT debug glyph rendering in mocks again — it consumed huge context this session for zero product value.
-- Tone-sandhi 一-before-neutral-tone (e.g. 一个) intentionally uses the textbook-simplified rule (documented in `tone-sandhi.ts`); leave as-is unless owner asks.
-
-## Verification evidence
-- `npm test` → exit 0, `24 passed, 0 failed` (incl. fallback regression tests).
-- `npm run build` → exit 0 (compiles clean, expected routes).
-- `npm run lint` → exit 0 (no output).
-- `git rev-parse --short HEAD` → `446cf39`; `git branch --show-current` → `glass-redesign`; Phase 1 changes uncommitted.
+- Do NOT gitignore `.claude/plans/` to silence the old Tailwind scan warning — fixed properly via
+  `@source not "../.claude"` (Phase 2); handoff docs are intentionally committed.
+- Do NOT debug Thai glyph rendering in HTML mocks — the mock's squished ก is a mock-only system-font
+  fallback artifact; the real app bundles Noto Sans Thai.
+- The two-lockfile Turbopack workspace-root build warning is pre-existing + harmless — not a Phase 4 task.
+- `text-foreground` + `text-[var(--heat-N-ink)]` on the SAME element = cascade collision that silently
+  defeated AA (Phase 3 CRITICAL). When two same-property Tailwind utilities co-exist, the later one in
+  the compiled bundle wins regardless of className order — never rely on className order.
 
 ## Read before starting
-1. `C:\Users\User\.claude\plans\act-like-a-designer-toasty-yao.md` — authoritative design spec (every decision, per-surface specs, build order, critical files, verification, Thai palette hexes).
-2. `C:\Users\User\Software Projects\Language-Learning-App\.claude\plans\glass-redesign-phase1.impl.md` — Phase 1 implementation detail.
-3. `C:\Users\User\Software Projects\Language-Learning-App\.claude\plans\glass-redesign-phase1.review.md` — Phase 1 review (findings + fixes).
-4. Project memory: `C:\Users\User\.claude\projects\C--Users-User-Software-Projects-Language-Learning-App\memory\glass-redesign-design-complete.md` (+ `mandarin-thai-distinct-card-design.md`, `vercel-prod-db-is-dev-db.md`).
+1. `C:\Users\User\.claude\plans\act-like-a-designer-toasty-yao.md` — authoritative design spec
+   (Verification end-to-end, Accessibility, Rollout rows).
+2. `C:\Users\User\Software Projects\Language-Learning-App\.claude\plans\glass-redesign-phase3.review.md`
+   — the deferred-to-QA items + LOW residual risks (reduced-motion SSR, streak 84-day cap) to verify live.
+3. `...\.claude\plans\glass-redesign-phase3.impl.md` — full Phase 3 detail incl. Post-review fixes.
+4. Project memory: `glass-redesign-design-complete.md`, `mandarin-thai-distinct-card-design.md`,
+   `vercel-prod-db-is-dev-db.md`.

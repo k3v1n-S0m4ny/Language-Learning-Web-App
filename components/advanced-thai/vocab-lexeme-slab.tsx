@@ -26,30 +26,51 @@ import {
 //
 // The seed script asserts that a word's morphemes actually SPELL the word, so
 // this strip can never show a decomposition of something else.
+//
+// `direction` is the ladder's doing. The card climbs from recognising the word to
+// PRODUCING it, and a produce step is the same card asked backwards — so only the
+// FRONT flips: it shows the English and asks for the Thai. The back is untouched
+// in both directions, because it was already the full answer (Thai, audio, gloss,
+// part of speech, morphology) rather than merely "the other side".
 export function VocabLexemeSlab({
   entry,
   audioUrl,
   revealed,
   onReveal,
+  direction = "recognise",
 }: {
   entry: VocabEntry;
   audioUrl: string | null;
   revealed: boolean;
   onReveal: () => void;
+  direction?: "recognise" | "produce";
 }) {
   const thai = useThaiFont();
+  const producing = direction === "produce";
 
   const front = (
     <CardShell className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-6 text-center">
       <span className="absolute left-5 top-5">
-        <Eyebrow>Word</Eyebrow>
+        <Eyebrow>{producing ? "Say it in Thai" : "Word"}</Eyebrow>
       </span>
-      <span className="absolute right-5 top-5">
-        <Chip tone={REGISTER_CLASS[entry.register]}>{entry.register}</Chip>
-      </span>
-      <p className={`${thai} text-[clamp(2rem,9vw,3.25rem)] font-medium leading-tight text-foreground`}>
-        {entry.thai}
-      </p>
+      {/* The register chip is a property of the Thai word, so on a produce step it
+          would be a free hint about an answer not yet given. */}
+      {!producing && (
+        <span className="absolute right-5 top-5">
+          <Chip tone={REGISTER_CLASS[entry.register]}>{entry.register}</Chip>
+        </span>
+      )}
+      {producing ? (
+        <p className="text-[clamp(1.25rem,5vw,1.75rem)] font-medium leading-snug text-foreground">
+          {entry.gloss}
+        </p>
+      ) : (
+        <p
+          className={`${thai} text-[clamp(2rem,9vw,3.25rem)] font-medium leading-tight text-foreground`}
+        >
+          {entry.thai}
+        </p>
+      )}
       <span className="absolute bottom-5 text-xs text-foreground-muted">Tap to reveal</span>
     </CardShell>
   );

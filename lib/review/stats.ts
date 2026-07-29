@@ -1,17 +1,18 @@
-// Stats queries for the Progress / Stats view (Milestone 6).
+// Stats queries for the Mandarin Progress view (Milestone 6).
 // All "day" bucketing uses Asia/Bangkok local midnight (A11).
-// Data is small (2 learners, ~100 cards, hundreds of logs): rows are fetched and
+// Data is small (2 learners, ~500 cards, hundreds of logs): rows are fetched and
 // aggregated in JS rather than writing tz-sensitive SQL window functions.
 
 import { gte, sql } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { cards, reviewLogs, reviewStates, users } from "@/lib/db/schema";
+import { INTERVAL_RUNG_DAYS, isMature } from "@/lib/ladder/intervals";
+import { LADDERS, isLeech, type StepFormat } from "@/lib/ladder/ladder";
 import {
   startOfThailandDay,
   thaiDateKey,
   thaiShortLabel,
 } from "@/lib/review/time";
-import { isLeech } from "@/lib/review/config";
 
 // --- Public types -----------------------------------------------------------
 
@@ -21,11 +22,19 @@ export interface DayCount {
   count: number;
 }
 
-export interface RatingCounts {
-  again: number; // FSRS rating 1
-  hard: number; // FSRS rating 2
-  good: number; // FSRS rating 3
-  easy: number; // FSRS rating 4
+/** Cards currently sitting at one rung of the ladder. */
+export interface StepCount {
+  step: number;
+  /** The question that step asks — what the chart labels the bar with. */
+  format: StepFormat;
+  count: number;
+}
+
+/** Cards whose schedule currently sits at one interval rung. */
+export interface IntervalBucket {
+  /** e.g. "1d", "27d" */
+  label: string;
+  count: number;
 }
 
 export interface LearnerStats {
@@ -36,7 +45,7 @@ export interface LearnerStats {
   seen: number;
   /** Total cards in the shared library */
   total: number;
-  /** Cards where FSRS scheduled_days >= 21 (A4 definition of "mature") */
+  /** Cards scheduled 27 days or further out (interval rung >= 3) */
   mature: number;
   /** Reviews per Thai day, last 30 days, chronological (A5) */
   reviewsByDay: DayCount[];
@@ -44,9 +53,11 @@ export interface LearnerStats {
   streak: number;
   /** Cards due on each of the next 7 Thai days (A7) */
   dueForecast: DayCount[];
-  /** Per-rating breakdown across all review_logs (A8) */
-  ratingCounts: RatingCounts;
-  /** Cards where fsrs_card.lapses >= LEECH_THRESHOLD — need manual attention */
+  /** How the Learner's started cards are spread across the ladder's steps */
+  stepCounts: StepCount[];
+  /** How far out the graduated cards are scheduled — the interval histogram */
+  intervalBuckets: IntervalBucket[];
+  /** Cards with enough demotions to need manual attention (see isLeech) */
   leechCount: number;
 }
 
@@ -86,33 +97,6 @@ function buildDayCounts(
   }));
 }
 
-// Extract scheduled_days from the FSRS jsonb blob stored in review_states.
-// ts-fsrs writes it as `scheduled_days` (snake_case).
-function scheduledDays(fsrsCard: unknown): number {
-  if (
-    fsrsCard !== null &&
-    typeof fsrsCard === "object" &&
-    "scheduled_days" in fsrsCard
-  ) {
-    const v = (fsrsCard as Record<string, unknown>).scheduled_days;
-    return typeof v === "number" ? v : 0;
-  }
-  return 0;
-}
-
-// Extract lapses from the FSRS jsonb blob.
-function extractLapses(fsrsCard: unknown): number {
-  if (
-    fsrsCard !== null &&
-    typeof fsrsCard === "object" &&
-    "lapses" in fsrsCard
-  ) {
-    const v = (fsrsCard as Record<string, unknown>).lapses;
-    return typeof v === "number" ? v : 0;
-  }
-  return 0;
-}
-
 // --- Main export ------------------------------------------------------------
 
 export async function getLearnersStats(now: Date): Promise<LearnerStats[]> {
@@ -123,63 +107,78 @@ export async function getLearnersStats(now: Date): Promise<LearnerStats[]> {
   const logWindowStart = new Date(todayStart.getTime() - 31 * 24 * 60 * 60 * 1000);
 
   // Wave 1 — all data in parallel (no per-learner branching yet).
-  const [allUsers, totalRow, allStates, recentLogs, allLogs] =
-    await Promise.all([
-      // All learners. Allowlist is 2 people; fetching all is safe.
-      db
-        .select({ id: users.id, name: users.name, email: users.email })
-        .from(users),
+  const [allUsers, totalRow, allStates, recentLogs, allLogs] = await Promise.all([
+    // All learners. Allowlist is 2 people; fetching all is safe.
+    db.select({ id: users.id, name: users.name, email: users.email }).from(users),
 
-      // Total cards in the shared library (A4 denominator).
-      db.select({ n: sql<number>`cast(count(*) as int)` }).from(cards),
+    // Total cards in the shared library (A4 denominator).
+    db.select({ n: sql<number>`cast(count(*) as int)` }).from(cards),
 
-      // Every review_states row (needed for seen, mature, dueForecast).
-      // Small table — safe to pull all rows.
-      db
-        .select({
-          learnerId: reviewStates.learnerId,
-          due: reviewStates.due,
-          fsrsCard: reviewStates.fsrsCard,
-        })
-        .from(reviewStates),
+    // Every review_states row (needed for seen, mature, forecast, ladder spread).
+    // Small table — safe to pull all rows.
+    db
+      .select({
+        learnerId: reviewStates.learnerId,
+        due: reviewStates.due,
+        step: reviewStates.step,
+        intervalRung: reviewStates.intervalRung,
+        demotions: reviewStates.demotions,
+      })
+      .from(reviewStates),
 
-      // Recent logs for the 30-day reviews-per-day chart (A5).
-      db
-        .select({
-          learnerId: reviewLogs.learnerId,
-          reviewedAt: reviewLogs.reviewedAt,
-        })
-        .from(reviewLogs)
-        .where(gte(reviewLogs.reviewedAt, logWindowStart)),
+    // Recent logs for the 30-day reviews-per-day chart (A5).
+    db
+      .select({
+        learnerId: reviewLogs.learnerId,
+        reviewedAt: reviewLogs.reviewedAt,
+      })
+      .from(reviewLogs)
+      .where(gte(reviewLogs.reviewedAt, logWindowStart)),
 
-      // All-time logs for the per-rating breakdown (A8) and streak (A6).
-      // No date filter — ensures streak is never silently capped.
-      db
-        .select({
-          learnerId: reviewLogs.learnerId,
-          rating: reviewLogs.rating,
-          reviewedAt: reviewLogs.reviewedAt,
-        })
-        .from(reviewLogs),
-    ]);
+    // All-time logs for the streak (A6). No date filter — ensures the streak is
+    // never silently capped.
+    db
+      .select({
+        learnerId: reviewLogs.learnerId,
+        reviewedAt: reviewLogs.reviewedAt,
+      })
+      .from(reviewLogs),
+  ]);
 
   const total = totalRow[0]?.n ?? 0;
+  const mandarinSteps = LADDERS.mandarin;
 
   // Aggregate per-learner stats in JS — avoids tz-sensitive SQL aggregations.
   return allUsers.map((u): LearnerStats => {
     const displayName = u.name ?? u.email ?? u.id;
 
-    // --- Seen + mature (A4) + leeches ---
+    // --- Seen + mature + leeches ---
     const myStates = allStates.filter((s) => s.learnerId === u.id);
     const seen = myStates.length;
-    const mature = myStates.filter((s) => scheduledDays(s.fsrsCard) >= 21).length;
-    const leechCount = myStates.filter((s) =>
-      isLeech({ lapses: extractLapses(s.fsrsCard) }),
-    ).length;
+    const mature = myStates.filter((s) => isMature(s.intervalRung)).length;
+    const leechCount = myStates.filter((s) => isLeech(s.demotions)).length;
 
-    // All-time logs for this learner — used by both streak (A6) and rating
-    // breakdown (A8).  Defined early so both sections can reference it.
-    const myAllLogs = allLogs.filter((l) => l.learnerId === u.id);
+    // --- Ladder spread ---
+    // Where the started cards actually sit. This is the FSRS rating breakdown's
+    // replacement, and it answers a better question: the old chart counted button
+    // presses over all time, which only ever grew, while this is a live snapshot
+    // of how far the deck has climbed. Every step is listed even at zero, so the
+    // shape of the ladder stays visible from the first session.
+    const stepCounts: StepCount[] = mandarinSteps.map((format, i) => ({
+      step: i + 1,
+      format,
+      count: myStates.filter((s) => s.step === i + 1).length,
+    }));
+
+    // --- Interval histogram ---
+    // Rung 0 means "has never passed at the top step", so those cards have no
+    // interval to report and are deliberately excluded — including them would put
+    // every card the Learner has merely started into the "1d" bucket and drown
+    // the graduated ones.
+    const intervalBuckets: IntervalBucket[] = INTERVAL_RUNG_DAYS.map((days, rung) => ({
+      label: `${days}d`,
+      count: rung === 0 ? 0 : myStates.filter((s) => s.intervalRung === rung).length,
+    })).slice(1);
 
     // --- Reviews per Thai day, last 30 days (A5) ---
     const past30Keys = buildDayKeys(past30Start, 30);
@@ -201,13 +200,11 @@ export async function getLearnersStats(now: Date): Promise<LearnerStats[]> {
     // the streak and we continue.  If today has no reviews yet (i=0, zero count),
     // we skip rather than break — so "not yet reviewed today" doesn't reset the
     // streak.  The break only fires on a zero-review day that is NOT i=0, meaning
-    // a genuine gap in the past.  Result: today=0, yesterday=reviews → streak
-    // counts from yesterday; today=reviews, yesterday=reviews → streak includes
-    // today.  This matches standard SRS "don't punish for not reviewing yet today"
-    // behavior.
+    // a genuine gap in the past.
     //
     // Safety cap of 365 iterations: allLogs has no date filter so the backing
     // data supports any streak length; 365 is a practical upper bound (> 1 year).
+    const myAllLogs = allLogs.filter((l) => l.learnerId === u.id);
     const myAllLogsReviewsByKey = new Map<string, number>();
     for (const log of myAllLogs) {
       const key = thaiDateKey(log.reviewedAt);
@@ -228,28 +225,20 @@ export async function getLearnersStats(now: Date): Promise<LearnerStats[]> {
 
     // --- Due forecast, next 7 Thai days (A7) ---
     // Cards overdue (due before today's Thailand midnight) are bucketed into
-    // today so they are not silently dropped from the forecast.
+    // today so they are not silently dropped from the forecast. Note that under
+    // the ladder every card still climbing carries `due = now`, so today's bar
+    // includes the whole of an unfinished round — which is the honest reading of
+    // "what do I owe today".
     const forecastKeys = buildDayKeys(todayStart, 7);
     const todayKey = forecastKeys[0];
     const forecastCounts = new Map<string, number>();
     for (const state of myStates) {
-      // Treat any overdue card as due today.
-      const dueKey =
-        state.due < todayStart ? todayKey : thaiDateKey(state.due);
+      const dueKey = state.due < todayStart ? todayKey : thaiDateKey(state.due);
       if (forecastKeys.includes(dueKey)) {
         forecastCounts.set(dueKey, (forecastCounts.get(dueKey) ?? 0) + 1);
       }
     }
     const dueForecast = buildDayCounts(forecastKeys, forecastCounts);
-
-    // --- Per-rating breakdown, all time (A8) ---
-    const ratingCounts: RatingCounts = { again: 0, hard: 0, good: 0, easy: 0 };
-    for (const log of myAllLogs) {
-      if (log.rating === 1) ratingCounts.again++;
-      else if (log.rating === 2) ratingCounts.hard++;
-      else if (log.rating === 3) ratingCounts.good++;
-      else if (log.rating === 4) ratingCounts.easy++;
-    }
 
     return {
       learnerId: u.id,
@@ -260,7 +249,8 @@ export async function getLearnersStats(now: Date): Promise<LearnerStats[]> {
       reviewsByDay,
       streak,
       dueForecast,
-      ratingCounts,
+      stepCounts,
+      intervalBuckets,
       leechCount,
     };
   });
