@@ -63,6 +63,33 @@ export function AdvancedReviewSession({
     return () => setSessionActive(false);
   }, []);
 
+  // RESET ON ARRIVAL, NOT ON REMOUNT.
+  //
+  // Every round ends with a single unfinished card, and that card still needs
+  // several exposures — so the batch legitimately hands the SAME card.id straight
+  // back (lib/ladder/round.ts pickNext has nothing else to return). The call site
+  // keys on card.id, so React reuses this component instead of rebuilding it, and
+  // every piece of per-serve state survives: `answered` stays true, the verdict
+  // stays set, and the card arrives locked under a stale highlight with its
+  // options disabled. Only a page reload cleared it.
+  //
+  // So the reset hangs off the arrival of card DATA rather than off a remount:
+  // each refresh delivers a new card object even when the id is unchanged. This is
+  // React's documented "adjust state when props change" pattern — the setStates
+  // run during render and re-render immediately, without ever committing the stale
+  // UI. Feedback timing is untouched, because arrival is exactly when the previous
+  // card's highlight was going away anyway.
+  //
+  // Practice mode needs it just as much: it never writes, so a drilled card is
+  // ALWAYS still eligible and a one-card pool re-serves the same id every time.
+  const [served, setServed] = useState(card);
+  if (served !== card) {
+    setServed(card);
+    setVerdict(null);
+    setAnswered(false);
+    setRevealed(false);
+  }
+
   const producing = card.format.startsWith("produce");
 
   function reveal() {
@@ -83,9 +110,9 @@ export function AdvancedReviewSession({
   function selfGrade(passed: boolean) {
     if (answered) return;
     setAnswered(true);
-    // Belt-and-braces. Reveal state survives a re-render that keeps the same
-    // card.id, so a round that hands the same card back — legitimate when it is
-    // the only one left unfinished — would otherwise show it face-up.
+    // Turn the face back over the moment it is graded, so the answer is not still
+    // sitting there through the submit. The same-card re-serve this used to be the
+    // partial guard for is now handled properly by the arrival check above.
     setRevealed(false);
     // In practice there is nothing to submit: the Learner has already seen the
     // answer, and the verdict is theirs alone. Just draw the next card.

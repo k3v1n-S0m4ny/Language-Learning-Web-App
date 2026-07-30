@@ -74,6 +74,11 @@ export function ReviewSession({ card }: { card: StudyCard }) {
   const toneColorOn = useToneColorOn();
   const autoplay = useMcAutoplay();
   const reduceMotion = useReducedMotion();
+  // Which SERVE the pronunciation has already been played for. Holding the card
+  // object rather than a boolean means it needs no resetting: a new arrival is a
+  // new object, so it simply stops matching. Written only inside the effect —
+  // refs must not be touched during render.
+  const autoplayedFor = useRef<StudyCard | null>(null);
 
   // Recede the bottom nav while a review session is on screen (Phase 4) — the
   // store resets on unmount (round complete, or navigating away).
@@ -81,6 +86,30 @@ export function ReviewSession({ card }: { card: StudyCard }) {
     setSessionActive(true);
     return () => setSessionActive(false);
   }, []);
+
+  // RESET ON ARRIVAL, NOT ON REMOUNT.
+  //
+  // Every round ends with a single unfinished Card, and that Card still needs
+  // several exposures — so the batch legitimately hands the SAME card.id straight
+  // back (lib/ladder/round.ts pickNext has nothing else to return). The call site
+  // keys on card.id, so React reuses this component instead of rebuilding it, and
+  // every piece of per-serve state survives: `answered` stays true, the verdict
+  // stays set, and the Card arrives locked under a stale highlight with its
+  // options disabled. Only a page reload cleared it.
+  //
+  // So the reset hangs off the arrival of card DATA rather than off a remount:
+  // each refresh delivers a new card object even when the id is unchanged. This is
+  // React's documented "adjust state when props change" pattern — the setStates
+  // run during render and re-render immediately, without ever committing the stale
+  // UI. Feedback timing is untouched, because arrival is exactly when the previous
+  // Card's highlight was going away anyway.
+  const [served, setServed] = useState(card);
+  if (served !== card) {
+    setServed(card);
+    setVerdict(null);
+    setAnswered(false);
+    setRevealed(false);
+  }
 
   const producing = card.format.startsWith("produce");
 
@@ -94,19 +123,23 @@ export function ReviewSession({ card }: { card: StudyCard }) {
   // but the format is handled here, so the guard is on the format and not on the
   // course.
   //
-  // The ref makes this once-per-Card rather than once-per-effect-run, so turning
-  // the preference ON mid-question plays the current Card (useful, and it follows
-  // a real gesture so the browser will allow it) while toggling off and back on
-  // does not stack up a second play. Autoplay before ANY user activation may be
-  // refused by the browser — the replay button beside the prompt is the fallback,
-  // and playAudio already swallows the rejection.
-  const autoplayed = useRef(false);
+  // Once per SERVE rather than once per effect run, so turning the preference ON
+  // mid-question plays the current Card (useful, and it follows a real gesture so
+  // the browser will allow it) while toggling off and back on does not stack up a
+  // second play. Autoplay before ANY user activation may be refused by the
+  // browser — the replay button beside the prompt is the fallback, and playAudio
+  // already swallows the rejection.
+  //
+  // Depends on `served` — the arriving card OBJECT — not on card.id or the fields
+  // read below. A re-served Card has an identical id and identical audio url, so
+  // depending on those would skip the replay on exactly the tail-of-round repeat
+  // this is meant to handle.
   useEffect(() => {
-    if (autoplayed.current) return;
-    if (card.format !== "recognise-mc" || !autoplay) return;
-    autoplayed.current = true;
-    playAudio(card.wholeAudioUrl);
-  }, [card.format, card.wholeAudioUrl, autoplay]);
+    if (autoplayedFor.current === served) return;
+    if (served.format !== "recognise-mc" || !autoplay) return;
+    autoplayedFor.current = served;
+    playAudio(served.wholeAudioUrl);
+  }, [served, autoplay]);
 
   function reveal() {
     if (revealed) return;
@@ -127,9 +160,9 @@ export function ReviewSession({ card }: { card: StudyCard }) {
   function selfGrade(passed: boolean) {
     if (answered) return;
     setAnswered(true);
-    // Belt-and-braces. Reveal state survives a re-render that keeps the same
-    // card.id, so a round that hands the same Card back — legitimate when it is
-    // the only one left unfinished — would otherwise show it face-up.
+    // Turn the face back over the moment it is graded, so the answer is not still
+    // sitting there through the submit. The same-Card re-serve this used to be the
+    // partial guard for is now handled properly by the arrival check above.
     setRevealed(false);
     startTransition(async () => {
       await submitSelfGrade(card.id, card.step, passed);
