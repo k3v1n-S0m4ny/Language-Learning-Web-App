@@ -6,6 +6,7 @@ import {
   computeSandhiByWord,
   computeSandhiFromSyllables,
   sliceSandhiByWord,
+  spokenSyllablesForPhrase,
 } from "./tone-sandhi";
 
 test("你好 — adjacent 3rd-tone pair: 你 sandhis to 2nd, 好 stays 3rd", () => {
@@ -193,4 +194,35 @@ test("computeSandhiFromSyllables does NOT apply 一/不 sandhi (no word-boundary
     { pinyin: "yī", tone: 1, sandhi: false },
     { pinyin: "diǎn", tone: 3, sandhi: false },
   ]);
+});
+
+test("spokenSyllablesForPhrase uses real word data when present — 一 sandhi survives", () => {
+  // The word-segmented branch keeps the 一/不 rules, which the fallback drops.
+  // This is the whole reason the two branches are not interchangeable.
+  const result = spokenSyllablesForPhrase(
+    [
+      { hanzi: "一", pinyin: "yī" },
+      { hanzi: "点", pinyin: "diǎn" },
+    ],
+    "yī diǎn",
+  );
+  assert.deepEqual(result, computeSandhi([
+    { hanzi: "一", pinyin: "yī" },
+    { hanzi: "点", pinyin: "diǎn" },
+  ]));
+  assert.equal(result[0].sandhi, true);
+});
+
+test("spokenSyllablesForPhrase falls back to wholePinyin when word data is empty", () => {
+  const result = spokenSyllablesForPhrase([], "wǒ xǐhuan hē chá");
+  assert.deepEqual(result, computeSandhiFromSyllables(tokenizePhrasePinyin("wǒ xǐhuan hē chá")));
+  // Tokenized on word boundaries, not re-split as one word.
+  assert.deepEqual(
+    result.map((s) => s.pinyin),
+    ["wǒ", "xǐ", "huan", "hē", "chá"],
+  );
+});
+
+test("spokenSyllablesForPhrase on empty word data AND empty pinyin yields nothing, not a crash", () => {
+  assert.deepEqual(spokenSyllablesForPhrase([], ""), []);
 });

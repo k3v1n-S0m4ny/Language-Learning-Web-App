@@ -1,16 +1,27 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { motion, useReducedMotion } from "motion/react";
 import { McQuestion, type McVerdict } from "@/components/ladder/mc-question";
 import { PassFailRow, RevealButton } from "@/components/ladder/flashcard";
 import { submitChoice, submitSelfGrade } from "@/lib/review/actions";
+import { spokenSyllablesForPhrase } from "@/lib/mandarin/tone-sandhi";
 import { setSessionActive } from "@/lib/ux/session-focus";
+import {
+  setMcAutoplay,
+  setPinyinShown,
+  setToneColorOn,
+  useMcAutoplay,
+  usePinyinShown,
+  useToneColorOn,
+} from "@/lib/ux/prefs";
 import type { StudyCard } from "@/lib/review/types";
-import { playAudio } from "./audio-button";
+import { AudioButton, playAudio } from "./audio-button";
 import { CardBack } from "./card-back";
 import { CardFront } from "./card-front";
+import { PinyinSyllables } from "./pinyin-syllables";
+import { TogglePill } from "./toggle-pill";
 
 // Owns the per-Card interaction state for Mandarin — the counterpart of
 // components/advanced-thai/advanced-review-session.tsx.
@@ -55,8 +66,13 @@ export function ReviewSession({ card }: { card: StudyCard }) {
   // Set the moment an answer is committed, so the Card cannot be answered twice
   // while the feedback timer and the refresh are both in flight.
   const [answered, setAnswered] = useState(false);
-  const [pinyinShown, setPinyinShown] = useState(false);
-  const [toneColorOn, setToneColorOn] = useState(true);
+  // Display preferences are device-local and REMEMBERED (lib/ux/prefs), not local
+  // state: this component is keyed by card.id at the call site, so anything held
+  // in useState here is forgotten on every single question — which is exactly
+  // what made the old back-face pinyin toggle need re-tapping card after card.
+  const pinyinShown = usePinyinShown();
+  const toneColorOn = useToneColorOn();
+  const autoplay = useMcAutoplay();
   const reduceMotion = useReducedMotion();
 
   // Recede the bottom nav while a review session is on screen (Phase 4) — the
@@ -67,6 +83,30 @@ export function ReviewSession({ card }: { card: StudyCard }) {
   }, []);
 
   const producing = card.format.startsWith("produce");
+
+  // Autoplay the pronunciation once per Card on a RECOGNITION multiple-choice
+  // question. Without it step 1 is a pure reading test — the Learner never hears
+  // the word at the one step they meet it most often.
+  //
+  // NEVER on a produce step, and this is the same rule the flip card follows by
+  // only playing on reveal: there the options ARE the Chinese, so speaking it
+  // aloud would read the answer out. Mandarin's ladder has no produce-mc today,
+  // but the format is handled here, so the guard is on the format and not on the
+  // course.
+  //
+  // The ref makes this once-per-Card rather than once-per-effect-run, so turning
+  // the preference ON mid-question plays the current Card (useful, and it follows
+  // a real gesture so the browser will allow it) while toggling off and back on
+  // does not stack up a second play. Autoplay before ANY user activation may be
+  // refused by the browser — the replay button beside the prompt is the fallback,
+  // and playAudio already swallows the rejection.
+  const autoplayed = useRef(false);
+  useEffect(() => {
+    if (autoplayed.current) return;
+    if (card.format !== "recognise-mc" || !autoplay) return;
+    autoplayed.current = true;
+    playAudio(card.wholeAudioUrl);
+  }, [card.format, card.wholeAudioUrl, autoplay]);
 
   function reveal() {
     if (revealed) return;
@@ -134,13 +174,39 @@ export function ReviewSession({ card }: { card: StudyCard }) {
         eyebrow={producing ? "Which is the Chinese?" : "What does it mean?"}
         prompt={
           producing ? (
+            // No audio and no pinyin on a produce step — both would hand over the
+            // Chinese the Learner is being asked to pick.
             <p className="text-[clamp(1.25rem,5vw,1.75rem)] font-medium leading-snug text-foreground">
               {card.wholeGloss}
             </p>
           ) : (
-            <p className="font-hanzi text-[clamp(2rem,10vw,3.5rem)] font-medium leading-tight text-foreground">
-              {card.headword}
-            </p>
+            <div className="flex flex-col items-center gap-2">
+              <p className="font-hanzi text-[clamp(2rem,10vw,3.5rem)] font-medium leading-tight text-foreground">
+                {card.headword}
+              </p>
+              {/* Only derived when actually shown — same phrase-level spoken
+                  tones as the flip card's back face, via the shared helper. */}
+              {pinyinShown && (
+                <PinyinSyllables
+                  syllables={spokenSyllablesForPhrase(card.words, card.wholePinyin)}
+                  toneColorOn={toneColorOn}
+                  className="text-base font-semibold"
+                />
+              )}
+              <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
+                <AudioButton url={card.wholeAudioUrl} label="Play the pronunciation again" />
+                <TogglePill
+                  label={pinyinShown ? "Hide pinyin" : "Show pinyin"}
+                  onToggle={() => setPinyinShown(!pinyinShown)}
+                />
+                <TogglePill
+                  label={autoplay ? "Autoplay on" : "Autoplay off"}
+                  onToggle={() => setMcAutoplay(!autoplay)}
+                  pressed={autoplay}
+                  title="Play the pronunciation automatically on each new card"
+                />
+              </div>
+            </div>
           )
         }
         options={card.options ?? []}
@@ -157,9 +223,9 @@ export function ReviewSession({ card }: { card: StudyCard }) {
     <CardBack
       card={card}
       pinyinShown={pinyinShown}
-      onTogglePinyin={() => setPinyinShown((v) => !v)}
+      onTogglePinyin={() => setPinyinShown(!pinyinShown)}
       toneColorOn={toneColorOn}
-      onToggleToneColor={() => setToneColorOn((v) => !v)}
+      onToggleToneColor={() => setToneColorOn(!toneColorOn)}
     />
   );
 
