@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { playAudio } from "@/components/audio-button";
+import { autoplayAudio, playAudio } from "@/components/audio-button";
 import { McQuestion, type McVerdict } from "@/components/ladder/mc-question";
 import { PassFailRow, RevealButton } from "@/components/ladder/flashcard";
 import {
@@ -133,8 +133,9 @@ export function AdvancedReviewSession({
           : await submitAdvancedChoice(card.id, card.step, choice);
       setVerdict({ chosen: choice, ...result });
       // The plan's one audio rule: it fires on the COMMIT, alongside the
-      // feedback, never before it.
-      playAudio(card.audioUrl);
+      // feedback, never before it. The `await` above has already spent the tap's
+      // user activation, so this needs the gesture-less player (lib/ux/audio.ts).
+      autoplayAudio(card.audioUrl);
       setTimeout(advance, FEEDBACK_MS);
     });
   }

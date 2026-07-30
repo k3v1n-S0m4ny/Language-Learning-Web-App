@@ -1,9 +1,9 @@
 "use client";
 
-// The low-level clip player now lives in lib/ux/audio.ts (the single URL-clip
+// The low-level clip players now live in lib/ux/audio.ts (the single URL-clip
 // seam). Re-exported here for back-compat with existing importers
-// (review-session, word-chip) that reach for it via this module.
-export { playAudio } from "@/lib/ux/audio";
+// (review-session, word-chip) that reach for them via this module.
+export { playAudio, autoplayAudio } from "@/lib/ux/audio";
 import { playAudio } from "@/lib/ux/audio";
 
 // Plays an Audio Clip from its Blob URL. Disabled (not hidden) when no clip

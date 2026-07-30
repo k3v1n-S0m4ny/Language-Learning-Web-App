@@ -19,11 +19,10 @@ export function AudioPlayButton({
 
   function play() {
     if (playing) return;
-    const audio = playAudio(url);
-    if (!audio) return;
+    const clip = playAudio(url);
+    if (!clip) return;
     setPlaying(true);
-    audio.addEventListener("ended", () => setPlaying(false));
-    audio.addEventListener("error", () => setPlaying(false));
+    clip.whenDone(() => setPlaying(false));
   }
 
   const sizeClass = size === "sm" ? "px-3 py-1 text-xs" : "px-4 py-2 text-sm";

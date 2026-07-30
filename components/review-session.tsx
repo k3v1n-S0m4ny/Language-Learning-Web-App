@@ -17,7 +17,7 @@ import {
   useToneColorOn,
 } from "@/lib/ux/prefs";
 import type { StudyCard } from "@/lib/review/types";
-import { AudioButton, playAudio } from "./audio-button";
+import { AudioButton, autoplayAudio, playAudio } from "./audio-button";
 import { CardBack } from "./card-back";
 import { CardFront } from "./card-front";
 import { PinyinSyllables } from "./pinyin-syllables";
@@ -124,11 +124,14 @@ export function ReviewSession({ card }: { card: StudyCard }) {
   // course.
   //
   // Once per SERVE rather than once per effect run, so turning the preference ON
-  // mid-question plays the current Card (useful, and it follows a real gesture so
-  // the browser will allow it) while toggling off and back on does not stack up a
-  // second play. Autoplay before ANY user activation may be refused by the
-  // browser — the replay button beside the prompt is the fallback, and playAudio
-  // already swallows the rejection.
+  // mid-question plays the current Card while toggling off and back on does not
+  // stack up a second play.
+  //
+  // autoplayAudio, NOT playAudio: an effect is not a user gesture, and iOS
+  // refuses a media element outside one — which is exactly why this shipped
+  // silent on an iPhone. See lib/ux/audio.ts. The 🔊 replay button beside the
+  // prompt stays the fallback for the cases even Web Audio cannot serve
+  // (page never touched yet, ringer switch off).
   //
   // Depends on `served` — the arriving card OBJECT — not on card.id or the fields
   // read below. A re-served Card has an identical id and identical audio url, so
@@ -138,7 +141,7 @@ export function ReviewSession({ card }: { card: StudyCard }) {
     if (autoplayedFor.current === served) return;
     if (served.format !== "recognise-mc" || !autoplay) return;
     autoplayedFor.current = served;
-    playAudio(served.wholeAudioUrl);
+    autoplayAudio(served.wholeAudioUrl);
   }, [served, autoplay]);
 
   function reveal() {
@@ -179,8 +182,9 @@ export function ReviewSession({ card }: { card: StudyCard }) {
       markAnswered();
       setVerdict({ chosen: choice, ...result });
       // The one audio rule: it fires on the COMMIT, alongside the feedback, never
-      // before it.
-      playAudio(card.wholeAudioUrl);
+      // before it. The `await` above has already spent the tap's user activation,
+      // so this needs the gesture-less player too.
+      autoplayAudio(card.wholeAudioUrl);
       setTimeout(advance, FEEDBACK_MS);
     });
   }
