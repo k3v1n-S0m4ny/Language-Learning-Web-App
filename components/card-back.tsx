@@ -1,11 +1,11 @@
 "use client";
 
-import { tokenizePhrasePinyin } from "@/lib/mandarin/pinyin-tone";
-import { computeSandhi, computeSandhiFromSyllables, sliceSandhiByWord } from "@/lib/mandarin/tone-sandhi";
+import { sliceSandhiByWord, spokenSyllablesForPhrase } from "@/lib/mandarin/tone-sandhi";
 import { isLeech } from "@/lib/ladder/ladder";
 import type { StudyCard } from "@/lib/review/types";
 import { AudioButton } from "./audio-button";
 import { PinyinSyllables } from "./pinyin-syllables";
+import { TogglePill } from "./toggle-pill";
 import { WordChip } from "./word-chip";
 
 // The back FACE of the flip card: whole-headword + tone-coloured pinyin
@@ -30,20 +30,12 @@ export function CardBack({
 }) {
   const leech = isLeech(card.demotions);
 
-  // card.words always carries at least one entry for non-phrase Cards too
-  // (the seed pipeline segments even a single-word headword into one word
-  // entry — confirmed against seed/mandarin/deck.generated.json). The
-  // `else` branch below only guards against unexpected empty word data: it
-  // whitespace-tokenizes card.wholePinyin directly (tokenizePhrasePinyin is
-  // word-boundary-aware, unlike naively re-splitting the whole phrase as if
-  // it were one word) and applies only the word-boundary-independent
-  // 3rd-tone rule (see computeSandhiFromSyllables) — no per-word data is
-  // available in this path, so `byWord`/word chips are simply empty.
-  const hasWordData = card.words.length > 0;
-  const phraseSyllables = hasWordData
-    ? computeSandhi(card.words)
-    : computeSandhiFromSyllables(tokenizePhrasePinyin(card.wholePinyin));
-  const byWord = hasWordData ? sliceSandhiByWord(phraseSyllables, card.words) : [];
+  // Branch rationale (and why the fallback tokenizes rather than re-splits)
+  // lives on spokenSyllablesForPhrase. No per-word data exists in the fallback
+  // path, so `byWord`/word chips are simply empty there.
+  const phraseSyllables = spokenSyllablesForPhrase(card.words, card.wholePinyin);
+  const byWord =
+    card.words.length > 0 ? sliceSandhiByWord(phraseSyllables, card.words) : [];
 
   return (
     <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 overflow-y-auto rounded-[var(--r-xl)] border border-border-base bg-surface p-4 text-center shadow-[var(--glass-shadow)] sm:gap-3 sm:p-6">
@@ -93,22 +85,16 @@ export function CardBack({
       )}
 
       <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
-        <button
-          type="button"
-          onClick={onTogglePinyin}
-          className="rounded-[var(--r-pill)] border border-border-base px-3 py-1.5 text-xs font-medium text-foreground-muted transition-colors hover:bg-[var(--glass-bg-strong)] hover:text-foreground"
-        >
-          {pinyinShown ? "Hide pinyin" : "Show pinyin"}
-        </button>
+        <TogglePill
+          label={pinyinShown ? "Hide pinyin" : "Show pinyin"}
+          onToggle={onTogglePinyin}
+        />
         {pinyinShown && (
-          <button
-            type="button"
-            onClick={onToggleToneColor}
-            aria-pressed={toneColorOn}
-            className="rounded-[var(--r-pill)] border border-border-base px-3 py-1.5 text-xs font-medium text-foreground-muted transition-colors hover:bg-[var(--glass-bg-strong)] hover:text-foreground"
-          >
-            {toneColorOn ? "Tone colour on" : "Tone colour off"}
-          </button>
+          <TogglePill
+            label={toneColorOn ? "Tone colour on" : "Tone colour off"}
+            onToggle={onToggleToneColor}
+            pressed={toneColorOn}
+          />
         )}
       </div>
     </div>

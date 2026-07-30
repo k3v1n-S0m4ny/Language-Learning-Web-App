@@ -37,7 +37,13 @@
 // than the historically-correct yí. This is a genuine instance of the
 // design spec's own "prosody-dependent, don't guess" carve-out — a richer
 // data source (not citation pinyin) would be needed to resolve it properly.
-import { splitWordPinyin, stripTones, toneOf, type Tone } from "./pinyin-tone";
+import {
+  splitWordPinyin,
+  stripTones,
+  toneOf,
+  tokenizePhrasePinyin,
+  type Tone,
+} from "./pinyin-tone";
 
 export interface SandhiWord {
   hanzi: string;
@@ -168,4 +174,29 @@ export function computeSandhiFromSyllables(citationSyllables: string[]): SpokenS
     yiBuTag: null,
   }));
   return applyRules(flat);
+}
+
+/**
+ * Phrase-level spoken syllables for a Card, picking the right entry point above.
+ *
+ * `words` always carries at least one entry even for a single-word Card (the
+ * seed pipeline segments the headword — confirmed against
+ * seed/mandarin/deck.generated.json), so the second branch only guards against
+ * that invariant being violated. It tokenizes `wholePinyin` with the
+ * word-boundary-aware `tokenizePhrasePinyin` rather than naively splitting the
+ * whole phrase as if it were one word, and gets only the boundary-independent
+ * third-tone rule.
+ *
+ * Extracted because two faces now need it: the flip card's back (which also
+ * slices it per word for the chips) and the multiple-choice prompt (which shows
+ * the phrase-level line only). One implementation, so the two cannot drift into
+ * colouring the same phrase differently.
+ */
+export function spokenSyllablesForPhrase(
+  words: SandhiWord[],
+  wholePinyin: string,
+): SpokenSyllable[] {
+  return words.length > 0
+    ? computeSandhi(words)
+    : computeSandhiFromSyllables(tokenizePhrasePinyin(wholePinyin));
 }
