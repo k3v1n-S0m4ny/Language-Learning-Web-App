@@ -38,6 +38,16 @@ All VERIFIED (see Verification evidence). Full inventory in `.claude/plans/imple
   `components/rating-buttons.tsx`, `components/empty-state.tsx`, `components/stats/rating-chart.tsx`,
   and `ts-fsrs` from `package.json`.
 
+## STATUS: SHIPPED 2026-07-30 — this handoff is closed
+
+Merged to `main` (squash `f7ecf70` + `a73b7af`), prod migrated, deployed. The "Remaining tasks" and
+"Next steps" below are HISTORICAL and resolved — see `active-plan.md` for what actually happened.
+Task 1 was resolved by the owner as **abandon `3bf34d4`**. Rollback, until deleted: Neon branch
+`pre-ladder-fsrs-backup` (`br-shy-dew-appfcklu`).
+
+Still open, and the reason not to call this finished: **nobody has played a real round in prod.**
+Also still deferred: `Left N` counting exposures rather than cards.
+
 ## Remaining tasks
 
 1. **Owner decision — the unmerged `pickFutureToday` work.** This branch still carries commit

@@ -84,10 +84,42 @@ far cheaper than "history on ~830 cards".
       lib/ladder/*.test.ts lib/review/*.test.ts` → 0 (73/73), `npx next build` → 0.
       Owner decision taken: commit `3bf34d4` (`pickFutureToday`) is **abandoned** — it rides in as a
       no-op because the ladder deletes the file it fixed.
-- [ ] Phase 5 — prod migration (owner decision: this wipes real learner data).
-      **`main` is NOT pushed.** It is deliberately held local: pushing triggers a Vercel production
-      deploy, and `f7ecf70` reads ladder columns that production's schema does not have yet. The
-      push and the migration must happen together — migrate `0009`+`0010` on prod first, then push.
+- [x] **Phase 5 — SHIPPED 2026-07-30.** Owner authorised the wipe.
+      1. Backup first: Neon branch `pre-ladder-fsrs-backup` (`br-shy-dew-appfcklu`), forked from prod
+         at its pre-migration state, verified holding all 615 FSRS rows and the `fsrs_card` column.
+         **Delete it once you are satisfied with the ladder in prod** — until then it is the rollback.
+      2. `0009` + `0010` applied to prod (`br-old-cell-apciruzj`) as ONE atomic transaction of 27
+         statements. `npm run db:migrate` was blocked by the permission classifier, so the owner
+         explicitly directed applying the two files via `mcp__Neon__run_sql_transaction`, plus two
+         hand-written `drizzle.__drizzle_migrations` rows.
+      3. Verified on prod: ladder columns present, `fsrs_card`/`rating`/`log` gone, `hsk_unlocks`
+         created and empty, the four FSRS tables at 0, ledger at 11 rows. **Read-Thai untouched** —
+         `thai_progress` 170, `cards` 515, `at_cards` 340.
+      4. `main` pushed (`dbc9f71..a73b7af`); Vercel production deploy Ready in 39s;
+         `https://thepolyglot.vercel.app` serves the sign-in page with no 500.
+
+## The drizzle ledger hash is LF-normalised, not the bytes on disk
+
+Writing `__drizzle_migrations` by hand exposed this. The stored hash is a SHA-256 of the migration
+file with **LF** line endings; this Windows checkout has CRLF, so `sha256sum` of the working-tree file
+is WRONG for any multi-line migration. Caught it because `0008_elite_sage.sql`'s stored hash did not
+match its file, while `tr -d '\r' | sha256sum` matched exactly. `0000`–`0007` are single-line, so they
+hash identically either way and hide the effect.
+
+The authoritative values did not need deriving at all: `0009`/`0010` had already been applied to the
+`quizlet-ladder` branch BY drizzle-kit, so its own ledger rows were copied. That they equalled the
+locally computed LF hashes also proved the two files had not drifted since the 41-check simulation.
+
+| migration | hash | created_at (journal `when`) |
+|---|---|---|
+| `0009_opposite_blue_marvel` | `68c6780d93ecc15c…` | 1785332502738 |
+| `0010_steep_skaar` | `9efcc85ef8836293…` | 1785332569002 |
+
+## Not verified
+
+The authenticated review flow was never exercised against prod — that needs a signed-in learner.
+Evidence for the ladder itself is the branch simulation (41 checks), 73 unit tests and the build; the
+prod evidence is schema plus a booting sign-in page. **First real round in prod is unwatched.**
 
 **The repo typechecks and builds again.** `npx tsc --noEmit` → exit 0 and `npx next build` →
 success, both for the first time since Phase 2's schema rewrite.
