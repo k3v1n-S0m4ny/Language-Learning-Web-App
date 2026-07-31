@@ -44,7 +44,7 @@ export function RevealButton({
  *
  * There is no interval hint under either label. Under FSRS the hint was the only
  * way to understand what a button would do; here the answer is the same
- * regardless — pass twice and the card climbs, fail and it drops one step — and a
+ * regardless — pass and the card climbs, fail and it drops one step — and a
  * number that never varies is noise.
  */
 export function PassFailRow({

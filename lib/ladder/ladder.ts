@@ -27,14 +27,27 @@ export const LADDERS: Record<LadderKey, readonly StepFormat[]> = {
   "advanced-thai:phrase": ["recognise-card"],
 };
 
-// Two CONSECUTIVE passes, so a single lucky multiple-choice guess (25% at four
-// options) cannot promote a card. The streak resets on any failure.
-export const PASSES_TO_PROMOTE = 2;
+// One pass promotes. This was two — a streak, so a single lucky multiple-choice
+// guess (25% at four options) could not promote a card — and the anti-guessing
+// job now belongs to DEMOTION instead. A card promoted on a lucky guess meets a
+// self-graded flashcard at the next step, and a miss there sends it straight back
+// down. The ladder catches the guess one exposure later rather than pre-empting
+// it, at roughly half the repetition: Mandarin graduates in 3 exposures rather
+// than 5, Advanced Thai vocab in 4 rather than 7.
+export const PASSES_TO_PROMOTE = 1;
 
 export interface LadderState {
   /** 1-based position in the ladder. */
   step: number;
-  /** Consecutive passes at the current step. */
+  /**
+   * Consecutive passes at the current step.
+   *
+   * VESTIGIAL while PASSES_TO_PROMOTE is 1 — a pass promotes, so this can never
+   * reach 1 and is written 0 on every transition. Kept in the type and in the
+   * `step` columns rather than dropped: removing it is a migration against real
+   * learner data that buys nothing, and it is what a future per-ladder streak
+   * rule would reach for.
+   */
   passStreak: number;
   /** Rung the NEXT top-step pass will be scheduled at. */
   intervalRung: number;
@@ -73,10 +86,10 @@ export function formatForStep(key: LadderKey, step: number): StepFormat {
 /**
  * Apply one answer.
  *
- * Promotion needs two consecutive passes, but the top step needs only one — a
- * card there has nowhere to be promoted to, so each pass buys an interval rung
- * instead. That is what makes the 3x tail reachable at all: requiring two passes
- * per rung would halve how fast intervals stretch.
+ * Every pass below the top promotes; every pass AT the top buys an interval rung
+ * instead, because a card there has nowhere to be promoted to. That second half
+ * is what makes the 3x tail reachable at all — gating a rung behind a streak
+ * would halve how fast intervals stretch.
  *
  * Failure demotes exactly one step and resets the rung to the bottom, so a card
  * that lapses at the top re-earns its whole interval. It does NOT reset to step
@@ -138,12 +151,13 @@ export function applyAnswer(
 }
 
 /**
- * Exposures a never-seen card needs to graduate: two passes at every step below
- * the top, plus one pass at the top step to set its first interval.
+ * Exposures a never-seen card needs to graduate: PASSES_TO_PROMOTE passes at
+ * every step below the top, plus one pass at the top step to set its first
+ * interval.
  *
- * Mandarin 5, Advanced Thai vocab 7, Advanced Thai phrase 1. Exported because
+ * Mandarin 3, Advanced Thai vocab 4, Advanced Thai phrase 1. Exported because
  * the round-length risk lives here — a 20-card Mandarin round of new cards is
- * ~100 card-views, and that number should be visible, not buried.
+ * ~60 card-views, and that number should be visible, not buried.
  */
 export function exposuresToGraduate(key: LadderKey): number {
   return (topStep(key) - 1) * PASSES_TO_PROMOTE + 1;

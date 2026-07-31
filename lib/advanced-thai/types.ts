@@ -60,9 +60,9 @@ export type AtStudyCard = {
  *
  * `remaining` COUNTS DOWN TO ZERO AT THE FINISH LINE, and it is deliberately not
  * the number of cards left to ASK. Those differ by a lot: a fresh Advanced Thai
- * vocab card takes seven exposures to graduate, so a ten-card round runs ~70
+ * vocab card takes four exposures to graduate, so a ten-card round runs ~40
  * answers. Defining `remaining` as "not yet asked this round" was tried first and
- * is actively misleading — it reads 0 after the tenth answer of seventy, with the
+ * is actively misleading — it reads 0 after the tenth answer of forty, with the
  * whole climb still ahead. What a Learner wants from a finish line is how many
  * cards still owe them work, so that is what this is: every card in the batch
  * that has not yet passed at its top step.
@@ -114,6 +114,42 @@ export interface AtPracticeCounts {
   // Every card of this kind the Learner has ever seen, across all themes.
   poolSize: number;
 }
+
+/**
+ * What a study flow needs to draw its next question — returned BY THE GRADING
+ * ACTIONS rather than fetched afterwards.
+ *
+ * This is the shape that lets the answer feedback and the next-card fetch
+ * overlap. The old flow returned only a verdict, so the next card did not exist
+ * anywhere until the client called router.refresh() once the feedback had
+ * expired: the fetch was strictly serial AFTER the reveal, and the one moment the
+ * Learner is happily busy reading was spent doing nothing. Handing the next card
+ * back with the verdict moves that fetch behind the feedback, and removes a whole
+ * client→server hop per card (the RSC re-render) along with it.
+ *
+ * A null `card` is the end of the flow — round complete, or an empty practice
+ * pool. Modelled on SubmitExamAnswerResult.nextCard in lib/thai/exam-actions.ts,
+ * which is where this pattern already works.
+ *
+ * `flow` is what makes the pair a discriminated union rather than two lookalikes.
+ * The counts genuinely differ — a round has a finish line to count down, a
+ * read-only drill has only a pool size — and the session component that carries
+ * these payloads is shared by both flows and reads neither. The tag is what lets
+ * each screen take back exactly the shape it knows how to render, with no cast.
+ */
+export interface AtNextRound {
+  flow: "round";
+  counts: AtRoundCounts;
+  card: AtStudyCard | null;
+}
+
+export interface AtNextPractice {
+  flow: "practice";
+  counts: AtPracticeCounts;
+  card: AtStudyCard | null;
+}
+
+export type AtNext = AtNextRound | AtNextPractice;
 
 /** One card kind on the picker, with this Learner's progress through it. */
 export interface AtKindSummary {
