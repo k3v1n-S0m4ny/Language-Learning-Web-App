@@ -1,9 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import Link from "next/link";
 import { SegmentedControl } from "@/components/ui/segmented-control";
-import type { AtCardKind, AtPracticeCounts, AtStudyCard } from "@/lib/advanced-thai/types";
+import type {
+  AtCardKind,
+  AtNext,
+  AtNextPractice,
+  AtPracticeCounts,
+  AtStudyCard,
+} from "@/lib/advanced-thai/types";
 import { AdvancedReviewSession } from "./advanced-review-session";
 import { ThaiFontProvider, type ThaiFont } from "./kit";
 
@@ -25,9 +31,10 @@ const KIND_LABEL: Record<AtCardKind, string> = {
 // cards this sitting has been through, and the second of those is client state
 // because it belongs to the sitting rather than to the database.
 //
-// Holds the letterform choice for the same reason AdvancedStudyScreen does: it
-// must outlive the individual card, which AdvancedReviewSession does not (it
-// remounts on every answer, keyed by card.id).
+// Holds the letterform choice — and which card is on display — for the same
+// reason AdvancedStudyScreen does: both must outlive the individual card, which
+// AdvancedReviewSession does not (it remounts on every answer, keyed by card.id).
+// The props are the opening draw; every answer returns its own successor.
 export function AdvancedPracticeScreen({
   kind,
   counts,
@@ -38,6 +45,19 @@ export function AdvancedPracticeScreen({
   card: AtStudyCard | null;
 }) {
   const [font, setFont] = useState<ThaiFont>("looped");
+  const [live, setLive] = useState<AtNextPractice>({ flow: "practice", counts, card });
+
+  const [fromServer, setFromServer] = useState(card);
+  if (fromServer !== card) {
+    setFromServer(card);
+    setLive({ flow: "practice", counts, card });
+  }
+
+  // See the note on AdvancedStudyScreen's own advance: the tag is the type
+  // boundary between the two flows, not a branch that can go the other way.
+  const advance = useCallback((next: AtNext) => {
+    if (next.flow === "practice") setLive(next);
+  }, []);
 
   return (
     <ThaiFontProvider value={font}>
@@ -66,7 +86,8 @@ export function AdvancedPracticeScreen({
         <p className="flex items-center gap-2.5 text-xs font-semibold text-foreground-muted">
           <span>
             Drilling{" "}
-            <b className="font-semibold tabular-nums text-foreground">{counts.poolSize}</b> cards
+            <b className="font-semibold tabular-nums text-foreground">{live.counts.poolSize}</b>{" "}
+            cards
           </span>
           <span aria-hidden className="text-foreground-muted/50">
             ·
@@ -75,8 +96,13 @@ export function AdvancedPracticeScreen({
         </p>
 
         <div className="flex w-full flex-1 flex-col items-center justify-center">
-          {card ? (
-            <AdvancedReviewSession key={card.id} card={card} mode="practice" />
+          {live.card ? (
+            <AdvancedReviewSession
+              key={live.card.id}
+              card={live.card}
+              mode="practice"
+              onAdvance={advance}
+            />
           ) : (
             <NothingToPractice kind={kind} />
           )}

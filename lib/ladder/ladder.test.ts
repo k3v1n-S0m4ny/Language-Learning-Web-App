@@ -53,24 +53,39 @@ test("formatForStep clamps rather than returning undefined", () => {
 
 // === promotion ==============================================================
 
-test("promotion needs two consecutive passes, not one", () => {
+test("one pass promotes", () => {
   const [first, second] = walk("mandarin", [true, true]);
-  assert.equal(first.state.step, 1);
-  assert.equal(first.state.passStreak, 1);
-  assert.equal(second.state.step, 2);
-  assert.equal(second.state.passStreak, 0);
+  assert.equal(first.state.step, 2);
+  assert.equal(second.state.step, 3);
 });
 
-test("a failure between two passes resets the streak", () => {
-  // pass, fail, pass -> still step 1, because the passes were not consecutive.
-  const [, , third] = walk("mandarin", [true, false, true]);
-  assert.equal(third.state.step, 1);
-  assert.equal(third.state.passStreak, 1);
+test("a failure between passes gives back exactly the step it bought", () => {
+  // pass, fail, pass -> step 1 -> 2 -> 1 -> 2. A miss costs one step, no more.
+  const [first, second, third] = walk("mandarin", [true, false, true]);
+  assert.equal(first.state.step, 2);
+  assert.equal(second.state.step, 1);
+  assert.equal(third.state.step, 2);
 });
 
-test("PASSES_TO_PROMOTE is the anti-guessing rule for multiple choice", () => {
-  // Four options means a 25% guess. One pass must never promote.
-  assert.equal(PASSES_TO_PROMOTE, 2);
+test("passStreak is vestigial while one pass promotes", () => {
+  // It can never reach 1: the pass that would set it promotes instead, and a
+  // failure zeroes it. Asserted so a future streak rule has to come back here.
+  assert.equal(PASSES_TO_PROMOTE, 1);
+  for (const transition of walk("advanced-thai:vocab", [true, true, false, true])) {
+    assert.equal(transition.state.passStreak, 0);
+  }
+});
+
+test("a lucky multiple-choice guess is caught by the next step, not by a streak", () => {
+  // The anti-guessing guarantee PASSES_TO_PROMOTE = 2 used to give. Guessing
+  // step 1 promotes to step 2 — which is recognise-card, self-graded, no options
+  // to guess from — and missing it there returns the card to step 1.
+  const [guessed] = walk("advanced-thai:vocab", [true]);
+  assert.equal(formatForStep("advanced-thai:vocab", guessed.state.step), "recognise-card");
+
+  const [, missed] = walk("advanced-thai:vocab", [true, false]);
+  assert.equal(missed.state.step, 1);
+  assert.equal(missed.state.demotions, 1);
 });
 
 // === the top step ===========================================================
@@ -150,8 +165,8 @@ test("a failed card never gets a due date", () => {
 // === graduation costs =======================================================
 
 test("a new card graduates in the documented number of exposures", () => {
-  assert.equal(exposuresToGraduate("mandarin"), 5);
-  assert.equal(exposuresToGraduate("advanced-thai:vocab"), 7);
+  assert.equal(exposuresToGraduate("mandarin"), 3);
+  assert.equal(exposuresToGraduate("advanced-thai:vocab"), 4);
   assert.equal(exposuresToGraduate("advanced-thai:phrase"), 1);
 });
 
@@ -194,6 +209,7 @@ test("a round terminates as long as passes eventually happen", () => {
   assert.equal(state.step, 1);
   assert.equal(state.demotions, 50);
 
-  const transitions = walk("advanced-thai:vocab", Array(7).fill(true), state);
-  assert.equal(transitions[6].finished, true);
+  const n = exposuresToGraduate("advanced-thai:vocab");
+  const transitions = walk("advanced-thai:vocab", Array(n).fill(true), state);
+  assert.equal(transitions[n - 1].finished, true);
 });

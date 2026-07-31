@@ -19,6 +19,11 @@ import { motion, useReducedMotion } from "motion/react";
 // appear after an answer has been committed. That is not a courtesy: on a
 // produce-mc step the answer is the Thai the Learner is being asked to produce,
 // and shipping it early would make the question answerable by reading the DOM.
+//
+// `chosen` does NOT weaken that. It is the Learner's own tap, echoed back before
+// the server has said anything about it — the acknowledgement that the tap
+// landed. Grading still happens entirely server-side and the correct option is
+// still unknowable until `verdict` arrives.
 
 export interface McVerdict {
   chosen: string;
@@ -32,6 +37,7 @@ export function McQuestion({
   prompt,
   options,
   optionClassName = "",
+  chosen = null,
   verdict,
   pending,
   onChoose,
@@ -42,12 +48,27 @@ export function McQuestion({
   options: string[];
   /** Applied to every option — the Thai letterform class on a produce step. */
   optionClassName?: string;
+  /**
+   * The option the Learner tapped, set the instant they tap it and before the
+   * server has graded it. Optional, and null-by-default, so a caller that does
+   * not pass it behaves exactly as this component always has: the grid simply
+   * gives no acknowledgement until the verdict lands.
+   */
+  chosen?: string | null;
   verdict: McVerdict | null;
   pending: boolean;
   onChoose: (choice: string) => void;
 }) {
   const reduceMotion = useReducedMotion();
   const answered = verdict !== null;
+  // Before grading this is the Learner's own tap; after it, the server's echo of
+  // the same string. Reading it from the verdict once one exists keeps the
+  // highlight correct for callers that never pass `chosen` at all.
+  const picked = verdict?.chosen ?? chosen;
+  // Committed but not yet graded: the answer is in flight. The grid stays on
+  // screen through this — replacing it with a spinner is what used to make the
+  // feedback look like a new card arriving pre-answered.
+  const committing = picked !== null && !answered;
 
   return (
     <div className="flex w-full max-w-md flex-col items-center gap-5 animate-slide-up-fade">
@@ -60,7 +81,7 @@ export function McQuestion({
 
       <div className="grid w-full grid-cols-2 gap-3">
         {options.map((option) => {
-          const isChosen = verdict?.chosen === option;
+          const isChosen = picked === option;
           const isCorrect = verdict?.correct === option;
 
           // Explicit text-foreground on the default state — the UA default button
@@ -72,17 +93,26 @@ export function McQuestion({
             else if (isChosen) tone = "border-clay bg-clay text-on-earthy";
             // Pulse the Learner's own choice when right, shake it when wrong.
             if (isChosen) feedback = verdict.passed ? "animate-correct-pulse" : "animate-shake";
+          } else if (committing) {
+            // Deliberately NEUTRAL — it says "got it", never "right" or "wrong".
+            // Committing to a verdict tone here would be the client grading
+            // itself, and would be wrong half the time.
+            tone = isChosen
+              ? "border-brand bg-[var(--glass-bg-strong)] text-foreground"
+              : "border-border-base bg-surface text-foreground opacity-50";
           }
+
+          const locked = answered || committing || pending;
 
           return (
             <motion.button
               key={option}
               type="button"
-              disabled={answered || pending}
+              disabled={locked}
               onClick={() => onChoose(option)}
-              whileTap={answered || pending || reduceMotion ? undefined : { scale: 0.95 }}
+              whileTap={locked || reduceMotion ? undefined : { scale: 0.95 }}
               transition={{ type: "spring", stiffness: 500, damping: 30 }}
-              className={`focus-ring rounded-[var(--r-lg)] border-2 px-4 py-3 text-center transition-colors disabled:cursor-default ${optionClassName} ${tone} ${feedback}`}
+              className={`focus-ring rounded-[var(--r-lg)] border-2 px-4 py-3 text-center transition-[color,background-color,border-color,opacity] disabled:cursor-default ${optionClassName} ${tone} ${feedback}`}
             >
               {option}
             </motion.button>

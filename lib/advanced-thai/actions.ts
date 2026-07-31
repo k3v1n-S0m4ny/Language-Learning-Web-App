@@ -23,8 +23,18 @@ import { ensureLearnerSettings } from "@/lib/review/queries";
 import { thaiDateKey } from "@/lib/review/time";
 import type { PhraseEntry, VocabEntry } from "@/seed/advanced-thai/types";
 import { isAdvancedThaiLearner } from "./access";
-import { expectedAnswerFor, isMultipleChoice } from "./queries";
-import { LADDER_FOR_KIND, type AtCardKind } from "./types";
+import {
+  expectedAnswerFor,
+  getAdvancedPracticeData,
+  getAdvancedRoundData,
+  isMultipleChoice,
+} from "./queries";
+import {
+  LADDER_FOR_KIND,
+  type AtCardKind,
+  type AtNextPractice,
+  type AtNextRound,
+} from "./types";
 
 /**
  * Everything the two submit actions share: authorise, load the card and its
@@ -55,8 +65,18 @@ async function loadForAnswer(cardId: string, step: number) {
 
   // The card must exist. Without this an unknown id would fall through to the
   // insert and fail on the FK with a Postgres error rather than a clear one.
+  //
+  // `themeId` is selected for the NEXT card rather than for this one: the round
+  // an answer belongs to is the theme of the card being answered, so deriving it
+  // here means the client never has to name a theme — and therefore cannot name
+  // someone else's.
   const [card] = await db
-    .select({ id: atCards.id, kind: atCards.kind, payload: atCards.payload })
+    .select({
+      id: atCards.id,
+      themeId: atCards.themeId,
+      kind: atCards.kind,
+      payload: atCards.payload,
+    })
     .from(atCards)
     .where(eq(atCards.id, cardId));
   if (!card) throw new Error("Card not found");
@@ -85,6 +105,8 @@ async function loadForAnswer(cardId: string, step: number) {
 
   return {
     learnerId,
+    themeId: card.themeId,
+    kind: card.kind as AtCardKind,
     payload: card.payload as VocabEntry | PhraseEntry,
     ladder: LADDER_FOR_KIND[card.kind as AtCardKind],
     current,
@@ -105,11 +127,18 @@ async function loadForAnswer(cardId: string, step: number) {
  * leave the just-answered card at the front of the queue and serve it straight
  * back.
  *
- * NOTHING HERE CALLS refresh(). Advancing to the next card is the client's move,
- * made with router.refresh() once it has finished showing the answer feedback —
- * refreshing from inside the action would swap the card out from under a
- * correct/incorrect highlight the Learner has not read yet. addNewCardsToday
- * still refreshes because it has no feedback to hold.
+ * NOTHING HERE CALLS refresh(), and the answer path no longer re-renders the page
+ * at all. The next card comes back in the grading action's own RETURN VALUE (see
+ * AtNextRound) and the client swaps it in when the Learner is done reading the
+ * feedback. Refreshing from inside the action would swap the card out from under
+ * a correct/incorrect highlight nobody has read yet; refreshing from the client
+ * AFTER the feedback — which is what this used to do — spent the whole reveal
+ * doing nothing and then made the Learner wait for a full RSC round trip.
+ * addNewCardsToday still refreshes, because it has no feedback to hold.
+ *
+ * THIS MUST COMPLETE BEFORE THE NEXT CARD IS QUERIED. `last_review` is stamped
+ * below, and that stamp is the only thing that stops the just-answered card being
+ * handed straight back as the next one (see the ordering note in queries.ts).
  */
 async function record(
   learnerId: string,
@@ -174,10 +203,10 @@ export async function submitAdvancedSelfGrade(
   cardId: string,
   step: number,
   passed: boolean,
-) {
+): Promise<{ next: AtNextRound }> {
   if (typeof passed !== "boolean") throw new Error("Invalid answer");
 
-  const { learnerId, ladder, current } = await loadForAnswer(cardId, step);
+  const { learnerId, themeId, ladder, current } = await loadForAnswer(cardId, step);
 
   // A self-graded verdict on a multiple-choice step would let the client mark its
   // own MC answer, which is the one thing the option contract exists to prevent.
@@ -186,6 +215,8 @@ export async function submitAdvancedSelfGrade(
   }
 
   await record(learnerId, cardId, ladder, current, passed);
+
+  return { next: await getAdvancedRoundData(learnerId, themeId) };
 }
 
 /**
@@ -201,15 +232,19 @@ export async function submitAdvancedSelfGrade(
  * may cross to the client: the answer has been committed and logged by then, so
  * knowing it can no longer change the outcome. That is what lets the option grid
  * highlight the right choice.
+ *
+ * The NEXT CARD rides back in the same return value, for the reason set out on
+ * record() above — so it is already in the client's hand while the Learner is
+ * still reading the reveal.
  */
 export async function submitAdvancedChoice(
   cardId: string,
   step: number,
   choice: string,
-): Promise<{ passed: boolean; correct: string }> {
+): Promise<{ passed: boolean; correct: string; next: AtNextRound }> {
   if (typeof choice !== "string") throw new Error("Invalid answer");
 
-  const { learnerId, payload, ladder, current } = await loadForAnswer(cardId, step);
+  const { learnerId, themeId, payload, ladder, current } = await loadForAnswer(cardId, step);
 
   const format = formatForStep(ladder, current.step);
   if (!isMultipleChoice(format)) throw new Error("Wrong answer type for this step");
@@ -219,7 +254,7 @@ export async function submitAdvancedChoice(
 
   await record(learnerId, cardId, ladder, current, passed);
 
-  return { passed, correct };
+  return { passed, correct, next: await getAdvancedRoundData(learnerId, themeId) };
 }
 
 /**
@@ -234,21 +269,62 @@ export async function submitAdvancedChoice(
  * no `at_review_states` row touched and no log written.
  *
  * The stale-step check still applies. It costs nothing and keeps one code path.
+ *
+ * The next DRAW comes back here too, exactly as it does for a recorded answer —
+ * but it is a cross-theme random draw of this kind rather than a round pick, so
+ * the pool it comes from is `card.kind` rather than `card.themeId`. Both are read
+ * off the answered card, so practice never names its own pool either.
  */
 export async function gradeAdvancedChoice(
   cardId: string,
   step: number,
   choice: string,
-): Promise<{ passed: boolean; correct: string }> {
+): Promise<{ passed: boolean; correct: string; next: AtNextPractice }> {
   if (typeof choice !== "string") throw new Error("Invalid answer");
 
-  const { payload, ladder, current } = await loadForAnswer(cardId, step);
+  const { learnerId, kind, payload, ladder, current } = await loadForAnswer(cardId, step);
 
   const format = formatForStep(ladder, current.step);
   if (!isMultipleChoice(format)) throw new Error("Wrong answer type for this step");
 
   const correct = expectedAnswerFor(payload, format);
-  return { passed: isCorrectChoice(choice, correct), correct };
+  return {
+    passed: isCorrectChoice(choice, correct),
+    correct,
+    next: await getAdvancedPracticeData(learnerId, kind),
+  };
+}
+
+/**
+ * Draw the next practice card after a SELF-GRADED one — practice mode's only
+ * server call on the flashcard path.
+ *
+ * A self-graded practice answer has nothing to submit: the Learner has already
+ * seen the back and the verdict is theirs alone, so this deliberately writes
+ * nothing and grades nothing. It exists because the draw itself is a server
+ * concern — the pool is every card of this kind the Learner has ever met, and the
+ * client is not allowed to pick from it. Before the next card started riding back
+ * with the answer, this path short-circuited straight to router.refresh(); the
+ * refresh is what is gone, so the draw needs somewhere to live.
+ *
+ * No stale-step check, because there is no step being answered. The allowlist
+ * re-check is the same as everywhere else in this file — a Server Action is a
+ * public POST endpoint whatever calls it.
+ */
+export async function nextAdvancedPracticeCard(cardId: string): Promise<AtNextPractice> {
+  const session = await auth();
+  const learnerId = session?.user?.id;
+  if (!learnerId) throw new Error("Unauthorized");
+  if (!isAdvancedThaiLearner(session.user?.email)) throw new Error("Unauthorized");
+
+  const [card] = await db
+    .select({ kind: atCards.kind })
+    .from(atCards)
+    .where(eq(atCards.id, cardId));
+  if (!card) throw new Error("Card not found");
+  if (card.kind !== "vocab" && card.kind !== "phrase") throw new Error("Card not found");
+
+  return getAdvancedPracticeData(learnerId, card.kind as AtCardKind);
 }
 
 /**

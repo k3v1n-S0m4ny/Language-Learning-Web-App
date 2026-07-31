@@ -12,6 +12,8 @@ import {
   LADDER_FOR_KIND,
   type AtCardKind,
   type AtKindSummary,
+  type AtNextPractice,
+  type AtNextRound,
   type AtPracticeCounts,
   type AtRoundCounts,
   type AtStudyCard,
@@ -212,7 +214,7 @@ export async function getAdvancedRoundData(
   learnerId: string,
   themeSlug: string,
   now: Date = new Date(),
-): Promise<{ counts: AtRoundCounts; card: AtStudyCard | null }> {
+): Promise<AtNextRound> {
   const dayStart = startOfThailandDay(now);
 
   const [settings, newTodayRow, dueRows, unseenRows] = await Promise.all([
@@ -292,9 +294,9 @@ export async function getAdvancedRoundData(
   };
 
   const chosenId = pickNext(candidates);
-  if (!chosenId) return { counts, card: null };
+  if (!chosenId) return { flow: "round", counts, card: null };
 
-  return { counts, card: await loadStudyCard(learnerId, chosenId) };
+  return { flow: "round", counts, card: await loadStudyCard(learnerId, chosenId) };
 }
 
 /**
@@ -393,7 +395,7 @@ export async function getKindSummaries(learnerId: string): Promise<AtKindSummary
 export async function getAdvancedPracticeData(
   learnerId: string,
   kind: AtCardKind,
-): Promise<{ counts: AtPracticeCounts; card: AtStudyCard | null }> {
+): Promise<AtNextPractice> {
   const poolFilter = and(
     eq(atReviewStates.learnerId, learnerId),
     eq(atCards.kind, kind),
@@ -416,7 +418,7 @@ export async function getAdvancedPracticeData(
 
   const counts: AtPracticeCounts = { poolSize: poolRow[0]?.n ?? 0 };
   const chosenId = drawnRow[0]?.cardId;
-  if (!chosenId) return { counts, card: null };
+  if (!chosenId) return { flow: "practice", counts, card: null };
 
-  return { counts, card: await loadStudyCard(learnerId, chosenId) };
+  return { flow: "practice", counts, card: await loadStudyCard(learnerId, chosenId) };
 }
