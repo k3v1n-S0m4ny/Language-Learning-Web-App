@@ -8,6 +8,7 @@ import { addNewCardsToday } from "@/lib/advanced-thai/actions";
 import type { AtNext, AtNextRound, AtRoundCounts, AtStudyCard } from "@/lib/advanced-thai/types";
 import { AdvancedReviewSession } from "./advanced-review-session";
 import { ThaiFontProvider, type ThaiFont } from "./kit";
+import { RailRule, RailStat } from "./stage-rail";
 
 // The client shell around one theme's round.
 //
@@ -83,8 +84,11 @@ export function AdvancedStudyScreen({
         {/* Left / Repeats, not Due / New. The pair now describes the ROUND rather
             than the queue: everything owed today, split by whether it has been
             asked yet — which is what makes the finish line legible while you are
-            still walking toward it. */}
-        <p className="flex items-center gap-2.5 text-xs font-semibold text-foreground-muted">
+            still walking toward it.
+
+            Hidden from lg: up, where the same figures move into the card's left
+            rail with room to actually be read. The two must never show at once. */}
+        <p className="flex items-center gap-2.5 text-xs font-semibold text-foreground-muted lg:hidden">
           <span>
             Left{" "}
             <b className="font-semibold tabular-nums text-foreground">{live.counts.remaining}</b>
@@ -100,7 +104,19 @@ export function AdvancedStudyScreen({
 
         <div className="flex w-full flex-1 flex-col items-center justify-center">
           {live.card ? (
-            <AdvancedReviewSession key={live.card.id} card={live.card} onAdvance={advance} />
+            <AdvancedReviewSession
+              key={live.card.id}
+              card={live.card}
+              rail={
+                <>
+                  <RailStat label="Left" value={live.counts.remaining} />
+                  <RailStat label="Repeats" value={live.counts.repeats} />
+                  <RailRule />
+                  <RailStat label="Unseen" value={live.counts.unseenRemaining} />
+                </>
+              }
+              onAdvance={advance}
+            />
           ) : (
             // The shared finish screen directly, rather than Mandarin's wrapper
             // (components/mandarin-round-complete.tsx). That wrapper exists only to

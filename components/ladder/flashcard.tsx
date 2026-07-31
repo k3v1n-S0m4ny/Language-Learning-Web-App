@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
+import { Kbd } from "@/components/ui/kbd";
 
 // The flashcard GRADING CHROME, shared by both ladder courses.
 //
@@ -49,9 +50,19 @@ export function RevealButton({
  */
 export function PassFailRow({
   pending,
+  showKeys = false,
+  className = "",
   onGrade,
 }: {
   pending: boolean;
+  /**
+   * Draws the 1 / 2 key caps. Opt-in, and default off, because this row is
+   * shared with Mandarin — which has no key bindings — and a cap advertising a
+   * key that does nothing is worse than no cap at all.
+   */
+  showKeys?: boolean;
+  /** Layout-only, for a caller placing this row inside its own grid. */
+  className?: string;
   onGrade: (passed: boolean) => void;
 }) {
   const reduceMotion = useReducedMotion();
@@ -63,11 +74,11 @@ export function PassFailRow({
 
   return (
     <div
-      className="grid w-full max-w-md grid-cols-2 gap-2 animate-slide-up-fade"
+      className={`grid w-full max-w-md grid-cols-2 gap-2 animate-slide-up-fade ${className}`}
       role="group"
       aria-label="Did you know it?"
     >
-      {buttons.map(({ passed, label, bg }) => (
+      {buttons.map(({ passed, label, bg }, index) => (
         <motion.button
           key={label}
           type="button"
@@ -75,9 +86,16 @@ export function PassFailRow({
           onClick={() => onGrade(passed)}
           whileTap={reduceMotion ? undefined : { scale: 0.92 }}
           transition={{ type: "spring", stiffness: 500, damping: 30 }}
-          className={`rate-press rounded-[var(--r-sm)] px-2 py-3 text-sm font-semibold text-on-earthy shadow-[inset_0_1px_0_0_rgba(255,255,255,0.28)] disabled:opacity-40 ${bg}`}
+          className={`rate-press rounded-[var(--r-sm)] px-2 py-3 text-sm font-semibold text-on-earthy shadow-[inset_0_1px_0_0_rgba(255,255,255,0.28)] disabled:opacity-40 ${showKeys ? "flex items-center justify-center gap-2 " : ""}${bg}`}
         >
-          {label}
+          {showKeys ? (
+            <>
+              <Kbd>{index + 1}</Kbd>
+              {label}
+            </>
+          ) : (
+            label
+          )}
         </motion.button>
       ))}
     </div>
