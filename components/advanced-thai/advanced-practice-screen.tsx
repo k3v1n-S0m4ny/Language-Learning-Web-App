@@ -12,6 +12,7 @@ import type {
 } from "@/lib/advanced-thai/types";
 import { AdvancedReviewSession } from "./advanced-review-session";
 import { ThaiFontProvider, type ThaiFont } from "./kit";
+import { RailRule, RailStat } from "./stage-rail";
 
 const KIND_LABEL: Record<AtCardKind, string> = {
   vocab: "Vocabulary",
@@ -83,7 +84,9 @@ export function AdvancedPracticeScreen({
           />
         </header>
 
-        <p className="flex items-center gap-2.5 text-xs font-semibold text-foreground-muted">
+        {/* Hidden from lg: up — the same two facts move into the card's left
+            rail there. See the note in AdvancedStudyScreen. */}
+        <p className="flex items-center gap-2.5 text-xs font-semibold text-foreground-muted lg:hidden">
           <span>
             Drilling{" "}
             <b className="font-semibold tabular-nums text-foreground">{live.counts.poolSize}</b>{" "}
@@ -101,6 +104,19 @@ export function AdvancedPracticeScreen({
               key={live.card.id}
               card={live.card}
               mode="practice"
+              // No round counts to show: this flow writes nothing and cannot end
+              // (see the header note), so the rail says what the pool is and that
+              // the drill is not being recorded — the same two facts as the line
+              // above, which is all there is to say.
+              rail={
+                <>
+                  <RailStat label="Pool" value={live.counts.poolSize} />
+                  <RailRule />
+                  <p className="text-xs leading-snug text-foreground-muted">
+                    Practice — nothing recorded
+                  </p>
+                </>
+              }
               onAdvance={advance}
             />
           ) : (

@@ -121,7 +121,10 @@ export function PhraseSlab({
       onFlip={onReveal}
       front={front}
       back={back}
-      ratio="aspect-[1/1.2]"
+      // Portrait on the phone, landscape from lg: — see the note on
+      // VocabLexemeSlab. Slightly taller than the vocab card in both, because a
+      // twelve-word chip row needs the extra rows.
+      ratio="aspect-[1/1.2] lg:aspect-[1/0.55]"
     />
   );
 }

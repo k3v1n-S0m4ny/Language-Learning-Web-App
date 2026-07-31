@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition, type ReactNode } from "react";
 import { autoplayAudio, playAudio } from "@/components/audio-button";
 import { McQuestion, type McVerdict } from "@/components/ladder/mc-question";
 import { PassFailRow, RevealButton } from "@/components/ladder/flashcard";
@@ -12,8 +12,10 @@ import {
 } from "@/lib/advanced-thai/actions";
 import type { AtNext, AtStudyCard } from "@/lib/advanced-thai/types";
 import { setSessionActive } from "@/lib/ux/session-focus";
+import { useActionKeys, useAnswerKeys } from "@/lib/ux/keyboard";
 import { PhraseSlab } from "./phrase-slab";
 import { useThaiFont } from "./kit";
+import { KeyLegend, StageRail } from "./stage-rail";
 import { VocabLexemeSlab } from "./vocab-lexeme-slab";
 
 // Owns the per-card interaction state for Advanced Thai — the counterpart of
@@ -63,10 +65,19 @@ const AUDIO_WAIT_CEILING_MS = 2600;
 export function AdvancedReviewSession({
   card,
   mode = "round",
+  rail,
   onAdvance,
 }: {
   card: AtStudyCard;
   mode?: "round" | "practice";
+  /**
+   * The left rail's contents, on desktop only. Supplied by the screen because
+   * the counts are the screen's to know — a round has remaining/repeats, a
+   * practice drill has a pool size, and this component reads neither. The RIGHT
+   * rail is built here instead, because the key legend has to track which keys
+   * are actually bound on the current step, which is state only this file holds.
+   */
+  rail?: ReactNode;
   /**
    * Hands the next card up to the screen, which owns which card is on display.
    * Takes the whole AtNext union because this component serves both flows and
@@ -146,8 +157,26 @@ export function AdvancedReviewSession({
     playAudio(card.audioUrl);
   }
 
+  // WHICH SERVE HAS ALREADY BEEN COMMITTED — the synchronous half of the
+  // double-submit guard, and the keyboard is why it now has to exist.
+  //
+  // `answered` is React state, so `if (answered) return` only sees what the
+  // CURRENT render closed over. Two events dispatched in the same frame both
+  // read false and both reach the server. With a pointer that was close enough
+  // to impossible to ignore — you cannot click two option buttons at once — but
+  // pressing 1 and 2 inside one frame is something a keyboard does by accident.
+  //
+  // A ref is checked and set synchronously, so the second event in the same
+  // frame sees the first one's write. It holds the card OBJECT rather than a
+  // boolean for the same reason `autoplayedFor` does: a re-serve is always a new
+  // object (see the arrival note above), so it stops matching on its own and
+  // there is nothing to reset — which matters because the reset would otherwise
+  // have to happen during render, where refs must not be touched.
+  const committedFor = useRef<AtStudyCard | null>(null);
+
   function selfGrade(passed: boolean) {
-    if (answered) return;
+    if (answered || committedFor.current === card) return;
+    committedFor.current = card;
     setAnswered(true);
     // Turn the face back over the moment it is graded, so the answer is not still
     // sitting there through the submit. The same-card re-serve this used to be the
@@ -166,7 +195,8 @@ export function AdvancedReviewSession({
   }
 
   function choose(choice: string) {
-    if (answered) return;
+    if (answered || committedFor.current === card) return;
+    committedFor.current = card;
     setAnswered(true);
     setChosen(choice);
     startTransition(async () => {
@@ -229,22 +259,88 @@ export function AdvancedReviewSession({
     };
   }, [verdict, pendingNext]);
 
-  if (card.format === "recognise-mc" || card.format === "produce-mc") {
+  const isMc = card.format === "recognise-mc" || card.format === "produce-mc";
+  const options = card.options ?? [];
+
+  // A miss, with the next card already loaded behind the reveal. The Learner
+  // reads the option they got wrong for as long as they want; Continue is
+  // instant because there is nothing left to fetch. Gated on the next card
+  // actually being in hand, so the button is never on screen with nowhere to go.
+  //
+  // Hoisted above the returns below because the Enter binding needs it, and
+  // hooks cannot be called after an early return.
+  const held = verdict !== null && !verdict.passed ? pendingNext : null;
+
+  // THE KEYBOARD. Every binding is gated on the same state the buttons are
+  // disabled by — never on whether a button is mounted — because a window-level
+  // listener keeps firing through both the `locked` option grid and the
+  // "Next card…" spinner further down this file. See lib/ux/keyboard.ts.
+  //
+  // Each binding also routes through the same handler its button calls, so the
+  // `if (answered) return;` re-entrancy guards in choose() and selfGrade() cover
+  // the key path for free rather than being duplicated here.
+  useAnswerKeys({
+    count: options.length,
+    enabled: isMc && !answered && !pending,
+    onPick: (index) => choose(options[index]),
+  });
+  useActionKeys([" ", "Enter"], !isMc && !revealed && !answered, reveal);
+  useAnswerKeys({
+    // The self-grade is the same digit row one card later: 1 missed, 2 got it.
+    count: 2,
+    enabled: !isMc && revealed && !answered && !pending,
+    onPick: (index) => selfGrade(index === 1),
+  });
+  useActionKeys(["Enter"], held !== null, () => {
+    if (held) onAdvance(held);
+  });
+
+  // The theatre grid. Below lg: it is exactly the column this has always been —
+  // `flex flex-col max-w-md` — and the rails render nothing. From lg: up it
+  // becomes three tracks (rail / stage / rail) with the card on row 1, the
+  // answers on row 2 and Continue on row 3.
+  // The mobile gap is left to the call site: the two formats have always spaced
+  // themselves differently (gap-5 under the option grid, gap-6 under the card)
+  // and the desktop layout is not a reason to change what the phone looks like.
+  // At lg: the gap-x/gap-y longhands win over either shorthand, because Tailwind
+  // emits media-query rules after the base ones.
+  const stage =
+    "flex w-full max-w-md flex-col items-center lg:grid lg:max-w-[68rem] lg:grid-cols-[9.5rem_minmax(0,1fr)_9.5rem] lg:items-start lg:gap-x-8 lg:gap-y-5";
+
+  const legend = isMc
+    ? [
+        { keys: "1-4", action: "pick" },
+        ...(held ? [{ keys: "↵", action: "continue" }] : []),
+      ]
+    : revealed
+      ? [
+          { keys: "1", action: "missed it" },
+          { keys: "2", action: "got it" },
+        ]
+      : [{ keys: "space", action: "reveal" }];
+
+  const rails = (
+    <>
+      <StageRail side="left">{rail}</StageRail>
+      <StageRail side="right">
+        <KeyLegend rows={legend} />
+      </StageRail>
+    </>
+  );
+
+  if (isMc) {
     // Only vocab reaches a multiple-choice step — the phrase ladder is a single
     // rung of recognise-card — so the prompt below reads the vocab payload
     // directly rather than branching on kind.
     const entry = card.kind === "vocab" ? card.payload : null;
     if (!entry) return null;
 
-    // A miss, with the next card already loaded behind the reveal. The Learner
-    // reads the option they got wrong for as long as they want; Continue is
-    // instant because there is nothing left to fetch. Gated on the next card
-    // actually being in hand, so the button is never on screen with nowhere to go.
-    const held = verdict !== null && !verdict.passed ? pendingNext : null;
-
     return (
-      <div className="flex w-full max-w-md flex-col items-center gap-5">
+      <div className={`${stage} gap-5`}>
+        {rails}
         <McQuestion
+          layout="theatre"
+          showKeys
           eyebrow={producing ? "Which is the Thai?" : "What does it mean?"}
           prompt={
             producing ? (
@@ -259,7 +355,7 @@ export function AdvancedReviewSession({
               </p>
             )
           }
-          options={card.options ?? []}
+          options={options}
           // Thai options need the Learner's chosen letterform; English ones must not
           // get it, or the gloss renders in a Thai-first cut.
           optionClassName={producing ? `${thai} text-lg` : "text-sm"}
@@ -269,7 +365,12 @@ export function AdvancedReviewSession({
           onChoose={choose}
         />
 
-        {held && <ContinueButton onClick={() => onAdvance(held)} />}
+        {held && (
+          <ContinueButton
+            className="lg:col-start-2 lg:row-start-3"
+            onClick={() => onAdvance(held)}
+          />
+        )}
       </div>
     );
   }
@@ -295,29 +396,43 @@ export function AdvancedReviewSession({
   }
 
   return (
-    <div className="flex w-full max-w-md flex-col items-center gap-6 animate-slide-up-fade">
-      {card.kind === "vocab" ? (
-        <VocabLexemeSlab
-          entry={card.payload}
-          audioUrl={card.audioUrl}
-          revealed={revealed}
-          onReveal={reveal}
-          direction={producing ? "produce" : "recognise"}
-        />
-      ) : (
-        <PhraseSlab
-          phrase={card.payload}
-          audioUrl={card.audioUrl}
-          revealed={revealed}
-          onReveal={reveal}
-        />
-      )}
+    <div className={`${stage} gap-6 animate-slide-up-fade`}>
+      {rails}
 
-      {!revealed ? (
-        <RevealButton onClick={reveal} />
-      ) : (
-        <PassFailRow pending={pending} onGrade={selfGrade} />
-      )}
+      {/* The card is the stage; the reveal/grade controls are the answer row
+          beneath it — the same two rows the multiple-choice step uses, so the
+          controls never move between formats. */}
+      <div className="w-full lg:col-start-2 lg:row-start-1">
+        {card.kind === "vocab" ? (
+          <VocabLexemeSlab
+            entry={card.payload}
+            audioUrl={card.audioUrl}
+            revealed={revealed}
+            onReveal={reveal}
+            direction={producing ? "produce" : "recognise"}
+          />
+        ) : (
+          <PhraseSlab
+            phrase={card.payload}
+            audioUrl={card.audioUrl}
+            revealed={revealed}
+            onReveal={reveal}
+          />
+        )}
+      </div>
+
+      <div className="flex w-full flex-col items-center lg:col-start-2 lg:row-start-2">
+        {!revealed ? (
+          <RevealButton onClick={reveal} />
+        ) : (
+          <PassFailRow
+            pending={pending}
+            showKeys
+            className="lg:max-w-lg"
+            onGrade={selfGrade}
+          />
+        )}
+      </div>
     </div>
   );
 }
@@ -325,13 +440,13 @@ export function AdvancedReviewSession({
 // Quiet on purpose. It sits under a reveal the Learner is meant to be reading,
 // so it must not compete with the green/clay highlight above it for attention —
 // this is the way out, not the thing to look at.
-function ContinueButton({ onClick }: { onClick: () => void }) {
+function ContinueButton({ className = "", onClick }: { className?: string; onClick: () => void }) {
   return (
     <button
       type="button"
       onClick={onClick}
       autoFocus
-      className="focus-ring w-full rounded-[var(--r-pill)] border border-border-base bg-surface px-8 py-3 text-sm font-semibold text-foreground transition-transform active:scale-95 animate-slide-up-fade"
+      className={`focus-ring w-full rounded-[var(--r-pill)] border border-border-base bg-surface px-8 py-3 text-sm font-semibold text-foreground transition-transform active:scale-95 animate-slide-up-fade ${className}`}
     >
       Continue
     </button>

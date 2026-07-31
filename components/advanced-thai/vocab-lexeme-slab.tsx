@@ -125,5 +125,18 @@ export function VocabLexemeSlab({
     </CardShell>
   );
 
-  return <FlipCard flipped={revealed} onFlip={onReveal} front={front} back={back} />;
+  // Portrait on the phone, LANDSCAPE from lg: up. A fixed 1/1.12 ratio only gets
+  // taller as it gets wider, so on the theatre layout's ~46rem stage it would
+  // stand over 800px tall and push the answer bar off the fold. Turning it flat
+  // is also what stops นักเขียนบทโฆษณา's four-morpheme strip overflowing at all —
+  // the tiles get to sit on one row instead of wrapping onto three.
+  return (
+    <FlipCard
+      flipped={revealed}
+      onFlip={onReveal}
+      front={front}
+      back={back}
+      ratio="aspect-[1/1.12] lg:aspect-[1/0.5]"
+    />
+  );
 }

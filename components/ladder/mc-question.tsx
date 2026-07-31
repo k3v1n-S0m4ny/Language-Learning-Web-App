@@ -1,7 +1,8 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { Fragment, type ReactNode } from "react";
 import { motion, useReducedMotion } from "motion/react";
+import { Kbd } from "@/components/ui/kbd";
 
 // The four-option multiple-choice step, for both ladder courses.
 //
@@ -24,6 +25,14 @@ import { motion, useReducedMotion } from "motion/react";
 // the server has said anything about it — the acknowledgement that the tap
 // landed. Grading still happens entirely server-side and the correct option is
 // still unknowable until `verdict` arrives.
+//
+// `layout` is an OPT-IN, and defaults to the layout this component has always
+// had. Mandarin (components/review-session.tsx) and Advanced Thai
+// (components/advanced-thai/advanced-review-session.tsx) both render this file,
+// and only Advanced Thai has the desktop treatment — so "stack" must keep
+// producing byte-identical output to what shipped before, and "theatre" must be
+// the only thing that changes. Below `lg:` the two are identical anyway; the
+// desktop layout is purely additive.
 
 export interface McVerdict {
   chosen: string;
@@ -40,6 +49,8 @@ export function McQuestion({
   chosen = null,
   verdict,
   pending,
+  layout = "stack",
+  showKeys = false,
   onChoose,
 }: {
   eyebrow: string;
@@ -57,6 +68,18 @@ export function McQuestion({
   chosen?: string | null;
   verdict: McVerdict | null;
   pending: boolean;
+  /**
+   * "stack" is the original single column, unchanged at every width.
+   *
+   * "theatre" drops the wrapper entirely and returns the prompt and the option
+   * grid as SIBLINGS, so the caller's own `lg:` grid can place them either side
+   * of its rails. A fragment creates no DOM node, so the two children land
+   * directly in the caller's grid — which is the whole reason this is a layout
+   * flag here rather than a wrapper component around it.
+   */
+  layout?: "stack" | "theatre";
+  /** Draws the 1-4 key caps. Only true where the keys are actually bound. */
+  showKeys?: boolean;
   onChoose: (choice: string) => void;
 }) {
   const reduceMotion = useReducedMotion();
@@ -70,17 +93,41 @@ export function McQuestion({
   // feedback look like a new card arriving pre-answered.
   const committing = picked !== null && !answered;
 
+  const theatre = layout === "theatre";
+
+  // The desktop-only half of each class string. Under `lg:` both layouts are the
+  // same single column, which is what keeps the mobile card untouched.
+  const promptCard = theatre
+    ? "lg:col-start-2 lg:row-start-1 lg:justify-center lg:p-12"
+    : "";
+  const optionGrid = theatre
+    ? "lg:col-start-2 lg:row-start-2 lg:grid-cols-4"
+    : "";
+  // Only a button that actually holds a key cap becomes a flex box; the bare
+  // label below keeps the original block rendering. Trailing space is deliberate
+  // — this concatenates straight onto optionClassName.
+  const optionBox = showKeys
+    ? `flex items-center justify-center gap-2 ${theatre ? "lg:min-h-22 lg:flex-col lg:px-3 lg:py-4 " : ""}`
+    : "";
+
+  const Wrapper = theatre ? Fragment : "div";
+  const wrapperProps = theatre
+    ? {}
+    : { className: "flex w-full max-w-md flex-col items-center gap-5 animate-slide-up-fade" };
+
   return (
-    <div className="flex w-full max-w-md flex-col items-center gap-5 animate-slide-up-fade">
-      <div className="flex w-full flex-col items-center gap-3 rounded-[var(--r-xl)] border border-border-base bg-surface p-6 text-center shadow-[var(--glass-shadow)]">
+    <Wrapper {...wrapperProps}>
+      <div
+        className={`flex w-full flex-col items-center gap-3 rounded-[var(--r-xl)] border border-border-base bg-surface p-6 text-center shadow-[var(--glass-shadow)] ${theatre ? "animate-slide-up-fade " : ""}${promptCard}`}
+      >
         <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-foreground-muted">
           {eyebrow}
         </span>
         {prompt}
       </div>
 
-      <div className="grid w-full grid-cols-2 gap-3">
-        {options.map((option) => {
+      <div className={`grid w-full grid-cols-2 gap-3 ${theatre ? "animate-slide-up-fade " : ""}${optionGrid}`}>
+        {options.map((option, index) => {
           const isChosen = picked === option;
           const isCorrect = verdict?.correct === option;
 
@@ -112,13 +159,22 @@ export function McQuestion({
               onClick={() => onChoose(option)}
               whileTap={locked || reduceMotion ? undefined : { scale: 0.95 }}
               transition={{ type: "spring", stiffness: 500, damping: 30 }}
-              className={`focus-ring rounded-[var(--r-lg)] border-2 px-4 py-3 text-center transition-[color,background-color,border-color,opacity] disabled:cursor-default ${optionClassName} ${tone} ${feedback}`}
+              className={`focus-ring rounded-[var(--r-lg)] border-2 px-4 py-3 text-center transition-[color,background-color,border-color,opacity] disabled:cursor-default ${optionBox}${optionClassName} ${tone} ${feedback}`}
             >
-              {option}
+              {/* A caller with no keys bound renders the bare label, exactly as
+                  this always did — no flex box, no wrapping span. */}
+              {showKeys ? (
+                <>
+                  <Kbd>{index + 1}</Kbd>
+                  <span className="min-w-0">{option}</span>
+                </>
+              ) : (
+                option
+              )}
             </motion.button>
           );
         })}
       </div>
-    </div>
+    </Wrapper>
   );
 }
